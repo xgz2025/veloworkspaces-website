@@ -21,7 +21,8 @@ wrangler.jsonc      Deploy config (Workers static assets, no worker code)
 .assetsignore       Keeps .git, this README, etc. out of the deployed assets
 assets/style.css    All styling
 assets/app-store.js Fills in every [data-app-store-link] button's href from one place
-assets/favicon.svg
+assets/icon.png     App icon — used as both the favicon and the header/footer brand mark
+assets/screenshots/ Four app screenshots shown in the home page hero (see below)
 ```
 
 ## Deploying on Cloudflare (Workers static assets)
@@ -47,19 +48,21 @@ This site is entirely built around `www.veloworkspaces.com` (see the canonical U
 that live:
 
 1. Cloudflare dashboard → **Workers & Pages** → the `veloworkspaces-website` worker → **Settings → Domains
-   & Routes → Add → Custom Domain** → enter `www.veloworkspaces.com`. Cloudflare provisions the DNS record
-   for you as long as `veloworkspaces.com` is already an active zone on this Cloudflare account.
-2. For `veloworkspaces.com` (the bare apex), **don't** add it as a second Custom Domain on this worker —
-   redirecting it to `www` has to happen *before* a request would ever reach the worker, and Workers-assets
-   `_redirects` can't express a cross-hostname redirect (it only accepts relative-path sources; that's what
-   failed the first deploy attempt). Instead, at the zone level: **veloworkspaces.com → Rules → Redirect
-   Rules → Create rule**:
-   - When incoming requests match: **Hostname equals `veloworkspaces.com`**
-   - Then: **Dynamic**, target `concat("https://www.veloworkspaces.com", http.request.uri.path)`,
-     status code **301**, preserve query string on.
-   - This needs an A/AAAA (or CNAME) record for the bare apex pointed at Cloudflare (proxied/orange-clouded)
-     for the rule to ever see the request — add a proxied placeholder record for `veloworkspaces.com` in DNS
-     if one doesn't already exist.
+   & Routes → Add → Custom Domain** → add **both**:
+   - `www.veloworkspaces.com` (canonical — every URL in this site points here)
+   - `veloworkspaces.com` (the bare apex)
+
+   Adding both is the simplest path: Custom Domains auto-manage their own DNS record, so there's no need to
+   hand-create a placeholder A/AAAA record for the apex. With both bound, visitors to either hostname get the
+   site directly — each page's `<link rel="canonical">` already points search engines at the `www` version,
+   so this isn't an SEO problem even without a redirect.
+2. **Optional — force apex visitors to redirect to `www`:** at the zone level, **veloworkspaces.com → Rules
+   → Redirect Rules → Create rule**: when hostname equals `veloworkspaces.com`, redirect (Dynamic) to
+   `concat("https://www.veloworkspaces.com", http.request.uri.path)`, status **301**, preserve query string
+   on. `_redirects` in this repo can't express this itself (Workers-assets rejects an absolute-URL source —
+   that's what failed the first deploy attempt), so it has to live here instead. Redirect Rules generally
+   take precedence over a Custom Domain serving content directly, but verify with
+   `curl -I https://veloworkspaces.com/` after setting it up — you want a `301` to the `www` URL back.
 3. Enable **Always Use HTTPS** (SSL/TLS settings for the zone) if it isn't already on.
 
 ## Updating the App Store link
@@ -73,6 +76,42 @@ Apple's App Store homepage as a safe placeholder. Once the app is approved:
 
 (Each button also has a static fallback `href` baked into the HTML for no-JS visitors and crawlers; you can
 leave those as-is, or update them to match once you're touching the file anyway.)
+
+## Adding the real app icon
+
+Every page currently references one file for both the browser-tab favicon and the small logo mark next to
+"Velo Workspaces" in the header and footer:
+
+- **Path:** `assets/icon.png`
+- **Size:** **512×512px**, PNG, square. This matches the `icon_512x512@1x` (or `icon_256x256@2x`) export in
+  a standard Xcode `AppIcon.appiconset`, so you can very likely drop in an existing export from the app's own
+  asset catalog without resizing anything.
+
+Just replace the file at that path with the real icon — nothing in the HTML/CSS needs to change, since every
+page already points at `assets/icon.png` for both the `<link rel="icon">` favicon and the `<img class="mark">`
+brand mark (displayed at 28×28, so 512px gives plenty of headroom for Retina displays without looking soft).
+
+## Adding real screenshots to the home page
+
+The home page hero currently shows four solid, accent-tinted placeholder tiles (a 2×2 grid, one per persona)
+in place of real screenshots. Each tile is just an `<img>` waiting for a file — add these four, at these
+exact paths, and the placeholders are replaced automatically, no HTML changes needed:
+
+| Path                                            | Persona            | Suggested screen                          |
+|--------------------------------------------------|---------------------|--------------------------------------------|
+| `assets/screenshots/software-engineers.png`      | Software Engineers  | A workspace detail view, Code & Build profile |
+| `assets/screenshots/ai-researchers.png`          | AI Researchers      | The AI Bridge tab, connected to a local model |
+| `assets/screenshots/devops-professionals.png`    | DevOps Professionals| DevOps Lab workspace / serial console      |
+| `assets/screenshots/qa-engineers.png`            | QA Engineers        | A Disposable Workspace, or the base image library |
+
+**Size:** **1600×1200px (4:3), PNG**, for each. They don't need to be pixel-exact — the CSS crops each image
+to a 4:3 tile with `object-fit: cover`, cropped from the top — but aim for landscape screenshots close to
+that ratio so the crop doesn't cut off anything important, and keep them as PNG (not JPEG) so UI text and
+edges stay sharp. Take them at a Retina/2× resolution and downscale to 1600×1200 if needed — that's plenty
+sharp for the roughly 380–400px-wide tile these render at on a real page, without shipping an oversized file.
+
+The suggested screen per persona is just that — a suggestion. Use whatever actually shows that persona's
+workflow best.
 
 ## Adding a social preview image
 
