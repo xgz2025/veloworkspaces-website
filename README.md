@@ -15,32 +15,52 @@ support/index.html  Support & FAQ        → served at /support/
 404.html            Not-found page
 robots.txt
 sitemap.xml
-_redirects          Cloudflare Pages: apex → www redirect
-_headers            Cloudflare Pages: security + cache headers
+_redirects          Cloudflare Workers assets: path-level redirects (none active — see below)
+_headers            Cloudflare Workers assets: security + cache headers
+wrangler.jsonc      Deploy config (Workers static assets, no worker code)
+.assetsignore       Keeps .git, this README, etc. out of the deployed assets
 assets/style.css    All styling
 assets/app-store.js Fills in every [data-app-store-link] button's href from one place
 assets/favicon.svg
 ```
 
-## Deploying on Cloudflare Pages
+## Deploying on Cloudflare (Workers static assets)
 
-1. In the Cloudflare dashboard: **Workers & Pages → Create → Pages → Connect to Git**, and select this
-   repository (`xgz2025/veloworkspaces-website`).
-2. Build settings — this site has no build step:
-   - **Framework preset:** None
-   - **Build command:** *(leave empty)*
-   - **Build output directory:** `/`
-3. Deploy. Cloudflare will build and serve the site on a `*.pages.dev` URL immediately.
-4. **Custom domain:** in the Pages project → **Custom domains**, add both:
-   - `www.veloworkspaces.com` (the canonical domain used throughout this site)
-   - `veloworkspaces.com` (the apex — needed so `_redirects` can 301 it to `www`)
+This repo is connected as a **Cloudflare Workers** project (static assets, no worker code) rather than
+classic Pages — that's what Cloudflare's dashboard provisioned when the repo was connected, and
+`wrangler.jsonc` in this repo matches it. The build step Cloudflare runs is:
 
-   If `veloworkspaces.com` is already on Cloudflare DNS (orange-clouded / proxied), adding it as a custom
-   domain here is usually enough — Cloudflare manages the DNS record for you. If it's on a different
-   registrar/DNS provider, point it at Cloudflare per Cloudflare's own custom-domain instructions for Pages.
-5. Enable **Always Use HTTPS** (Cloudflare's SSL/TLS settings) if it isn't already on for the zone.
+```
+npx wrangler deploy
+```
 
-Every push to the connected branch redeploys automatically — no CI to maintain here.
+That's it — no separate build command, `assets.directory` in `wrangler.jsonc` is `.` (the repo root).
+Every push to the connected branch redeploys automatically.
+
+**Important:** because the assets directory is the repo root, `wrangler deploy` would otherwise upload
+`.git/` itself as public, downloadable static assets. `.assetsignore` (gitignore-style syntax) excludes it,
+along with this README and the wrangler/git config files — don't remove that file.
+
+### Routing www and the apex domain
+
+This site is entirely built around `www.veloworkspaces.com` (see the canonical URLs throughout). To make
+that live:
+
+1. Cloudflare dashboard → **Workers & Pages** → the `veloworkspaces-website` worker → **Settings → Domains
+   & Routes → Add → Custom Domain** → enter `www.veloworkspaces.com`. Cloudflare provisions the DNS record
+   for you as long as `veloworkspaces.com` is already an active zone on this Cloudflare account.
+2. For `veloworkspaces.com` (the bare apex), **don't** add it as a second Custom Domain on this worker —
+   redirecting it to `www` has to happen *before* a request would ever reach the worker, and Workers-assets
+   `_redirects` can't express a cross-hostname redirect (it only accepts relative-path sources; that's what
+   failed the first deploy attempt). Instead, at the zone level: **veloworkspaces.com → Rules → Redirect
+   Rules → Create rule**:
+   - When incoming requests match: **Hostname equals `veloworkspaces.com`**
+   - Then: **Dynamic**, target `concat("https://www.veloworkspaces.com", http.request.uri.path)`,
+     status code **301**, preserve query string on.
+   - This needs an A/AAAA (or CNAME) record for the bare apex pointed at Cloudflare (proxied/orange-clouded)
+     for the rule to ever see the request — add a proxied placeholder record for `veloworkspaces.com` in DNS
+     if one doesn't already exist.
+3. Enable **Always Use HTTPS** (SSL/TLS settings for the zone) if it isn't already on.
 
 ## Updating the App Store link
 

@@ -1,0 +1,15 @@
+# Excludes paths from the Workers static-assets upload (gitignore syntax).
+# assets.directory in wrangler.jsonc is the repo root, so without this file
+# `wrangler deploy` walks and uploads *everything* it finds there — that
+# included .git/ in the first deploy attempt, which would have made the
+# entire git history (and its objects) publicly downloadable at
+# www.veloworkspaces.com/.git/... had the build not failed for an unrelated
+# reason first.
+.git
+.github
+.gitignore
+.assetsignore
+.wrangler
+wrangler.jsonc
+README.md
+node_modules

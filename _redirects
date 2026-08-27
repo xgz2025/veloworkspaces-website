@@ -1,6 +1,11 @@
-# Cloudflare Pages redirects.
-# Canonicalize the apex domain onto www. Requires BOTH veloworkspaces.com and
-# www.veloworkspaces.com to be added as custom domains on this Pages project
-# (Cloudflare Pages > your project > Custom domains) — otherwise the apex
-# domain never reaches this project for the redirect to fire.
-https://veloworkspaces.com/*  https://www.veloworkspaces.com/:splat  301!
+# _redirects only accepts relative-path sources on Cloudflare Workers static
+# assets (unlike classic Cloudflare Pages, absolute-URL sources are rejected
+# at deploy time — "Only relative URLs are allowed"). That means it cannot
+# express a cross-hostname redirect like apex -> www: by the time a request
+# reaches this file's rules it has already been routed here by hostname.
+#
+# The apex (veloworkspaces.com) -> www (www.veloworkspaces.com) redirect is
+# instead set up as a Cloudflare Redirect Rule at the zone level — see
+# README.md "Routing www and the apex domain". Nothing else in this site
+# currently needs a path-level redirect, so this file intentionally has no
+# active rules.

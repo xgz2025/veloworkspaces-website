@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "veloworkspaces-website",
+  "compatibility_date": "2026-08-25",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": ".",
+    // Serves 404.html (with its own 200-friendly content) for any request
+    // that doesn't match a real asset, instead of Workers' generic default.
+    "not_found_handling": "404-page"
+  }
+}
