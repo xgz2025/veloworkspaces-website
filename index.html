@@ -166,6 +166,31 @@
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Nothing is sent to Velo Workspaces or any third party</li>
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> AI Sandbox profile is sized for agent frameworks and tooling out of the box</li>
             </ul>
+
+            <div class="benchmark">
+              <p class="benchmark-label">Measured on a Mac mini (Apple M1)</p>
+              <div class="benchmark-row">
+                <span class="benchmark-metric">Time to first token</span>
+                <span class="benchmark-values">
+                  <strong>280&nbsp;ms</strong> native
+                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  <strong>310&nbsp;ms</strong> via AI Bridge
+                </span>
+                <span class="benchmark-delta">+10%</span>
+              </div>
+              <div class="benchmark-row">
+                <span class="benchmark-metric">Throughput</span>
+                <span class="benchmark-values">
+                  <strong>12.75&nbsp;tok/s</strong> native
+                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  <strong>12.27&nbsp;tok/s</strong> via AI Bridge
+                </span>
+                <span class="benchmark-delta">&minus;4%</span>
+              </div>
+              <p class="benchmark-footnote">Same local model, compared directly on the host (loopback) versus
+                reached from a Linux workspace over AI Bridge — averaged across 5 runs each. Results vary by
+                model, Mac, and workload.</p>
+            </div>
           </div>
         </div>
 
