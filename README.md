@@ -107,11 +107,17 @@ exact paths, and the placeholders are replaced automatically, no HTML changes ne
 | `assets/screenshots/devops-professionals.png`    | DevOps Professionals| DevOps Lab workspace / serial console      |
 | `assets/screenshots/qa-engineers.png`            | QA Engineers        | A Disposable Workspace, or the base image library |
 
-**Size:** **1600×1200px (4:3), PNG**, for each. They don't need to be pixel-exact — the CSS crops each image
-to a 4:3 tile with `object-fit: cover`, cropped from the top — but aim for landscape screenshots close to
-that ratio so the crop doesn't cut off anything important, and keep them as PNG (not JPEG) so UI text and
-edges stay sharp. Take them at a Retina/2× resolution and downscale to 1600×1200 if needed — that's plenty
-sharp for the roughly 380–400px-wide tile these render at on a real page, without shipping an oversized file.
+**Size:** they don't need to be pixel-exact — the CSS crops each image to an 8:5 (16:10) tile with
+`object-fit: cover`, anchored to the top, so any reasonably close landscape screenshot works without editing.
+A screenshot captured at **1440×900** fits that tile exactly with zero cropping; **1440×846** (the other size
+these have been captured at) is close enough that `cover` only trims a sliver off the sides — not enough to
+plausibly cut into a sidebar or toolbar. Keep them as PNG (not JPEG) so UI text and window edges stay sharp.
+
+They're plenty sharp to use straight from a 1440-wide capture — no resizing required — but each one renders
+at roughly 380–450px wide on the actual page, so a 1440px-wide PNG is 3-4× larger than it needs to be
+(slower page load for no visible benefit). If you want to trim that: downscale to around **960×600** (same
+8:5 ratio, 2× the display size for Retina sharpness) with any image tool (`sips -Z 960 in.png --out out.png`
+on macOS, Preview's Export, etc.) before dropping them in.
 
 The suggested screen per persona is just that — a suggestion. Use whatever actually shows that persona's
 workflow best.
