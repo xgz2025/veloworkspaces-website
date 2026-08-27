@@ -5,4 +5,14 @@
   Permissions-Policy: geolocation=(), microphone=(), camera=()
 
 /assets/*
-  Cache-Control: public, max-age=31536000, immutable
+  # NOT `immutable` + a year-long max-age: these are plain filenames
+  # (style.css, app-store.js, icon.png, the screenshots) that get edited
+  # and redeployed in place, not content-hashed build output. `immutable`
+  # previously told browsers to never even revalidate, so anyone who'd
+  # visited before a CSS/JS change kept silently serving the stale file
+  # (visible as unstyled elements, e.g. huge default-sized inline SVGs
+  # with no matching CSS rule reaching the browser) until the year was up
+  # or they hard-refreshed. `must-revalidate` forces a cheap conditional
+  # GET (a 304 when nothing changed) on every request instead, so a
+  # deploy is visible on the very next load.
+  Cache-Control: public, max-age=300, must-revalidate
