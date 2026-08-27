@@ -44,26 +44,29 @@ along with this README and the wrangler/git config files — don't remove that f
 
 ### Routing www and the apex domain
 
-This site is entirely built around `www.veloworkspaces.com` (see the canonical URLs throughout). To make
-that live:
+This site is entirely built around `www.veloworkspaces.com` (see the canonical URLs throughout). The apex
+(`veloworkspaces.com`) should 301 to it — done as a zone-level Redirect Rule, not a Custom Domain, so there's
+exactly one thing that can ever handle apex traffic (no need to reason about Redirect Rules vs. Custom
+Domain precedence):
 
-1. Cloudflare dashboard → **Workers & Pages** → the `veloworkspaces-website` worker → **Settings → Domains
-   & Routes → Add → Custom Domain** → add **both**:
-   - `www.veloworkspaces.com` (canonical — every URL in this site points here)
-   - `veloworkspaces.com` (the bare apex)
+1. **DNS** for the `veloworkspaces.com` zone → add a placeholder record for the bare apex, proxied:
+   - `A`, name `@` (or `veloworkspaces.com`), address `192.0.2.1`, Proxy status **Proxied**
+   - Optionally also `AAAA`, name `@`, address `2001:DB8::1`, **Proxied**
 
-   Adding both is the simplest path: Custom Domains auto-manage their own DNS record, so there's no need to
-   hand-create a placeholder A/AAAA record for the apex. With both bound, visitors to either hostname get the
-   site directly — each page's `<link rel="canonical">` already points search engines at the `www` version,
-   so this isn't an SEO problem even without a redirect.
-2. **Optional — force apex visitors to redirect to `www`:** at the zone level, **veloworkspaces.com → Rules
-   → Redirect Rules → Create rule**: when hostname equals `veloworkspaces.com`, redirect (Dynamic) to
-   `concat("https://www.veloworkspaces.com", http.request.uri.path)`, status **301**, preserve query string
-   on. `_redirects` in this repo can't express this itself (Workers-assets rejects an absolute-URL source —
-   that's what failed the first deploy attempt), so it has to live here instead. Redirect Rules generally
-   take precedence over a Custom Domain serving content directly, but verify with
-   `curl -I https://veloworkspaces.com/` after setting it up — you want a `301` to the `www` URL back.
-3. Enable **Always Use HTTPS** (SSL/TLS settings for the zone) if it isn't already on.
+   These are IANA-reserved documentation addresses — Cloudflare's own recommended placeholder for exactly
+   this case. The address is never actually contacted; it only needs to exist so Cloudflare's edge sees and
+   proxies apex requests at all, for the Redirect Rule below to have something to fire on. Do this *before*
+   the next step, so there's no gap where the apex has no record at all.
+2. Cloudflare dashboard → **Workers & Pages** → the `veloworkspaces-website` worker → **Settings → Domains &
+   Routes** → add **only** `www.veloworkspaces.com` as a Custom Domain. Do **not** add the bare apex here —
+   the whole point of this setup is that the Redirect Rule is the only thing that can ever answer for it.
+3. **Rules → Redirect Rules → Create rule**, at the zone level:
+   - When incoming requests match: **Hostname equals `veloworkspaces.com`**
+   - Then: **Dynamic**, expression `concat("https://www.veloworkspaces.com", http.request.uri.path)`,
+     status code **301**, preserve query string on
+4. Verify: `curl -I https://veloworkspaces.com/` should return `301` with
+   `location: https://www.veloworkspaces.com/`.
+5. Enable **Always Use HTTPS** (SSL/TLS settings for the zone) if it isn't already on.
 
 ## Updating the App Store link
 
