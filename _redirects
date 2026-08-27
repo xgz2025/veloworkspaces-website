@@ -1,0 +1,6 @@
+# Cloudflare Pages redirects.
+# Canonicalize the apex domain onto www. Requires BOTH veloworkspaces.com and
+# www.veloworkspaces.com to be added as custom domains on this Pages project
+# (Cloudflare Pages > your project > Custom domains) — otherwise the apex
+# domain never reaches this project for the redirect to fire.
+https://veloworkspaces.com/*  https://www.veloworkspaces.com/:splat  301!
