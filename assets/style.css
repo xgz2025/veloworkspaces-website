@@ -228,7 +228,11 @@ p:last-child { margin-bottom: 0; }
   gap: 16px;
 }
 .shot-tile {
-  aspect-ratio: 4 / 3;
+  /* 8:5 (16:10) rather than a generic 4:3 — that's an exact match for a
+     1440x900 screenshot (zero cropping) and close enough to a 1440x846 one
+     that object-fit: cover only trims a sliver off the sides, not enough to
+     plausibly cut into a sidebar or toolbar. */
+  aspect-ratio: 8 / 5;
   border-radius: var(--radius-md);
   overflow: hidden;
   background: var(--color-bg-raised);
