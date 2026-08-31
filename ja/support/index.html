@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>サポート & FAQ — Velo Workspaces</title>
+<meta name="description" content="Velo Workspaces の使い始め方、使い捨てワークスペースの使い方、Fedora と Debian での Rosetta の有効化、共有フォルダへのアクセス、クリップボードのトラブルシューティングなど。">
+<link rel="canonical" href="https://www.veloworkspaces.com/ja/support/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=2">
+<link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/">
+<link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/">
+<link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/">
+<link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/support/">
+<link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/support/">
+<link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/support/">
+<link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/support/">
+<link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/support/">
+<link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/support/">
+<link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/support/">
+<link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="サポート & FAQ — Velo Workspaces">
+<meta property="og:description" content="使い始め方、使い捨てワークスペース、Fedora/Debian での Rosetta、共有フォルダ、クリップボードのトラブルシューティングなど。">
+<meta property="og:url" content="https://www.veloworkspaces.com/ja/support/">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "ワークスペース内から共有フォルダにアクセスするにはどうすればよいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "macOS ワークスペース（macOS 13 以降）の場合、共有フォルダは /Volumes/My Shared Files の下に自動的にマウントされます——コマンドは不要です。Linux ワークスペースの場合は、そのフォルダ自身の VirtioFS タグを使用する、「共有ファイル」タブに表示されているマウントコマンドを実行してください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Mac と Linux ワークスペースの間でコピー & ペーストができません",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Linux でのクリップボード共有は、ゲスト内で動作する spice-vdagent パッケージに依存します。sudo apt install spice-vdagent（または各ディストリビューションの相当パッケージ）でインストールし、spice-vdagentd サービスが実行されていることを確認し、ワークスペースの「リソース」タブでクリップボード共有が有効になっていることを確認してください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Debian ワークスペースで Rosetta を有効にするには？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Debian は Ubuntu と同じ apt および update-binfmts ツールを使用します：rosetta VirtioFS 共有をマウントし、binfmt-support をインストールしてから、Apple が公開している magic bytes とマスクを使って update-binfmts で Rosetta を登録します。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Fedora ワークスペースで Rosetta を有効にするには？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Fedora には update-binfmts が含まれていません。rosetta VirtioFS 共有をマウントし、/etc/binfmt.d/rosetta.conf に設定ファイルを書き込んで systemd-binfmt サービスを再起動することで、systemd-binfmt に直接登録してください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "使い捨てワークスペースを閉じるとどうなりますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "閉じた瞬間に、ディスクごと自動的に削除されます。その後復元する方法はないため、保持しておく必要のあるものには使い捨てワークスペースを使わないでください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Velo Workspaces は Windows ゲストに対応していますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "このリリースでは未対応です。Velo Workspaces は現在 Linux と macOS ゲストに対応しています。Windows ゲストのサポートは将来のリリースで追加される可能性があります。"
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/ja/">
+      <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/ja/#personas">対象ユーザー</a>
+        <a href="/ja/#features">機能</a>
+        <a href="/ja/support/">サポート</a>
+      </span>
+      <details class="lang-switch">
+        <summary><span class="lang-switch-label">日本語</span> <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <ul class="lang-menu">
+          <li><a href="/support/" hreflang="en">English</a></li>
+          <li><a href="/zh-hans/support/" hreflang="zh-Hans">简体中文</a></li>
+          <li><a href="/zh-hant/support/" hreflang="zh-Hant">繁體中文</a></li>
+          <li><a href="/fr/support/" hreflang="fr">Français</a></li>
+          <li><a href="/de/support/" hreflang="de">Deutsch</a></li>
+          <li><a href="/it/support/" hreflang="it">Italiano</a></li>
+          <li><a href="/ja/support/" hreflang="ja" aria-current="true">日本語</a></li>
+          <li><a href="/ko/support/" hreflang="ko">한국어</a></li>
+          <li><a href="/pt-br/support/" hreflang="pt-BR">Português (Brasil)</a></li>
+          <li><a href="/es/support/" hreflang="es">Español</a></li>
+        </ul>
+      </details>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/">ダウンロード</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="section" style="padding-bottom:32px;">
+    <div class="container">
+      <span class="eyebrow">サポート</span>
+      <h1>使い始め方と、よくある質問への回答。</h1>
+      <p style="max-width:60ch;">お探しの情報が見つかりませんか？ <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a> までメールでお問い合わせください。直接サポートいたします。</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <h2>使い始め方</h2>
+
+      <div class="card" style="margin-bottom:24px;">
+        <h3>ワークスペースの作成方法</h3>
+        <ol class="steps" style="margin-top:20px;">
+          <li>
+            <div>
+              <h3>新規ワークスペースを開く</h3>
+              <p>ワークスペースライブラリから新規ワークスペースを選び、イメージのソースを選択します：公式イメージ、既存の仮想ディスク、または保存済みのベースイメージ。</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>プロファイルを選ぶ</h3>
+              <p>自分の作業に合ったプロファイルを選びます——コード & ビルド、DevOps ラボ、AI サンドボックスなど——または CPU、メモリ、ストレージを自分で設定します。</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>確認して起動</h3>
+              <p>概要を確認し、インストールを開始します（ベースイメージの複製の場合は起動）。公式イメージは初めて使用する際、各プロジェクト自身のソースから直接ダウンロードされます。</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3>使い捨てワークスペースの使い方</h3>
+        <ol class="steps" style="margin-top:20px;">
+          <li>
+            <div>
+              <h3>ワークスペースを使い捨てとしてマーク</h3>
+              <p>ワークスペースを作成する際に使い捨てオプションをオンにします——ベースイメージと組み合わせると、動作確認済みの状態から即座に起動できるので最適です。</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>1つのタスクにのみ使う</h3>
+              <p>テストを実行する、バグを再現する、リスクのあるコマンドを試す——ワークスペースを完全に使い捨てとして扱います。</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>閉じる</h3>
+              <p>使い捨てワークスペースを閉じると、ディスクごと自動的に削除されます。その後片付ける必要も、復元する必要もありません——保持しておく必要のあるものには使い捨てワークスペースを使わないでください。</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2 style="margin-bottom:32px;">よくある質問</h2>
+
+      <div class="faq-group">
+        <h2>共有フォルダ</h2>
+        <details class="faq-item">
+          <summary>ワークスペース内から共有フォルダにアクセスするにはどうすればよいですか？</summary>
+          <div class="faq-answer">
+            <p><strong>macOS ワークスペース（macOS 13 以降）：</strong>共有フォルダは自動的にマウントされます——Finder を開いて <code>/Volumes/My Shared Files</code>の下を確認してください。コマンドは不要です。</p>
+            <p><strong>Linux ワークスペース：</strong>各共有フォルダには専用のマウントコマンドがあり、アプリ内のワークスペースの「共有ファイル」タブに直接表示されます。そのフォルダ自身のタグを使って、次のような形になります：</p>
+            <pre><code>mkdir -p /mnt/my_folder
+sudo mount -t virtiofs &lt;folder-tag-shown-in-app&gt; /mnt/my_folder</code></pre>
+            <p>アプリに表示されている通りのタグを使ってください——フォルダごとに固有なので、他から持ってきたコマンドをコピーしても動作しません。</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>クリップボードと入力</h2>
+        <details class="faq-item">
+          <summary>Mac と Linux ワークスペースの間でコピー & ペーストができません</summary>
+          <div class="faq-answer">
+            <p>Linux でのクリップボード共有は、ゲスト内で動作するエージェントに依存します。次の手順を順番に確認してください：</p>
+            <ol>
+              <li>ワークスペースの「リソース」タブで、 <strong>クリップボード共有</strong> がオンになっていることを確認します。</li>
+              <li>ゲスト内で、 <code>spice-vdagent</code> がインストールされていることを確認します：
+                <pre><code>sudo apt install spice-vdagent</code></pre>
+              </li>
+              <li>エージェントが実際に動作しているか確認します：
+                <pre><code>systemctl status spice-vdagentd</code></pre>
+                非アクティブな場合は、 <code>sudo systemctl start spice-vdagentd</code>で起動し、グラフィカルデスクトップを使用している場合はログアウトして再度ログインし、デスクトップセッションに反映させてください。
+              </li>
+              <li>一部の最小構成またはヘッドレスなデスクトップ環境では、 <code>spice-vdagent</code> が自動的に起動しません——エージェントがインストールされ動作しているのにまだうまくいかない場合は、デスクトップ環境の自動起動設定を確認してください。</li>
+            </ol>
+            <p>クリップボード共有は現在 Linux ワークスペースでのみ動作します。</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>Rosetta（Apple シリコン上での x86_64）</h2>
+        <details class="faq-item">
+          <summary>Debian ワークスペースで Rosetta を有効にするには？</summary>
+          <div class="faq-answer">
+            <p>Debian は Ubuntu と同じ <code>apt</code> と <code>update-binfmts</code> ツールを使用します。ワークスペースの「リソース」タブで Rosetta をオンにし、ワークスペースを起動してから、ゲスト内で一度だけ次を実行してください：</p>
+            <pre><code>sudo mkdir -p /media/rosetta
+sudo mount -t virtiofs rosetta /media/rosetta
+
+sudo apt-get update
+sudo apt-get install -y binfmt-support
+
+sudo /usr/sbin/update-binfmts --install rosetta /media/rosetta/rosetta \
+  --magic "\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00" \
+  --mask "\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff" \
+  --credentials yes --preserve yes --fix-binary yes</code></pre>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Fedora ワークスペースで Rosetta を有効にするには？</summary>
+          <div class="faq-answer">
+            <p>Fedora には Debian の <code>update-binfmts</code> ツールは含まれていませんが、 <code>systemd-binfmt</code>は含まれており、設定ファイルから、まったく同じカーネルの <code>binfmt_misc</code> 登録を読み込みます。ワークスペースの「リソース」タブで Rosetta をオンにし、ワークスペースを起動してから、ゲスト内で一度だけ次を実行してください：</p>
+            <pre><code>sudo mkdir -p /media/rosetta
+sudo mount -t virtiofs rosetta /media/rosetta
+
+sudo mkdir -p /etc/binfmt.d
+sudo tee /etc/binfmt.d/rosetta.conf > /dev/null &lt;&lt;'EOF'
+:rosetta:M::\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00:\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/media/rosetta/rosetta:CF
+EOF
+
+sudo systemctl restart systemd-binfmt</code></pre>
+            <p> <code>rosetta.conf</code> ファイルは再起動後も保持されるため、この設定はワークスペースごとに一度だけ行えば済みます。</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>AI ブリッジ</h2>
+        <details class="faq-item">
+          <summary>AI ブリッジを Ollama に接続するには？</summary>
+          <div class="faq-answer">
+            <ol>
+              <li>ワークスペースの外、あなたの Mac 上で Ollama をインストールして実行します。</li>
+              <li>ワークスペースで AI ブリッジを有効にします（AI サンドボックスプロファイルではデフォルトでオン、または自分でワークスペースの「統合」または「リソース」設定でオンにします）。</li>
+              <li>ワークスペースを起動し、その AI ブリッジタブを開きます——ローカルエンドポイントのアドレスと、Linux ゲストの場合は接続を転送するための正確なコマンドが表示されます。</li>
+              <li>ワークスペース内で、標準的な chat-completions API 形式を話すローカルサーバーに接続するのと同じように、ツールをそのアドレスに向けてください。</li>
+            </ol>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>使い捨てワークスペース & ベースイメージ</h2>
+        <details class="faq-item">
+          <summary>使い捨てワークスペースを閉じるとどうなりますか？</summary>
+          <div class="faq-answer">
+            <p>閉じた瞬間に、ディスクごと自動的に削除されます。その後復元する方法はありません——保持しておく必要のあるものには使い捨てワークスペースを使わないでください。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>ワークスペースを再利用可能なベースイメージにするにはどうすればよいですか？</summary>
+          <div class="faq-answer">
+            <p>ワークスペースを停止し、停止したワークスペースに表示されるバナーから <strong>ベースイメージとして保存</strong> を選択します。同じワークスペースを後で再度保存すると、以前のものを上書きするのではなく、新しい独立したベースイメージが作成されます——不要になったベースイメージは環境設定 → ベースイメージから管理・削除できます。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>ワークスペースとベースイメージはどこに保存されますか？また、どうすれば空き容量を確保できますか？</summary>
+          <div class="faq-answer">
+            <p>ワークスペースのディスクとベースイメージは、Mac 上の <code>~/Library/Application Support/VeloWorkspaces</code> に保存されています。空き容量を確保するには、ライブラリから不要なワークスペースを削除し、環境設定 → ベースイメージから未使用のベースイメージを削除してください。</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>一般</h2>
+        <details class="faq-item">
+          <summary>Velo Workspaces は Windows ゲストに対応していますか？</summary>
+          <div class="faq-answer">
+            <p>このリリースでは未対応です。Velo Workspaces は現在 Linux と macOS ゲストに対応しています。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>ワークスペースの実行中に一部の設定を変更できないのはなぜですか？</summary>
+          <div class="faq-answer">
+            <p>CPU、メモリ、ストレージ、共有フォルダ、その他いくつかの設定は仮想マシンの構成の一部であり、実行中は変更できません（Apple の Virtualization フレームワークはこれらのホットプラグに対応していません）。ワークスペースを停止し、変更を行ってから、再度起動してください。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>macOS ゲストを作成できないのはなぜですか？</summary>
+          <div class="faq-answer">
+            <p>macOS ゲストにはホストとして Apple シリコン搭載 Mac が必要です。Intel Mac では、Linux ゲストは引き続き完全にサポートされています。</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="text-align:center;">
+    <div class="container">
+      <h2>それでも解決しませんか？</h2>
+      <p style="max-width:52ch; margin:0 auto 20px;">メールをお送りください。解決までサポートいたします。</p>
+      <a class="btn btn-primary" href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/ja/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/ja/support/">サポート</a>
+        <a href="/ja/privacy/">プライバシー</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">
+      © 2026 Velo Workspaces. Apple、Apple ロゴ、Mac、macOS、および App Store は米国および他の国々で登録された Apple Inc. の商標です。Velo Workspaces は独立したアプリであり、Apple Inc. とは提携しておらず、Apple Inc. の承認を受けたものでもありません。
+    </p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=2"></script>
+</body>
+</html>

@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Soporte y preguntas frecuentes — Velo Workspaces</title>
+<meta name="description" content="Primeros pasos con Velo Workspaces, cómo usar los espacios de trabajo desechables, activar Rosetta en Fedora y Debian, acceso a carpetas compartidas, solución de problemas del portapapeles, y más.">
+<link rel="canonical" href="https://www.veloworkspaces.com/es/support/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=2">
+<link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/">
+<link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/">
+<link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/">
+<link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/support/">
+<link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/support/">
+<link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/support/">
+<link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/support/">
+<link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/support/">
+<link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/support/">
+<link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/support/">
+<link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Soporte y preguntas frecuentes — Velo Workspaces">
+<meta property="og:description" content="Primeros pasos, espacios de trabajo desechables, Rosetta en Fedora/Debian, carpetas compartidas, solución de problemas del portapapeles, y más.">
+<meta property="og:url" content="https://www.veloworkspaces.com/es/support/">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Cómo accedo a una carpeta compartida desde dentro de un espacio de trabajo?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Para un espacio de trabajo macOS (macOS 13 o posterior), las carpetas compartidas se montan automáticamente en /Volumes/My Shared Files — no se necesita ningún comando. Para un espacio de trabajo Linux, ejecuta el comando de montaje mostrado para esa carpeta en la pestaña Archivos compartidos, que usa la etiqueta VirtioFS propia de esa carpeta."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Copiar y pegar no funciona entre mi Mac y un espacio de trabajo Linux",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "La compartición del portapapeles en Linux depende del paquete spice-vdagent que se ejecuta dentro del invitado. Instálalo con sudo apt install spice-vdagent (o el equivalente de tu distribución), asegúrate de que el servicio spice-vdagentd esté en ejecución, y confirma que Compartir portapapeles esté activado en la pestaña Recursos del espacio de trabajo."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo activo Rosetta en un espacio de trabajo Debian?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Debian usa las mismas herramientas apt y update-binfmts que Ubuntu: monta el recurso compartido VirtioFS rosetta, instala binfmt-support, y luego registra Rosetta con update-binfmts usando los magic bytes y la máscara publicados por Apple."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo activo Rosetta en un espacio de trabajo Fedora?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Fedora no incluye update-binfmts. Monta el recurso compartido VirtioFS rosetta, y luego regístralo directamente con systemd-binfmt escribiendo un archivo de configuración en /etc/binfmt.d/rosetta.conf y reiniciando el servicio systemd-binfmt."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué pasa con un espacio de trabajo desechable cuando lo cierro?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Se elimina automáticamente en el momento en que lo cierras, disco incluido. No hay nada que recuperar después, así que no uses un espacio de trabajo desechable para nada que necesites conservar."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Velo Workspaces admite invitados Windows?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No en esta versión. Velo Workspaces actualmente admite invitados Linux y macOS; la compatibilidad con invitados Windows podría añadirse en una versión futura."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/es/">
+      <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/es/#personas">Para quién es</a>
+        <a href="/es/#features">Funciones</a>
+        <a href="/es/support/">Soporte</a>
+      </span>
+      <details class="lang-switch">
+        <summary><span class="lang-switch-label">Español</span> <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <ul class="lang-menu">
+          <li><a href="/support/" hreflang="en">English</a></li>
+          <li><a href="/zh-hans/support/" hreflang="zh-Hans">简体中文</a></li>
+          <li><a href="/zh-hant/support/" hreflang="zh-Hant">繁體中文</a></li>
+          <li><a href="/fr/support/" hreflang="fr">Français</a></li>
+          <li><a href="/de/support/" hreflang="de">Deutsch</a></li>
+          <li><a href="/it/support/" hreflang="it">Italiano</a></li>
+          <li><a href="/ja/support/" hreflang="ja">日本語</a></li>
+          <li><a href="/ko/support/" hreflang="ko">한국어</a></li>
+          <li><a href="/pt-br/support/" hreflang="pt-BR">Português (Brasil)</a></li>
+          <li><a href="/es/support/" hreflang="es" aria-current="true">Español</a></li>
+        </ul>
+      </details>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/">Descargar</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="section" style="padding-bottom:32px;">
+    <div class="container">
+      <span class="eyebrow">Soporte</span>
+      <h1>Primeros pasos y respuestas a preguntas frecuentes.</h1>
+      <p style="max-width:60ch;">¿No encuentras lo que buscas? Escribe a <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a> y te ayudaremos directamente.</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <h2>Primeros pasos</h2>
+
+      <div class="card" style="margin-bottom:24px;">
+        <h3>Cómo crear un espacio de trabajo</h3>
+        <ol class="steps" style="margin-top:20px;">
+          <li>
+            <div>
+              <h3>Abrir Nuevo espacio de trabajo</h3>
+              <p>Desde la biblioteca de espacios de trabajo, elige Nuevo espacio de trabajo y selecciona una fuente de imagen: una imagen oficial, un disco virtual existente, o una imagen base guardada.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Elegir un perfil</h3>
+              <p>Elige el perfil que se ajuste a tu trabajo — Código y compilación, Laboratorio DevOps, Sandbox de IA, y más — o configura tú mismo CPU, memoria y almacenamiento.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Revisar y lanzar</h3>
+              <p>Confirma el resumen y luego inicia la instalación (o el arranque, para un clon de una imagen base). Las imágenes oficiales se descargan directamente desde la fuente propia de ese proyecto la primera vez que las usas.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3>Cómo usar los espacios de trabajo desechables</h3>
+        <ol class="steps" style="margin-top:20px;">
+          <li>
+            <div>
+              <h3>Marcar un espacio de trabajo como desechable</h3>
+              <p>Al crear un espacio de trabajo, activa la opción desechable — lo ideal es combinarla con una imagen base para que arranque al instante desde un estado conocido y funcional.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Úsalo para exactamente una tarea</h3>
+              <p>Ejecuta tu prueba, reproduce el error, o prueba el comando arriesgado — trata el espacio de trabajo como totalmente prescindible.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Ciérralo</h3>
+              <p>Cerrar un espacio de trabajo desechable lo elimina automáticamente, disco incluido. No hay nada que limpiar después, ni nada que recuperar — no uses espacios de trabajo desechables para nada que necesites conservar.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2 style="margin-bottom:32px;">Preguntas frecuentes</h2>
+
+      <div class="faq-group">
+        <h2>Carpetas compartidas</h2>
+        <details class="faq-item">
+          <summary>¿Cómo accedo a la carpeta compartida desde dentro de un espacio de trabajo?</summary>
+          <div class="faq-answer">
+            <p><strong>Espacios de trabajo macOS (macOS 13 o posterior):</strong> las carpetas compartidas se montan automáticamente — abre Finder y busca en <code>/Volumes/My Shared Files</code>. No se necesita ningún comando.</p>
+            <p><strong>Espacios de trabajo Linux:</strong> cada carpeta compartida tiene su propio comando de montaje, que se muestra directamente en la app en la pestaña Archivos compartidos del espacio de trabajo. Se ve así, usando la etiqueta propia de esa carpeta:</p>
+            <pre><code>mkdir -p /mnt/my_folder
+sudo mount -t virtiofs &lt;folder-tag-shown-in-app&gt; /mnt/my_folder</code></pre>
+            <p>Usa exactamente la etiqueta mostrada en la app — es única por carpeta, así que copiar un comando de otro lugar no funcionará.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>Portapapeles y entrada</h2>
+        <details class="faq-item">
+          <summary>Copiar y pegar no funciona entre mi Mac y un espacio de trabajo Linux</summary>
+          <div class="faq-answer">
+            <p>La compartición del portapapeles en Linux depende de un agente que se ejecuta dentro del invitado. Sigue estos pasos en orden:</p>
+            <ol>
+              <li>En la pestaña Recursos del espacio de trabajo, confirma que <strong>Compartir portapapeles</strong> esté activado.</li>
+              <li>Dentro del invitado, asegúrate de que <code>spice-vdagent</code> esté instalado:
+                <pre><code>sudo apt install spice-vdagent</code></pre>
+              </li>
+              <li>Confirma que el agente realmente se esté ejecutando:
+                <pre><code>systemctl status spice-vdagentd</code></pre>
+                Si está inactivo, inícialo con <code>sudo systemctl start spice-vdagentd</code>, y si usas un escritorio gráfico, cierra sesión y vuelve a entrar para que la sesión de escritorio lo reconozca.
+              </li>
+              <li>Algunos entornos de escritorio mínimos o headless no inician <code>spice-vdagent</code> automáticamente — revisa la configuración de inicio automático de tu entorno de escritorio si sigue sin funcionar después de que el agente esté instalado y en ejecución.</li>
+            </ol>
+            <p>La compartición del portapapeles actualmente solo funciona para espacios de trabajo Linux.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>Rosetta (x86_64 en Apple Silicon)</h2>
+        <details class="faq-item">
+          <summary>¿Cómo activo Rosetta en un espacio de trabajo Debian?</summary>
+          <div class="faq-answer">
+            <p>Debian usa las mismas herramientas <code>apt</code> y <code>update-binfmts</code> que Ubuntu. Activa Rosetta para el espacio de trabajo en su pestaña Recursos, inícialo, y luego ejecuta esto una vez dentro del invitado:</p>
+            <pre><code>sudo mkdir -p /media/rosetta
+sudo mount -t virtiofs rosetta /media/rosetta
+
+sudo apt-get update
+sudo apt-get install -y binfmt-support
+
+sudo /usr/sbin/update-binfmts --install rosetta /media/rosetta/rosetta \
+  --magic "\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00" \
+  --mask "\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff" \
+  --credentials yes --preserve yes --fix-binary yes</code></pre>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>¿Cómo activo Rosetta en un espacio de trabajo Fedora?</summary>
+          <div class="faq-answer">
+            <p>Fedora no incluye la herramienta <code>update-binfmts</code> de Debian, pero sí incluye <code>systemd-binfmt</code>, que lee exactamente el mismo registro del kernel <code>binfmt_misc</code> desde un archivo de configuración. Activa Rosetta para el espacio de trabajo en su pestaña Recursos, inícialo, y luego ejecuta esto una vez dentro del invitado:</p>
+            <pre><code>sudo mkdir -p /media/rosetta
+sudo mount -t virtiofs rosetta /media/rosetta
+
+sudo mkdir -p /etc/binfmt.d
+sudo tee /etc/binfmt.d/rosetta.conf > /dev/null &lt;&lt;'EOF'
+:rosetta:M::\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00:\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/media/rosetta/rosetta:CF
+EOF
+
+sudo systemctl restart systemd-binfmt</code></pre>
+            <p>El archivo <code>rosetta.conf</code> persiste entre reinicios, así que es una configuración única por espacio de trabajo.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>Puente de IA</h2>
+        <details class="faq-item">
+          <summary>¿Cómo conecto Puente de IA a Ollama?</summary>
+          <div class="faq-answer">
+            <ol>
+              <li>Instala y ejecuta Ollama en tu Mac, fuera del espacio de trabajo.</li>
+              <li>Activa Puente de IA para el espacio de trabajo (activado por defecto en el perfil Sandbox de IA, o actívalo tú mismo en la configuración de Integraciones o Recursos del espacio de trabajo).</li>
+              <li>Inicia el espacio de trabajo y luego abre su pestaña Puente de IA — muestra la dirección del endpoint local y, para un invitado Linux, los comandos exactos para reenviar la conexión.</li>
+              <li>Dentro del espacio de trabajo, apunta tus herramientas a esa dirección igual que lo harías con cualquier servidor local que use el formato de API chat-completions estándar.</li>
+            </ol>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>Espacios de trabajo desechables e imágenes base</h2>
+        <details class="faq-item">
+          <summary>¿Qué pasa con un espacio de trabajo desechable cuando lo cierro?</summary>
+          <div class="faq-answer">
+            <p>Se elimina automáticamente en el momento en que lo cierras, disco incluido. No hay nada que recuperar después — no uses un espacio de trabajo desechable para nada que necesites conservar.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>¿Cómo convierto un espacio de trabajo en una imagen base reutilizable?</summary>
+          <div class="faq-answer">
+            <p>Detén el espacio de trabajo y luego elige <strong>Guardar como imagen base</strong> desde el banner que se muestra en un espacio de trabajo detenido. Guardar el mismo espacio de trabajo de nuevo más tarde crea una nueva imagen base independiente en lugar de sobrescribir la anterior — gestiona y elimina las imágenes base que ya no necesites desde Preferencias → Imágenes base.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>¿Dónde se almacenan mis espacios de trabajo e imágenes base, y cómo libero espacio?</summary>
+          <div class="faq-answer">
+            <p>Los discos de los espacios de trabajo y las imágenes base están en <code>~/Library/Application Support/VeloWorkspaces</code> en tu Mac. Elimina de la biblioteca los espacios de trabajo que ya no necesites, y las imágenes base sin usar desde Preferencias → Imágenes base, para liberar espacio.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>General</h2>
+        <details class="faq-item">
+          <summary>¿Velo Workspaces admite invitados Windows?</summary>
+          <div class="faq-answer">
+            <p>No en esta versión. Velo Workspaces actualmente admite invitados Linux y macOS.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>¿Por qué no puedo cambiar algunos ajustes mientras un espacio de trabajo está en ejecución?</summary>
+          <div class="faq-answer">
+            <p>CPU, memoria, almacenamiento, carpetas compartidas y algunos otros ajustes forman parte de la configuración de la máquina virtual y no se pueden cambiar mientras está en ejecución (el framework Virtualization de Apple no admite modificarlos en caliente). Detén el espacio de trabajo, haz el cambio, y vuelve a iniciarlo.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>¿Por qué no puedo crear un invitado macOS?</summary>
+          <div class="faq-answer">
+            <p>Los invitados macOS requieren un Mac con Apple Silicon como host. En un Mac Intel, los invitados Linux siguen siendo totalmente compatibles.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="text-align:center;">
+    <div class="container">
+      <h2>¿Sigues atascado?</h2>
+      <p style="max-width:52ch; margin:0 auto 20px;">Escríbenos y te ayudaremos a resolverlo.</p>
+      <a class="btn btn-primary" href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/es/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/es/support/">Soporte</a>
+        <a href="/es/privacy/">Privacidad</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">
+      © 2026 Velo Workspaces. Apple, el logotipo de Apple, Mac, macOS y App Store son marcas registradas de Apple Inc. en EE. UU. y otros países. Velo Workspaces es una aplicación independiente y no está afiliada ni respaldada por Apple Inc.
+    </p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=2"></script>
+</body>
+</html>

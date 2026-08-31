@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Support &amp; FAQ — Velo Workspaces</title>
+<meta name="description" content="Erste Schritte mit Velo Workspaces, Nutzung von Einweg-Arbeitsbereichen, Aktivieren von Rosetta unter Fedora und Debian, Zugriff auf gemeinsame Ordner, Fehlerbehebung bei der Zwischenablage und mehr.">
+<link rel="canonical" href="https://www.veloworkspaces.com/de/support/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=2">
+<link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/">
+<link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/">
+<link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/">
+<link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/support/">
+<link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/support/">
+<link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/support/">
+<link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/support/">
+<link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/support/">
+<link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/support/">
+<link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/support/">
+<link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Support & FAQ — Velo Workspaces">
+<meta property="og:description" content="Erste Schritte, Einweg-Arbeitsbereiche, Rosetta unter Fedora/Debian, gemeinsame Ordner, Fehlerbehebung bei der Zwischenablage und mehr.">
+<meta property="og:url" content="https://www.veloworkspaces.com/de/support/">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Wie greife ich von innerhalb eines Arbeitsbereichs auf einen gemeinsamen Ordner zu?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Bei einem macOS-Arbeitsbereich (macOS 13 oder neuer) werden gemeinsame Ordner automatisch unter /Volumes/My Shared Files eingebunden — kein Befehl nötig. Führen Sie bei einem Linux-Arbeitsbereich den für diesen Ordner im Tab „Freigegebene Dateien“ angezeigten Einbindungsbefehl aus, der das eigene VirtioFS-Tag dieses Ordners verwendet."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Kopieren und Einfügen funktioniert nicht zwischen meinem Mac und einem Linux-Arbeitsbereich",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Die Zwischenablage-Freigabe unter Linux hängt vom im Gast laufenden Paket spice-vdagent ab. Installieren Sie es mit sudo apt install spice-vdagent (oder dem Äquivalent Ihrer Distribution), stellen Sie sicher, dass der Dienst spice-vdagentd läuft, und bestätigen Sie, dass die Zwischenablage-Freigabe im Resources-Tab des Arbeitsbereichs aktiviert ist."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wie aktiviere ich Rosetta in einem Debian-Arbeitsbereich?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Debian nutzt dieselben apt- und update-binfmts-Werkzeuge wie Ubuntu: Binden Sie die rosetta-VirtioFS-Freigabe ein, installieren Sie binfmt-support, und registrieren Sie Rosetta dann mit update-binfmts unter Verwendung der von Apple veröffentlichten Magic Bytes und Maske."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wie aktiviere ich Rosetta in einem Fedora-Arbeitsbereich?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Fedora liefert update-binfmts nicht mit. Binden Sie die rosetta-VirtioFS-Freigabe ein und registrieren Sie sie dann direkt bei systemd-binfmt, indem Sie eine Konfigurationsdatei nach /etc/binfmt.d/rosetta.conf schreiben und den Dienst systemd-binfmt neu starten."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was passiert mit einem Einweg-Arbeitsbereich, wenn ich ihn schließe?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Er wird automatisch in dem Moment gelöscht, in dem Sie ihn schließen, inklusive Festplatte. Danach gibt es nichts wiederherzustellen — verwenden Sie einen Einweg-Arbeitsbereich also nicht für etwas, das Sie behalten müssen."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Unterstützt Velo Workspaces Windows-Gäste?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Nicht in dieser Version. Velo Workspaces unterstützt derzeit Linux- und macOS-Gäste; Unterstützung für Windows-Gäste könnte in einer zukünftigen Version hinzugefügt werden."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/de/">
+      <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/de/#personas">Für wen</a>
+        <a href="/de/#features">Funktionen</a>
+        <a href="/de/support/">Support</a>
+      </span>
+      <details class="lang-switch">
+        <summary><span class="lang-switch-label">Deutsch</span> <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <ul class="lang-menu">
+          <li><a href="/support/" hreflang="en">English</a></li>
+          <li><a href="/zh-hans/support/" hreflang="zh-Hans">简体中文</a></li>
+          <li><a href="/zh-hant/support/" hreflang="zh-Hant">繁體中文</a></li>
+          <li><a href="/fr/support/" hreflang="fr">Français</a></li>
+          <li><a href="/de/support/" hreflang="de" aria-current="true">Deutsch</a></li>
+          <li><a href="/it/support/" hreflang="it">Italiano</a></li>
+          <li><a href="/ja/support/" hreflang="ja">日本語</a></li>
+          <li><a href="/ko/support/" hreflang="ko">한국어</a></li>
+          <li><a href="/pt-br/support/" hreflang="pt-BR">Português (Brasil)</a></li>
+          <li><a href="/es/support/" hreflang="es">Español</a></li>
+        </ul>
+      </details>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="section" style="padding-bottom:32px;">
+    <div class="container">
+      <span class="eyebrow">Support</span>
+      <h1>Erste Schritte und Antworten auf häufige Fragen.</h1>
+      <p style="max-width:60ch;">Nicht gefunden, wonach Sie suchen? Schreiben Sie an <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a> und wir helfen Ihnen direkt weiter.</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <h2>Erste Schritte</h2>
+
+      <div class="card" style="margin-bottom:24px;">
+        <h3>So erstellen Sie einen Arbeitsbereich</h3>
+        <ol class="steps" style="margin-top:20px;">
+          <li>
+            <div>
+              <h3>Neuen Arbeitsbereich öffnen</h3>
+              <p>Wählen Sie in der Arbeitsbereich-Bibliothek Neuer Arbeitsbereich und dann eine Image-Quelle: ein offizielles Image, eine vorhandene virtuelle Festplatte oder ein gespeichertes Basis-Image.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Profil auswählen</h3>
+              <p>Wählen Sie das Profil, das zu Ihrer Arbeit passt — Code &amp; Build, DevOps-Labor, KI-Sandbox und mehr — oder konfigurieren Sie CPU, Arbeitsspeicher und Speicherplatz selbst.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Prüfen und starten</h3>
+              <p>Bestätigen Sie die Zusammenfassung und starten Sie dann die Installation (oder den Start, bei einem Klon eines Basis-Images). Offizielle Images werden beim ersten Gebrauch direkt von der eigenen Quelle des jeweiligen Projekts heruntergeladen.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3>So nutzen Sie Einweg-Arbeitsbereiche</h3>
+        <ol class="steps" style="margin-top:20px;">
+          <li>
+            <div>
+              <h3>Einen Arbeitsbereich als Einweg markieren</h3>
+              <p>Aktivieren Sie beim Erstellen eines Arbeitsbereichs die Einweg-Option — am besten kombiniert mit einem Basis-Image, damit er sofort in einem bekannt guten Zustand startet.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Für genau eine Aufgabe verwenden</h3>
+              <p>Führen Sie Ihren Test aus, reproduzieren Sie den Fehler, oder probieren Sie den riskanten Befehl aus — behandeln Sie den Arbeitsbereich als vollständig entbehrlich.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Schließen</h3>
+              <p>Das Schließen eines Einweg-Arbeitsbereichs löscht ihn automatisch, inklusive Festplatte. Danach gibt es nichts aufzuräumen und nichts wiederherzustellen — verwenden Sie Einweg-Arbeitsbereiche nicht für etwas, das Sie behalten müssen.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2 style="margin-bottom:32px;">Häufig gestellte Fragen</h2>
+
+      <div class="faq-group">
+        <h2>Gemeinsame Ordner</h2>
+        <details class="faq-item">
+          <summary>Wie greife ich von innerhalb eines Arbeitsbereichs auf den gemeinsamen Ordner zu?</summary>
+          <div class="faq-answer">
+            <p><strong>macOS-Arbeitsbereiche (macOS 13 oder neuer):</strong> Gemeinsame Ordner werden automatisch eingebunden — öffnen Sie den Finder und schauen Sie unter <code>/Volumes/My Shared Files</code> nach. Kein Befehl nötig.</p>
+            <p><strong>Linux-Arbeitsbereiche:</strong> Jeder gemeinsame Ordner erhält seinen eigenen Einbindungsbefehl, der direkt in der App unter dem Tab „Freigegebene Dateien“ des Arbeitsbereichs angezeigt wird. Er sieht so aus, mit dem eigenen Tag dieses Ordners:</p>
+            <pre><code>mkdir -p /mnt/my_folder
+sudo mount -t virtiofs &lt;folder-tag-shown-in-app&gt; /mnt/my_folder</code></pre>
+            <p>Verwenden Sie genau das in der App angezeigte Tag — es ist pro Ordner eindeutig, sodass das Kopieren eines Befehls von anderswo nicht funktioniert.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>Zwischenablage &amp; Eingabe</h2>
+        <details class="faq-item">
+          <summary>Kopieren und Einfügen funktioniert nicht zwischen meinem Mac und einem Linux-Arbeitsbereich</summary>
+          <div class="faq-answer">
+            <p>Die Zwischenablage-Freigabe unter Linux hängt von einem im Gast laufenden Agenten ab. Gehen Sie diese Schritte der Reihe nach durch:</p>
+            <ol>
+              <li>Bestätigen Sie im Resources-Tab des Arbeitsbereichs, dass <strong>Zwischenablage-Freigabe</strong> aktiviert ist.</li>
+              <li>Stellen Sie im Gast sicher, dass <code>spice-vdagent</code> installiert ist:
+                <pre><code>sudo apt install spice-vdagent</code></pre>
+              </li>
+              <li>Bestätigen Sie, dass der Agent tatsächlich läuft:
+                <pre><code>systemctl status spice-vdagentd</code></pre>
+                Falls er inaktiv ist, starten Sie ihn mit <code>sudo systemctl start spice-vdagentd</code>, und melden Sie sich, falls Sie eine grafische Desktop-Umgebung nutzen, ab und wieder an, damit die Desktop-Sitzung ihn erkennt.
+              </li>
+              <li>Manche minimalen oder headless Desktop-Umgebungen starten <code>spice-vdagent</code> nicht automatisch — prüfen Sie die Autostart-Einstellungen Ihrer Desktop-Umgebung, falls es weiterhin nicht funktioniert, nachdem der Agent installiert ist und läuft.</li>
+            </ol>
+            <p>Die Zwischenablage-Freigabe funktioniert derzeit nur für Linux-Arbeitsbereiche.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>Rosetta (x86_64 auf Apple Silicon)</h2>
+        <details class="faq-item">
+          <summary>Wie aktiviere ich Rosetta in einem Debian-Arbeitsbereich?</summary>
+          <div class="faq-answer">
+            <p>Debian nutzt dieselben <code>apt</code> und <code>update-binfmts</code> Werkzeuge wie Ubuntu. Aktivieren Sie Rosetta für den Arbeitsbereich im Resources-Tab, starten Sie den Arbeitsbereich, und führen Sie dann einmalig Folgendes im Gast aus:</p>
+            <pre><code>sudo mkdir -p /media/rosetta
+sudo mount -t virtiofs rosetta /media/rosetta
+
+sudo apt-get update
+sudo apt-get install -y binfmt-support
+
+sudo /usr/sbin/update-binfmts --install rosetta /media/rosetta/rosetta \
+  --magic "\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00" \
+  --mask "\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff" \
+  --credentials yes --preserve yes --fix-binary yes</code></pre>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Wie aktiviere ich Rosetta in einem Fedora-Arbeitsbereich?</summary>
+          <div class="faq-answer">
+            <p>Fedora liefert Debians <code>update-binfmts</code> Tool nicht mit, wohl aber <code>systemd-binfmt</code>, das über eine Konfigurationsdatei exakt dieselbe Kernel- <code>binfmt_misc</code> -Registrierung liest. Aktivieren Sie Rosetta für den Arbeitsbereich im Resources-Tab, starten Sie den Arbeitsbereich, und führen Sie dann einmalig Folgendes im Gast aus:</p>
+            <pre><code>sudo mkdir -p /media/rosetta
+sudo mount -t virtiofs rosetta /media/rosetta
+
+sudo mkdir -p /etc/binfmt.d
+sudo tee /etc/binfmt.d/rosetta.conf > /dev/null &lt;&lt;'EOF'
+:rosetta:M::\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00:\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/media/rosetta/rosetta:CF
+EOF
+
+sudo systemctl restart systemd-binfmt</code></pre>
+            <p>Die Datei <code>rosetta.conf</code> bleibt über Neustarts hinweg bestehen — dies ist also eine einmalige Einrichtung pro Arbeitsbereich.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>AI Bridge</h2>
+        <details class="faq-item">
+          <summary>Wie verbinde ich AI Bridge mit Ollama?</summary>
+          <div class="faq-answer">
+            <ol>
+              <li>Installieren und starten Sie Ollama auf Ihrem Mac, außerhalb des Arbeitsbereichs.</li>
+              <li>Aktivieren Sie AI Bridge für den Arbeitsbereich (standardmäßig aktiv im KI-Sandbox-Profil, oder selbst in den Integrations- bzw. Resources-Einstellungen des Arbeitsbereichs aktivieren).</li>
+              <li>Starten Sie den Arbeitsbereich und öffnen Sie dann dessen AI-Bridge-Tab — er zeigt die lokale Endpunktadresse und, bei einem Linux-Gast, die genauen Befehle zur Weiterleitung der Verbindung.</li>
+              <li>Richten Sie Ihre Werkzeuge innerhalb des Arbeitsbereichs auf diese Adresse, genauso wie Sie es bei jedem lokalen Server tun würden, der das gängige Chat-Completions-API-Format spricht.</li>
+            </ol>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>Einweg-Arbeitsbereiche &amp; Basis-Images</h2>
+        <details class="faq-item">
+          <summary>Was passiert mit einem Einweg-Arbeitsbereich, wenn ich ihn schließe?</summary>
+          <div class="faq-answer">
+            <p>Er wird automatisch in dem Moment gelöscht, in dem Sie ihn schließen, inklusive Festplatte. Danach gibt es nichts wiederherzustellen — verwenden Sie einen Einweg-Arbeitsbereich nicht für etwas, das Sie behalten müssen.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Wie mache ich aus einem Arbeitsbereich ein wiederverwendbares Basis-Image?</summary>
+          <div class="faq-answer">
+            <p>Stoppen Sie den Arbeitsbereich und wählen Sie dann <strong>Als Basis-Image speichern</strong> aus dem Banner, das bei einem gestoppten Arbeitsbereich angezeigt wird. Speichern Sie denselben Arbeitsbereich später erneut, entsteht ein neues, unabhängiges Basis-Image, statt das vorherige zu überschreiben — verwalten und löschen Sie nicht mehr benötigte Basis-Images unter Einstellungen → Basis-Images.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Wo werden meine Arbeitsbereiche und Basis-Images gespeichert, und wie schaffe ich Speicherplatz frei?</summary>
+          <div class="faq-answer">
+            <p>Arbeitsbereich-Festplatten und Basis-Images liegen unter <code>~/Library/Application Support/VeloWorkspaces</code> auf Ihrem Mac. Löschen Sie nicht mehr benötigte Arbeitsbereiche aus der Bibliothek und ungenutzte Basis-Images unter Einstellungen → Basis-Images, um Speicherplatz freizugeben.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>Allgemein</h2>
+        <details class="faq-item">
+          <summary>Unterstützt Velo Workspaces Windows-Gäste?</summary>
+          <div class="faq-answer">
+            <p>Nicht in dieser Version. Velo Workspaces unterstützt derzeit Linux- und macOS-Gäste.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Warum kann ich manche Einstellungen nicht ändern, während ein Arbeitsbereich läuft?</summary>
+          <div class="faq-answer">
+            <p>CPU, Arbeitsspeicher, Speicherplatz, gemeinsame Ordner und einige andere Einstellungen sind Teil der Konfiguration der virtuellen Maschine und können nicht geändert werden, während sie läuft (Apples Virtualization-Framework unterstützt kein Hot-Plugging dafür). Stoppen Sie den Arbeitsbereich, nehmen Sie die Änderung vor, und starten Sie ihn erneut.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Warum kann ich keinen macOS-Gast erstellen?</summary>
+          <div class="faq-answer">
+            <p>macOS-Gäste erfordern einen Apple-Silicon-Mac als Host. Auf einem Intel-Mac werden Linux-Gäste weiterhin vollständig unterstützt.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="text-align:center;">
+    <div class="container">
+      <h2>Immer noch nicht weiter?</h2>
+      <p style="max-width:52ch; margin:0 auto 20px;">Schreiben Sie uns, und wir helfen Ihnen, das Problem zu lösen.</p>
+      <a class="btn btn-primary" href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/de/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/de/support/">Support</a>
+        <a href="/de/privacy/">Datenschutz</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">
+      © 2026 Velo Workspaces. Apple, das Apple-Logo, Mac, macOS und App Store sind Marken der Apple Inc., eingetragen in den USA und anderen Ländern. Velo Workspaces ist eine unabhängige App und steht in keiner Verbindung zu Apple Inc. und wird nicht von Apple Inc. unterstützt.
+    </p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=2"></script>
+</body>
+</html>

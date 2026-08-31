@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>支援與常見問題 — Velo Workspaces</title>
+<meta name="description" content="Velo Workspaces 入門指南、如何使用用後即焚工作區、在 Fedora 與 Debian 上啟用 Rosetta、共用資料夾存取、剪貼簿疑難排解等。">
+<link rel="canonical" href="https://www.veloworkspaces.com/zh-hant/support/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=2">
+<link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/">
+<link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/">
+<link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/">
+<link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/support/">
+<link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/support/">
+<link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/support/">
+<link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/support/">
+<link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/support/">
+<link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/support/">
+<link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/support/">
+<link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="支援與常見問題 — Velo Workspaces">
+<meta property="og:description" content="入門指南、用後即焚工作區、Fedora/Debian 上的 Rosetta、共用資料夾、剪貼簿疑難排解等。">
+<meta property="og:url" content="https://www.veloworkspaces.com/zh-hant/support/">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "如何從工作區內部存取共用資料夾？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "對於 macOS 工作區（macOS 13 或更新版本），共用資料夾會自動掛載在 /Volumes/My Shared Files 下——無需任何指令。對於 Linux 工作區，請執行「共用檔案」分頁中為該資料夾顯示的掛載指令，其中使用了該資料夾專屬的 VirtioFS 標籤。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Mac 與 Linux 工作區之間的複製貼上不生效",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Linux 上的剪貼簿共用依賴於虛擬機器內執行的 spice-vdagent 套件。用 sudo apt install spice-vdagent（或對應發行版的等效指令）安裝它，確認 spice-vdagentd 服務正在執行，並確認工作區「資源」分頁中的剪貼簿共用已啟用。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "如何在 Debian 工作區中啟用 Rosetta？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Debian 使用與 Ubuntu 相同的 apt 與 update-binfmts 工具：掛載 rosetta VirtioFS 共用，安裝 binfmt-support，然後使用 Apple 公布的 magic bytes 與遮罩，透過 update-binfmts 註冊 Rosetta。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "如何在 Fedora 工作區中啟用 Rosetta？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Fedora 沒有內建 update-binfmts。掛載 rosetta VirtioFS 共用，然後將設定檔寫入 /etc/binfmt.d/rosetta.conf 並重新啟動 systemd-binfmt 服務，直接向 systemd-binfmt 註冊。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "關閉用後即焚工作區後會發生什麼事？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "關閉的瞬間它會被自動刪除，包括其磁碟。由於之後無法復原，請不要把用後即焚工作區用於任何你需要保留的東西。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Velo Workspaces 支援 Windows 虛擬機器嗎？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "此版本尚不支援。Velo Workspaces 目前支援 Linux 與 macOS 虛擬機器；未來版本可能會加入對 Windows 虛擬機器的支援。"
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/zh-hant/">
+      <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/zh-hant/#personas">適合對象</a>
+        <a href="/zh-hant/#features">功能</a>
+        <a href="/zh-hant/support/">支援</a>
+      </span>
+      <details class="lang-switch">
+        <summary><span class="lang-switch-label">繁體中文</span> <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <ul class="lang-menu">
+          <li><a href="/support/" hreflang="en">English</a></li>
+          <li><a href="/zh-hans/support/" hreflang="zh-Hans">简体中文</a></li>
+          <li><a href="/zh-hant/support/" hreflang="zh-Hant" aria-current="true">繁體中文</a></li>
+          <li><a href="/fr/support/" hreflang="fr">Français</a></li>
+          <li><a href="/de/support/" hreflang="de">Deutsch</a></li>
+          <li><a href="/it/support/" hreflang="it">Italiano</a></li>
+          <li><a href="/ja/support/" hreflang="ja">日本語</a></li>
+          <li><a href="/ko/support/" hreflang="ko">한국어</a></li>
+          <li><a href="/pt-br/support/" hreflang="pt-BR">Português (Brasil)</a></li>
+          <li><a href="/es/support/" hreflang="es">Español</a></li>
+        </ul>
+      </details>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/">下載</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="section" style="padding-bottom:32px;">
+    <div class="container">
+      <span class="eyebrow">支援</span>
+      <h1>入門指南，以及常見問題解答。</h1>
+      <p style="max-width:60ch;">沒有找到你需要的內容？寄信到 <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a> 我們會直接為你提供協助。</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <h2>入門指南</h2>
+
+      <div class="card" style="margin-bottom:24px;">
+        <h3>如何建立工作區</h3>
+        <ol class="steps" style="margin-top:20px;">
+          <li>
+            <div>
+              <h3>開啟新增工作區</h3>
+              <p>在工作區庫中選擇新增工作區，然後選取映像檔來源：官方映像檔、現有虛擬磁碟，或已儲存的基礎映像檔。</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>選擇預設</h3>
+              <p>選擇與你的工作相符的預設——程式碼與建構、DevOps 實驗室、AI 沙盒等——或者自行設定 CPU、記憶體與儲存空間。</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>確認並啟動</h3>
+              <p>確認摘要資訊，然後開始安裝（若是從基礎映像檔複製，則為開機）。官方映像檔會在你首次使用時直接從該專案自己的來源下載。</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3>如何使用用後即焚工作區</h3>
+        <ol class="steps" style="margin-top:20px;">
+          <li>
+            <div>
+              <h3>將工作區標記為用後即焚</h3>
+              <p>建立工作區時開啟用後即焚選項——最好搭配基礎映像檔使用，這樣能立即從已驗證可用的狀態啟動。</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>僅用於一項任務</h3>
+              <p>執行你的測試、重現錯誤，或嘗試有風險的指令——把這個工作區當作完全可以捨棄的對象。</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>關閉它</h3>
+              <p>關閉用後即焚工作區會自動將其刪除，包括磁碟在內。之後無需清理，也無法復原——不要把用後即焚工作區用於任何你需要保留的東西。</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2 style="margin-bottom:32px;">常見問題</h2>
+
+      <div class="faq-group">
+        <h2>共用資料夾</h2>
+        <details class="faq-item">
+          <summary>如何從工作區內部存取共用資料夾？</summary>
+          <div class="faq-answer">
+            <p><strong>macOS 工作區（macOS 13 或更新版本）：</strong>共用資料夾會自動掛載——開啟 Finder，查看 <code>/Volumes/My Shared Files</code>路徑下的內容。無需任何指令。</p>
+            <p><strong>Linux 工作區：</strong>每個共用資料夾都有自己的掛載指令，會直接顯示在應用程式內該工作區的「共用檔案」分頁中，使用該資料夾專屬的標籤，形如：</p>
+            <pre><code>mkdir -p /mnt/my_folder
+sudo mount -t virtiofs &lt;folder-tag-shown-in-app&gt; /mnt/my_folder</code></pre>
+            <p>請使用應用程式中顯示的確切標籤——每個資料夾的標籤都是唯一的，因此從別處複製的指令不會生效。</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>剪貼簿與輸入</h2>
+        <details class="faq-item">
+          <summary>Mac 與 Linux 工作區之間的複製貼上不生效</summary>
+          <div class="faq-answer">
+            <p>Linux 上的剪貼簿共用依賴於虛擬機器內執行的代理程式。請依序檢查以下幾點：</p>
+            <ol>
+              <li>在工作區的「資源」分頁中，確認 <strong>剪貼簿共用</strong> 已開啟。</li>
+              <li>在虛擬機器內，確認 <code>spice-vdagent</code> 已安裝：
+                <pre><code>sudo apt install spice-vdagent</code></pre>
+              </li>
+              <li>確認該代理程式確實正在執行：
+                <pre><code>systemctl status spice-vdagentd</code></pre>
+                如果處於未啟用狀態，用 <code>sudo systemctl start spice-vdagentd</code>啟動它；如果你使用的是圖形化桌面環境，請登出後重新登入，讓桌面工作階段辨識它。
+              </li>
+              <li>某些精簡版或無圖形介面的桌面環境不會自動啟動 <code>spice-vdagent</code> ——如果代理程式已安裝並執行，但仍然不生效，請檢查你桌面環境的自動啟動設定。</li>
+            </ol>
+            <p>剪貼簿共用目前僅適用於 Linux 工作區。</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>Rosetta（在 Apple 晶片上執行 x86_64）</h2>
+        <details class="faq-item">
+          <summary>如何在 Debian 工作區中啟用 Rosetta？</summary>
+          <div class="faq-answer">
+            <p>Debian 使用與 Ubuntu 相同的 <code>apt</code> 與 <code>update-binfmts</code> 工具。在工作區的「資源」分頁中開啟 Rosetta，啟動該工作區，然後在虛擬機器內執行一次以下指令：</p>
+            <pre><code>sudo mkdir -p /media/rosetta
+sudo mount -t virtiofs rosetta /media/rosetta
+
+sudo apt-get update
+sudo apt-get install -y binfmt-support
+
+sudo /usr/sbin/update-binfmts --install rosetta /media/rosetta/rosetta \
+  --magic "\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00" \
+  --mask "\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff" \
+  --credentials yes --preserve yes --fix-binary yes</code></pre>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>如何在 Fedora 工作區中啟用 Rosetta？</summary>
+          <div class="faq-answer">
+            <p>Fedora 沒有內建 Debian 的 <code>update-binfmts</code> 工具，但內建了 <code>systemd-binfmt</code>，它會從設定檔中讀取與前者完全相同的核心 <code>binfmt_misc</code> 註冊資訊。在工作區的「資源」分頁中開啟 Rosetta，啟動該工作區，然後在虛擬機器內執行一次以下指令：</p>
+            <pre><code>sudo mkdir -p /media/rosetta
+sudo mount -t virtiofs rosetta /media/rosetta
+
+sudo mkdir -p /etc/binfmt.d
+sudo tee /etc/binfmt.d/rosetta.conf > /dev/null &lt;&lt;'EOF'
+:rosetta:M::\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00:\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/media/rosetta/rosetta:CF
+EOF
+
+sudo systemctl restart systemd-binfmt</code></pre>
+            <p> <code>rosetta.conf</code> 檔案會在重新啟動後依然保留，因此每個工作區只需設定一次。</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>AI 橋接</h2>
+        <details class="faq-item">
+          <summary>如何將 AI 橋接連接到 Ollama？</summary>
+          <div class="faq-answer">
+            <ol>
+              <li>在工作區之外，於你的 Mac 上安裝並執行 Ollama。</li>
+              <li>為該工作區啟用 AI 橋接（在 AI 沙盒預設中預設為開啟，也可以自行在工作區的「整合」或「資源」設定中開啟）。</li>
+              <li>啟動工作區，然後開啟其 AI 橋接分頁——其中會顯示本機端點位址，對於 Linux 虛擬機器，還會顯示轉發連線所需的確切指令。</li>
+              <li>在工作區內，把你的工具指向這個位址，就像連接任何使用標準 chat-completions API 格式的本機伺服器一樣。</li>
+            </ol>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>用後即焚工作區與基礎映像檔</h2>
+        <details class="faq-item">
+          <summary>關閉用後即焚工作區後會發生什麼事？</summary>
+          <div class="faq-answer">
+            <p>關閉的瞬間它會被自動刪除，包括其磁碟。之後無法復原——不要把用後即焚工作區用於任何你需要保留的東西。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>如何把一個工作區變成可重複使用的基礎映像檔？</summary>
+          <div class="faq-answer">
+            <p>停止該工作區，然後在已停止工作區顯示的橫幅中選擇 <strong>儲存為基礎映像檔</strong> 。之後再次儲存同一個工作區會建立一個新的獨立基礎映像檔，而不是覆蓋先前的映像檔——你可以在偏好設定 → 基礎映像檔中管理並刪除不再需要的基礎映像檔。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>我的工作區與基礎映像檔儲存在哪裡？如何釋放空間？</summary>
+          <div class="faq-answer">
+            <p>工作區磁碟與基礎映像檔存放在你 Mac 上的 <code>~/Library/Application Support/VeloWorkspaces</code> 目錄下。從資料庫中刪除不再需要的工作區，並在偏好設定 → 基礎映像檔中刪除未使用的基礎映像檔，即可釋放空間。</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>一般問題</h2>
+        <details class="faq-item">
+          <summary>Velo Workspaces 支援 Windows 虛擬機器嗎？</summary>
+          <div class="faq-answer">
+            <p>此版本尚不支援。Velo Workspaces 目前支援 Linux 與 macOS 虛擬機器。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>為什麼工作區執行時無法變更某些設定？</summary>
+          <div class="faq-answer">
+            <p>CPU、記憶體、儲存空間、共用資料夾等一些設定屬於虛擬機器設定的一部分，執行期間無法變更（Apple 的 Virtualization 框架不支援對這些項目進行熱插拔）。請先停止該工作區，完成變更後再重新啟動。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>為什麼我無法建立 macOS 虛擬機器？</summary>
+          <div class="faq-answer">
+            <p>建立 macOS 虛擬機器需要以 Apple 晶片 Mac 作為主機。在 Intel Mac 上，Linux 虛擬機器仍然完全受支援。</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="text-align:center;">
+    <div class="container">
+      <h2>仍然沒解決？</h2>
+      <p style="max-width:52ch; margin:0 auto 20px;">寄信給我們，我們會協助你解決問題。</p>
+      <a class="btn btn-primary" href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/zh-hant/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/zh-hant/support/">支援</a>
+        <a href="/zh-hant/privacy/">隱私</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">
+      © 2026 Velo Workspaces。Apple、Apple 標誌、Mac、macOS 及 App Store 是 Apple Inc. 在美國及其他國家╱地區註冊的商標。Velo Workspaces 是一款獨立應用程式，與 Apple Inc. 無關聯，亦未獲其認可。
+    </p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=2"></script>
+</body>
+</html>

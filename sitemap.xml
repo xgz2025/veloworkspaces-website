@@ -1,17 +1,483 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://www.veloworkspaces.com/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/"/>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/zh-hans/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/"/>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/zh-hant/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/"/>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/fr/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/"/>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/de/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/"/>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/it/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/"/>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/ja/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/"/>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/ko/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/"/>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/pt-br/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/"/>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/es/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/"/>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/support/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/support/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/support/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/support/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/support/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/support/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/support/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/support/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/zh-hans/support/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/support/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/support/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/support/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/support/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/support/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/support/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/support/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/zh-hant/support/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/support/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/support/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/support/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/support/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/support/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/support/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/support/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/fr/support/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/support/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/support/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/support/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/support/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/support/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/support/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/support/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/de/support/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/support/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/support/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/support/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/support/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/support/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/support/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/support/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/it/support/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/support/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/support/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/support/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/support/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/support/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/support/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/support/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/ja/support/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/support/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/support/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/support/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/support/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/support/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/support/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/support/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/ko/support/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/support/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/support/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/support/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/support/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/support/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/support/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/support/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/pt-br/support/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/support/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/support/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/support/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/support/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/support/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/support/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/support/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/es/support/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/support/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/support/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/support/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/support/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/support/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/support/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/support/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/"/>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/privacy/"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/zh-hans/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/privacy/"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/zh-hant/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/privacy/"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/fr/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/privacy/"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/de/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/privacy/"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/it/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/privacy/"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/ja/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/privacy/"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/ko/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/privacy/"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/pt-br/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/privacy/"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/es/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/privacy/"/>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>

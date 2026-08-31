@@ -6,24 +6,62 @@ Plain static HTML + CSS. No framework, no build step, no JavaScript beyond one s
 the App Store download link. This is deliberate — it keeps the site fast, dependency-free, and easy for
 search engines to crawl.
 
+The site is localized into 10 languages (see "Localization" below) — still plain static HTML per locale,
+still no build step for deployment. The `i18n/` scripts are authoring tooling only, used to keep 30 generated
+pages consistent; they never run at request time and are excluded from the deployed assets.
+
 ## Structure
 
 ```
-index.html          Home / marketing page
-privacy/index.html  Privacy policy       → served at /privacy/
-support/index.html  Support & FAQ        → served at /support/
+index.html          Home / marketing page                 (English, at /)
+privacy/index.html  Privacy policy                         → served at /privacy/
+support/index.html  Support & FAQ                           → served at /support/
 404.html            Not-found page
+de/ fr/ it/ es/ pt-br/ ja/ ko/ zh-hans/ zh-hant/
+                     Same three pages + 404, per locale     → served at /<locale>/, /<locale>/privacy/, etc.
+i18n/                Authoring scripts that generate every localized page — see "Localization" below
 robots.txt
-sitemap.xml
+sitemap.xml          Generated — lists all 30 localized URLs with hreflang alternates
 _redirects          Cloudflare Workers assets: path-level redirects (none active — see below)
 _headers            Cloudflare Workers assets: security + cache headers
 wrangler.jsonc      Deploy config (Workers static assets, no worker code)
-.assetsignore       Keeps .git, this README, etc. out of the deployed assets
+.assetsignore       Keeps .git, this README, i18n/, etc. out of the deployed assets
 assets/style.css    All styling
 assets/app-store.js Fills in every [data-app-store-link] button's href from one place
 assets/icon.png     App icon — used as both the favicon and the header/footer brand mark
 assets/screenshots/ Four app screenshots shown in the home page hero (see below)
 ```
+
+## Localization
+
+Every page exists in English plus 9 other locales — German, French, Italian, Spanish, Brazilian
+Portuguese, Japanese, Korean, Simplified Chinese, and Traditional Chinese — at `/<locale>/`
+(`/de/`, `/fr/`, `/zh-hans/`, etc.), matching the app's own in-app localizations (profile names, "AI
+Bridge", "Disposable" terminology are kept consistent with `Localizable.xcstrings` in the app repo). The
+app's product name, "Velo Workspaces", is never translated.
+
+**This is generated, not hand-maintained per file.** The English copy for each page and the corresponding
+translations live as Python dicts in `i18n/content_home.py`, `i18n/content_privacy.py`, and
+`i18n/content_support.py` — one dict key per translatable string, one entry per locale, with shell
+commands and code blocks (e.g. the Rosetta setup scripts) shared verbatim across all locales rather than
+retyped. `i18n/render_*.py` assemble the actual HTML from those dicts plus the shared header/footer/nav/
+hreflang scaffolding in `i18n/gen_locales.py`.
+
+**To change site copy:**
+1. Edit the relevant field in `i18n/content_home.py` / `content_privacy.py` / `content_support.py` — for
+   the English page, edit the `"en"` entry; for a translation, edit that locale's entry directly. (Don't
+   hand-edit the generated HTML files — a rebuild will overwrite them.)
+2. Run `python3 i18n/build.py` from the repo root. This regenerates all 30 pages (+ 10 404 pages) and
+   `sitemap.xml`.
+3. Diff the result, then commit both the `content_*.py` change and the regenerated HTML together.
+
+**To add an 11th locale:** add an entry to `LOCALES` in `i18n/gen_locales.py` (BCP-47 code, URL segment,
+native display name), add a matching entry to every dict in the three `content_*.py` files (same keys as
+`"en"`) and to `render_404.py`'s `NOTFOUND` dict, then run `i18n/build.py`.
+
+Each page's `<head>` carries `hreflang` alternate links to every locale variant plus `x-default` (pointing
+at English), and a `<details class="lang-switch">` menu in the header lets visitors jump between locales
+of the current page — no JavaScript required, consistent with the rest of the site.
 
 ## Deploying on Cloudflare (Workers static assets)
 

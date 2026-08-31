@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>支持与常见问题 — Velo Workspaces</title>
+<meta name="description" content="Velo Workspaces 入门指南、如何使用用后即焚工作区、在 Fedora 与 Debian 上启用 Rosetta、共享文件夹访问、剪贴板故障排查等。">
+<link rel="canonical" href="https://www.veloworkspaces.com/zh-hans/support/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=2">
+<link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/">
+<link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/">
+<link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/">
+<link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/support/">
+<link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/support/">
+<link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/support/">
+<link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/support/">
+<link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/support/">
+<link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/support/">
+<link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/support/">
+<link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="支持与常见问题 — Velo Workspaces">
+<meta property="og:description" content="入门指南、用后即焚工作区、Fedora/Debian 上的 Rosetta、共享文件夹、剪贴板故障排查等。">
+<meta property="og:url" content="https://www.veloworkspaces.com/zh-hans/support/">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "如何从工作区内部访问共享文件夹？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "对于 macOS 工作区（macOS 13 或更高版本），共享文件夹会自动挂载在 /Volumes/My Shared Files 下——无需任何命令。对于 Linux 工作区，请运行「共享文件」标签页中为该文件夹显示的挂载命令，其中使用了该文件夹专属的 VirtioFS 标签。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Mac 与 Linux 工作区之间的复制粘贴不生效",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Linux 上的剪贴板共享依赖于虚拟机内运行的 spice-vdagent 软件包。用 sudo apt install spice-vdagent（或对应发行版的等效命令）安装它，确认 spice-vdagentd 服务正在运行，并确认工作区「资源」标签页中的剪贴板共享已启用。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "如何在 Debian 工作区中启用 Rosetta？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Debian 使用与 Ubuntu 相同的 apt 和 update-binfmts 工具：挂载 rosetta VirtioFS 共享，安装 binfmt-support，然后使用 Apple 公布的 magic bytes 与掩码，通过 update-binfmts 注册 Rosetta。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "如何在 Fedora 工作区中启用 Rosetta？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Fedora 没有自带 update-binfmts。挂载 rosetta VirtioFS 共享，然后将配置文件写入 /etc/binfmt.d/rosetta.conf 并重启 systemd-binfmt 服务，直接向 systemd-binfmt 注册。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "关闭用后即焚工作区后会发生什么？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "关闭的瞬间它会被自动删除，包括其磁盘。由于之后无法恢复，请不要把用后即焚工作区用于任何你需要保留的东西。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Velo Workspaces 支持 Windows 虚拟机吗？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "此版本尚不支持。Velo Workspaces 目前支持 Linux 和 macOS 虚拟机；未来版本可能会加入对 Windows 虚拟机的支持。"
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/zh-hans/">
+      <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/zh-hans/#personas">适合谁</a>
+        <a href="/zh-hans/#features">功能</a>
+        <a href="/zh-hans/support/">支持</a>
+      </span>
+      <details class="lang-switch">
+        <summary><span class="lang-switch-label">简体中文</span> <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <ul class="lang-menu">
+          <li><a href="/support/" hreflang="en">English</a></li>
+          <li><a href="/zh-hans/support/" hreflang="zh-Hans" aria-current="true">简体中文</a></li>
+          <li><a href="/zh-hant/support/" hreflang="zh-Hant">繁體中文</a></li>
+          <li><a href="/fr/support/" hreflang="fr">Français</a></li>
+          <li><a href="/de/support/" hreflang="de">Deutsch</a></li>
+          <li><a href="/it/support/" hreflang="it">Italiano</a></li>
+          <li><a href="/ja/support/" hreflang="ja">日本語</a></li>
+          <li><a href="/ko/support/" hreflang="ko">한국어</a></li>
+          <li><a href="/pt-br/support/" hreflang="pt-BR">Português (Brasil)</a></li>
+          <li><a href="/es/support/" hreflang="es">Español</a></li>
+        </ul>
+      </details>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/">下载</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="section" style="padding-bottom:32px;">
+    <div class="container">
+      <span class="eyebrow">支持</span>
+      <h1>入门指南，以及常见问题解答。</h1>
+      <p style="max-width:60ch;">没有找到你需要的内容？发邮件到 <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a> 我们会直接为你提供帮助。</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <h2>入门指南</h2>
+
+      <div class="card" style="margin-bottom:24px;">
+        <h3>如何创建工作区</h3>
+        <ol class="steps" style="margin-top:20px;">
+          <li>
+            <div>
+              <h3>打开新建工作区</h3>
+              <p>在工作区库中选择新建工作区，然后选取镜像来源：官方镜像、现有虚拟磁盘，或已保存的基础镜像。</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>选择预设</h3>
+              <p>选择与你的工作匹配的预设——代码与构建、DevOps 实验室、AI 沙盒等——或者自行配置 CPU、内存和存储。</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>确认并启动</h3>
+              <p>确认摘要信息，然后开始安装（如果是从基础镜像克隆，则为启动）。官方镜像会在你首次使用时直接从该项目自己的源下载。</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3>如何使用用后即焚工作区</h3>
+        <ol class="steps" style="margin-top:20px;">
+          <li>
+            <div>
+              <h3>将工作区标记为用后即焚</h3>
+              <p>创建工作区时打开用后即焚选项——最好搭配基础镜像使用，这样能立即从已验证可用的状态启动。</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>仅用于一项任务</h3>
+              <p>运行你的测试、复现 bug，或尝试有风险的命令——把这个工作区当作完全可以丢弃的对象。</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>关闭它</h3>
+              <p>关闭一个用后即焚工作区会自动将其删除，包括磁盘在内。之后无需清理，也无法恢复——不要把用后即焚工作区用于任何你需要保留的东西。</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2 style="margin-bottom:32px;">常见问题</h2>
+
+      <div class="faq-group">
+        <h2>共享文件夹</h2>
+        <details class="faq-item">
+          <summary>如何从工作区内部访问共享文件夹？</summary>
+          <div class="faq-answer">
+            <p><strong>macOS 工作区（macOS 13 或更高版本）：</strong>共享文件夹会自动挂载——打开访达（Finder），查看 <code>/Volumes/My Shared Files</code>路径下的内容。无需任何命令。</p>
+            <p><strong>Linux 工作区：</strong>每个共享文件夹都有自己的挂载命令，会直接显示在应用内该工作区的「共享文件」标签页中，使用该文件夹专属的标签，形如：</p>
+            <pre><code>mkdir -p /mnt/my_folder
+sudo mount -t virtiofs &lt;folder-tag-shown-in-app&gt; /mnt/my_folder</code></pre>
+            <p>请使用应用中显示的确切标签——每个文件夹的标签都是唯一的，因此从别处复制的命令不会生效。</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>剪贴板与输入</h2>
+        <details class="faq-item">
+          <summary>Mac 与 Linux 工作区之间的复制粘贴不生效</summary>
+          <div class="faq-answer">
+            <p>Linux 上的剪贴板共享依赖于虚拟机内运行的代理程序。请按顺序检查以下几点：</p>
+            <ol>
+              <li>在工作区的「资源」标签页中，确认 <strong>剪贴板共享</strong> 已打开。</li>
+              <li>在虚拟机内，确认 <code>spice-vdagent</code> 已安装：
+                <pre><code>sudo apt install spice-vdagent</code></pre>
+              </li>
+              <li>确认该代理程序确实在运行：
+                <pre><code>systemctl status spice-vdagentd</code></pre>
+                如果处于未激活状态，用 <code>sudo systemctl start spice-vdagentd</code>启动它；如果你使用的是图形桌面环境，请注销后重新登录，以便桌面会话识别它。
+              </li>
+              <li>某些精简版或无图形界面的桌面环境不会自动启动 <code>spice-vdagent</code> ——如果代理程序已安装并运行，但仍然不生效，请检查你桌面环境的自启动设置。</li>
+            </ol>
+            <p>剪贴板共享目前仅适用于 Linux 工作区。</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>Rosetta（在 Apple 芯片上运行 x86_64）</h2>
+        <details class="faq-item">
+          <summary>如何在 Debian 工作区中启用 Rosetta？</summary>
+          <div class="faq-answer">
+            <p>Debian 使用与 Ubuntu 相同的 <code>apt</code> 和 <code>update-binfmts</code> 工具。在工作区的「资源」标签页中打开 Rosetta，启动该工作区，然后在虚拟机内执行一次以下命令：</p>
+            <pre><code>sudo mkdir -p /media/rosetta
+sudo mount -t virtiofs rosetta /media/rosetta
+
+sudo apt-get update
+sudo apt-get install -y binfmt-support
+
+sudo /usr/sbin/update-binfmts --install rosetta /media/rosetta/rosetta \
+  --magic "\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00" \
+  --mask "\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff" \
+  --credentials yes --preserve yes --fix-binary yes</code></pre>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>如何在 Fedora 工作区中启用 Rosetta？</summary>
+          <div class="faq-answer">
+            <p>Fedora 没有自带 Debian 的 <code>update-binfmts</code> 工具，但自带了 <code>systemd-binfmt</code>，它会从配置文件中读取与前者完全相同的内核 <code>binfmt_misc</code> 注册信息。在工作区的「资源」标签页中打开 Rosetta，启动该工作区，然后在虚拟机内执行一次以下命令：</p>
+            <pre><code>sudo mkdir -p /media/rosetta
+sudo mount -t virtiofs rosetta /media/rosetta
+
+sudo mkdir -p /etc/binfmt.d
+sudo tee /etc/binfmt.d/rosetta.conf > /dev/null &lt;&lt;'EOF'
+:rosetta:M::\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00:\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/media/rosetta/rosetta:CF
+EOF
+
+sudo systemctl restart systemd-binfmt</code></pre>
+            <p> <code>rosetta.conf</code> 文件会在重启后依然保留，因此每个工作区只需设置一次。</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>AI 桥接</h2>
+        <details class="faq-item">
+          <summary>如何将 AI 桥接连接到 Ollama？</summary>
+          <div class="faq-answer">
+            <ol>
+              <li>在工作区之外，于你的 Mac 上安装并运行 Ollama。</li>
+              <li>为该工作区启用 AI 桥接（在 AI 沙盒预设中默认开启，也可以自行在工作区的「集成」或「资源」设置中打开）。</li>
+              <li>启动工作区，然后打开它的 AI 桥接标签页——其中会显示本地端点地址，对于 Linux 虚拟机，还会显示转发连接所需的确切命令。</li>
+              <li>在工作区内，把你的工具指向这个地址，就像连接任何使用标准 chat-completions API 格式的本地服务器一样。</li>
+            </ol>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>用后即焚工作区与基础镜像</h2>
+        <details class="faq-item">
+          <summary>关闭用后即焚工作区后会发生什么？</summary>
+          <div class="faq-answer">
+            <p>关闭的瞬间它会被自动删除，包括其磁盘。之后无法恢复——不要把用后即焚工作区用于任何你需要保留的东西。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>如何把一个工作区变成可复用的基础镜像？</summary>
+          <div class="faq-answer">
+            <p>停止该工作区，然后在已停止工作区显示的横幅中选择 <strong>保存为基础镜像</strong> 。之后再次保存同一个工作区会创建一个新的独立基础镜像，而不是覆盖之前的镜像——你可以在偏好设置 → 基础镜像中管理并删除不再需要的基础镜像。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>我的工作区和基础镜像存储在哪里？如何释放空间？</summary>
+          <div class="faq-answer">
+            <p>工作区磁盘和基础镜像存放在你 Mac 上的 <code>~/Library/Application Support/VeloWorkspaces</code> 目录下。从库中删除不再需要的工作区，并在偏好设置 → 基础镜像中删除未使用的基础镜像，即可释放空间。</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>常规问题</h2>
+        <details class="faq-item">
+          <summary>Velo Workspaces 支持 Windows 虚拟机吗？</summary>
+          <div class="faq-answer">
+            <p>此版本尚不支持。Velo Workspaces 目前支持 Linux 和 macOS 虚拟机。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>为什么工作区运行时无法更改某些设置？</summary>
+          <div class="faq-answer">
+            <p>CPU、内存、存储、共享文件夹等一些设置属于虚拟机配置的一部分，运行期间无法更改（Apple 的 Virtualization 框架不支持对这些项目进行热插拔）。请先停止该工作区，完成更改后再重新启动。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>为什么我无法创建 macOS 虚拟机？</summary>
+          <div class="faq-answer">
+            <p>创建 macOS 虚拟机需要以 Apple 芯片 Mac 作为主机。在 Intel Mac 上，Linux 虚拟机仍然完全受支持。</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="text-align:center;">
+    <div class="container">
+      <h2>仍然没解决？</h2>
+      <p style="max-width:52ch; margin:0 auto 20px;">给我们发邮件，我们会帮你解决问题。</p>
+      <a class="btn btn-primary" href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/zh-hans/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/zh-hans/support/">支持</a>
+        <a href="/zh-hans/privacy/">隐私</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">
+      © 2026 Velo Workspaces。Apple、Apple 标志、Mac、macOS 和 App Store 是 Apple Inc. 在美国及其他国家/地区注册的商标。Velo Workspaces 是一款独立应用，与 Apple Inc. 无关联，也未获得其认可。
+    </p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=2"></script>
+</body>
+</html>

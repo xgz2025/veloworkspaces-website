@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Velo Workspaces — Apple シリコン向け使い捨て Linux &amp; macOS 環境</title>
+<meta name="description" content="Velo Workspaces は Apple シリコン上で分離された Linux と macOS の環境を実行します。AI 研究者、QA エンジニア、DevOps プロフェッショナル、ソフトウェアエンジニアのために作られており、AI ブリッジによるローカル AI 推論と、ベースイメージから数秒で複製できる使い捨てワークスペースを備えています。">
+<link rel="canonical" href="https://www.veloworkspaces.com/ja/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=2">
+<link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/">
+<link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/">
+<link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/">
+<link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/">
+<link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/">
+<link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/">
+<link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/">
+<link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/">
+<link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/">
+<link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/">
+<link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Velo Workspaces — Apple シリコン向け使い捨て Linux & macOS 環境">
+<meta property="og:description" content="ローカル AI 推論、使い捨ての QA 環境、そして Apple シリコン上で再現可能な開発・DevOps ワークスペース——アカウント不要、クラウド依存なし。">
+<meta property="og:url" content="https://www.veloworkspaces.com/ja/">
+<!-- TODO: add /assets/og-image.png (1200x630) and uncomment once it exists.
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+-->
+<meta name="twitter:title" content="Velo Workspaces — Apple シリコン向け使い捨て Linux & macOS 環境">
+<meta name="twitter:description" content="ローカル AI 推論、使い捨ての QA 環境、そして Apple シリコン上で再現可能な開発・DevOps ワークスペース——アカウント不要、クラウド依存なし。">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Velo Workspaces",
+  "operatingSystem": "macOS",
+  "applicationCategory": "DeveloperApplication",
+  "description": "Velo Workspaces は Apple シリコン上で分離された使い捨ての Linux と macOS 環境を実行し、AI ブリッジによるローカル AI モデル推論、再利用可能なベースイメージ、そしてソフトウェアエンジニア、QA エンジニア、DevOps プロフェッショナル、AI 研究者向けの統合機能を備えています。",
+  "url": "https://www.veloworkspaces.com/ja/",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/ja/">
+      <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/ja/#personas">対象ユーザー</a>
+        <a href="/ja/#features">機能</a>
+        <a href="/ja/support/">サポート</a>
+      </span>
+      <details class="lang-switch">
+        <summary><span class="lang-switch-label">日本語</span> <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <ul class="lang-menu">
+          <li><a href="/" hreflang="en">English</a></li>
+          <li><a href="/zh-hans/" hreflang="zh-Hans">简体中文</a></li>
+          <li><a href="/zh-hant/" hreflang="zh-Hant">繁體中文</a></li>
+          <li><a href="/fr/" hreflang="fr">Français</a></li>
+          <li><a href="/de/" hreflang="de">Deutsch</a></li>
+          <li><a href="/it/" hreflang="it">Italiano</a></li>
+          <li><a href="/ja/" hreflang="ja" aria-current="true">日本語</a></li>
+          <li><a href="/ko/" hreflang="ko">한국어</a></li>
+          <li><a href="/pt-br/" hreflang="pt-BR">Português (Brasil)</a></li>
+          <li><a href="/es/" hreflang="es">Español</a></li>
+        </ul>
+      </details>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/">ダウンロード</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="eyebrow">Apple シリコン搭載 Mac 向け</span>
+        <h1>使い捨てで再現可能な環境——おもちゃの VM アプリではありません。</h1>
+        <p style="font-size:1.15rem; color:var(--color-text-secondary); max-width:52ch;">
+          Velo Workspaces は、AI 研究者、QA エンジニア、DevOps プロフェッショナル、ソフトウェアエンジニアが実際にどう働くかを軸に作られた、本物の分離された Linux と macOS 環境を Mac 上で実行します——ありきたりな「別の OS を動かす」目新しさではありません。
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-store" data-app-store-link href="https://apps.apple.com/">
+            <svg class="btn-store-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M16.365 1.43c0 1.14-.415 2.198-1.244 3.176-.995 1.164-2.197 1.838-3.5 1.732a3.72 3.72 0 0 1-.028-.46c0-1.09.475-2.253 1.32-3.204.42-.483.955-.885 1.604-1.206.648-.316 1.26-.49 1.834-.518.018.16.014.32.014.48zm4.29 16.61c-.31.716-.677 1.377-1.103 1.988-.582.835-1.06 1.412-1.427 1.73-.568.51-1.176.772-1.827.788-.468 0-1.032-.133-1.688-.403-.658-.27-1.263-.403-1.816-.403-.58 0-1.202.133-1.869.403-.667.27-1.205.41-1.617.424-.625.027-1.246-.242-1.865-.808-.397-.345-.897-.944-1.5-1.797-.647-.912-1.18-1.97-1.598-3.177-.448-1.302-.673-2.563-.673-3.784 0-1.398.302-2.605.907-3.618a5.33 5.33 0 0 1 1.902-1.94 5.11 5.11 0 0 1 2.573-.727c.497 0 1.148.154 1.958.457.807.304 1.325.458 1.552.458.169 0 .747-.18 1.729-.539.93-.332 1.716-.47 2.36-.415 1.744.14 3.055.827 3.928 2.066-1.56.945-2.333 2.269-2.318 3.966.014 1.322.492 2.423 1.432 3.298.427.405.903.719 1.432.943-.115.334-.237.654-.366.962z"/>
+            </svg>
+            <span class="btn-store-text"><small>近日</small><strong>App Store に登場</strong></span>
+          </a>
+          <a class="btn btn-outline" href="#personas">何のために作られたか見る</a>
+        </div>
+        <p class="hero-note">Apple シリコン搭載 Mac、macOS 14 以降。アカウント不要。クラウド依存なし。</p>
+      </div>
+      <div class="hero-art">
+        <div class="shot-tile" style="--accent: var(--color-accent-swe);">
+          <img src="/assets/screenshots/software-engineers.png" alt="Velo Workspaces のワークスペース詳細ビュー、コード & ビルドプロファイル" loading="eager" width="960" height="600">
+        </div>
+        <div class="shot-tile" style="--accent: var(--color-accent-ai);">
+          <img src="/assets/screenshots/ai-researchers.png" alt="Velo Workspaces の AI ブリッジタブ、ローカルモデルに接続" loading="eager" width="960" height="600">
+        </div>
+        <div class="shot-tile" style="--accent: var(--color-accent-devops);">
+          <img src="/assets/screenshots/devops-professionals.png" alt="Velo Workspaces の DevOps ラボワークスペース、シリアルコンソール付き" loading="eager" width="960" height="600">
+        </div>
+        <div class="shot-tile" style="--accent: var(--color-accent-qa);">
+          <img src="/assets/screenshots/qa-engineers.png" alt="Velo Workspaces の使い捨てワークスペースとベースイメージライブラリ" loading="eager" width="960" height="600">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="personas">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">対象ユーザー</span>
+        <h2>4つの仕事。そのために作られた4つのプロファイル。</h2>
+        <p>どのワークスペースも、当てずっぽうではなく目の前の仕事に合わせて設計されたプロファイルから始まります——CPU、メモリ、ストレージを仕事に合わせて設定するか、自分で構成することもできます。</p>
+      </div>
+      <div class="grid grid-4">
+        <div class="card persona-card" style="--accent: var(--color-accent-swe);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="8 6 2 12 8 18"/><polyline points="16 6 22 12 16 18"/></svg>
+          </div>
+          <h3>ソフトウェアエンジニア</h3>
+          <p>メインマシンに触れることなく、クリーンなツールチェーンでビルド・テストできます——または同僚とまったく同じセットアップを正確に再現できます。</p>
+          <span class="persona-profile">コード & ビルドプロファイル</span>
+        </div>
+        <div class="card persona-card" style="--accent: var(--color-accent-qa);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1" stroke-dasharray="2 2"/><path d="M14 3h7v7h-7z"/><path d="M14 14h7v7h-7z"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+          </div>
+          <h3>QA エンジニア</h3>
+          <p>すべてのテストをまったく同じ動作確認済みイメージから実行し、その後環境を破棄——覚えておくべきスナップショットも、疑うべき残存状態もありません。</p>
+          <span class="persona-profile">使い捨てワークスペース</span>
+        </div>
+        <div class="card persona-card" style="--accent: var(--color-accent-devops);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          </div>
+          <h3>DevOps プロフェッショナル</h3>
+          <p>デプロイスクリプト、インストール手順、設定変更を、本番投入前に本物の分離された Linux ホストで検証できます。</p>
+          <span class="persona-profile">DevOps ラボプロファイル</span>
+        </div>
+        <div class="card persona-card" style="--accent: var(--color-accent-ai);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <h3>AI 研究者</h3>
+          <p>自分の Mac 上で動くモデルに対して、隔離された環境の中でエージェント、ツール呼び出し、RAG パイプラインを構築・テストできます。</p>
+          <span class="persona-profile">AI サンドボックス + AI ブリッジ</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="features">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">最も重要な2つの機能</span>
+        <h2>ローカル AI を中心に、そして気兼ねなく捨てられる環境を中心に。</h2>
+      </div>
+
+      <div class="grid" style="gap:24px; margin-bottom:24px;">
+        <div class="card feature-card large" style="--accent: var(--color-accent-ai);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <div>
+            <h3>AI ブリッジ——ローカルモデル推論、クラウドを介さない</h3>
+            <p>Mac 自身の GPU で推論を実行し、ワークスペース内から標準的な chat-completions エンドポイントとしてアクセスできます——どんなローカルサーバーにアクセスするのとも同じ感覚です。マシンを一切離れないモデルに対してエージェント、ツール呼び出し、RAG パイプラインを構築・テストできます。API キー不要、利用コスト不要、データは Mac の外に出ません。</p>
+            <ul class="feature-list" style="margin-top:16px;">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Ollama などのローカルモデルサーバーで動作</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Velo Workspaces や第三者に送信されるものは一切なし</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> AI サンドボックスプロファイルは、標準でエージェントフレームワークやツール向けにサイズ設定済み</li>
+            </ul>
+
+            <div class="benchmark">
+              <p class="benchmark-label">Mac mini（Apple M1）で測定</p>
+              <div class="benchmark-row">
+                <span class="benchmark-metric">最初のトークンまでの時間</span>
+                <span class="benchmark-values">
+                  <strong>280&nbsp;ms</strong> ネイティブ
+                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  <strong>310&nbsp;ms</strong> AI ブリッジ経由
+                </span>
+                <span class="benchmark-delta">+10%</span>
+              </div>
+              <div class="benchmark-row">
+                <span class="benchmark-metric">スループット</span>
+                <span class="benchmark-values">
+                  <strong>12.75&nbsp;tok/s</strong> ネイティブ
+                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  <strong>12.27&nbsp;tok/s</strong> AI ブリッジ経由
+                </span>
+                <span class="benchmark-delta">&minus;4%</span>
+              </div>
+              <p class="benchmark-footnote">Llama 3 を使用し、ホスト上（ループバック）での直接実行と、AI ブリッジ経由で Linux ワークスペースから到達した場合をそれぞれ5回ずつ計測して平均。結果はモデル、Mac、ワークロードにより変動します。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card feature-card large" style="--accent: var(--color-accent-qa);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1" stroke-dasharray="2 2"/><path d="M14 3h7v7h-7z"/><path d="M14 14h7v7h-7z"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+          </div>
+          <div>
+            <h3>使い捨てワークスペース——QA はこうあるべき</h3>
+            <p>1回のテスト実行のためだけにクリーンな環境を立ち上げ、閉じた瞬間に自動でクリーンアップさせる——削除を忘れがちなスナップショットも、「前回何かインストールしたまま残っていないか」というテスト結果の信頼性を揺るがす疑念もありません。OS、パッケージ、dotfiles まで含めて完全に構成されたワークスペースを一度だけベースイメージとして封印し、そこから copy-on-write で数秒のうちに新しい使い捨てワークスペースを複製すれば、すべてのテストがまったく同じ、動作確認済みの状態から始まります。</p>
+            <ul class="feature-list" style="margin-top:16px;">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 現在の状態をワンクリックで再利用可能なベースイメージとして保存</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 即座に複製——毎回の実行前に再インストール不要</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 片付けたいときはいつでも環境設定から保存済みベースイメージを管理</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">その他、期待通りのすべて</span>
+        <h2>実際のツールチェーンを尊重する統合機能。</h2>
+      </div>
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>共有フォルダ</h3>
+          <p>ホストのフォルダをそのままワークスペースに共有——macOS ゲストでは自動マウント、Linux にはコピー & ペースト可能なコマンドを用意。</p>
+        </div>
+        <div class="card">
+          <h3>SSH & VS Code、ワンクリックで</h3>
+          <p>どのワークスペースにもすばやい SSH アクセス、さらに生成される VS Code Remote-SSH 設定で、ゲストが起動した瞬間にエディタが接続。</p>
+        </div>
+        <div class="card">
+          <h3>シリアルコンソール</h3>
+          <p>ディスプレイを一切起動しない Linux ゲストをデバッグするための内蔵ターミナル——外部の SSH クライアント不要。</p>
+        </div>
+        <div class="card">
+          <h3>クリップボード共有</h3>
+          <p>自分のデスクトップのウィンドウのように、Mac と Linux ワークスペースの間でコピー & ペースト。</p>
+        </div>
+        <div class="card">
+          <h3>Linux 向け Rosetta 2</h3>
+          <p>必要とするワークスペース内で、x86_64 の Linux バイナリを Apple シリコン上でほぼネイティブな速度で実行。</p>
+        </div>
+        <div class="card">
+          <h3>一時停止 & 休止</h3>
+          <p>作業途中でワークスペースを一時停止し、バックグラウンドで動かし続けることなく、まさにその続きから再開。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">ゲスト OS</span>
+        <h2>本当に必要な Linux を実行する。</h2>
+        <p>ミラーではなく各プロジェクトの公式ソースから直接取得——さらに Metal アクセラレーションによるほぼネイティブなグラフィックスを備えた macOS ゲストも利用可能。</p>
+      </div>
+      <div class="pill-row" style="justify-content:center;">
+        <span class="pill">Ubuntu Desktop</span>
+        <span class="pill">Ubuntu Server</span>
+        <span class="pill">Debian</span>
+        <span class="pill">Fedora Workstation</span>
+        <span class="pill">Alpine Linux</span>
+        <span class="pill">macOS guests</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="callout">
+        <div class="icon-badge" style="--accent: var(--color-accent-devops);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div>
+          <h2 style="margin-bottom:8px;">デフォルトでプライベート、デフォルトでローカル。</h2>
+          <p>アカウント不要、ワークスペースが行うことにクラウド依存は一切ありません。診断機能とクラッシュレポートはオプトインで、デフォルトではオフです。すべて——ゲスト OS、あなたのファイル、あなたのモデル——が Mac の中にとどまります。詳細は <a href="/ja/privacy/">プライバシーポリシー</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="text-align:center;">
+    <div class="container">
+      <h2>クリーンな環境を、当たり前の第一級ワークフローとして扱う。</h2>
+      <p style="max-width:56ch; margin:0 auto 28px;">ローカルモデルに対して AI エージェントをデバッグするときも、同じ自動テストスイートを1日に何百回も実行するときも、Velo Workspaces はそのために作られています。</p>
+      <a class="btn btn-store" data-app-store-link href="https://apps.apple.com/" style="display:inline-flex;">
+            <svg class="btn-store-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M16.365 1.43c0 1.14-.415 2.198-1.244 3.176-.995 1.164-2.197 1.838-3.5 1.732a3.72 3.72 0 0 1-.028-.46c0-1.09.475-2.253 1.32-3.204.42-.483.955-.885 1.604-1.206.648-.316 1.26-.49 1.834-.518.018.16.014.32.014.48zm4.29 16.61c-.31.716-.677 1.377-1.103 1.988-.582.835-1.06 1.412-1.427 1.73-.568.51-1.176.772-1.827.788-.468 0-1.032-.133-1.688-.403-.658-.27-1.263-.403-1.816-.403-.58 0-1.202.133-1.869.403-.667.27-1.205.41-1.617.424-.625.027-1.246-.242-1.865-.808-.397-.345-.897-.944-1.5-1.797-.647-.912-1.18-1.97-1.598-3.177-.448-1.302-.673-2.563-.673-3.784 0-1.398.302-2.605.907-3.618a5.33 5.33 0 0 1 1.902-1.94 5.11 5.11 0 0 1 2.573-.727c.497 0 1.148.154 1.958.457.807.304 1.325.458 1.552.458.169 0 .747-.18 1.729-.539.93-.332 1.716-.47 2.36-.415 1.744.14 3.055.827 3.928 2.066-1.56.945-2.333 2.269-2.318 3.966.014 1.322.492 2.423 1.432 3.298.427.405.903.719 1.432.943-.115.334-.237.654-.366.962z"/>
+            </svg>
+            <span class="btn-store-text"><small>近日</small><strong>App Store に登場</strong></span>
+          </a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/ja/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/ja/support/">サポート</a>
+        <a href="/ja/privacy/">プライバシー</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">
+      © 2026 Velo Workspaces. Apple、Apple ロゴ、Mac、macOS、および App Store は米国および他の国々で登録された Apple Inc. の商標です。Velo Workspaces は独立したアプリであり、Apple Inc. とは提携しておらず、Apple Inc. の承認を受けたものでもありません。
+    </p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=2"></script>
+</body>
+</html>

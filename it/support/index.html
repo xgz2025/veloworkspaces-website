@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Supporto &amp; FAQ — Velo Workspaces</title>
+<meta name="description" content="Guida introduttiva a Velo Workspaces, come usare i workspace usa e getta, abilitare Rosetta su Fedora e Debian, accesso alle cartelle condivise, risoluzione problemi degli appunti, e altro.">
+<link rel="canonical" href="https://www.veloworkspaces.com/it/support/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=2">
+<link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/">
+<link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/">
+<link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/">
+<link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/support/">
+<link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/support/">
+<link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/support/">
+<link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/support/">
+<link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/support/">
+<link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/support/">
+<link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/support/">
+<link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Supporto & FAQ — Velo Workspaces">
+<meta property="og:description" content="Guida introduttiva, workspace usa e getta, Rosetta su Fedora/Debian, cartelle condivise, risoluzione problemi degli appunti, e altro.">
+<meta property="og:url" content="https://www.veloworkspaces.com/it/support/">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Come accedo a una cartella condivisa dall'interno di un workspace?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Per un workspace macOS (macOS 13 o successivo), le cartelle condivise si montano automaticamente sotto /Volumes/My Shared Files — nessun comando necessario. Per un workspace Linux, esegui il comando di mount mostrato per quella cartella nella scheda File condivisi, che usa il tag VirtioFS proprio di quella cartella."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Copia e incolla non funziona tra il mio Mac e un workspace Linux",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "La condivisione degli appunti su Linux dipende dal pacchetto spice-vdagent in esecuzione all'interno del guest. Installalo con sudo apt install spice-vdagent (o l'equivalente della tua distribuzione), assicurati che il servizio spice-vdagentd sia in esecuzione, e conferma che la condivisione degli appunti sia attivata nella scheda Risorse del workspace."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Come abilito Rosetta in un workspace Debian?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Debian usa gli stessi strumenti apt e update-binfmts di Ubuntu: monta la condivisione VirtioFS rosetta, installa binfmt-support, poi registra Rosetta con update-binfmts usando i magic byte e la maschera pubblicati da Apple."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Come abilito Rosetta in un workspace Fedora?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Fedora non include update-binfmts. Monta la condivisione VirtioFS rosetta, poi registrala direttamente con systemd-binfmt scrivendo un file di configurazione in /etc/binfmt.d/rosetta.conf e riavviando il servizio systemd-binfmt."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Cosa succede a un workspace usa e getta quando lo chiudo?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Viene eliminato automaticamente nel momento in cui lo chiudi, disco incluso. Non c'è nulla da recuperare dopo, quindi non usare un workspace usa e getta per qualcosa che devi conservare."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Velo Workspaces supporta i guest Windows?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Non in questa versione. Velo Workspaces attualmente supporta guest Linux e macOS; il supporto per i guest Windows potrebbe essere aggiunto in una versione futura."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/it/">
+      <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/it/#personas">Per chi è</a>
+        <a href="/it/#features">Funzionalità</a>
+        <a href="/it/support/">Supporto</a>
+      </span>
+      <details class="lang-switch">
+        <summary><span class="lang-switch-label">Italiano</span> <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <ul class="lang-menu">
+          <li><a href="/support/" hreflang="en">English</a></li>
+          <li><a href="/zh-hans/support/" hreflang="zh-Hans">简体中文</a></li>
+          <li><a href="/zh-hant/support/" hreflang="zh-Hant">繁體中文</a></li>
+          <li><a href="/fr/support/" hreflang="fr">Français</a></li>
+          <li><a href="/de/support/" hreflang="de">Deutsch</a></li>
+          <li><a href="/it/support/" hreflang="it" aria-current="true">Italiano</a></li>
+          <li><a href="/ja/support/" hreflang="ja">日本語</a></li>
+          <li><a href="/ko/support/" hreflang="ko">한국어</a></li>
+          <li><a href="/pt-br/support/" hreflang="pt-BR">Português (Brasil)</a></li>
+          <li><a href="/es/support/" hreflang="es">Español</a></li>
+        </ul>
+      </details>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/">Scarica</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="section" style="padding-bottom:32px;">
+    <div class="container">
+      <span class="eyebrow">Supporto</span>
+      <h1>Guida introduttiva e risposte alle domande più comuni.</h1>
+      <p style="max-width:60ch;">Non trovi quello che cerchi? Scrivi a <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a> e ti aiuteremo direttamente.</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <h2>Guida introduttiva</h2>
+
+      <div class="card" style="margin-bottom:24px;">
+        <h3>Come creare un workspace</h3>
+        <ol class="steps" style="margin-top:20px;">
+          <li>
+            <div>
+              <h3>Apri Nuovo Workspace</h3>
+              <p>Dalla libreria dei workspace, scegli Nuovo Workspace e seleziona una fonte per l'immagine: un'immagine ufficiale, un disco virtuale esistente, o un'immagine di base salvata.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Scegli un profilo</h3>
+              <p>Scegli il profilo adatto al tuo lavoro — Codice &amp; Build, Lab DevOps, Sandbox IA, e altro — oppure configura tu stesso CPU, memoria e storage.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Rivedi e avvia</h3>
+              <p>Conferma il riepilogo, poi avvia l'installazione (o l'avvio, per un clone di un'immagine di base). Le immagini ufficiali vengono scaricate direttamente dalla fonte propria di quel progetto la prima volta che le usi.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3>Come usare i workspace usa e getta</h3>
+        <ol class="steps" style="margin-top:20px;">
+          <li>
+            <div>
+              <h3>Contrassegna un workspace come usa e getta</h3>
+              <p>Quando crei un workspace, attiva l'opzione usa e getta — meglio se abbinata a un'immagine di base così parte istantaneamente da uno stato noto e funzionante.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Usalo per esattamente un compito</h3>
+              <p>Esegui il tuo test, riproduci il bug, o prova il comando rischioso — tratta il workspace come completamente sacrificabile.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Chiudilo</h3>
+              <p>Chiudere un workspace usa e getta lo elimina automaticamente, disco incluso. Non c'è nulla da ripulire dopo, e nulla da recuperare — non usare i workspace usa e getta per qualcosa che devi conservare.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2 style="margin-bottom:32px;">Domande frequenti</h2>
+
+      <div class="faq-group">
+        <h2>Cartelle condivise</h2>
+        <details class="faq-item">
+          <summary>Come accedo alla cartella condivisa dall'interno di un workspace?</summary>
+          <div class="faq-answer">
+            <p><strong>Workspace macOS (macOS 13 o successivo):</strong> le cartelle condivise si montano automaticamente — apri Finder e cerca sotto <code>/Volumes/My Shared Files</code>. Nessun comando necessario.</p>
+            <p><strong>Workspace Linux:</strong> ogni cartella condivisa ha il proprio comando di mount, mostrato direttamente nell'app nella scheda File condivisi del workspace. Ha questo aspetto, usando il tag proprio di quella cartella:</p>
+            <pre><code>mkdir -p /mnt/my_folder
+sudo mount -t virtiofs &lt;folder-tag-shown-in-app&gt; /mnt/my_folder</code></pre>
+            <p>Usa esattamente il tag mostrato nell'app — è univoco per cartella, quindi copiare un comando da un'altra parte non funzionerà.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>Appunti &amp; input</h2>
+        <details class="faq-item">
+          <summary>Copia e incolla non funziona tra il mio Mac e un workspace Linux</summary>
+          <div class="faq-answer">
+            <p>La condivisione degli appunti su Linux dipende da un agente in esecuzione all'interno del guest. Procedi in quest'ordine:</p>
+            <ol>
+              <li>Nella scheda Risorse del workspace, conferma che <strong>Condivisione appunti</strong> sia attivata.</li>
+              <li>All'interno del guest, assicurati che <code>spice-vdagent</code> sia installato:
+                <pre><code>sudo apt install spice-vdagent</code></pre>
+              </li>
+              <li>Conferma che l'agente sia effettivamente in esecuzione:
+                <pre><code>systemctl status spice-vdagentd</code></pre>
+                Se è inattivo, avvialo con <code>sudo systemctl start spice-vdagentd</code>, e se ti trovi su un desktop grafico, esci e rientra affinché la sessione desktop lo rilevi.
+              </li>
+              <li>Alcuni ambienti desktop minimali o headless non avviano <code>spice-vdagent</code> automaticamente — controlla le impostazioni di avvio automatico del tuo ambiente desktop se continua a non funzionare dopo che l'agente è installato ed è in esecuzione.</li>
+            </ol>
+            <p>La condivisione degli appunti al momento funziona solo per i workspace Linux.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>Rosetta (x86_64 su Apple Silicon)</h2>
+        <details class="faq-item">
+          <summary>Come abilito Rosetta in un workspace Debian?</summary>
+          <div class="faq-answer">
+            <p>Debian usa gli stessi strumenti <code>apt</code> e <code>update-binfmts</code> di Ubuntu. Attiva Rosetta per il workspace nella sua scheda Risorse, avvia il workspace, poi esegui questo una volta all'interno del guest:</p>
+            <pre><code>sudo mkdir -p /media/rosetta
+sudo mount -t virtiofs rosetta /media/rosetta
+
+sudo apt-get update
+sudo apt-get install -y binfmt-support
+
+sudo /usr/sbin/update-binfmts --install rosetta /media/rosetta/rosetta \
+  --magic "\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00" \
+  --mask "\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff" \
+  --credentials yes --preserve yes --fix-binary yes</code></pre>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Come abilito Rosetta in un workspace Fedora?</summary>
+          <div class="faq-answer">
+            <p>Fedora non include lo strumento <code>update-binfmts</code> di Debian, ma include <code>systemd-binfmt</code>, che legge esattamente la stessa registrazione kernel <code>binfmt_misc</code> da un file di configurazione. Attiva Rosetta per il workspace nella sua scheda Risorse, avvia il workspace, poi esegui questo una volta all'interno del guest:</p>
+            <pre><code>sudo mkdir -p /media/rosetta
+sudo mount -t virtiofs rosetta /media/rosetta
+
+sudo mkdir -p /etc/binfmt.d
+sudo tee /etc/binfmt.d/rosetta.conf > /dev/null &lt;&lt;'EOF'
+:rosetta:M::\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00:\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/media/rosetta/rosetta:CF
+EOF
+
+sudo systemctl restart systemd-binfmt</code></pre>
+            <p>Il file <code>rosetta.conf</code> persiste tra i riavvii, quindi è una configurazione una tantum per workspace.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>Ponte IA</h2>
+        <details class="faq-item">
+          <summary>Come collego Ponte IA a Ollama?</summary>
+          <div class="faq-answer">
+            <ol>
+              <li>Installa ed esegui Ollama sul tuo Mac, al di fuori del workspace.</li>
+              <li>Attiva Ponte IA per il workspace (attivo per impostazione predefinita nel profilo Sandbox IA, oppure attivalo tu stesso nelle impostazioni Integrazioni o Risorse del workspace).</li>
+              <li>Avvia il workspace, poi apri la sua scheda Ponte IA — mostra l'indirizzo dell'endpoint locale e, per un guest Linux, i comandi esatti per inoltrare la connessione.</li>
+              <li>All'interno del workspace, punta i tuoi strumenti verso quell'indirizzo esattamente come faresti con qualsiasi server locale che parla il formato API chat-completions standard.</li>
+            </ol>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>Workspace usa e getta &amp; immagini di base</h2>
+        <details class="faq-item">
+          <summary>Cosa succede a un workspace usa e getta quando lo chiudo?</summary>
+          <div class="faq-answer">
+            <p>Viene eliminato automaticamente nel momento in cui lo chiudi, disco incluso. Non c'è nulla da recuperare dopo — non usare un workspace usa e getta per qualcosa che devi conservare.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Come trasformo un workspace in un'immagine di base riutilizzabile?</summary>
+          <div class="faq-answer">
+            <p>Ferma il workspace, poi scegli <strong>Salva come immagine di base</strong> dal banner mostrato su un workspace fermato. Salvare di nuovo lo stesso workspace in seguito crea una nuova immagine di base indipendente invece di sovrascrivere quella precedente — gestisci ed elimina le immagini di base che non ti servono più da Preferenze → Immagini di base.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Dove sono memorizzati i miei workspace e le immagini di base, e come libero spazio?</summary>
+          <div class="faq-answer">
+            <p>I dischi dei workspace e le immagini di base si trovano sotto <code>~/Library/Application Support/VeloWorkspaces</code> sul tuo Mac. Elimina dalla libreria i workspace che non ti servono più, e le immagini di base inutilizzate da Preferenze → Immagini di base, per liberare spazio.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>Generale</h2>
+        <details class="faq-item">
+          <summary>Velo Workspaces supporta i guest Windows?</summary>
+          <div class="faq-answer">
+            <p>Non in questa versione. Velo Workspaces attualmente supporta guest Linux e macOS.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Perché non posso cambiare alcune impostazioni mentre un workspace è in esecuzione?</summary>
+          <div class="faq-answer">
+            <p>CPU, memoria, storage, cartelle condivise e alcune altre impostazioni fanno parte della configurazione della macchina virtuale e non possono essere modificate mentre è in esecuzione (il framework Virtualization di Apple non supporta la loro modifica a caldo). Ferma il workspace, apporta la modifica, e riavvialo.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Perché non posso creare un guest macOS?</summary>
+          <div class="faq-answer">
+            <p>I guest macOS richiedono un Mac Apple Silicon come host. Su un Mac Intel, i guest Linux sono comunque pienamente supportati.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="text-align:center;">
+    <div class="container">
+      <h2>Ancora bloccato?</h2>
+      <p style="max-width:52ch; margin:0 auto 20px;">Scrivici e ti aiuteremo a risolvere il problema.</p>
+      <a class="btn btn-primary" href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/it/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/it/support/">Supporto</a>
+        <a href="/it/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">
+      © 2026 Velo Workspaces. Apple, il logo Apple, Mac, macOS e App Store sono marchi di Apple Inc., registrati negli Stati Uniti e in altri paesi. Velo Workspaces è un'app indipendente e non è affiliata né approvata da Apple Inc.
+    </p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=2"></script>
+</body>
+</html>

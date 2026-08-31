@@ -8,6 +8,17 @@
 <link rel="canonical" href="https://www.veloworkspaces.com/support/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=2">
+<link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/">
+<link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/">
+<link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/">
+<link rel="alternate" hreflang="fr" href="https://www.veloworkspaces.com/fr/support/">
+<link rel="alternate" hreflang="de" href="https://www.veloworkspaces.com/de/support/">
+<link rel="alternate" hreflang="it" href="https://www.veloworkspaces.com/it/support/">
+<link rel="alternate" hreflang="ja" href="https://www.veloworkspaces.com/ja/support/">
+<link rel="alternate" hreflang="ko" href="https://www.veloworkspaces.com/ko/support/">
+<link rel="alternate" hreflang="pt-BR" href="https://www.veloworkspaces.com/pt-br/support/">
+<link rel="alternate" hreflang="es" href="https://www.veloworkspaces.com/es/support/">
+<link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="Support & FAQ — Velo Workspaces">
@@ -22,32 +33,50 @@
     {
       "@type": "Question",
       "name": "How do I access a shared folder from inside a workspace?",
-      "acceptedAnswer": { "@type": "Answer", "text": "For a macOS workspace (macOS 13 or later), shared folders mount automatically under /Volumes/My Shared Files — no command needed. For a Linux workspace, run the mount command shown for that folder in the Shared Files tab, which uses that folder's own VirtioFS tag." }
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For a macOS workspace (macOS 13 or later), shared folders mount automatically under /Volumes/My Shared Files — no command needed. For a Linux workspace, run the mount command shown for that folder in the Shared Files tab, which uses that folder's own VirtioFS tag."
+      }
     },
     {
       "@type": "Question",
       "name": "Copy and paste isn't working between my Mac and a Linux workspace",
-      "acceptedAnswer": { "@type": "Answer", "text": "Clipboard sharing on Linux depends on the spice-vdagent package running inside the guest. Install it with sudo apt install spice-vdagent (or your distribution's equivalent), make sure the spice-vdagentd service is running, and confirm Clipboard Sharing is enabled in the workspace's Resources tab." }
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Clipboard sharing on Linux depends on the spice-vdagent package running inside the guest. Install it with sudo apt install spice-vdagent (or your distribution's equivalent), make sure the spice-vdagentd service is running, and confirm Clipboard Sharing is enabled in the workspace's Resources tab."
+      }
     },
     {
       "@type": "Question",
       "name": "How do I enable Rosetta in a Debian workspace?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Debian uses the same apt and update-binfmts tooling as Ubuntu: mount the rosetta VirtioFS share, install binfmt-support, then register Rosetta with update-binfmts using Apple's published magic bytes and mask." }
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Debian uses the same apt and update-binfmts tooling as Ubuntu: mount the rosetta VirtioFS share, install binfmt-support, then register Rosetta with update-binfmts using Apple's published magic bytes and mask."
+      }
     },
     {
       "@type": "Question",
       "name": "How do I enable Rosetta in a Fedora workspace?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Fedora doesn't ship update-binfmts. Mount the rosetta VirtioFS share, then register it directly with systemd-binfmt by writing a config file to /etc/binfmt.d/rosetta.conf and restarting the systemd-binfmt service." }
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Fedora doesn't ship update-binfmts. Mount the rosetta VirtioFS share, then register it directly with systemd-binfmt by writing a config file to /etc/binfmt.d/rosetta.conf and restarting the systemd-binfmt service."
+      }
     },
     {
       "@type": "Question",
       "name": "What happens to a Disposable Workspace when I close it?",
-      "acceptedAnswer": { "@type": "Answer", "text": "It's deleted automatically the moment you close it, including its disk. There is nothing to recover afterward, so don't use a disposable workspace for anything you need to keep." }
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It's deleted automatically the moment you close it, including its disk. There is nothing to recover afterward, so don't use a disposable workspace for anything you need to keep."
+      }
     },
     {
       "@type": "Question",
       "name": "Does Velo Workspaces support Windows guests?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Not in this release. Velo Workspaces currently supports Linux and macOS guests; Windows guest support may be added in a future release." }
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not in this release. Velo Workspaces currently supports Linux and macOS guests; Windows guest support may be added in a future release."
+      }
     }
   ]
 }
@@ -68,6 +97,21 @@
         <a href="/#features">Features</a>
         <a href="/support/">Support</a>
       </span>
+      <details class="lang-switch">
+        <summary><span class="lang-switch-label">English</span> <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <ul class="lang-menu">
+          <li><a href="/support/" hreflang="en" aria-current="true">English</a></li>
+          <li><a href="/zh-hans/support/" hreflang="zh-Hans">简体中文</a></li>
+          <li><a href="/zh-hant/support/" hreflang="zh-Hant">繁體中文</a></li>
+          <li><a href="/fr/support/" hreflang="fr">Français</a></li>
+          <li><a href="/de/support/" hreflang="de">Deutsch</a></li>
+          <li><a href="/it/support/" hreflang="it">Italiano</a></li>
+          <li><a href="/ja/support/" hreflang="ja">日本語</a></li>
+          <li><a href="/ko/support/" hreflang="ko">한국어</a></li>
+          <li><a href="/pt-br/support/" hreflang="pt-BR">Português (Brasil)</a></li>
+          <li><a href="/es/support/" hreflang="es">Español</a></li>
+        </ul>
+      </details>
       <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/">Download</a>
     </nav>
   </div>
@@ -93,22 +137,19 @@
           <li>
             <div>
               <h3>Open New Workspace</h3>
-              <p>From the workspace library, choose New Workspace and pick an image source: an official
-                image, an existing virtual disk, or a saved base image.</p>
+              <p>From the workspace library, choose New Workspace and pick an image source: an official image, an existing virtual disk, or a saved base image.</p>
             </div>
           </li>
           <li>
             <div>
               <h3>Pick a profile</h3>
-              <p>Choose the profile that matches your work — Code &amp; Build, DevOps Lab, AI Sandbox, and
-                more — or configure CPU, memory, and storage yourself.</p>
+              <p>Choose the profile that matches your work — Code &amp; Build, DevOps Lab, AI Sandbox, and more — or configure CPU, memory, and storage yourself.</p>
             </div>
           </li>
           <li>
             <div>
               <h3>Review and launch</h3>
-              <p>Confirm the summary, then start the install (or boot, for a base image clone). Official
-                images are downloaded directly from that project's own source the first time you use them.</p>
+              <p>Confirm the summary, then start the install (or boot, for a base image clone). Official images are downloaded directly from that project's own source the first time you use them.</p>
             </div>
           </li>
         </ol>
@@ -120,23 +161,19 @@
           <li>
             <div>
               <h3>Mark a workspace as disposable</h3>
-              <p>When creating a workspace, turn on the disposable option — best paired with a base image
-                so it starts from a known-good state instantly.</p>
+              <p>When creating a workspace, turn on the disposable option — best paired with a base image so it starts from a known-good state instantly.</p>
             </div>
           </li>
           <li>
             <div>
               <h3>Use it for exactly one task</h3>
-              <p>Run your test, reproduce the bug, or try the risky command — treat the workspace as fully
-                expendable.</p>
+              <p>Run your test, reproduce the bug, or try the risky command — treat the workspace as fully expendable.</p>
             </div>
           </li>
           <li>
             <div>
               <h3>Close it</h3>
-              <p>Closing a disposable workspace deletes it automatically, disk included. There's nothing to
-                clean up afterward, and nothing to recover — don't use disposable workspaces for anything
-                you need to keep.</p>
+              <p>Closing a disposable workspace deletes it automatically, disk included. There's nothing to clean up afterward, and nothing to recover — don't use disposable workspaces for anything you need to keep.</p>
             </div>
           </li>
         </ol>
@@ -153,15 +190,11 @@
         <details class="faq-item">
           <summary>How do I access the shared folder from inside a workspace?</summary>
           <div class="faq-answer">
-            <p><strong>macOS workspaces (macOS 13 or later):</strong> shared folders mount automatically —
-              open Finder and look under <code>/Volumes/My Shared Files</code>. No command needed.</p>
-            <p><strong>Linux workspaces:</strong> each shared folder gets its own mount command, shown right
-              in the app under the workspace's Shared Files tab. It looks like this, using that folder's own
-              tag:</p>
+            <p><strong>macOS workspaces (macOS 13 or later):</strong> shared folders mount automatically — open Finder and look under <code>/Volumes/My Shared Files</code>. No command needed.</p>
+            <p><strong>Linux workspaces:</strong> each shared folder gets its own mount command, shown right in the app under the workspace's Shared Files tab. It looks like this, using that folder's own tag:</p>
             <pre><code>mkdir -p /mnt/my_folder
 sudo mount -t virtiofs &lt;folder-tag-shown-in-app&gt; /mnt/my_folder</code></pre>
-            <p>Use the exact tag shown in the app — it's unique per folder, so copying a command from
-              somewhere else won't work.</p>
+            <p>Use the exact tag shown in the app — it's unique per folder, so copying a command from somewhere else won't work.</p>
           </div>
         </details>
       </div>
@@ -171,8 +204,7 @@ sudo mount -t virtiofs &lt;folder-tag-shown-in-app&gt; /mnt/my_folder</code></pr
         <details class="faq-item">
           <summary>Copy and paste doesn't work between my Mac and a Linux workspace</summary>
           <div class="faq-answer">
-            <p>Clipboard sharing on Linux depends on an agent running inside the guest. Work through these in
-              order:</p>
+            <p>Clipboard sharing on Linux depends on an agent running inside the guest. Work through these in order:</p>
             <ol>
               <li>In the workspace's Resources tab, confirm <strong>Clipboard Sharing</strong> is turned on.</li>
               <li>Inside the guest, make sure <code>spice-vdagent</code> is installed:
@@ -180,12 +212,9 @@ sudo mount -t virtiofs &lt;folder-tag-shown-in-app&gt; /mnt/my_folder</code></pr
               </li>
               <li>Confirm the agent is actually running:
                 <pre><code>systemctl status spice-vdagentd</code></pre>
-                If it's inactive, start it with <code>sudo systemctl start spice-vdagentd</code> and, if
-                you're on a graphical desktop, log out and back in so the desktop session picks it up.
+                If it's inactive, start it with <code>sudo systemctl start spice-vdagentd</code>, and, if you're on a graphical desktop, log out and back in so the desktop session picks it up.
               </li>
-              <li>Some minimal or headless desktop environments don't launch <code>spice-vdagent</code>
-                automatically — check your desktop environment's autostart settings if it still doesn't work
-                after the agent is installed and running.</li>
+              <li>Some minimal or headless desktop environments don't launch <code>spice-vdagent</code> automatically — check your desktop environment's autostart settings if it still doesn't work after the agent is installed and running.</li>
             </ol>
             <p>Clipboard sharing currently works for Linux workspaces only.</p>
           </div>
@@ -197,9 +226,7 @@ sudo mount -t virtiofs &lt;folder-tag-shown-in-app&gt; /mnt/my_folder</code></pr
         <details class="faq-item">
           <summary>How do I enable Rosetta in a Debian workspace?</summary>
           <div class="faq-answer">
-            <p>Debian uses the same <code>apt</code> and <code>update-binfmts</code> tooling as Ubuntu. Turn
-              on Rosetta for the workspace in its Resources tab, start the workspace, then run this once
-              inside the guest:</p>
+            <p>Debian uses the same <code>apt</code> and <code>update-binfmts</code> tooling as Ubuntu. Turn on Rosetta for the workspace in its Resources tab, start the workspace, then run this once inside the guest:</p>
             <pre><code>sudo mkdir -p /media/rosetta
 sudo mount -t virtiofs rosetta /media/rosetta
 
@@ -215,10 +242,7 @@ sudo /usr/sbin/update-binfmts --install rosetta /media/rosetta/rosetta \
         <details class="faq-item">
           <summary>How do I enable Rosetta in a Fedora workspace?</summary>
           <div class="faq-answer">
-            <p>Fedora doesn't ship Debian's <code>update-binfmts</code> tool, but it does ship
-              <code>systemd-binfmt</code>, which reads the exact same kernel <code>binfmt_misc</code>
-              registration from a config file. Turn on Rosetta for the workspace in its Resources tab, start
-              the workspace, then run this once inside the guest:</p>
+            <p>Fedora doesn't ship Debian's <code>update-binfmts</code> tool, but it does ship <code>systemd-binfmt</code>, which reads the exact same kernel <code>binfmt_misc</code> registration from a config file. Turn on Rosetta for the workspace in its Resources tab, start the workspace, then run this once inside the guest:</p>
             <pre><code>sudo mkdir -p /media/rosetta
 sudo mount -t virtiofs rosetta /media/rosetta
 
@@ -228,8 +252,7 @@ sudo tee /etc/binfmt.d/rosetta.conf > /dev/null &lt;&lt;'EOF'
 EOF
 
 sudo systemctl restart systemd-binfmt</code></pre>
-            <p>The <code>rosetta.conf</code> file persists across reboots, so this is a one-time setup per
-              workspace.</p>
+            <p>The <code>rosetta.conf</code> file persists across reboots, so this is a one-time setup per workspace.</p>
           </div>
         </details>
       </div>
@@ -241,12 +264,9 @@ sudo systemctl restart systemd-binfmt</code></pre>
           <div class="faq-answer">
             <ol>
               <li>Install and run Ollama on your Mac, outside the workspace.</li>
-              <li>Enable AI Bridge for the workspace (on by default in the AI Sandbox profile, or turn it on
-                yourself in the workspace's Integrations or Resources settings).</li>
-              <li>Start the workspace, then open its AI Bridge tab — it shows the local endpoint address and,
-                for a Linux guest, the exact commands to forward the connection.</li>
-              <li>Inside the workspace, point your tooling at that address the same way you'd point it at any
-                local OpenAI-compatible server.</li>
+              <li>Enable AI Bridge for the workspace (on by default in the AI Sandbox profile, or turn it on yourself in the workspace's Integrations or Resources settings).</li>
+              <li>Start the workspace, then open its AI Bridge tab — it shows the local endpoint address and, for a Linux guest, the exact commands to forward the connection.</li>
+              <li>Inside the workspace, point your tooling at that address the same way you'd point it at any local server that speaks the standard chat-completions API format.</li>
             </ol>
           </div>
         </details>
@@ -257,25 +277,19 @@ sudo systemctl restart systemd-binfmt</code></pre>
         <details class="faq-item">
           <summary>What happens to a Disposable Workspace when I close it?</summary>
           <div class="faq-answer">
-            <p>It's deleted automatically the moment you close it, including its disk. There's nothing to
-              recover afterward — don't use a disposable workspace for anything you need to keep.</p>
+            <p>It's deleted automatically the moment you close it, including its disk. There's nothing to recover afterward — don't use a disposable workspace for anything you need to keep.</p>
           </div>
         </details>
         <details class="faq-item">
           <summary>How do I turn a workspace into a reusable base image?</summary>
           <div class="faq-answer">
-            <p>Stop the workspace, then choose <strong>Save as Base Image</strong> from the banner shown on a
-              stopped workspace. Saving the same workspace again later creates a new, independent base image
-              rather than overwriting the previous one — manage and delete base images you no longer need
-              from Preferences → Base Images.</p>
+            <p>Stop the workspace, then choose <strong>Save as Base Image</strong> from the banner shown on a stopped workspace. Saving the same workspace again later creates a new, independent base image rather than overwriting the previous one — manage and delete base images you no longer need from Preferences → Base Images.</p>
           </div>
         </details>
         <details class="faq-item">
           <summary>Where are my workspaces and base images stored, and how do I free up space?</summary>
           <div class="faq-answer">
-            <p>Workspace disks and base images live under <code>~/Library/Application Support/VeloWorkspaces</code>
-              on your Mac. Delete workspaces you no longer need from the library, and unused base images from
-              Preferences → Base Images, to free up space.</p>
+            <p>Workspace disks and base images live under <code>~/Library/Application Support/VeloWorkspaces</code> on your Mac. Delete workspaces you no longer need from the library, and unused base images from Preferences → Base Images, to free up space.</p>
           </div>
         </details>
       </div>
@@ -291,17 +305,13 @@ sudo systemctl restart systemd-binfmt</code></pre>
         <details class="faq-item">
           <summary>Why can't I change some settings while a workspace is running?</summary>
           <div class="faq-answer">
-            <p>CPU, memory, storage, shared folders, and a few other settings are part of the virtual
-              machine's configuration and can't be changed while it's running (Apple's Virtualization
-              framework doesn't support hot-plugging them). Stop the workspace, make the change, and start it
-              again.</p>
+            <p>CPU, memory, storage, shared folders, and a few other settings are part of the virtual machine's configuration and can't be changed while it's running (Apple's Virtualization framework doesn't support hot-plugging them). Stop the workspace, make the change, and start it again.</p>
           </div>
         </details>
         <details class="faq-item">
           <summary>Why can't I create a macOS guest?</summary>
           <div class="faq-answer">
-            <p>macOS guests require an Apple silicon Mac as the host. On an Intel Mac, Linux guests are still
-              fully supported.</p>
+            <p>macOS guests require an Apple silicon Mac as the host. On an Intel Mac, Linux guests are still fully supported.</p>
           </div>
         </details>
       </div>
@@ -332,9 +342,7 @@ sudo systemctl restart systemd-binfmt</code></pre>
       </nav>
     </div>
     <p class="footer-fine">
-      © 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc.,
-      registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated
-      with or endorsed by Apple Inc.
+      © 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.
     </p>
   </div>
 </footer>
