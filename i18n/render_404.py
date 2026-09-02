@@ -59,7 +59,7 @@ def render(code, seg):
 <title>{t['title']}</title>
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=3">
+<link rel="stylesheet" href="/assets/style.css?v=4">
 </head>
 <body>
 <header class="site-header">

@@ -19,13 +19,19 @@ def check_svg():
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>'
 
 def yt_facade(video_id, label):
+    # A plain link, not a JS-driven embed: opens the video on youtube.com in
+    # a new tab. Works with zero JavaScript, is natively keyboard/screen-
+    # reader accessible, and — unlike an inline iframe embed — doesn't hit
+    # YouTube's embed-specific bot-check ("Sign in to confirm you're not a
+    # bot"), which is a widely reported issue for iframe playback that a
+    # normal top-level video visit doesn't trigger.
     play_svg = ('<svg viewBox="0 0 68 48" aria-hidden="true">'
                 '<path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.13 13.05 0 24 0 24s.13 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.87 34.95 68 24 68 24s-.13-10.95-1.48-16.26z" fill="#f00"/>'
                 '<path d="M45 24 27 14v20" fill="#fff"/></svg>')
-    return f'''<div class="yt-facade" data-yt-id="{video_id}" role="button" tabindex="0" aria-label="{label}">
+    return f'''<a class="yt-facade" href="https://www.youtube.com/watch?v={video_id}" target="_blank" rel="noopener" aria-label="{label}">
               <img src="https://img.youtube.com/vi/{video_id}/hqdefault.jpg" alt="{label}" loading="lazy" width="480" height="360">
               <span class="yt-play">{play_svg}</span>
-            </div>
+            </a>
             <p class="yt-facade-caption">{label}</p>'''
 
 def arrow_svg():
@@ -52,7 +58,7 @@ def render(code, seg, label):
 <meta name="description" content="{t['meta_description']}">
 <link rel="canonical" href="{canonical}">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=3">
+<link rel="stylesheet" href="/assets/style.css?v=4">
 {hreflang}
 
 <meta property="og:type" content="website">
@@ -354,7 +360,6 @@ def render(code, seg, label):
 </footer>
 
 <script src="/assets/app-store.js?v=3"></script>
-<script src="/assets/yt-facade.js" defer></script>
 </body>
 </html>
 '''
