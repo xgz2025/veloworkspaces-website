@@ -70,6 +70,7 @@ def render(code, seg, label):
       <span class="nav-links">
         <a href="{p}/#personas">{t['nav_who']}</a>
         <a href="{p}/#features">{t['nav_features']}</a>
+        <a href="{p}/#pricing">{t['nav_pricing']}</a>
         <a href="{p}/support/">{t['nav_support']}</a>
       </span>
       {switcher}
