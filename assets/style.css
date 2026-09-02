@@ -104,7 +104,13 @@ p:last-child { margin-bottom: 0; }
   border-bottom: 1px solid var(--color-border);
   background: var(--color-bg);
   position: sticky;
-  top: 0;
+  /* Not 0: a sticky element pinned to an exact 0 offset gets its box
+     recalculated (and misreported as a layout shift) by some mobile
+     browsers' Layout Instability implementation when the dynamic
+     address/tab bar hides or reveals on scroll and resizes the visual
+     viewport. A 1px offset avoids that recalculation path; visually
+     identical. */
+  top: -1px;
   z-index: 10;
 }
 

@@ -45,7 +45,7 @@ def render(code, seg, label):
 <meta name="description" content="{t['meta_description']}">
 <link rel="canonical" href="{canonical}">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=4">
+<link rel="stylesheet" href="/assets/style.css?v=5">
 {hreflang}
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Velo Workspaces">
