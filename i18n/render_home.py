@@ -8,7 +8,7 @@ REPO = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
 
 def store_button(t, extra_style=""):
     style_attr = f' style="{extra_style}"' if extra_style else ""
-    return f'''<a class="btn btn-store" data-app-store-link href="https://apps.apple.com/"{style_attr}>
+    return f'''<a class="btn btn-store" data-app-store-link href="https://apps.apple.com/app/velo-workspaces/id6805509975"{style_attr}>
             <svg class="btn-store-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M16.365 1.43c0 1.14-.415 2.198-1.244 3.176-.995 1.164-2.197 1.838-3.5 1.732a3.72 3.72 0 0 1-.028-.46c0-1.09.475-2.253 1.32-3.204.42-.483.955-.885 1.604-1.206.648-.316 1.26-.49 1.834-.518.018.16.014.32.014.48zm4.29 16.61c-.31.716-.677 1.377-1.103 1.988-.582.835-1.06 1.412-1.427 1.73-.568.51-1.176.772-1.827.788-.468 0-1.032-.133-1.688-.403-.658-.27-1.263-.403-1.816-.403-.58 0-1.202.133-1.869.403-.667.27-1.205.41-1.617.424-.625.027-1.246-.242-1.865-.808-.397-.345-.897-.944-1.5-1.797-.647-.912-1.18-1.97-1.598-3.177-.448-1.302-.673-2.563-.673-3.784 0-1.398.302-2.605.907-3.618a5.33 5.33 0 0 1 1.902-1.94 5.11 5.11 0 0 1 2.573-.727c.497 0 1.148.154 1.958.457.807.304 1.325.458 1.552.458.169 0 .747-.18 1.729-.539.93-.332 1.716-.47 2.36-.415 1.744.14 3.055.827 3.928 2.066-1.56.945-2.333 2.269-2.318 3.966.014 1.322.492 2.423 1.432 3.298.427.405.903.719 1.432.943-.115.334-.237.654-.366.962z"/>
             </svg>
@@ -87,7 +87,7 @@ def render(code, seg, label):
         <a href="{p}/support/">{t['nav_support']}</a>
       </span>
       {switcher}
-      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/">{t['nav_download']}</a>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/velo-workspaces/id6805509975">{t['nav_download']}</a>
     </nav>
   </div>
 </header>
@@ -329,7 +329,7 @@ def render(code, seg, label):
   </div>
 </footer>
 
-<script src="/assets/app-store.js?v=2"></script>
+<script src="/assets/app-store.js?v=3"></script>
 </body>
 </html>
 '''

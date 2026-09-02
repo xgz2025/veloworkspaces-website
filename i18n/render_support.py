@@ -73,7 +73,7 @@ def render(code, seg, label):
         <a href="{p}/support/">{t['nav_support']}</a>
       </span>
       {switcher}
-      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/">{t['nav_download']}</a>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/velo-workspaces/id6805509975">{t['nav_download']}</a>
     </nav>
   </div>
 </header>
@@ -290,7 +290,7 @@ def render(code, seg, label):
   </div>
 </footer>
 
-<script src="/assets/app-store.js?v=2"></script>
+<script src="/assets/app-store.js?v=3"></script>
 </body>
 </html>
 '''
