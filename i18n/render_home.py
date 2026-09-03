@@ -81,7 +81,7 @@ def render(code, seg, label):
   "url": "{canonical}",
   "offers": {{
     "@type": "Offer",
-    "price": "0",
+    "price": "79.99",
     "priceCurrency": "USD"
   }}
 }}
