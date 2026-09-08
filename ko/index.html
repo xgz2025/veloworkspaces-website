@@ -189,26 +189,35 @@
             </ul>
 
             <div class="benchmark">
-              <p class="benchmark-label">Mac mini(Apple M1)에서 측정</p>
+              <p class="benchmark-label">Mac mini(Apple M4)에서 측정</p>
               <div class="benchmark-row">
                 <span class="benchmark-metric">첫 토큰까지의 시간</span>
                 <span class="benchmark-values">
-                  <strong>280&nbsp;ms</strong> 네이티브
+                  <strong>56&nbsp;ms</strong> 네이티브
                   <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>310&nbsp;ms</strong> AI 브리지 경유
+                  <strong>59&nbsp;ms</strong> AI 브리지 경유
                 </span>
-                <span class="benchmark-delta">+10%</span>
+                <span class="benchmark-delta">+5%</span>
               </div>
               <div class="benchmark-row">
                 <span class="benchmark-metric">처리량</span>
                 <span class="benchmark-values">
-                  <strong>12.75&nbsp;tok/s</strong> 네이티브
+                  <strong>21.07&nbsp;tok/s</strong> 네이티브
                   <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>12.27&nbsp;tok/s</strong> AI 브리지 경유
+                  <strong>20.89&nbsp;tok/s</strong> AI 브리지 경유
                 </span>
-                <span class="benchmark-delta">&minus;4%</span>
+                <span class="benchmark-delta">&minus;1%</span>
               </div>
-              <p class="benchmark-footnote">Llama 3 기준, 호스트에서 직접(루프백) 실행한 경우와 AI 브리지를 통해 Linux 워크스페이스에서 접근한 경우를 각각 5회씩 측정해 평균낸 값입니다. 결과는 모델, Mac, 워크로드에 따라 달라집니다.</p>
+              <div class="benchmark-row">
+                <span class="benchmark-metric">동시 부하(클라이언트 8개)</span>
+                <span class="benchmark-values">
+                  <strong>14.36&nbsp;초</strong> 네이티브
+                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  <strong>12.41&nbsp;초</strong> AI 브리지 경유
+                </span>
+                <span class="benchmark-delta">13% 더 빠름</span>
+              </div>
+              <p class="benchmark-footnote">Qwen2.5-Coder 7B(Q4_K_M), Mac mini(Apple M4) 기준. 첫 토큰까지의 시간과 처리량은 단일 요청을 5회 측정한 평균값이며, 동시 부하 수치는 8개의 병렬 클라이언트(Ollama OLLAMA_NUM_PARALLEL=2)를 사용해 측정했습니다. 결과는 모델, Mac, 워크로드에 따라 달라집니다.</p>
             </div>
 
             <a class="yt-facade" href="https://www.youtube.com/watch?v=e7z3Nx8vWr0" target="_blank" rel="noopener" aria-label="AI 브리지 작동 영상 보기">

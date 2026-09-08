@@ -189,26 +189,35 @@
             </ul>
 
             <div class="benchmark">
-              <p class="benchmark-label">Gemessen auf einem Mac mini (Apple M1)</p>
+              <p class="benchmark-label">Gemessen auf einem Mac mini (Apple M4)</p>
               <div class="benchmark-row">
                 <span class="benchmark-metric">Zeit bis zum ersten Token</span>
                 <span class="benchmark-values">
-                  <strong>280&nbsp;ms</strong> nativ
+                  <strong>56&nbsp;ms</strong> nativ
                   <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>310&nbsp;ms</strong> über AI Bridge
+                  <strong>59&nbsp;ms</strong> über AI Bridge
                 </span>
-                <span class="benchmark-delta">+10 %</span>
+                <span class="benchmark-delta">+5 %</span>
               </div>
               <div class="benchmark-row">
                 <span class="benchmark-metric">Durchsatz</span>
                 <span class="benchmark-values">
-                  <strong>12,75&nbsp;Tok/s</strong> nativ
+                  <strong>21,07&nbsp;Tok/s</strong> nativ
                   <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>12,27&nbsp;Tok/s</strong> über AI Bridge
+                  <strong>20,89&nbsp;Tok/s</strong> über AI Bridge
                 </span>
-                <span class="benchmark-delta">&minus;4 %</span>
+                <span class="benchmark-delta">&minus;1 %</span>
               </div>
-              <p class="benchmark-footnote">Llama 3, direkt auf dem Host (Loopback) verglichen mit dem Zugriff aus einem Linux-Arbeitsbereich über AI Bridge — gemittelt über je 5 Läufe. Ergebnisse variieren je nach Modell, Mac und Workload.</p>
+              <div class="benchmark-row">
+                <span class="benchmark-metric">Gleichzeitige Last (8 Clients)</span>
+                <span class="benchmark-values">
+                  <strong>14,36&nbsp;s</strong> nativ
+                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  <strong>12,41&nbsp;s</strong> über AI Bridge
+                </span>
+                <span class="benchmark-delta">13 % schneller</span>
+              </div>
+              <p class="benchmark-footnote">Qwen2.5-Coder 7B (Q4_K_M) auf einem Mac mini (Apple M4). Zeit bis zum ersten Token und Durchsatz sind Durchschnittswerte einzelner Anfragen über 5 Läufe; der Wert für gleichzeitige Last basiert auf 8 parallelen Clients (Ollama OLLAMA_NUM_PARALLEL=2). Ergebnisse variieren je nach Modell, Mac und Workload.</p>
             </div>
 
             <a class="yt-facade" href="https://www.youtube.com/watch?v=e7z3Nx8vWr0" target="_blank" rel="noopener" aria-label="AI Bridge in Aktion ansehen">

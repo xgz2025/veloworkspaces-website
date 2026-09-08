@@ -189,26 +189,35 @@
             </ul>
 
             <div class="benchmark">
-              <p class="benchmark-label">Medido en un Mac mini (Apple M1)</p>
+              <p class="benchmark-label">Medido en un Mac mini (Apple M4)</p>
               <div class="benchmark-row">
                 <span class="benchmark-metric">Tiempo hasta el primer token</span>
                 <span class="benchmark-values">
-                  <strong>280&nbsp;ms</strong> nativo
+                  <strong>56&nbsp;ms</strong> nativo
                   <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>310&nbsp;ms</strong> vía Puente de IA
+                  <strong>59&nbsp;ms</strong> vía Puente de IA
                 </span>
-                <span class="benchmark-delta">+10 %</span>
+                <span class="benchmark-delta">+5 %</span>
               </div>
               <div class="benchmark-row">
                 <span class="benchmark-metric">Rendimiento</span>
                 <span class="benchmark-values">
-                  <strong>12,75&nbsp;tok/s</strong> nativo
+                  <strong>21,07&nbsp;tok/s</strong> nativo
                   <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>12,27&nbsp;tok/s</strong> vía Puente de IA
+                  <strong>20,89&nbsp;tok/s</strong> vía Puente de IA
                 </span>
-                <span class="benchmark-delta">&minus;4 %</span>
+                <span class="benchmark-delta">&minus;1 %</span>
               </div>
-              <p class="benchmark-footnote">Llama 3, comparado directamente en el host (loopback) frente al acceso desde un espacio de trabajo Linux vía Puente de IA — promedio de 5 ejecuciones cada uno. Los resultados varían según el modelo, el Mac y la carga de trabajo.</p>
+              <div class="benchmark-row">
+                <span class="benchmark-metric">Carga simultánea (8 clientes)</span>
+                <span class="benchmark-values">
+                  <strong>14,36&nbsp;s</strong> nativo
+                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  <strong>12,41&nbsp;s</strong> vía Puente de IA
+                </span>
+                <span class="benchmark-delta">13 % más rápido</span>
+              </div>
+              <p class="benchmark-footnote">Qwen2.5-Coder 7B (Q4_K_M) en un Mac mini (Apple M4). El tiempo hasta el primer token y el rendimiento son promedios de una sola solicitud en 5 ejecuciones; la carga simultánea usa 8 clientes en paralelo (Ollama OLLAMA_NUM_PARALLEL=2). Los resultados varían según el modelo, el Mac y la carga de trabajo.</p>
             </div>
 
             <a class="yt-facade" href="https://www.youtube.com/watch?v=e7z3Nx8vWr0" target="_blank" rel="noopener" aria-label="Ver Puente de IA en acción">

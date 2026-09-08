@@ -189,26 +189,35 @@
             </ul>
 
             <div class="benchmark">
-              <p class="benchmark-label">在 Mac mini（Apple M1）上测得</p>
+              <p class="benchmark-label">在 Mac mini（Apple M4）上测得</p>
               <div class="benchmark-row">
                 <span class="benchmark-metric">首个 token 生成时间</span>
                 <span class="benchmark-values">
-                  <strong>280&nbsp;毫秒</strong> 原生
+                  <strong>56&nbsp;毫秒</strong> 原生
                   <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>310&nbsp;毫秒</strong> 经由 AI 桥接
+                  <strong>59&nbsp;毫秒</strong> 经由 AI 桥接
                 </span>
-                <span class="benchmark-delta">+10%</span>
+                <span class="benchmark-delta">+5%</span>
               </div>
               <div class="benchmark-row">
                 <span class="benchmark-metric">吞吐量</span>
                 <span class="benchmark-values">
-                  <strong>12.75&nbsp;tok/s</strong> 原生
+                  <strong>21.07&nbsp;tok/s</strong> 原生
                   <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>12.27&nbsp;tok/s</strong> 经由 AI 桥接
+                  <strong>20.89&nbsp;tok/s</strong> 经由 AI 桥接
                 </span>
-                <span class="benchmark-delta">&minus;4%</span>
+                <span class="benchmark-delta">&minus;1%</span>
               </div>
-              <p class="benchmark-footnote">使用 Llama 3，在主机上直接测试（回环）与经由 AI 桥接从 Linux 工作区访问两种方式各自运行 5 次取平均。结果会因模型、Mac 机型和负载而异。</p>
+              <div class="benchmark-row">
+                <span class="benchmark-metric">并发负载（8 个客户端）</span>
+                <span class="benchmark-values">
+                  <strong>14.36&nbsp;秒</strong> 原生
+                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  <strong>12.41&nbsp;秒</strong> 经由 AI 桥接
+                </span>
+                <span class="benchmark-delta">快 13%</span>
+              </div>
+              <p class="benchmark-footnote">使用 Qwen2.5-Coder 7B（Q4_K_M），在 Mac mini（Apple M4）上测得。首个 token 生成时间与吞吐量为单请求 5 次运行的平均值；并发负载数据基于 8 个并行客户端（Ollama OLLAMA_NUM_PARALLEL=2）。结果会因模型、Mac 机型和负载而异。</p>
             </div>
 
             <a class="yt-facade" href="https://www.youtube.com/watch?v=e7z3Nx8vWr0" target="_blank" rel="noopener" aria-label="观看 AI 桥接实际运行">

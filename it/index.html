@@ -189,26 +189,35 @@
             </ul>
 
             <div class="benchmark">
-              <p class="benchmark-label">Misurato su un Mac mini (Apple M1)</p>
+              <p class="benchmark-label">Misurato su un Mac mini (Apple M4)</p>
               <div class="benchmark-row">
                 <span class="benchmark-metric">Tempo al primo token</span>
                 <span class="benchmark-values">
-                  <strong>280&nbsp;ms</strong> nativo
+                  <strong>56&nbsp;ms</strong> nativo
                   <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>310&nbsp;ms</strong> via Ponte IA
+                  <strong>59&nbsp;ms</strong> via Ponte IA
                 </span>
-                <span class="benchmark-delta">+10%</span>
+                <span class="benchmark-delta">+5%</span>
               </div>
               <div class="benchmark-row">
                 <span class="benchmark-metric">Throughput</span>
                 <span class="benchmark-values">
-                  <strong>12,75&nbsp;tok/s</strong> nativo
+                  <strong>21,07&nbsp;tok/s</strong> nativo
                   <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>12,27&nbsp;tok/s</strong> via Ponte IA
+                  <strong>20,89&nbsp;tok/s</strong> via Ponte IA
                 </span>
-                <span class="benchmark-delta">&minus;4%</span>
+                <span class="benchmark-delta">&minus;1%</span>
               </div>
-              <p class="benchmark-footnote">Llama 3, confrontato direttamente sull'host (loopback) rispetto all'accesso da un workspace Linux tramite Ponte IA — media di 5 esecuzioni ciascuno. I risultati variano in base al modello, al Mac e al carico di lavoro.</p>
+              <div class="benchmark-row">
+                <span class="benchmark-metric">Carico simultaneo (8 client)</span>
+                <span class="benchmark-values">
+                  <strong>14,36&nbsp;s</strong> nativo
+                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  <strong>12,41&nbsp;s</strong> via Ponte IA
+                </span>
+                <span class="benchmark-delta">13% più veloce</span>
+              </div>
+              <p class="benchmark-footnote">Qwen2.5-Coder 7B (Q4_K_M) su un Mac mini (Apple M4). Il tempo al primo token e il throughput sono medie su singola richiesta su 5 esecuzioni; il carico simultaneo utilizza 8 client paralleli (Ollama OLLAMA_NUM_PARALLEL=2). I risultati variano in base al modello, al Mac e al carico di lavoro.</p>
             </div>
 
             <a class="yt-facade" href="https://www.youtube.com/watch?v=e7z3Nx8vWr0" target="_blank" rel="noopener" aria-label="Guarda Ponte IA in azione">

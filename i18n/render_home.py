@@ -227,6 +227,15 @@ def render(code, seg, label):
                 </span>
                 <span class="benchmark-delta">{t['bench_delta2']}</span>
               </div>
+              <div class="benchmark-row">
+                <span class="benchmark-metric">{t['bench_conc']}</span>
+                <span class="benchmark-values">
+                  <strong>{t['bench_conc_native']}</strong> {t['bench_native1']}
+                  {arrow_svg()}
+                  <strong>{t['bench_conc_bridge']}</strong> {t['bench_bridge1']}
+                </span>
+                <span class="benchmark-delta">{t['bench_delta3']}</span>
+              </div>
               <p class="benchmark-footnote">{t['bench_footnote']}</p>
             </div>
 
