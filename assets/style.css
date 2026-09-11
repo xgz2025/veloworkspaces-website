@@ -473,6 +473,48 @@ p:last-child { margin-bottom: 0; }
   .benchmark-values { justify-content: flex-start; width: 100%; order: 3; }
 }
 
+/* ---------- Benchmark engine tabs (Ollama / MLX) — zero-JS, radio-driven ---------- */
+
+.benchmark-tab-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.benchmark-tab-labels {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+}
+.benchmark-tab-label {
+  cursor: pointer;
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.benchmark-tab-label:hover { color: var(--color-text); border-color: var(--color-text-secondary); }
+.benchmark-panel { display: none; margin-top: 12px; }
+#bench-tab-ollama:checked ~ .benchmark-tab-labels label[for="bench-tab-ollama"],
+#bench-tab-mlx:checked ~ .benchmark-tab-labels label[for="bench-tab-mlx"] {
+  background: var(--accent, var(--color-primary));
+  border-color: transparent;
+  color: #fff;
+}
+#bench-tab-ollama:focus-visible ~ .benchmark-tab-labels label[for="bench-tab-ollama"],
+#bench-tab-mlx:focus-visible ~ .benchmark-tab-labels label[for="bench-tab-mlx"] {
+  outline: 2px solid var(--accent, var(--color-primary));
+  outline-offset: 2px;
+}
+#bench-tab-ollama:checked ~ #bench-panel-ollama,
+#bench-tab-mlx:checked ~ #bench-panel-mlx { display: block; }
+.benchmark-delta-neutral {
+  background: color-mix(in srgb, var(--color-text-secondary) 16%, transparent);
+  color: var(--color-text-secondary);
+}
+
 /* ---------- YouTube facade (links out to youtube.com, no embed) ---------- */
 
 .yt-facade {

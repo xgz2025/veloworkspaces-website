@@ -207,36 +207,77 @@ def render(code, seg, label):
               <li>{check_svg()} {t['aib_li3']}</li>
             </ul>
 
-            <div class="benchmark">
-              <p class="benchmark-label">{t['bench_label']}</p>
-              <div class="benchmark-row">
-                <span class="benchmark-metric">{t['bench_ttft']}</span>
-                <span class="benchmark-values">
-                  <strong>{t['bench_ttft_native']}</strong> {t['bench_native1']}
-                  {arrow_svg()}
-                  <strong>{t['bench_ttft_bridge']}</strong> {t['bench_bridge1']}
-                </span>
-                <span class="benchmark-delta">{t['bench_delta1']}</span>
+            <div class="benchmark-tabs">
+              <input type="radio" name="bench-engine" id="bench-tab-ollama" class="benchmark-tab-input" checked>
+              <input type="radio" name="bench-engine" id="bench-tab-mlx" class="benchmark-tab-input">
+              <div class="benchmark-tab-labels" role="tablist">
+                <label for="bench-tab-ollama" class="benchmark-tab-label">Ollama</label>
+                <label for="bench-tab-mlx" class="benchmark-tab-label">MLX</label>
               </div>
-              <div class="benchmark-row">
-                <span class="benchmark-metric">{t['bench_tput']}</span>
-                <span class="benchmark-values">
-                  <strong>{t['bench_tput_native']}</strong> {t['bench_native1']}
-                  {arrow_svg()}
-                  <strong>{t['bench_tput_bridge']}</strong> {t['bench_bridge1']}
-                </span>
-                <span class="benchmark-delta">{t['bench_delta2']}</span>
+
+              <div class="benchmark benchmark-panel" id="bench-panel-ollama">
+                <p class="benchmark-label">{t['bench_label']}</p>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">{t['bench_ttft']}</span>
+                  <span class="benchmark-values">
+                    <strong>{t['bench_ttft_native']}</strong> {t['bench_native1']}
+                    {arrow_svg()}
+                    <strong>{t['bench_ttft_bridge']}</strong> {t['bench_bridge1']}
+                  </span>
+                  <span class="benchmark-delta">{t['bench_delta1']}</span>
+                </div>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">{t['bench_tput']}</span>
+                  <span class="benchmark-values">
+                    <strong>{t['bench_tput_native']}</strong> {t['bench_native1']}
+                    {arrow_svg()}
+                    <strong>{t['bench_tput_bridge']}</strong> {t['bench_bridge1']}
+                  </span>
+                  <span class="benchmark-delta">{t['bench_delta2']}</span>
+                </div>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">{t['bench_conc']}</span>
+                  <span class="benchmark-values">
+                    <strong>{t['bench_conc_native']}</strong> {t['bench_native1']}
+                    {arrow_svg()}
+                    <strong>{t['bench_conc_bridge']}</strong> {t['bench_bridge1']}
+                  </span>
+                  <span class="benchmark-delta">{t['bench_delta3']}</span>
+                </div>
+                <p class="benchmark-footnote">{t['bench_footnote']}</p>
               </div>
-              <div class="benchmark-row">
-                <span class="benchmark-metric">{t['bench_conc']}</span>
-                <span class="benchmark-values">
-                  <strong>{t['bench_conc_native']}</strong> {t['bench_native1']}
-                  {arrow_svg()}
-                  <strong>{t['bench_conc_bridge']}</strong> {t['bench_bridge1']}
-                </span>
-                <span class="benchmark-delta">{t['bench_delta3']}</span>
+
+              <div class="benchmark benchmark-panel" id="bench-panel-mlx">
+                <p class="benchmark-label">{t['bench_label']}</p>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">{t['bench_ttft']}</span>
+                  <span class="benchmark-values">
+                    <strong>{t['bench2_ttft_native']}</strong> {t['bench_native1']}
+                    {arrow_svg()}
+                    <strong>{t['bench2_ttft_bridge']}</strong> {t['bench_bridge1']}
+                  </span>
+                  <span class="benchmark-delta">{t['bench2_delta1']}</span>
+                </div>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">{t['bench_tput']}</span>
+                  <span class="benchmark-values">
+                    <strong>{t['bench2_tput_native']}</strong> {t['bench_native1']}
+                    {arrow_svg()}
+                    <strong>{t['bench2_tput_bridge']}</strong> {t['bench_bridge1']}
+                  </span>
+                  <span class="benchmark-delta">{t['bench2_delta2']}</span>
+                </div>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">{t['bench_conc']}</span>
+                  <span class="benchmark-values">
+                    <strong>{t['bench2_conc_native']}</strong> {t['bench_native1']}
+                    {arrow_svg()}
+                    <strong>{t['bench2_conc_bridge']}</strong> {t['bench_bridge1']}
+                  </span>
+                  <span class="benchmark-delta benchmark-delta-neutral">{t['bench2_delta3']}</span>
+                </div>
+                <p class="benchmark-footnote">{t['bench2_footnote']}</p>
               </div>
-              <p class="benchmark-footnote">{t['bench_footnote']}</p>
             </div>
 
             {yt_facade("e7z3Nx8vWr0", t['video_ai_label'])}

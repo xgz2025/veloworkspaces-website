@@ -188,36 +188,77 @@
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Das KI-Sandbox-Profil ist von Haus aus auf Agenten-Frameworks und Tooling zugeschnitten</li>
             </ul>
 
-            <div class="benchmark">
-              <p class="benchmark-label">Gemessen auf einem Mac mini (Apple M4)</p>
-              <div class="benchmark-row">
-                <span class="benchmark-metric">Zeit bis zum ersten Token</span>
-                <span class="benchmark-values">
-                  <strong>56&nbsp;ms</strong> nativ
-                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>59&nbsp;ms</strong> über AI Bridge
-                </span>
-                <span class="benchmark-delta">+6 %</span>
+            <div class="benchmark-tabs">
+              <input type="radio" name="bench-engine" id="bench-tab-ollama" class="benchmark-tab-input" checked>
+              <input type="radio" name="bench-engine" id="bench-tab-mlx" class="benchmark-tab-input">
+              <div class="benchmark-tab-labels" role="tablist">
+                <label for="bench-tab-ollama" class="benchmark-tab-label">Ollama</label>
+                <label for="bench-tab-mlx" class="benchmark-tab-label">MLX</label>
               </div>
-              <div class="benchmark-row">
-                <span class="benchmark-metric">Durchsatz</span>
-                <span class="benchmark-values">
-                  <strong>22,09&nbsp;Tok/s</strong> nativ
-                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>21,78&nbsp;Tok/s</strong> über AI Bridge
-                </span>
-                <span class="benchmark-delta">&minus;1 %</span>
+
+              <div class="benchmark benchmark-panel" id="bench-panel-ollama">
+                <p class="benchmark-label">Gemessen auf einem Mac mini (Apple M4)</p>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">Zeit bis zum ersten Token</span>
+                  <span class="benchmark-values">
+                    <strong>56&nbsp;ms</strong> nativ
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>59&nbsp;ms</strong> über AI Bridge
+                  </span>
+                  <span class="benchmark-delta">+6 %</span>
+                </div>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">Durchsatz</span>
+                  <span class="benchmark-values">
+                    <strong>22,09&nbsp;Tok/s</strong> nativ
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>21,78&nbsp;Tok/s</strong> über AI Bridge
+                  </span>
+                  <span class="benchmark-delta">&minus;1 %</span>
+                </div>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">Gleichzeitige Last (8 Clients)</span>
+                  <span class="benchmark-values">
+                    <strong>15,04&nbsp;s</strong> nativ
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>12,73&nbsp;s</strong> über AI Bridge
+                  </span>
+                  <span class="benchmark-delta">15 % schneller</span>
+                </div>
+                <p class="benchmark-footnote">Qwen2.5-Coder 7B (Q4_K_M) auf einem Mac mini (Apple M4). Zeit bis zum ersten Token und Durchsatz sind Durchschnittswerte einzelner Anfragen über 5 Läufe; der Wert für gleichzeitige Last basiert auf 8 parallelen Clients (Ollama OLLAMA_NUM_PARALLEL=2). Ergebnisse variieren je nach Modell, Mac und Workload.</p>
               </div>
-              <div class="benchmark-row">
-                <span class="benchmark-metric">Gleichzeitige Last (8 Clients)</span>
-                <span class="benchmark-values">
-                  <strong>15,04&nbsp;s</strong> nativ
-                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>12,73&nbsp;s</strong> über AI Bridge
-                </span>
-                <span class="benchmark-delta">15 % schneller</span>
+
+              <div class="benchmark benchmark-panel" id="bench-panel-mlx">
+                <p class="benchmark-label">Gemessen auf einem Mac mini (Apple M4)</p>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">Zeit bis zum ersten Token</span>
+                  <span class="benchmark-values">
+                    <strong>172,21&nbsp;ms</strong> nativ
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>174,27&nbsp;ms</strong> über AI Bridge
+                  </span>
+                  <span class="benchmark-delta">+1 %</span>
+                </div>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">Durchsatz</span>
+                  <span class="benchmark-values">
+                    <strong>24,09&nbsp;Tok/s</strong> nativ
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>23,88&nbsp;Tok/s</strong> über AI Bridge
+                  </span>
+                  <span class="benchmark-delta">&minus;1 %</span>
+                </div>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">Gleichzeitige Last (8 Clients)</span>
+                  <span class="benchmark-values">
+                    <strong>7,04&nbsp;s</strong> nativ
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>7,38&nbsp;s</strong> über AI Bridge
+                  </span>
+                  <span class="benchmark-delta benchmark-delta-neutral">auf Augenhöhe mit dem Host</span>
+                </div>
+                <p class="benchmark-footnote">Qwen2.5-Coder 7B (MLX, 4-Bit) auf einem Mac mini (Apple M4). Zeit bis zum ersten Token und Durchsatz sind Durchschnittswerte einzelner Anfragen über 5 Läufe; die Werte für gleichzeitige Last sind der Durchschnitt aus 4 Läufen mit je 8 parallelen Clients. MLX behandelt gleichzeitige Anfragen anders als Ollama, weshalb die Ergebnisse zwischen den beiden Tabs nicht direkt vergleichbar sind. Ergebnisse variieren je nach Modell, Mac und Workload.</p>
               </div>
-              <p class="benchmark-footnote">Qwen2.5-Coder 7B (Q4_K_M) auf einem Mac mini (Apple M4). Zeit bis zum ersten Token und Durchsatz sind Durchschnittswerte einzelner Anfragen über 5 Läufe; der Wert für gleichzeitige Last basiert auf 8 parallelen Clients (Ollama OLLAMA_NUM_PARALLEL=2). Ergebnisse variieren je nach Modell, Mac und Workload.</p>
             </div>
 
             <a class="yt-facade" href="https://www.youtube.com/watch?v=e7z3Nx8vWr0" target="_blank" rel="noopener" aria-label="AI Bridge in Aktion ansehen">

@@ -188,36 +188,77 @@
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> AI 沙盒预设默认即为智能体框架与相关工具预留了合适的资源</li>
             </ul>
 
-            <div class="benchmark">
-              <p class="benchmark-label">在 Mac mini（Apple M4）上测得</p>
-              <div class="benchmark-row">
-                <span class="benchmark-metric">首个 token 生成时间</span>
-                <span class="benchmark-values">
-                  <strong>56&nbsp;毫秒</strong> 原生
-                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>59&nbsp;毫秒</strong> 经由 AI 桥接
-                </span>
-                <span class="benchmark-delta">+6%</span>
+            <div class="benchmark-tabs">
+              <input type="radio" name="bench-engine" id="bench-tab-ollama" class="benchmark-tab-input" checked>
+              <input type="radio" name="bench-engine" id="bench-tab-mlx" class="benchmark-tab-input">
+              <div class="benchmark-tab-labels" role="tablist">
+                <label for="bench-tab-ollama" class="benchmark-tab-label">Ollama</label>
+                <label for="bench-tab-mlx" class="benchmark-tab-label">MLX</label>
               </div>
-              <div class="benchmark-row">
-                <span class="benchmark-metric">吞吐量</span>
-                <span class="benchmark-values">
-                  <strong>22.09&nbsp;tok/s</strong> 原生
-                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>21.78&nbsp;tok/s</strong> 经由 AI 桥接
-                </span>
-                <span class="benchmark-delta">&minus;1%</span>
+
+              <div class="benchmark benchmark-panel" id="bench-panel-ollama">
+                <p class="benchmark-label">在 Mac mini（Apple M4）上测得</p>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">首个 token 生成时间</span>
+                  <span class="benchmark-values">
+                    <strong>56&nbsp;毫秒</strong> 原生
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>59&nbsp;毫秒</strong> 经由 AI 桥接
+                  </span>
+                  <span class="benchmark-delta">+6%</span>
+                </div>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">吞吐量</span>
+                  <span class="benchmark-values">
+                    <strong>22.09&nbsp;tok/s</strong> 原生
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>21.78&nbsp;tok/s</strong> 经由 AI 桥接
+                  </span>
+                  <span class="benchmark-delta">&minus;1%</span>
+                </div>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">并发负载（8 个客户端）</span>
+                  <span class="benchmark-values">
+                    <strong>15.04&nbsp;秒</strong> 原生
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>12.73&nbsp;秒</strong> 经由 AI 桥接
+                  </span>
+                  <span class="benchmark-delta">快 15%</span>
+                </div>
+                <p class="benchmark-footnote">使用 Qwen2.5-Coder 7B（Q4_K_M），在 Mac mini（Apple M4）上测得。首个 token 生成时间与吞吐量为单请求 5 次运行的平均值；并发负载数据基于 8 个并行客户端（Ollama OLLAMA_NUM_PARALLEL=2）。结果会因模型、Mac 机型和负载而异。</p>
               </div>
-              <div class="benchmark-row">
-                <span class="benchmark-metric">并发负载（8 个客户端）</span>
-                <span class="benchmark-values">
-                  <strong>15.04&nbsp;秒</strong> 原生
-                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>12.73&nbsp;秒</strong> 经由 AI 桥接
-                </span>
-                <span class="benchmark-delta">快 15%</span>
+
+              <div class="benchmark benchmark-panel" id="bench-panel-mlx">
+                <p class="benchmark-label">在 Mac mini（Apple M4）上测得</p>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">首个 token 生成时间</span>
+                  <span class="benchmark-values">
+                    <strong>172.21&nbsp;ms</strong> 原生
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>174.27&nbsp;ms</strong> 经由 AI 桥接
+                  </span>
+                  <span class="benchmark-delta">+1%</span>
+                </div>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">吞吐量</span>
+                  <span class="benchmark-values">
+                    <strong>24.09&nbsp;tok/s</strong> 原生
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>23.88&nbsp;tok/s</strong> 经由 AI 桥接
+                  </span>
+                  <span class="benchmark-delta">&minus;1%</span>
+                </div>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">并发负载（8 个客户端）</span>
+                  <span class="benchmark-values">
+                    <strong>7.04&nbsp;秒</strong> 原生
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>7.38&nbsp;秒</strong> 经由 AI 桥接
+                  </span>
+                  <span class="benchmark-delta benchmark-delta-neutral">与主机相当</span>
+                </div>
+                <p class="benchmark-footnote">使用 Qwen2.5-Coder 7B（MLX，4-bit），在 Mac mini（Apple M4）上测得。首个 token 生成时间与吞吐量为单请求 5 次运行的平均值；并发负载数据为 8 个并行客户端测试 4 次的平均值。MLX 处理并发请求的方式与 Ollama 不同，因此两个标签页的结果不能直接比较。结果会因模型、Mac 机型和负载而异。</p>
               </div>
-              <p class="benchmark-footnote">使用 Qwen2.5-Coder 7B（Q4_K_M），在 Mac mini（Apple M4）上测得。首个 token 生成时间与吞吐量为单请求 5 次运行的平均值；并发负载数据基于 8 个并行客户端（Ollama OLLAMA_NUM_PARALLEL=2）。结果会因模型、Mac 机型和负载而异。</p>
             </div>
 
             <a class="yt-facade" href="https://www.youtube.com/watch?v=e7z3Nx8vWr0" target="_blank" rel="noopener" aria-label="观看 AI 桥接实际运行">

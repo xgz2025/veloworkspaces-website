@@ -188,36 +188,77 @@
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Le profil Bac à sable IA est dimensionné d'office pour les frameworks d'agents et leurs outils</li>
             </ul>
 
-            <div class="benchmark">
-              <p class="benchmark-label">Mesuré sur un Mac mini (Apple M4)</p>
-              <div class="benchmark-row">
-                <span class="benchmark-metric">Délai avant le premier token</span>
-                <span class="benchmark-values">
-                  <strong>56&nbsp;ms</strong> natif
-                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>59&nbsp;ms</strong> via Pont IA
-                </span>
-                <span class="benchmark-delta">+6 %</span>
+            <div class="benchmark-tabs">
+              <input type="radio" name="bench-engine" id="bench-tab-ollama" class="benchmark-tab-input" checked>
+              <input type="radio" name="bench-engine" id="bench-tab-mlx" class="benchmark-tab-input">
+              <div class="benchmark-tab-labels" role="tablist">
+                <label for="bench-tab-ollama" class="benchmark-tab-label">Ollama</label>
+                <label for="bench-tab-mlx" class="benchmark-tab-label">MLX</label>
               </div>
-              <div class="benchmark-row">
-                <span class="benchmark-metric">Débit</span>
-                <span class="benchmark-values">
-                  <strong>22,09&nbsp;tok/s</strong> natif
-                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>21,78&nbsp;tok/s</strong> via Pont IA
-                </span>
-                <span class="benchmark-delta">&minus;1 %</span>
+
+              <div class="benchmark benchmark-panel" id="bench-panel-ollama">
+                <p class="benchmark-label">Mesuré sur un Mac mini (Apple M4)</p>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">Délai avant le premier token</span>
+                  <span class="benchmark-values">
+                    <strong>56&nbsp;ms</strong> natif
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>59&nbsp;ms</strong> via Pont IA
+                  </span>
+                  <span class="benchmark-delta">+6 %</span>
+                </div>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">Débit</span>
+                  <span class="benchmark-values">
+                    <strong>22,09&nbsp;tok/s</strong> natif
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>21,78&nbsp;tok/s</strong> via Pont IA
+                  </span>
+                  <span class="benchmark-delta">&minus;1 %</span>
+                </div>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">Charge simultanée (8 clients)</span>
+                  <span class="benchmark-values">
+                    <strong>15,04&nbsp;s</strong> natif
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>12,73&nbsp;s</strong> via Pont IA
+                  </span>
+                  <span class="benchmark-delta">15 % plus rapide</span>
+                </div>
+                <p class="benchmark-footnote">Qwen2.5-Coder 7B (Q4_K_M) sur un Mac mini (Apple M4). Le délai avant le premier token et le débit sont des moyennes par requête unique sur 5 exécutions ; la charge simultanée utilise 8 clients parallèles (Ollama OLLAMA_NUM_PARALLEL=2). Les résultats varient selon le modèle, le Mac et la charge de travail.</p>
               </div>
-              <div class="benchmark-row">
-                <span class="benchmark-metric">Charge simultanée (8 clients)</span>
-                <span class="benchmark-values">
-                  <strong>15,04&nbsp;s</strong> natif
-                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>12,73&nbsp;s</strong> via Pont IA
-                </span>
-                <span class="benchmark-delta">15 % plus rapide</span>
+
+              <div class="benchmark benchmark-panel" id="bench-panel-mlx">
+                <p class="benchmark-label">Mesuré sur un Mac mini (Apple M4)</p>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">Délai avant le premier token</span>
+                  <span class="benchmark-values">
+                    <strong>172,21&nbsp;ms</strong> natif
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>174,27&nbsp;ms</strong> via Pont IA
+                  </span>
+                  <span class="benchmark-delta">+1 %</span>
+                </div>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">Débit</span>
+                  <span class="benchmark-values">
+                    <strong>24,09&nbsp;tok/s</strong> natif
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>23,88&nbsp;tok/s</strong> via Pont IA
+                  </span>
+                  <span class="benchmark-delta">&minus;1 %</span>
+                </div>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">Charge simultanée (8 clients)</span>
+                  <span class="benchmark-values">
+                    <strong>7,04&nbsp;s</strong> natif
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>7,38&nbsp;s</strong> via Pont IA
+                  </span>
+                  <span class="benchmark-delta benchmark-delta-neutral">au niveau de l'hôte</span>
+                </div>
+                <p class="benchmark-footnote">Qwen2.5-Coder 7B (MLX, 4 bits) sur un Mac mini (Apple M4). Le délai avant le premier token et le débit sont des moyennes par requête unique sur 5 exécutions ; les valeurs de charge simultanée sont la moyenne de 4 exécutions de 8 clients parallèles chacune. MLX gère les requêtes simultanées différemment d'Ollama, les résultats ne sont donc pas directement comparables entre les deux onglets. Les résultats varient selon le modèle, le Mac et la charge de travail.</p>
               </div>
-              <p class="benchmark-footnote">Qwen2.5-Coder 7B (Q4_K_M) sur un Mac mini (Apple M4). Le délai avant le premier token et le débit sont des moyennes par requête unique sur 5 exécutions ; la charge simultanée utilise 8 clients parallèles (Ollama OLLAMA_NUM_PARALLEL=2). Les résultats varient selon le modèle, le Mac et la charge de travail.</p>
             </div>
 
             <a class="yt-facade" href="https://www.youtube.com/watch?v=e7z3Nx8vWr0" target="_blank" rel="noopener" aria-label="Voir Pont IA en action">

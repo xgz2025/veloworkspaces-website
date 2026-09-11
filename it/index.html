@@ -188,36 +188,77 @@
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Il profilo Sandbox IA è dimensionato di default per framework di agenti e tooling</li>
             </ul>
 
-            <div class="benchmark">
-              <p class="benchmark-label">Misurato su un Mac mini (Apple M4)</p>
-              <div class="benchmark-row">
-                <span class="benchmark-metric">Tempo al primo token</span>
-                <span class="benchmark-values">
-                  <strong>56&nbsp;ms</strong> nativo
-                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>59&nbsp;ms</strong> via Ponte IA
-                </span>
-                <span class="benchmark-delta">+6%</span>
+            <div class="benchmark-tabs">
+              <input type="radio" name="bench-engine" id="bench-tab-ollama" class="benchmark-tab-input" checked>
+              <input type="radio" name="bench-engine" id="bench-tab-mlx" class="benchmark-tab-input">
+              <div class="benchmark-tab-labels" role="tablist">
+                <label for="bench-tab-ollama" class="benchmark-tab-label">Ollama</label>
+                <label for="bench-tab-mlx" class="benchmark-tab-label">MLX</label>
               </div>
-              <div class="benchmark-row">
-                <span class="benchmark-metric">Throughput</span>
-                <span class="benchmark-values">
-                  <strong>22,09&nbsp;tok/s</strong> nativo
-                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>21,78&nbsp;tok/s</strong> via Ponte IA
-                </span>
-                <span class="benchmark-delta">&minus;1%</span>
+
+              <div class="benchmark benchmark-panel" id="bench-panel-ollama">
+                <p class="benchmark-label">Misurato su un Mac mini (Apple M4)</p>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">Tempo al primo token</span>
+                  <span class="benchmark-values">
+                    <strong>56&nbsp;ms</strong> nativo
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>59&nbsp;ms</strong> via Ponte IA
+                  </span>
+                  <span class="benchmark-delta">+6%</span>
+                </div>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">Throughput</span>
+                  <span class="benchmark-values">
+                    <strong>22,09&nbsp;tok/s</strong> nativo
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>21,78&nbsp;tok/s</strong> via Ponte IA
+                  </span>
+                  <span class="benchmark-delta">&minus;1%</span>
+                </div>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">Carico simultaneo (8 client)</span>
+                  <span class="benchmark-values">
+                    <strong>15,04&nbsp;s</strong> nativo
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>12,73&nbsp;s</strong> via Ponte IA
+                  </span>
+                  <span class="benchmark-delta">15% più veloce</span>
+                </div>
+                <p class="benchmark-footnote">Qwen2.5-Coder 7B (Q4_K_M) su un Mac mini (Apple M4). Il tempo al primo token e il throughput sono medie su singola richiesta su 5 esecuzioni; il carico simultaneo utilizza 8 client paralleli (Ollama OLLAMA_NUM_PARALLEL=2). I risultati variano in base al modello, al Mac e al carico di lavoro.</p>
               </div>
-              <div class="benchmark-row">
-                <span class="benchmark-metric">Carico simultaneo (8 client)</span>
-                <span class="benchmark-values">
-                  <strong>15,04&nbsp;s</strong> nativo
-                  <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  <strong>12,73&nbsp;s</strong> via Ponte IA
-                </span>
-                <span class="benchmark-delta">15% più veloce</span>
+
+              <div class="benchmark benchmark-panel" id="bench-panel-mlx">
+                <p class="benchmark-label">Misurato su un Mac mini (Apple M4)</p>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">Tempo al primo token</span>
+                  <span class="benchmark-values">
+                    <strong>172,21&nbsp;ms</strong> nativo
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>174,27&nbsp;ms</strong> via Ponte IA
+                  </span>
+                  <span class="benchmark-delta">+1%</span>
+                </div>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">Throughput</span>
+                  <span class="benchmark-values">
+                    <strong>24,09&nbsp;tok/s</strong> nativo
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>23,88&nbsp;tok/s</strong> via Ponte IA
+                  </span>
+                  <span class="benchmark-delta">&minus;1%</span>
+                </div>
+                <div class="benchmark-row">
+                  <span class="benchmark-metric">Carico simultaneo (8 client)</span>
+                  <span class="benchmark-values">
+                    <strong>7,04&nbsp;s</strong> nativo
+                    <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <strong>7,38&nbsp;s</strong> via Ponte IA
+                  </span>
+                  <span class="benchmark-delta benchmark-delta-neutral">alla pari con l'host</span>
+                </div>
+                <p class="benchmark-footnote">Qwen2.5-Coder 7B (MLX, 4-bit) su un Mac mini (Apple M4). Il tempo al primo token e il throughput sono medie su singola richiesta su 5 esecuzioni; i valori di carico simultaneo sono la media di 4 esecuzioni con 8 client paralleli ciascuna. MLX gestisce le richieste simultanee in modo diverso da Ollama, quindi i risultati non sono direttamente confrontabili tra le due schede. I risultati variano in base al modello, al Mac e al carico di lavoro.</p>
               </div>
-              <p class="benchmark-footnote">Qwen2.5-Coder 7B (Q4_K_M) su un Mac mini (Apple M4). Il tempo al primo token e il throughput sono medie su singola richiesta su 5 esecuzioni; il carico simultaneo utilizza 8 client paralleli (Ollama OLLAMA_NUM_PARALLEL=2). I risultati variano in base al modello, al Mac e al carico di lavoro.</p>
             </div>
 
             <a class="yt-facade" href="https://www.youtube.com/watch?v=e7z3Nx8vWr0" target="_blank" rel="noopener" aria-label="Guarda Ponte IA in azione">
