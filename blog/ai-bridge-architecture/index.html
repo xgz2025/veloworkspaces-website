@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>An Architecture to Run AI Agents Safely and Efficiently in a Linux VM on Apple Silicon — Velo Workspaces</title>
+<meta name="description" content="How AI Bridge splits an AI agent from its model over a vsock channel, so a Linux VM on Apple Silicon gets real isolation without losing native GPU inference speed — with benchmark numbers.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/ai-bridge-architecture/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="An Architecture to Run AI Agents Safely and Efficiently in a Linux VM on Apple Silicon">
+<meta property="og:description" content="How AI Bridge splits an AI agent from its model over a vsock channel, so a Linux VM on Apple Silicon gets real isolation without losing native GPU inference speed.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/ai-bridge-architecture/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/velo-workspaces/id6805509975">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/#features">← Back to Velo Workspaces</a>
+      <div class="article-header">
+        <span class="eyebrow">Architecture</span>
+        <h1>An Architecture to Run AI Agents Safely and Efficiently in a Linux VM on Apple Silicon</h1>
+        <p class="article-lede">How to let an AI agent run generated code safely in a VM without giving up GPU acceleration — the architecture behind AI Bridge, based on vsock, and the benchmark numbers behind it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>The problem</h2>
+      <p>If you want to run an AI coding agent locally on your Mac today, you may choose one of the following two options.</p>
+
+      <p><strong>Option A: run it directly on your Mac.</strong> Most agent frameworks, like LangChain, AutoGen, SWE-Agent and Open Interpreter, execute LLM-generated code via <code>subprocess</code> or <code>exec()</code> with full access to your filesystem, network, and credentials. Docker's own engineering blog has documented real <a href="https://www.docker.com/blog/ai-coding-agent-horror-stories-security-risks/" target="_blank" rel="noopener">AI coding agent security incidents</a> resulting from exactly this. A recent dev.to post lays out the same concern plainly: <a href="https://dev.to/serenitiesai/ai-agents-run-unsandboxed-code-how-to-fix-it-2026-1np4" target="_blank" rel="noopener">AI Agents Run Unsandboxed Code — How to Fix It</a>. Indirect prompt injection makes this worse than it sounds, and a malicious instruction hidden in a file the agent reads can trigger commands with your full permissions, not just the ones you asked for.</p>
+
+      <p><strong>Option B: run it in a VM or container for isolation.</strong> This is the "correct" answer on paper, and it runs straight into a wall specific to Apple Silicon: <strong>Apple's Virtualization.framework does not expose the host GPU to a Linux guest like the way it does for macOS guests.</strong> This isn't a rumor, it's confirmed directly by Apple's own container team in their public repos, in response to people asking for exactly this: <a href="https://github.com/apple/container/discussions/62" target="_blank" rel="noopener">GPU passthrough availability?</a> and <a href="https://github.com/apple/containerization/issues/480" target="_blank" rel="noopener">Paravirtualized Graphics via virtio-gpu</a>. A macOS guest gets a purpose-built Metal-based GPU driver; a Linux guest gets <code>virtio-gpu</code>, a paravirtualized 2D device with no path to the host's compute GPU. Running a 7B model inside the VM is dramatically slower than the same model on the host.</p>
+
+      <p><strong>Root cause:</strong> on Apple Silicon, "safe" (inside a VM) and "fast" (on the GPU) currently pull in opposite directions, because the GPU only exists on the host side in the case of Linux VMs.</p>
+
+      <h2>The solution: split the agent from the model</h2>
+      <p>The fix isn't to pick a side, it's to stop treating "run the agent" and "run the model" as a same problem. The dangerous part (executing LLM-generated code) and the expensive part (running the model) don't have to live in the same place:</p>
+      <ul>
+        <li>The <strong>agent</strong> runs inside the isolated, disposable Linux VM, and when you're done, the whole VM (and anything it wrote to disk) is gone.</li>
+        <li>The <strong>model</strong> runs on the host, on Ollama or MLX, with full native Metal GPU access.</li>
+        <li><strong>AI Bridge</strong> connects the two over a direct vsock channel, so the agent inside the VM talks to the model exactly like it would talk to any local server.</li>
+      </ul>
+
+      <figure>
+        <pre><code>┌───────────────────────────────────────────────────────────────────┐
+│                            macOS HOST                             │
+│                                                                   │
+│      Ollama / MLX Engine   ───►  Storage: ~/.ollama/models        │
+│      (Native Metal GPU)          (single 10GB–50GB copy)          │
+│              ▲                                                    │
+│              │  Velo Workspaces AI Bridge                         │
+│              │  proxies to localhost:&lt;port&gt;                       │
+│              ▼                                                    │
+│      ┌─────────────────────────────────────────────────────┐      │
+│      │                     LINUX VM                        │      │
+│      │  socat 127.0.0.1:&lt;port&gt;  ⇄  vsock CID 2             │      │
+│      │  Env: OPENAI_API_BASE=http://127.0.0.1:&lt;port&gt;/v1    │      │
+│      │  Dev apps / Docker containers / VS Code / Python    │      │
+│      └─────────────────────────────────────────────────────┘      │
+└───────────────────────────────────────────────────────────────────┘</code></pre>
+        <figcaption>The model stays on the host GPU; only the agent's code execution moves into the VM. AI Bridge is the vsock channel connecting them.</figcaption>
+      </figure>
+
+      <p>A relay bridges a local TCP port inside the guest to the host's model-server port over vsock (CID 2 is the host, in Apple's vsock addressing). The port isn't hardcoded to Ollama, so the bridge works for MLX or any other OpenAI-compatible local server on whatever port it's actually listening on. From inside the VM, you set <code>OPENAI_API_BASE</code> (or whatever your tool calls it) to <code>http://127.0.0.1:&lt;port&gt;/v1</code> and every OpenAI-compatible client will work, such as Open Interpreter, LangChain, or a raw <code>curl</code>. No code changes need to be done, and no awareness that a VM boundary exists at all.</p>
+
+      <p><strong>The value this targets specifically:</strong> get real isolation for the part that's actually risky (arbitrary generated code execution) without paying a GPU-virtualization tax for the part that's actually expensive (inference), and without copying a 10–50GB model file into every VM you spin up.</p>
+
+      <h2>The results</h2>
+      <p>I wanted to know how close this actually gets to "no tax" so I benchmarked it properly rather than asserting it.</p>
+
+      <p><strong>Setup:</strong></p>
+      <ul>
+        <li>Host: Mac mini, Apple M4, 10 cores, 16GB RAM, macOS 26.6.2.</li>
+        <li>Guest: Ubuntu Server 26.04 (minimized), 4 vCPU, 4GB RAM.</li>
+        <li>Model: <code>qwen2.5-coder:7b</code> (Q4_K_M) served by Ollama on the host.</li>
+      </ul>
+      <p>Bridge tuned with a larger socat buffer and <code>nodelay</code> set. Both sides on Python 3.12.</p>
+
+      <p>Three tests, <a href="https://github.com/xgz2025/veloworkspace-tools" target="_blank" rel="noopener">scripts here</a>:</p>
+      <ol>
+        <li><strong><code>ai_perf_test.py</code></strong> — single-request time-to-first-token and throughput, 5 runs, deterministic</li>
+        <li><strong><code>ai_load_test.py</code></strong> — 8 concurrent clients (<code>OLLAMA_NUM_PARALLEL=2</code>)</li>
+        <li><strong><code>oi_perf_test.py</code></strong> — full agentic-loop latency via Open Interpreter: prompt → generated code → execution → result, 5 runs × 3 tasks</li>
+      </ol>
+
+      <p><strong>One methodology lesson that mattered more than anything else:</strong> the first time I ran these, I switched between the host test and the VM test without being disciplined about fully stopping the VM and restarting Ollama between them. The agentic-loop numbers were a mess on host, wildly bimodal, some iterations 10x slower than others. The fix was to <strong>stop all VMs, stop Ollama, restart <code>ollama serve</code> fresh, before every single run</strong> for both host and VM tests. Once I did that consistently, the bimodal pattern disappeared completely. A leftover process from the previous run contending for CPU/scheduling with the one actually being measured was enough to produce numbers that looked dramatic but meant nothing. All results below are from the controlled re-run.</p>
+
+      <h3>Raw single-request speed — this is the actual "tax," and it's small</h3>
+      <div class="benchmark" style="margin-top:12px;">
+        <p class="benchmark-label">Mac mini (Apple M4), qwen2.5-coder:7b (Q4_K_M)</p>
+        <div class="benchmark-row">
+          <span class="benchmark-metric">Time to first token</span>
+          <span class="benchmark-values">
+            <strong>56&nbsp;ms</strong> host
+            <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <strong>59&nbsp;ms</strong> VM (AI Bridge)
+          </span>
+          <span class="benchmark-delta">+6%</span>
+        </div>
+        <div class="benchmark-row">
+          <span class="benchmark-metric">Throughput</span>
+          <span class="benchmark-values">
+            <strong>22.09&nbsp;tok/s</strong> host
+            <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <strong>21.78&nbsp;tok/s</strong> VM (AI Bridge)
+          </span>
+          <span class="benchmark-delta">&minus;1%</span>
+        </div>
+      </div>
+      <p>These numbers reveal the actual cost of this setup: exactly one network hop over vsock. Because the model stays firmly anchored to the host's hardware, a single-digit percentage drop is practically as close to a "zero virtualization tax" as physics will allow. You aren't paying a penalty for slow GPU emulation simply because there is no GPU emulation happening at all.</p>
+
+      <h3>8 concurrent clients — the VM won</h3>
+      <div class="benchmark" style="margin-top:12px;">
+        <p class="benchmark-label">8 parallel clients</p>
+        <div class="benchmark-row">
+          <span class="benchmark-metric">Total wall time</span>
+          <span class="benchmark-values">
+            <strong>15.04&nbsp;s</strong> host
+            <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <strong>12.73&nbsp;s</strong> VM (AI Bridge)
+          </span>
+          <span class="benchmark-delta">15% faster</span>
+        </div>
+        <div class="benchmark-row">
+          <span class="benchmark-metric">Avg. per-client time</span>
+          <span class="benchmark-values">
+            <strong>9.43&nbsp;s</strong> host
+            <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <strong>8.28&nbsp;s</strong> VM (AI Bridge)
+          </span>
+          <span class="benchmark-delta">12% faster</span>
+        </div>
+      </div>
+      <p>The VM finished ~15% faster via the bridge! Initially, I thought this was purely about CPU isolation on the host — the benchmark client and the Ollama server are fighting for the exact same physical cores. In the VM, the client gets its own dedicated vCPU slice. But digging into the network architecture reveals a deeper mechanical advantage. When you run 8 concurrent Python clients natively on macOS, Python relies on kqueue for async I/O. It works, but it isn't quite as efficient as Linux's epoll event loop for handling rapid socket creation. More importantly, when the VM routes traffic over vsock, it lands in Velo Workspaces's native Swift app on the host, which uses Apple's Grand Central Dispatch (GCD) to proxy the connection to Ollama. GCD acts like a highly optimized shock-absorber at the Apple Silicon hardware level. It batches and streams those requests to localhost far more efficiently than a raw Python script hammering the port directly. You are effectively putting an enterprise-grade reverse proxy in front of the model.</p>
+
+      <h3>Real agentic loop — the VM won consistently, by a believable margin</h3>
+      <div class="benchmark" style="margin-top:12px;">
+        <p class="benchmark-label">Open Interpreter, 5 runs × 3 tasks, mean ± std dev</p>
+        <div class="benchmark-row">
+          <span class="benchmark-metric">Math computation</span>
+          <span class="benchmark-values">
+            <strong>6.45&nbsp;s</strong> ±1.16s host
+            <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <strong>5.38&nbsp;s</strong> ±1.28s VM
+          </span>
+          <span class="benchmark-delta">17% faster</span>
+        </div>
+        <div class="benchmark-row">
+          <span class="benchmark-metric">System info</span>
+          <span class="benchmark-values">
+            <strong>7.14&nbsp;s</strong> ±1.12s host
+            <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <strong>5.82&nbsp;s</strong> ±1.07s VM
+          </span>
+          <span class="benchmark-delta">18% faster</span>
+        </div>
+        <div class="benchmark-row">
+          <span class="benchmark-metric">File I/O</span>
+          <span class="benchmark-values">
+            <strong>9.08&nbsp;s</strong> ±1.22s host
+            <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <strong>6.56&nbsp;s</strong> ±1.38s VM
+          </span>
+          <span class="benchmark-delta">28% faster</span>
+        </div>
+      </div>
+      <p>The VM ran 17–28% faster, with both sides showing tight, comparable variance and no bimodal weirdness once background contention was controlled for. Seeing the VM consistently beat native macOS on tasks like File I/O and System Info might look counter-intuitive, but it makes perfect sense when you look at how agent frameworks actually execute code. Open Interpreter relies heavily on spawning background terminal shells and Python REPLs, writing temporary files, and reading stdout. Every time a script does this natively on macOS, Apple's background security daemons (XProtect, Gatekeeper, and Endpoint Security) briefly intercept the execution to scan for malicious behavior. It is a tiny delay that compounds massively over the course of an agentic loop. Inside the minimized Ubuntu VM, none of that desktop antivirus overhead exists. Linux's process creation (<code>fork()</code>) is fundamentally lighter than macOS's (<code>posix_spawn</code>), and writing to a raw ext4 filesystem is instantaneous. The vsock bridge penalty is so remarkably small that it gets completely swallowed by the sheer execution speed of Linux.</p>
+
+      <h3>How close to the ideal outcome?</h3>
+      <p>The goal was "near without virtualization tax" — not literally zero, since a network hop is unavoidable, but close enough that it isn't the thing you'd notice. A single-digit-percent difference on the raw inference path is that outcome. What I didn't expect going in was that the <em>system-level</em> numbers — concurrent load, real agentic workflows — would come out ahead in the VM rather than merely close. The isolation you get for safety turns out to also isolate you from host-side resource contention, which is a genuine bonus on top of the safety case, not just a wash.</p>
+
+      <p><strong>Biggest lesson overall:</strong> environment hygiene between benchmark runs matters as much as the architecture you're testing. A leftover process from the previous run can produce numbers dramatic enough to completely mislead you about which side actually won.</p>
+
+      <hr style="border:none; border-top:1px solid var(--color-border); margin:32px 0;">
+
+      <p>Scripts are at <a href="https://github.com/xgz2025/veloworkspace-tools" target="_blank" rel="noopener">github.com/xgz2025/veloworkspace-tools</a> if you want to reproduce this on your own hardware or model. This is exactly the architecture Velo Workspaces implements as <strong>AI Bridge</strong> — see it under <a href="/#features">Features</a>, or <a href="https://apps.apple.com/app/velo-workspaces/id6805509975" data-app-store-link>download it</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js"></script>
+</body>
+</html>

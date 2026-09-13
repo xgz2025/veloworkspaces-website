@@ -187,6 +187,7 @@
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Velo Workspaces や第三者に送信されるものは一切なし</li>
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> AI サンドボックスプロファイルは、標準でエージェントフレームワークやツール向けにサイズ設定済み</li>
             </ul>
+            <p style="margin-top:12px;"><a href="/blog/ai-bridge-architecture/">Read the architecture behind AI Bridge, with benchmark numbers →</a></p>
 
             <div class="benchmark-tabs">
               <input type="radio" name="bench-engine" id="bench-tab-ollama" class="benchmark-tab-input" checked>
@@ -225,7 +226,7 @@
                   </span>
                   <span class="benchmark-delta">15% 高速</span>
                 </div>
-                <p class="benchmark-footnote">Qwen2.5-Coder 7B（Q4_K_M）、Mac mini（Apple M4）で計測。最初のトークンまでの時間とスループットは単一リクエストを5回計測した平均値、同時実行負荷は8並列クライアント（Ollama OLLAMA_NUM_PARALLEL=2）による値です。結果はモデル、Mac、ワークロードにより変動します。</p>
+                <p class="benchmark-footnote">Qwen2.5-Coder 7B（Q4_K_M）、Mac mini（Apple M4）で計測。最初のトークンまでの時間とスループットは単一リクエストを5回計測した平均値、同時実行負荷は8並列クライアント（Ollama OLLAMA_NUM_PARALLEL=2）による値です。結果はモデル、Mac、ワークロードにより変動します。 <a href="/blog/ai-bridge-architecture/">See the full write-up →</a></p>
               </div>
 
               <div class="benchmark benchmark-panel" id="bench-panel-mlx">
@@ -257,7 +258,7 @@
                   </span>
                   <span class="benchmark-delta benchmark-delta-neutral">ホストと同等</span>
                 </div>
-                <p class="benchmark-footnote">Qwen2.5-Coder 7B（MLX、4bit）、Mac mini（Apple M4）で計測。最初のトークンまでの時間とスループットは単一リクエストを5回計測した平均値、同時実行負荷の数値は8並列クライアントによる計測を4回行った平均値です。MLXはOllamaとは異なる方法で同時リクエストを処理するため、両タブの結果を直接比較することはできません。結果はモデル、Mac、ワークロードにより変動します。</p>
+                <p class="benchmark-footnote">Qwen2.5-Coder 7B（MLX、4bit）、Mac mini（Apple M4）で計測。最初のトークンまでの時間とスループットは単一リクエストを5回計測した平均値、同時実行負荷の数値は8並列クライアントによる計測を4回行った平均値です。MLXはOllamaとは異なる方法で同時リクエストを処理するため、両タブの結果を直接比較することはできません。結果はモデル、Mac、ワークロードにより変動します。 <a href="/blog/vm-inference-benchmark/">See the full write-up →</a></p>
               </div>
             </div>
 

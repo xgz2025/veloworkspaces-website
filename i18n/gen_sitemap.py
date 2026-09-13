@@ -11,6 +11,16 @@ PAGES = [
     ("privacy/", "monthly", "0.3"),
 ]
 
+# English-only long-form pages with no translations yet — listed without
+# hreflang alternates rather than forced through the per-locale PAGES loop,
+# which would otherwise emit alternate links to /de/blog/... paths that
+# don't exist.
+ENGLISH_ONLY_PAGES = [
+    ("blog/ai-bridge-architecture/", "monthly", "0.6"),
+    ("blog/mlx-vm-setup-guide/", "monthly", "0.6"),
+    ("blog/vm-inference-benchmark/", "monthly", "0.6"),
+]
+
 def alternates_block(path, indent="    "):
     lines = []
     for code, seg, label in ALL_LOCALES:
@@ -32,6 +42,15 @@ def build():
                 f"    <priority>{prio}</priority>\n"
                 "  </url>"
             )
+    for path, freq, prio in ENGLISH_ONLY_PAGES:
+        loc = f"https://www.veloworkspaces.com/{path}"
+        entries.append(
+            "  <url>\n"
+            f"    <loc>{loc}</loc>\n"
+            f"    <changefreq>{freq}</changefreq>\n"
+            f"    <priority>{prio}</priority>\n"
+            "  </url>"
+        )
     body = "\n".join(entries)
     xml = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'

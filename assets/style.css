@@ -654,6 +654,63 @@ code {
 }
 pre code { background: none; padding: 0; }
 
+/* ---------- Long-form article pages (/blog/*) ---------- */
+
+.article-header { padding-bottom: 8px; }
+.article-meta {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 8px;
+}
+.article-lede {
+  font-size: 1.15rem;
+  color: var(--color-text-secondary);
+  max-width: 68ch;
+}
+.article-body {
+  max-width: 68ch;
+  margin: 0 auto;
+}
+.article-body h2 { margin-top: 2.2em; }
+.article-body h3 { margin-top: 1.6em; }
+.article-body ul,
+.article-body ol { color: var(--color-text-secondary); padding-left: 1.4em; }
+.article-body li { margin-bottom: 0.5em; }
+.article-body li:last-child { margin-bottom: 0; }
+.article-body figure { margin: 24px 0; }
+.article-body figure img,
+.article-body figure pre {
+  width: 100%;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+.article-body figcaption {
+  font-size: 0.82rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin-top: 8px;
+}
+.article-appendix-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 16px 0 8px;
+}
+.article-appendix-grid img {
+  width: 100%;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  display: block;
+}
+@media (max-width: 640px) {
+  .article-appendix-grid { grid-template-columns: 1fr; }
+}
+.article-back-link {
+  display: inline-block;
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+}
+
 /* ---------- Steps ---------- */
 
 .steps {

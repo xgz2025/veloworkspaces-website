@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I Sandboxed My AI Coding Agent in a VM — It Cost Me Near-Zero GPU Speed — Velo Workspaces</title>
+<meta name="description" content="Three benchmarks on Apple Silicon — single-request speed, concurrent load, and a real agentic coding loop — measuring what a Linux VM actually costs when the model stays on the host GPU via MLX.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/vm-inference-benchmark/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="I Sandboxed My AI Coding Agent in a VM — It Cost Me Near-Zero GPU Speed">
+<meta property="og:description" content="Three benchmarks on Apple Silicon measuring what a Linux VM actually costs when the model stays on the host GPU via MLX.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/vm-inference-benchmark/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/velo-workspaces/id6805509975">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/#features">← Back to Velo Workspaces</a>
+      <div class="article-header">
+        <span class="eyebrow">Benchmark</span>
+        <h1>I Sandboxed My AI Coding Agent in a VM — It Cost Me Near-Zero GPU Speed</h1>
+        <p class="article-lede">Three benchmarks on Apple Silicon. Single-request speed, concurrent load, and a real agentic coding loop, to measure what a Linux VM actually costs you when the model itself stays on the host GPU.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>The question</h2>
+      <p>Running an AI coding agent inside a VM is the obvious way to give it real isolation — its own filesystem, its own blast radius, nothing to clean up when you're done. On Apple Silicon that runs into a wall: Apple's <code>Virtualization.framework</code> doesn't pass the host GPU through to a Linux guest, so a model loaded inside the VM is CPU-bound only. <a href="/">Velo Workspaces</a>' answer is <strong>AI Bridge</strong> — a vsock-based channel that lets the VM reach a model server running on the host's own GPU, exposed inside the guest as a plain OpenAI-compatible endpoint.</p>
+
+      <p>The question that actually matters if you're going to rely on this setup day to day: what does that channel cost you? I ran three separate benchmarks, at three different scales, to find out — against <strong>MLX</strong>, Apple's own array framework, running natively on the Metal GPU via <code>mlx_lm.server</code>.</p>
+
+      <ul>
+        <li><strong>Raw single-request speed</strong> — time-to-first-token and sustained throughput</li>
+        <li><strong>Concurrent load</strong> — 8 parallel requests, wall-clock time</li>
+        <li><strong>A real agentic coding loop</strong> — an actual coding agent (OpenCode) writing and running code against the model, end to end</li>
+      </ul>
+
+      <h2>Setup</h2>
+      <ul>
+        <li><strong>Host:</strong> Mac mini, Apple M4, 10 cores, 16GB RAM, macOS 26.6.2</li>
+        <li><strong>Guest:</strong> Ubuntu Server 26.04 LTS VM, 4 vCPU, 4GB RAM — Velo Workspaces' AI Sandbox profile</li>
+        <li><strong>Model:</strong> <code>mlx-community/Qwen2.5-Coder-7B-Instruct-4bit</code>, served by <code>mlx_lm.server</code> on the host</li>
+        <li><strong>Protocol:</strong> every run was preceded by stopping all VMs and restarting the model server fresh, to rule out leftover contention from a previous run.</li>
+      </ul>
+
+      <h2>Tools</h2>
+      <p>Open source: <a href="https://github.com/xgz2025/veloworkspace-tools" target="_blank" rel="noopener">veloworkspace-tools</a> — <code>ai_perf_test.py</code>, <code>ai_load_test.py</code>, <code>opencode_perf_test.py</code>.</p>
+
+      <h2>Results</h2>
+
+      <h3>Single-request speed <span style="font-weight:400; color:var(--color-text-secondary); font-size:0.85em;">(5-run average)</span></h3>
+      <figure>
+        <img src="/assets/blog/mlx-chart1-single-request.png" alt="Bar chart comparing host vs VM single-request speed. Time to first token: 172.21 ms on host vs 174.27 ms via AI Bridge (+1%). Throughput: 24.09 tokens/sec on host vs 23.88 tokens/sec via AI Bridge (-1%).">
+      </figure>
+      <p>A ~1% difference in either direction is inside normal run-to-run noise — this is not a measurable cost of the VM boundary.</p>
+
+      <h3>Concurrent load <span style="font-weight:400; color:var(--color-text-secondary); font-size:0.85em;">(8 parallel clients, averaged across 4 runs)</span></h3>
+      <figure>
+        <img src="/assets/blog/mlx-chart2-concurrent-load.png" alt="Bar chart comparing host vs VM under 8-client concurrent load. Total wall time: 7.04 seconds on host vs 7.38 seconds via AI Bridge. Average per-client time: 6.24 seconds on host vs 6.39 seconds via AI Bridge.">
+      </figure>
+      <p>The VM runs a few percent behind the host here, consistently across all 4 repeated runs — small, but real rather than noise.</p>
+
+      <h3>Agentic loop <span style="font-weight:400; color:var(--color-text-secondary); font-size:0.85em;">(OpenCode, 5 iterations per task, mean)</span></h3>
+      <figure>
+        <img src="/assets/blog/mlx-chart3-agentic-loop.png" alt="Bar chart comparing host vs VM on three OpenCode agentic tasks. Math computation: 8.40s host vs 8.82s VM. System info: 4.50s host vs 4.55s VM. File I/O: 5.58s host vs 5.70s VM.">
+      </figure>
+      <p>Same pattern: the VM trails by roughly 1–5% across all three tasks, with tight run-to-run variance (standard deviation under 0.2s on every task) — meaning this is a repeatable, low-noise gap, not a fluke of one run.</p>
+
+      <h2>Conclusion</h2>
+      <p>At single-request scale, routing inference through a vsock proxy into a VM costs nothing measurable — the architecture does what it's supposed to do. Under concurrent load and in a real agentic workflow, there's a small, consistent, low single-digit-percent gap rather than perfect parity — worth stating precisely rather than rounding to zero in either direction.</p>
+
+      <p>Practically: if you're running an AI coding agent inside a disposable Linux VM to keep it off your host filesystem, and reaching a model served by MLX on your Mac's own GPU, you're not trading away meaningful inference speed to get that isolation. The vsock hop AI Bridge adds is close to free.</p>
+
+      <p>Raw output, methodology notes, and the benchmark scripts themselves are in the <a href="https://github.com/xgz2025/veloworkspace-tools" target="_blank" rel="noopener">repo</a> if you want to reproduce this against a different model or Mac — these numbers are specific to this hardware, model, and workload, and won't necessarily generalize to a 70B model or an 8GB Mac.</p>
+
+      <h2>Appendix — raw test output</h2>
+      <p style="font-size:0.9rem;">Terminal output from each test, host and VM side by side.</p>
+
+      <h3>Single-request speed test</h3>
+      <div class="article-appendix-grid">
+        <img src="/assets/blog/screenshot-single-request-host.png" alt="Terminal output: ai_perf_test.py running on the host, showing average TTFT 172.21 ms and average throughput 24.09 tokens/sec.">
+        <img src="/assets/blog/screenshot-single-request-vm.png" alt="Terminal output: ai_perf_test.py running inside the VM over AI Bridge, showing average TTFT 174.27 ms and average throughput 23.88 tokens/sec.">
+      </div>
+
+      <h3>Concurrent load test</h3>
+      <div class="article-appendix-grid">
+        <img src="/assets/blog/screenshot-concurrent-load-host.png" alt="Terminal output: ai_load_test.py running on the host with 8 parallel clients, total wall time 7.04s, avg client time 6.24s.">
+        <img src="/assets/blog/screenshot-concurrent-load-vm.png" alt="Terminal output: ai_load_test.py running inside the VM over AI Bridge with 8 parallel clients, total wall time 7.38s, avg client time 6.39s.">
+      </div>
+
+      <h3>Agentic-loop latency test (OpenCode)</h3>
+      <div class="article-appendix-grid">
+        <img src="/assets/blog/screenshot-agentic-loop-host.png" alt="Terminal output: opencode_perf_test.py running on the host, showing mean times of 8.40s, 4.50s, and 5.58s for the three tasks.">
+        <img src="/assets/blog/screenshot-agentic-loop-vm.png" alt="Terminal output: opencode_perf_test.py running inside the VM over AI Bridge, showing mean times of 8.82s, 4.55s, and 5.70s for the three tasks.">
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js"></script>
+</body>
+</html>

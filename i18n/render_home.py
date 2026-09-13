@@ -206,6 +206,7 @@ def render(code, seg, label):
               <li>{check_svg()} {t['aib_li2']}</li>
               <li>{check_svg()} {t['aib_li3']}</li>
             </ul>
+            <p style="margin-top:12px;"><a href="/blog/ai-bridge-architecture/">Read the architecture behind AI Bridge, with benchmark numbers →</a></p>
 
             <div class="benchmark-tabs">
               <input type="radio" name="bench-engine" id="bench-tab-ollama" class="benchmark-tab-input" checked>
@@ -244,7 +245,7 @@ def render(code, seg, label):
                   </span>
                   <span class="benchmark-delta">{t['bench_delta3']}</span>
                 </div>
-                <p class="benchmark-footnote">{t['bench_footnote']}</p>
+                <p class="benchmark-footnote">{t['bench_footnote']} <a href="/blog/ai-bridge-architecture/">See the full write-up →</a></p>
               </div>
 
               <div class="benchmark benchmark-panel" id="bench-panel-mlx">
@@ -276,7 +277,7 @@ def render(code, seg, label):
                   </span>
                   <span class="benchmark-delta benchmark-delta-neutral">{t['bench2_delta3']}</span>
                 </div>
-                <p class="benchmark-footnote">{t['bench2_footnote']}</p>
+                <p class="benchmark-footnote">{t['bench2_footnote']} <a href="/blog/vm-inference-benchmark/">See the full write-up →</a></p>
               </div>
             </div>
 

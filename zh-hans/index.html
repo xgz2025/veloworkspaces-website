@@ -187,6 +187,7 @@
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 不会向 Velo Workspaces 或任何第三方发送任何内容</li>
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> AI 沙盒预设默认即为智能体框架与相关工具预留了合适的资源</li>
             </ul>
+            <p style="margin-top:12px;"><a href="/blog/ai-bridge-architecture/">Read the architecture behind AI Bridge, with benchmark numbers →</a></p>
 
             <div class="benchmark-tabs">
               <input type="radio" name="bench-engine" id="bench-tab-ollama" class="benchmark-tab-input" checked>
@@ -225,7 +226,7 @@
                   </span>
                   <span class="benchmark-delta">快 15%</span>
                 </div>
-                <p class="benchmark-footnote">使用 Qwen2.5-Coder 7B（Q4_K_M），在 Mac mini（Apple M4）上测得。首个 token 生成时间与吞吐量为单请求 5 次运行的平均值；并发负载数据基于 8 个并行客户端（Ollama OLLAMA_NUM_PARALLEL=2）。结果会因模型、Mac 机型和负载而异。</p>
+                <p class="benchmark-footnote">使用 Qwen2.5-Coder 7B（Q4_K_M），在 Mac mini（Apple M4）上测得。首个 token 生成时间与吞吐量为单请求 5 次运行的平均值；并发负载数据基于 8 个并行客户端（Ollama OLLAMA_NUM_PARALLEL=2）。结果会因模型、Mac 机型和负载而异。 <a href="/blog/ai-bridge-architecture/">See the full write-up →</a></p>
               </div>
 
               <div class="benchmark benchmark-panel" id="bench-panel-mlx">
@@ -257,7 +258,7 @@
                   </span>
                   <span class="benchmark-delta benchmark-delta-neutral">与主机相当</span>
                 </div>
-                <p class="benchmark-footnote">使用 Qwen2.5-Coder 7B（MLX，4-bit），在 Mac mini（Apple M4）上测得。首个 token 生成时间与吞吐量为单请求 5 次运行的平均值；并发负载数据为 8 个并行客户端测试 4 次的平均值。MLX 处理并发请求的方式与 Ollama 不同，因此两个标签页的结果不能直接比较。结果会因模型、Mac 机型和负载而异。</p>
+                <p class="benchmark-footnote">使用 Qwen2.5-Coder 7B（MLX，4-bit），在 Mac mini（Apple M4）上测得。首个 token 生成时间与吞吐量为单请求 5 次运行的平均值；并发负载数据为 8 个并行客户端测试 4 次的平均值。MLX 处理并发请求的方式与 Ollama 不同，因此两个标签页的结果不能直接比较。结果会因模型、Mac 机型和负载而异。 <a href="/blog/vm-inference-benchmark/">See the full write-up →</a></p>
               </div>
             </div>
 

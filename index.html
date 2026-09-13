@@ -187,6 +187,7 @@
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Nothing is sent to Velo Workspaces or any third party</li>
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> AI Sandbox profile is sized for agent frameworks and tooling out of the box</li>
             </ul>
+            <p style="margin-top:12px;"><a href="/blog/ai-bridge-architecture/">Read the architecture behind AI Bridge, with benchmark numbers →</a></p>
 
             <div class="benchmark-tabs">
               <input type="radio" name="bench-engine" id="bench-tab-ollama" class="benchmark-tab-input" checked>
@@ -225,7 +226,7 @@
                   </span>
                   <span class="benchmark-delta">15% faster</span>
                 </div>
-                <p class="benchmark-footnote">Qwen2.5-Coder 7B (Q4_K_M) on a Mac mini (Apple M4). Time-to-first-token and throughput are single-request averages over 5 runs; the concurrent-load figure uses 8 parallel clients (Ollama OLLAMA_NUM_PARALLEL=2). Results vary by model, Mac, and workload.</p>
+                <p class="benchmark-footnote">Qwen2.5-Coder 7B (Q4_K_M) on a Mac mini (Apple M4). Time-to-first-token and throughput are single-request averages over 5 runs; the concurrent-load figure uses 8 parallel clients (Ollama OLLAMA_NUM_PARALLEL=2). Results vary by model, Mac, and workload. <a href="/blog/ai-bridge-architecture/">See the full write-up →</a></p>
               </div>
 
               <div class="benchmark benchmark-panel" id="bench-panel-mlx">
@@ -257,7 +258,7 @@
                   </span>
                   <span class="benchmark-delta benchmark-delta-neutral">on par with host</span>
                 </div>
-                <p class="benchmark-footnote">Qwen2.5-Coder 7B (MLX, 4-bit) on a Mac mini (Apple M4). Time-to-first-token and throughput are single-request averages over 5 runs; the concurrent-load figures average 4 runs of 8 parallel clients each. MLX handles concurrent requests differently than Ollama, so results aren't directly comparable between tabs. Results vary by model, Mac, and workload.</p>
+                <p class="benchmark-footnote">Qwen2.5-Coder 7B (MLX, 4-bit) on a Mac mini (Apple M4). Time-to-first-token and throughput are single-request averages over 5 runs; the concurrent-load figures average 4 runs of 8 parallel clients each. MLX handles concurrent requests differently than Ollama, so results aren't directly comparable between tabs. Results vary by model, Mac, and workload. <a href="/blog/vm-inference-benchmark/">See the full write-up →</a></p>
               </div>
             </div>
 
