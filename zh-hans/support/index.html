@@ -315,6 +315,17 @@ sudo systemctl restart systemd-binfmt</code></pre>
             <p>创建 macOS 虚拟机需要以 Apple 芯片 Mac 作为主机。在 Intel Mac 上，Linux 虚拟机仍然完全受支持。</p>
           </div>
         </details>
+        <details class="faq-item">
+          <summary>从 Ubuntu Server（最小化安装）基础镜像克隆的工作空间无法获取 IP 地址</summary>
+          <div class="faq-answer">
+            <p>Velo Workspaces 会为每个工作空间分配一个新的唯一 MAC 地址，包括从基础镜像克隆出的工作空间。Ubuntu Server 的最小化安装默认在 systemd-networkd 之上使用 Netplan 配置网络，它默认会将网络接口绑定到基础镜像原本的 MAC 地址，而不是按接口名称匹配——因此一旦克隆后的 MAC 地址发生变化，配置就不再匹配，也就永远不会发起 DHCP 请求。</p>
+            <p>找到工作空间实际的 MAC 地址，然后更新到 netplan 的配置文件中：</p>
+            <pre><code>ip addr show</code></pre>
+            <p>记下该网络接口（通常是 enp0s1）link/ether 后显示的地址，将其设置为 netplan 配置中该接口的 MAC 地址，然后重新应用：</p>
+            <pre><code>sudo sed -i 's/macaddress:.*/macaddress: &lt;new-mac-address&gt;/' /etc/netplan/*.yaml
+sudo netplan apply</code></pre>
+          </div>
+        </details>
       </div>
     </div>
   </section>

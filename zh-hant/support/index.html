@@ -315,6 +315,17 @@ sudo systemctl restart systemd-binfmt</code></pre>
             <p>建立 macOS 虛擬機器需要以 Apple 晶片 Mac 作為主機。在 Intel Mac 上，Linux 虛擬機器仍然完全受支援。</p>
           </div>
         </details>
+        <details class="faq-item">
+          <summary>從 Ubuntu Server（最小化安裝）基礎映像複製的工作區無法取得 IP 位址</summary>
+          <div class="faq-answer">
+            <p>Velo Workspaces 會為每個工作區指派一個新的唯一 MAC 位址，包括從基礎映像複製出的工作區。Ubuntu Server 的最小化安裝預設會在 systemd-networkd 之上使用 Netplan 設定網路，它預設會將網路介面綁定到基礎映像原本的 MAC 位址，而不是依介面名稱比對——因此一旦複製後的 MAC 位址不同，設定就不再相符，也就永遠不會發出 DHCP 請求。</p>
+            <p>找出工作區實際的 MAC 位址，然後更新到 netplan 的設定檔中：</p>
+            <pre><code>ip addr show</code></pre>
+            <p>記下該網路介面（通常是 enp0s1）link/ether 後顯示的位址，將其設為 netplan 設定中該介面的 MAC 位址，然後重新套用：</p>
+            <pre><code>sudo sed -i 's/macaddress:.*/macaddress: &lt;new-mac-address&gt;/' /etc/netplan/*.yaml
+sudo netplan apply</code></pre>
+          </div>
+        </details>
       </div>
     </div>
   </section>

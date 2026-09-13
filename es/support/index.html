@@ -315,6 +315,17 @@ sudo systemctl restart systemd-binfmt</code></pre>
             <p>Los invitados macOS requieren un Mac con Apple Silicon como host. En un Mac Intel, los invitados Linux siguen siendo totalmente compatibles.</p>
           </div>
         </details>
+        <details class="faq-item">
+          <summary>Un workspace clonado desde una imagen base de Ubuntu Server (minimizada) no obtiene una dirección IP</summary>
+          <div class="faq-answer">
+            <p>Velo Workspaces asigna una nueva dirección MAC única a cada workspace, incluido uno clonado desde una imagen base. La instalación minimizada de Ubuntu Server configura la red con Netplan sobre systemd-networkd, que por defecto vincula la interfaz a la dirección MAC original de la imagen base en lugar de identificarla por el nombre de la interfaz — así que en cuanto el clon tiene una MAC diferente, nada coincide y nunca se solicita DHCP.</p>
+            <p>Busca la dirección MAC real del workspace y actualízala en la configuración de netplan:</p>
+            <pre><code>ip addr show</code></pre>
+            <p>Anota la dirección que aparece después de link/ether para la interfaz (normalmente enp0s1), configúrala como la MAC de esa interfaz en netplan y vuelve a aplicar:</p>
+            <pre><code>sudo sed -i 's/macaddress:.*/macaddress: &lt;new-mac-address&gt;/' /etc/netplan/*.yaml
+sudo netplan apply</code></pre>
+          </div>
+        </details>
       </div>
     </div>
   </section>

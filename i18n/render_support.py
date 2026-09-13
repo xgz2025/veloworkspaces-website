@@ -258,6 +258,17 @@ def render(code, seg, label):
             <p>{t['faq_gen3_a']}</p>
           </div>
         </details>
+        <details class="faq-item">
+          <summary>{t['faq_gen4_q']}</summary>
+          <div class="faq-answer">
+            <p>{t['faq_gen4_a1']}</p>
+            <p>{t['faq_gen4_a2']}</p>
+            <pre><code>ip addr show</code></pre>
+            <p>{t['faq_gen4_a3']}</p>
+            <pre><code>sudo sed -i 's/macaddress:.*/macaddress: &lt;new-mac-address&gt;/' /etc/netplan/*.yaml
+sudo netplan apply</code></pre>
+          </div>
+        </details>
       </div>
     </div>
   </section>

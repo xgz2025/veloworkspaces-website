@@ -315,6 +315,17 @@ sudo systemctl restart systemd-binfmt</code></pre>
             <p>macOS 게스트는 호스트로 Apple 실리콘 Mac이 필요합니다. Intel Mac에서는 Linux 게스트가 여전히 완전히 지원됩니다.</p>
           </div>
         </details>
+        <details class="faq-item">
+          <summary>Ubuntu Server(최소 설치) 기본 이미지에서 복제한 워크스페이스가 IP 주소를 받지 못함</summary>
+          <div class="faq-answer">
+            <p>Velo Workspaces는 기본 이미지에서 복제한 워크스페이스를 포함해 모든 워크스페이스에 새로운 고유 MAC 주소를 할당합니다. Ubuntu Server의 최소 설치는 systemd-networkd 위에서 Netplan으로 네트워크를 구성하는데, 기본적으로 인터페이스 이름이 아니라 기본 이미지의 원래 MAC 주소로 인터페이스를 고정합니다. 따라서 복제본이 다른 MAC 주소를 갖게 되면 아무것도 일치하지 않아 DHCP 요청이 전혀 이루어지지 않습니다.</p>
+            <p>워크스페이스의 실제 MAC 주소를 확인한 다음 netplan 설정에 반영하세요:</p>
+            <pre><code>ip addr show</code></pre>
+            <p>해당 인터페이스(보통 enp0s1)의 link/ether 뒤에 표시된 주소를 적어두고, 이를 netplan 설정에서 해당 인터페이스의 MAC 주소로 설정한 뒤 다시 적용하세요:</p>
+            <pre><code>sudo sed -i 's/macaddress:.*/macaddress: &lt;new-mac-address&gt;/' /etc/netplan/*.yaml
+sudo netplan apply</code></pre>
+          </div>
+        </details>
       </div>
     </div>
   </section>

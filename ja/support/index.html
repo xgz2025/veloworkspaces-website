@@ -315,6 +315,17 @@ sudo systemctl restart systemd-binfmt</code></pre>
             <p>macOS ゲストにはホストとして Apple シリコン搭載 Mac が必要です。Intel Mac では、Linux ゲストは引き続き完全にサポートされています。</p>
           </div>
         </details>
+        <details class="faq-item">
+          <summary>Ubuntu Server（最小構成）のベースイメージから複製したワークスペースが IP アドレスを取得できない</summary>
+          <div class="faq-answer">
+            <p>Velo Workspaces は、ベースイメージから複製したものも含め、ワークスペースごとに新しい一意の MAC アドレスを割り当てます。Ubuntu Server の最小構成インストールは systemd-networkd 上で Netplan を使ってネットワークを設定しますが、デフォルトではインターフェース名ではなく、ベースイメージの元の MAC アドレスにインターフェースを紐付けます。そのため複製後に MAC アドレスが変わると、設定が一致しなくなり DHCP が要求されなくなります。</p>
+            <p>ワークスペースの実際の MAC アドレスを確認し、netplan の設定に反映します。</p>
+            <pre><code>ip addr show</code></pre>
+            <p>該当インターフェース（通常は enp0s1）の link/ether の後に表示されるアドレスを控え、それを netplan 設定内のそのインターフェースの MAC アドレスとして設定して、再適用します。</p>
+            <pre><code>sudo sed -i 's/macaddress:.*/macaddress: &lt;new-mac-address&gt;/' /etc/netplan/*.yaml
+sudo netplan apply</code></pre>
+          </div>
+        </details>
       </div>
     </div>
   </section>
