@@ -206,7 +206,7 @@ def render(code, seg, label):
               <li>{check_svg()} {t['aib_li2']}</li>
               <li>{check_svg()} {t['aib_li3']}</li>
             </ul>
-            <p style="margin-top:12px;"><a href="/blog/ai-bridge-architecture/">Read the architecture behind AI Bridge, with benchmark numbers →</a></p>
+            <p style="margin-top:12px;"><a href="/blog/mlx-vm-setup-guide/">Guides to set up local AI agents with MLX →</a></p>
 
             <div class="benchmark-tabs">
               <input type="radio" name="bench-engine" id="bench-tab-ollama" class="benchmark-tab-input" checked>
