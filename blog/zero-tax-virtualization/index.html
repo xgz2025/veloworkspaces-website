@@ -82,49 +82,41 @@
       </div>
 
       <h2>2. Architecture Topology</h2>
-      <pre><code>┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ EXTERNAL CLIENT (LAN)                                                                    │
-│ Browser: http://&lt;HOST_IP&gt;:8081 ──────────────────────────────────────────┐               │
-└────────────────────────────────────────────────────────────────────────┼───────────────┘
-                                                                           │
-┌──────────────────────────────────────── macOS HOST ──────────────────────┼───────────────┐
-│                                                                          │               │
-│   Incoming LAN Traffic ──────────────────────────────────────────────────┘               │
-│         │                                                                                │
-│         ▼                                                                                │
-│   ┌───────────────┐           ┌──────────────────────────────────────────────────────┐   │
-│   │ Port Forward  │           │ Inference Server — Ollama or MLX (pick one)          │   │
-│   │ (Caddy)       │           │ - Unified Memory / Metal GPU compute                 │   │
-│   │ :8081 ─► :4096│           │ - Listening: 127.0.0.1:&lt;PORT&gt; (TCP)                  │   │
-│   └───────┬───────┘           │   MLX default 8080 · Ollama default 11434            │   │
-│           │                   │ - Models cached on disk (see Section 3)              │   │
-│           │                   └────────────────────────▲─────────────────────────────┘   │
-│           │ Forwarded LAN                              │ Host Loopback TCP               │
-│           │ Traffic (Port 4096)                        │                                 │
-│           │                                   ┌────────┴───────────────────────────┐     │
-│           │                                   │ Velo AI Bridge (Swift Host Agent)  │     │
-│           │                                   │ - VirtIO-vsock Host Listener       │     │
-│           │                                   │ - Forwards to whichever engine     │     │
-│           │                                   │   and port you selected as         │     │
-│           │                                   │   Host Provider                    │     │
-│           │                                   └────────▲───────────────────────────┘     │
-│           │                                            │                                 │
-│           │ Direct VM Access                           │ VirtIO-vsock                     │
-│           │ http://&lt;VM_IP&gt;:4096                        │ Channel (CID 2:&lt;PORT&gt;)           │
-│           │ (from Host Browser)                        │                                 │
-│           ▼                                            ▼                                 │
-│   ┌──────────────────────────────────────────────────────────────────────────────────┐   │
-│   │ LINUX GUEST VM (Ubuntu 26.04)                                                    │   │
-│   │                                                                                  │   │
-│   │  [Optional] Agent Web UI                AI Forwarding Proxy (socat / daemon)    │   │
-│   │   - For agents like OpenCode            - 127.0.0.1:&lt;PORT&gt; ⇄ vsock:2:&lt;PORT&gt;     │   │
-│   │   - Listening on: 0.0.0.0:4096          - OPENAI_API_BASE=http://127.0.0.1:&lt;PORT&gt;/v1│ │
-│   │             │                                      ▲                             │   │
-│   │             └───────────── Local IPC ──────────────┘                             │   │
-│   │                                            │                                     │   │
-│   │   Isolated Agent Sandbox: Terminal / Any AI Agent (e.g., Python REPL, Shell)    │   │
-│   └──────────────────────────────────────────────────────────────────────────────────┘   │
-└────────────────────────────────────────────────────────────────────────────────────────┘</code></pre>
+      <pre><code>  EXTERNAL CLIENT (LAN)
+  Browser  ──►  http://&lt;HOST_IP&gt;:8081
+            │
+            ▼
+┌─────────────────────────────────────────────┐
+│ macOS HOST                                  │
+│                                             │
+│ Caddy reverse proxy                         │
+│   :8081  ──►  forwards to guest :4096       │
+│                                             │
+│ Inference Server — Ollama or MLX (pick one) │
+│   Unified Memory / Metal GPU compute        │
+│   Listens on 127.0.0.1:&lt;PORT&gt;               │
+│   MLX default 8080 · Ollama default 11434   │
+│         ▲                                   │
+│         │  host loopback TCP                │
+│ Velo AI Bridge (Swift host agent)           │
+│   VirtIO-vsock host listener                │
+│   forwards to your selected Host Provider   │
+└─────────────────────────────────────────────┘
+             │  VirtIO-vsock (CID 2:&lt;PORT&gt;)
+             │  + a direct http://&lt;VM_IP&gt;:4096
+             │    hop for the optional Web UI
+             ▼
+┌───────────────────────────────────────────────┐
+│ LINUX GUEST VM                                │
+│                                               │
+│ AI Forwarding Proxy (socat / systemd service) │
+│   127.0.0.1:&lt;PORT&gt;  ⇄  vsock:2:&lt;PORT&gt;         │
+│         │                                     │
+│         ▼                                     │
+│ Agent runtime — CLI, or [optional] Web UI on  │
+│   0.0.0.0:4096 (OpenCode, Aider, Open         │
+│   Interpreter, Goose, ...)                    │
+└───────────────────────────────────────────────┘</code></pre>
 
       <h3>Network Flow Breakdown</h3>
       <ul>
@@ -209,7 +201,7 @@ source ~/.mlx-env/bin/activate
 # Install the MLX LM server package
 pip install --upgrade mlx-lm</code></pre>
 
-      <p>Launch the server bound to loopback (<code>127.0.0.1</code>) on port <code>8080</code>. It downloads the model from Hugging Face automatically on first run — pick the model tag for your RAM tier from Section 3:</p>
+      <p>Launch the server bound to loopback (<code>127.0.0.1</code>) on port <code>8080</code>. It downloads the model from Hugging Face automatically on first run. <code>mlx-community/Qwen2.5-Coder-7B-Instruct-4bit</code> below is just an example — swap in whichever tag you picked for your RAM tier in <strong>Section 3</strong>:</p>
       <pre><code>mlx_lm.server \
   --model mlx-community/Qwen2.5-Coder-7B-Instruct-4bit \
   --host 127.0.0.1 \
@@ -219,7 +211,7 @@ pip install --upgrade mlx-lm</code></pre>
       <pre><code>curl -s http://127.0.0.1:8080/v1/models | grep "id"</code></pre>
 
       <h3>5.2 Option B — Ollama</h3>
-      <p>Install Ollama from <a href="https://ollama.com" target="_blank" rel="noopener">ollama.com</a> (or <code>brew install ollama</code>), then pull the model tag for your RAM tier from Section 3:</p>
+      <p>Install Ollama from <a href="https://ollama.com" target="_blank" rel="noopener">ollama.com</a> (or <code>brew install ollama</code>). <code>qwen2.5-coder:7b</code> below is just an example — pull whichever tag you picked for your RAM tier in <strong>Section 3</strong> instead:</p>
       <pre><code>brew install ollama
 ollama serve &amp;          # or just launch the Ollama app — it runs this for you
 ollama pull qwen2.5-coder:7b</code></pre>
