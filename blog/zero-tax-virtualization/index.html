@@ -82,41 +82,10 @@
       </div>
 
       <h2>2. Architecture Topology</h2>
-      <pre><code>  EXTERNAL CLIENT (LAN)
-  Browser  ──►  http://&lt;HOST_IP&gt;:8081
-            │
-            ▼
-┌─────────────────────────────────────────────┐
-│ macOS HOST                                  │
-│                                             │
-│ Caddy reverse proxy                         │
-│   :8081  ──►  forwards to guest :4096       │
-│                                             │
-│ Inference Server — Ollama or MLX (pick one) │
-│   Unified Memory / Metal GPU compute        │
-│   Listens on 127.0.0.1:&lt;PORT&gt;               │
-│   MLX default 8080 · Ollama default 11434   │
-│         ▲                                   │
-│         │  host loopback TCP                │
-│ Velo AI Bridge (Swift host agent)           │
-│   VirtIO-vsock host listener                │
-│   forwards to your selected Host Provider   │
-└─────────────────────────────────────────────┘
-             │  VirtIO-vsock (CID 2:&lt;PORT&gt;)
-             │  + a direct http://&lt;VM_IP&gt;:4096
-             │    hop for the optional Web UI
-             ▼
-┌───────────────────────────────────────────────┐
-│ LINUX GUEST VM                                │
-│                                               │
-│ AI Forwarding Proxy (socat / systemd service) │
-│   127.0.0.1:&lt;PORT&gt;  ⇄  vsock:2:&lt;PORT&gt;         │
-│         │                                     │
-│         ▼                                     │
-│ Agent runtime — CLI, or [optional] Web UI on  │
-│   0.0.0.0:4096 (OpenCode, Aider, Open         │
-│   Interpreter, Goose, ...)                    │
-└───────────────────────────────────────────────┘</code></pre>
+      <figure>
+        <img src="/assets/blog/architecture-topology-diagram.png" alt="Architecture topology diagram: an external LAN client reaches the macOS host through a Caddy port forward; on the host, the inference server (Ollama or MLX) and the Velo AI Bridge Swift agent talk over host loopback TCP; the AI Bridge reaches the Linux guest VM over a VirtIO-vsock channel, where an AI forwarding proxy (socat) relays to the agent runtime, with an optional agent web UI reachable directly or via the LAN port forward.">
+        <figcaption>Traffic flow from an external LAN client, through the macOS host's inference server and AI Bridge, over VirtIO-vsock, into the Linux guest VM's agent runtime.</figcaption>
+      </figure>
 
       <h3>Network Flow Breakdown</h3>
       <ul>
