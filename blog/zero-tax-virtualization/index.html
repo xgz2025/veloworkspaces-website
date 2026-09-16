@@ -83,8 +83,8 @@
 
       <h2>2. Architecture Topology</h2>
       <figure>
-        <img src="/assets/blog/architecture-topology-diagram.png" alt="Architecture topology diagram: an external LAN client reaches the macOS host through a Caddy port forward; on the host, the inference server (Ollama or MLX) and the Velo AI Bridge Swift agent talk over host loopback TCP; the AI Bridge reaches the Linux guest VM over a VirtIO-vsock channel, where an AI forwarding proxy (socat) relays to the agent runtime, with an optional agent web UI reachable directly or via the LAN port forward.">
-        <figcaption>Traffic flow from an external LAN client, through the macOS host's inference server and AI Bridge, over VirtIO-vsock, into the Linux guest VM's agent runtime.</figcaption>
+        <img src="/assets/blog/architecture-topology-diagram.png" alt="Architecture topology diagram: inside the Linux guest VM, the agent's traffic is forwarded over a VirtIO-vsock channel to the AI Bridge on the macOS host, which relays it to the host's inference server (Ollama or MLX). A separate Caddy port forward lets an external LAN client reach the VM's optional web UI.">
+        <figcaption>Inside the VM, the agent's traffic is forwarded over a VirtIO-vsock channel to the AI Bridge on the macOS host, which relays it to the host's inference server (Ollama or MLX). A separate Caddy port forward lets an external LAN client reach the VM's optional web UI.</figcaption>
       </figure>
 
       <h3>Network Flow Breakdown</h3>
