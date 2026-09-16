@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zero-Tax Virtualization: Running AI Agents Safely in Velo Workspaces — Velo Workspaces</title>
+<meta name="description" content="A complete guide to running AI coding agents inside an isolated Linux VM on Apple Silicon, with the model — MLX or Ollama — served at near-native speed on the host GPU via AI Bridge.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/zero-tax-virtualization/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Zero-Tax Virtualization: Running AI Agents Safely in Velo Workspaces">
+<meta property="og:description" content="A complete guide to running AI coding agents inside an isolated Linux VM on Apple Silicon, with the model — MLX or Ollama — served at near-native speed on the host GPU.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/zero-tax-virtualization/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/velo-workspaces/id6805509975">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/#features">← Back to Velo Workspaces</a>
+      <div class="article-header">
+        <span class="eyebrow">Complete guide</span>
+        <h1>Zero-Tax Virtualization: Running AI Agents Safely in Velo Workspaces</h1>
+        <p class="article-lede">A complete guide to running AI coding agents inside an isolated Linux VM on Apple Silicon, with the model — MLX or Ollama, your choice — served at near-native speed on the host GPU via AI Bridge.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>1. Introduction: The Security vs. Performance Dilemma</h2>
+      <p>Running autonomous AI coding agents natively on your primary macOS machine introduces severe security liabilities. Modern agents execute terminal commands, install unverified dependencies via <code>pip</code> and <code>npm</code>, modify arbitrary files, and can be coerced through prompt injection attacks into exfiltrating environment variables, dotfiles, or macOS Keychain secrets.</p>
+
+      <p>The standard industry remedy is sandboxing agents inside a Linux virtual machine or container. On Apple Silicon, however, this immediately collides with a hypervisor-level barrier:</p>
+      <ul>
+        <li><strong>No Compute Passthrough:</strong> Apple's native <code>Virtualization.framework</code> does not expose the host Metal GPU to Linux guests. Linux VMs receive only a 2D paravirtualized framebuffer (<code>virtio-gpu</code>).</li>
+        <li><strong>The "Virtualization Tax":</strong> Attempting to run an LLM directly inside a Linux VM forces model inference onto virtualized CPU cores. Generation speeds crater by 80%+, making multi-turn agentic loops unusable.</li>
+        <li><strong>Containers Share the Same Limitation:</strong> Docker Desktop, OrbStack, and Colima run atop Linux guest kernels and face the exact same GPU compute void.</li>
+      </ul>
+
+      <h3>The Decoupled Solution: Velo Workspaces AI Bridge</h3>
+      <p>Velo Workspaces resolves this trade-off by separating the <strong>agent execution environment</strong> from the <strong>model inference engine</strong>:</p>
+      <ol>
+        <li><strong>Model on the Host:</strong> An inference server — <strong>Ollama</strong> or <strong>Apple MLX</strong> — runs natively on macOS, retaining full access to unified memory bandwidth and Metal GPU acceleration.</li>
+        <li><strong>Agent in the VM:</strong> The agent framework executes inside an isolated Ubuntu Linux guest, restricting all file modifications and terminal execution to a sandboxed filesystem.</li>
+        <li><strong>VirtIO-vsock Transport:</strong> Traffic travels across hypervisor memory buffers via vsock rather than a traditional virtualized NAT network stack, reducing bridge overhead to single-digit milliseconds.</li>
+      </ol>
+
+      <p>This guide covers <strong>both</strong> engines side by side. Pick one in Section 5 — everything downstream (VM setup, the vsock bridge, agent configuration) works identically either way, substituting the port your chosen engine listens on.</p>
+
+      <div class="article-table-wrap">
+        <table>
+          <thead><tr><th></th><th>MLX</th><th>Ollama</th></tr></thead>
+          <tbody>
+            <tr><td>Default port</td><td><code>8080</code></td><td><code>11434</code></td></tr>
+            <tr><td>Model source</td><td><a href="https://huggingface.co/models?library=mlx-lm" target="_blank" rel="noopener">huggingface.co/models?library=mlx-lm</a></td><td><a href="https://ollama.com/library" target="_blank" rel="noopener">ollama.com/library</a></td></tr>
+            <tr><td>Best for</td><td>Apple Silicon-native performance, the widest current selection of day-one MLX-quantized releases</td><td>The simplest one-command setup and model management (<code>ollama pull</code>, <code>ollama run</code>)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>2. Architecture Topology</h2>
+      <pre><code>┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ EXTERNAL CLIENT (LAN)                                                                    │
+│ Browser: http://&lt;HOST_IP&gt;:8081 ──────────────────────────────────────────┐               │
+└────────────────────────────────────────────────────────────────────────┼───────────────┘
+                                                                           │
+┌──────────────────────────────────────── macOS HOST ──────────────────────┼───────────────┐
+│                                                                          │               │
+│   Incoming LAN Traffic ──────────────────────────────────────────────────┘               │
+│         │                                                                                │
+│         ▼                                                                                │
+│   ┌───────────────┐           ┌──────────────────────────────────────────────────────┐   │
+│   │ Port Forward  │           │ Inference Server — Ollama or MLX (pick one)          │   │
+│   │ (Caddy)       │           │ - Unified Memory / Metal GPU compute                 │   │
+│   │ :8081 ─► :4096│           │ - Listening: 127.0.0.1:&lt;PORT&gt; (TCP)                  │   │
+│   └───────┬───────┘           │   MLX default 8080 · Ollama default 11434            │   │
+│           │                   │ - Models cached on disk (see Section 3)              │   │
+│           │                   └────────────────────────▲─────────────────────────────┘   │
+│           │ Forwarded LAN                              │ Host Loopback TCP               │
+│           │ Traffic (Port 4096)                        │                                 │
+│           │                                   ┌────────┴───────────────────────────┐     │
+│           │                                   │ Velo AI Bridge (Swift Host Agent)  │     │
+│           │                                   │ - VirtIO-vsock Host Listener       │     │
+│           │                                   │ - Forwards to whichever engine     │     │
+│           │                                   │   and port you selected as         │     │
+│           │                                   │   Host Provider                    │     │
+│           │                                   └────────▲───────────────────────────┘     │
+│           │                                            │                                 │
+│           │ Direct VM Access                           │ VirtIO-vsock                     │
+│           │ http://&lt;VM_IP&gt;:4096                        │ Channel (CID 2:&lt;PORT&gt;)           │
+│           │ (from Host Browser)                        │                                 │
+│           ▼                                            ▼                                 │
+│   ┌──────────────────────────────────────────────────────────────────────────────────┐   │
+│   │ LINUX GUEST VM (Ubuntu 26.04)                                                    │   │
+│   │                                                                                  │   │
+│   │  [Optional] Agent Web UI                AI Forwarding Proxy (socat / daemon)    │   │
+│   │   - For agents like OpenCode            - 127.0.0.1:&lt;PORT&gt; ⇄ vsock:2:&lt;PORT&gt;     │   │
+│   │   - Listening on: 0.0.0.0:4096          - OPENAI_API_BASE=http://127.0.0.1:&lt;PORT&gt;/v1│ │
+│   │             │                                      ▲                             │   │
+│   │             └───────────── Local IPC ──────────────┘                             │   │
+│   │                                            │                                     │   │
+│   │   Isolated Agent Sandbox: Terminal / Any AI Agent (e.g., Python REPL, Shell)    │   │
+│   └──────────────────────────────────────────────────────────────────────────────────┘   │
+└────────────────────────────────────────────────────────────────────────────────────────┘</code></pre>
+
+      <h3>Network Flow Breakdown</h3>
+      <ul>
+        <li><strong>Inference Path:</strong> The agent sends standard OpenAI-compatible HTTP requests to <code>127.0.0.1:&lt;PORT&gt;</code> inside the VM — <code>8080</code> for MLX, <code>11434</code> for Ollama. The local <code>socat</code> proxy routes this payload across vsock to the host. The Swift AI Bridge receives the connection and relays it to whichever engine you selected as the workspace's Host Provider.</li>
+        <li><strong>Host UI Access:</strong> The host browser connects directly to the guest's virtual interface via <code>http://&lt;VM_IP&gt;:4096</code> over the standard hypervisor bridge.</li>
+        <li><strong>External LAN Access:</strong> Because external machines cannot route directly to the VM's private virtual subnet, the host forwards an external port (<code>8081</code>) to the guest's Web UI port (<code>4096</code>). Port <code>8081</code> is used to avoid colliding with whichever inference port (<code>8080</code> or <code>11434</code>) the host is already using.</li>
+      </ul>
+
+      <h2>3. Choose Your Model (Purpose and Host RAM Requirements)</h2>
+      <p>Both engines use macOS Unified Memory dynamically. Because the OS, display compositor, and the model's KV cache share this pool, reserve at least 20–25% of total host RAM for operating overhead.</p>
+      <p>Model identifiers below are verified as of this writing — always confirm current availability and exact tags at <a href="https://huggingface.co/models?library=mlx-lm" target="_blank" rel="noopener">huggingface.co/models?library=mlx-lm</a> (MLX) or <a href="https://ollama.com/library" target="_blank" rel="noopener">ollama.com/library</a> (Ollama) before pulling, since libraries change.</p>
+
+      <div class="article-table-wrap">
+        <table>
+          <thead><tr><th>Mac Unified RAM</th><th>MLX (Hugging Face)</th><th>Ollama (<code>ollama pull ...</code>)</th><th>Quant</th><th>Use Case</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>16&nbsp;GB</td>
+              <td><code>mlx-community/Qwen2.5-Coder-7B-Instruct-4bit</code></td>
+              <td><code>qwen2.5-coder:7b</code></td>
+              <td>4-bit</td>
+              <td>Fast code completion, lightweight script generation, single-file edits.</td>
+            </tr>
+            <tr>
+              <td>24&nbsp;GB / 32&nbsp;GB</td>
+              <td><code>mlx-community/Qwen2.5-Coder-32B-Instruct-4bit</code><br><code>mlx-community/Mistral-Small-24B-Instruct-4bit</code></td>
+              <td><code>qwen2.5-coder:32b</code><br><code>mistral-small</code></td>
+              <td>4-bit</td>
+              <td>Multi-file reasoning, refactoring, and debugging complex logic.</td>
+            </tr>
+            <tr>
+              <td>36&nbsp;GB / 48&nbsp;GB</td>
+              <td><code>mlx-community/Qwen3.8-27B-4bit</code>*</td>
+              <td><code>qwen3.8:27b</code>*</td>
+              <td>4-bit</td>
+              <td>Advanced agentic tasks, architectural design, repository-wide indexing.</td>
+            </tr>
+            <tr>
+              <td>64&nbsp;GB / 96&nbsp;GB</td>
+              <td><code>mlx-community/Llama-3.3-70B-Instruct-4bit</code></td>
+              <td><code>llama3.3:70b</code></td>
+              <td>4-bit</td>
+              <td>Deep reasoning, zero-shot full repository synthesis, complex planning.</td>
+            </tr>
+            <tr>
+              <td>128&nbsp;GB+</td>
+              <td><code>mlx-community/Qwen3.8-2.4T-A95B-*bit</code>*<br><code>deepseek-ai/DeepSeek-V3</code>*</td>
+              <td><code>deepseek-v3</code>*</td>
+              <td>1–4-bit</td>
+              <td>Full-scale autonomous pipelines, heavy concurrent agent swarms.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.85rem;">* Very recent (2026) or very large releases — check the library link for the exact current tag/quantization before pulling; MLX and Ollama conversions can lag a new release by days to weeks.</p>
+
+      <h2>4. VM Sizing Guidelines</h2>
+      <p>Because the heavy LLM weights and KV caches stay in macOS unified memory, the Linux VM only needs enough resources to execute the code generated by the agent.</p>
+      <p><strong>Important (Session Longevity):</strong> Long-running autonomous sessions gradually leak resources. Agents continuously generate temporary files, compile dependencies, bloat <code>pip</code>/<code>npm</code> caches, and retain execution logs. Allocate extra memory buffers for long-lived environments to keep the Linux Out-Of-Memory (OOM) killer from terminating tasks.</p>
+
+      <div class="article-table-wrap">
+        <table>
+          <thead><tr><th>Scenario</th><th>vCPUs</th><th>Memory</th><th>Storage</th><th>Primary Workloads &amp; Rationale</th></tr></thead>
+          <tbody>
+            <tr><td>Ephemeral / Light Automation</td><td>2</td><td>2–3&nbsp;GB</td><td>15–20&nbsp;GB</td><td>CLI automation and simple scripts. Ideal for short-lived, disposable tasks.</td></tr>
+            <tr><td>Full-Stack Web Development</td><td>4</td><td>4–6&nbsp;GB</td><td>30–40&nbsp;GB</td><td>Node.js, Django, SQLite, Vite. Accommodates build tools and background servers.</td></tr>
+            <tr><td>Long-Running Agent Sessions</td><td>4–6</td><td>8–12&nbsp;GB</td><td>50–60&nbsp;GB</td><td>Continuous autonomous loops. Buffers memory against cached artifacts and logs.</td></tr>
+            <tr><td>System Programming &amp; Docker</td><td>6–8</td><td>12–16&nbsp;GB</td><td>60–80&nbsp;GB</td><td>Rust/Go/C++ compilation, Docker-in-VM services. Prevents compilation lockups.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>5. Install the Inference Engine on the macOS Host</h2>
+      <p>Pick <strong>one</strong> engine. All steps in this section run in the <strong>macOS Terminal</strong> on the host.</p>
+
+      <h3>5.1 Option A — MLX</h3>
+      <p>Install the official Apple MLX language model package using Python (3.10+):</p>
+      <pre><code># Create and activate an isolated virtual environment
+python3 -m venv ~/.mlx-env
+source ~/.mlx-env/bin/activate
+
+# Install the MLX LM server package
+pip install --upgrade mlx-lm</code></pre>
+
+      <p>Launch the server bound to loopback (<code>127.0.0.1</code>) on port <code>8080</code>. It downloads the model from Hugging Face automatically on first run — pick the model tag for your RAM tier from Section 3:</p>
+      <pre><code>mlx_lm.server \
+  --model mlx-community/Qwen2.5-Coder-7B-Instruct-4bit \
+  --host 127.0.0.1 \
+  --port 8080</code></pre>
+
+      <p>In a second macOS terminal, verify it's responding to OpenAI-compatible requests:</p>
+      <pre><code>curl -s http://127.0.0.1:8080/v1/models | grep "id"</code></pre>
+
+      <h3>5.2 Option B — Ollama</h3>
+      <p>Install Ollama from <a href="https://ollama.com" target="_blank" rel="noopener">ollama.com</a> (or <code>brew install ollama</code>), then pull the model tag for your RAM tier from Section 3:</p>
+      <pre><code>brew install ollama
+ollama serve &amp;          # or just launch the Ollama app — it runs this for you
+ollama pull qwen2.5-coder:7b</code></pre>
+
+      <p>Ollama listens on <code>127.0.0.1:11434</code> by default. Verify it's responding:</p>
+      <pre><code>curl -s http://127.0.0.1:11434/v1/models | grep "id"</code></pre>
+
+      <h2>6. Create a VM in Velo Workspaces</h2>
+      <ol>
+        <li>Launch <strong>Velo Workspaces</strong> on macOS.</li>
+        <li>Choose <strong>AI Workspace</strong> in the sidebar, click <strong>+</strong> in the upper right.</li>
+        <li>Pick an image source: download an official image, choose a local OS image file, or boot from an existing virtual disk. Let's pick Ubuntu 26.04 LTS (Server or Desktop).</li>
+        <li>Choose the <strong>AI Sandbox</strong> profile, click <strong>"Show Advanced Settings"</strong>.</li>
+        <li>Assign hardware parameters based on the sizing guidelines in Section 4 (e.g., 4 vCPUs, 6 GB RAM, 40 GB Disk). Ensure <strong>AI Bridge</strong> is checked and <strong>Host Provider</strong> matches whichever engine you started in Section 5 — <strong>MLX</strong> or <strong>Ollama</strong>.</li>
+      </ol>
+
+      <figure>
+        <img src="/assets/blog/ai_workspace_config.png" alt="AI Sandbox configuration example, with AI Bridge enabled and Host Provider set to MLX">
+        <figcaption>Example: AI Sandbox profile with AI Bridge enabled and Host Provider set to MLX. Pick Ollama here instead if that's what you started in Section 5.</figcaption>
+      </figure>
+
+      <p>Click <strong>Continue</strong>, install the guest OS, then start the virtual machine and log in.</p>
+
+      <h2>7. Install and Configure AI Agents inside the VM</h2>
+      <p>All steps in this section run in the <strong>Ubuntu Linux Terminal</strong> inside the VM. Throughout, <code>&lt;PORT&gt;</code> is <code>8080</code> for MLX or <code>11434</code> for Ollama — whichever you picked in Section 5.</p>
+
+      <h3>7.1 Establish the Guest Vsock Proxy</h3>
+      <p>Rather than typing this by hand, open the running workspace's <strong>AI Bridge</strong> tab in Velo Workspaces — it shows your exact port already filled in, with a Copy button on each command block. Run <strong>step 1</strong>, then either <strong>step 2</strong> (forwards for the life of this terminal session — simplest, good for a quick test) or <strong>step 3</strong> (installs it as a systemd service that survives reboots — better for anything you'll come back to):</p>
+
+      <figure>
+        <img src="/assets/blog/ai-bridge-tab.png" alt="The AI Bridge tab inside a running workspace, showing the Environment Variables and the four copy-pasteable setup commands">
+      </figure>
+
+      <pre><code># 1. Install socat
+sudo apt-get install -y socat
+
+# 2. Forward the port for this session
+socat -d -d TCP-LISTEN:&lt;PORT&gt;,fork,reuseaddr,bind=127.0.0.1,nodelay VSOCK-CONNECT:2:&lt;PORT&gt;</code></pre>
+
+      <p><strong>— or, to keep it running across reboots —</strong></p>
+      <pre><code># 3. Install as a systemd service instead of step 2
+sudo tee /etc/systemd/system/velo-ai-bridge.service >/dev/null &lt;&lt;'EOF'
+[Unit]
+Description=Velo Workspaces AI Bridge (127.0.0.1:&lt;PORT&gt; to the host over the high speed channel)
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/socat TCP-LISTEN:&lt;PORT&gt;,fork,reuseaddr,bind=127.0.0.1,nodelay VSOCK-CONNECT:2:&lt;PORT&gt;
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
+EOF
+sudo systemctl daemon-reload
+sudo systemctl enable velo-ai-bridge
+sudo systemctl restart velo-ai-bridge</code></pre>
+
+      <p>Then, either way, verify guest-to-host connectivity across the vsock boundary:</p>
+      <pre><code># 4. Check it from inside the workspace
+curl -sS http://127.0.0.1:&lt;PORT&gt;/v1/models</code></pre>
+
+      <p>If that returns your model's info, the bridge is live — every agent below points at <code>http://127.0.0.1:&lt;PORT&gt;/v1</code>, and each one configures that itself in the next section, so there's no separate global environment-variable setup needed here.</p>
+
+      <h3>7.2 Configure Agent Frameworks</h3>
+
+      <h4>Agent Option A: OpenCode (CLI &amp; Web UI)</h4>
+      <p>OpenCode provides both an automated CLI agent and an interactive web workspace.</p>
+      <ol>
+        <li>
+          <strong>Install OpenCode and its build dependencies:</strong>
+          <pre><code>sudo apt install -y curl git build-essential
+curl -fsSL https://opencode.ai/install | bash
+source ~/.bashrc</code></pre>
+        </li>
+        <li>
+          <strong>Register your inference engine as a provider.</strong> Create <code>~/.config/opencode/opencode.json</code>:
+          <pre><code>mkdir -p ~/.config/opencode
+nano ~/.config/opencode/opencode.json</code></pre>
+          Paste this, substituting <code>&lt;PORT&gt;</code> and the model name for your chosen engine (from Section 3):
+          <pre><code>{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "local": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Local Server",
+      "options": {
+        "baseURL": "http://127.0.0.1:&lt;PORT&gt;/v1"
+      },
+      "models": {
+        "&lt;model-name&gt;": {
+          "name": "&lt;Display Name&gt;"
+        }
+      }
+    }
+  },
+  "model": "local/&lt;model-name&gt;"
+}</code></pre>
+        </li>
+        <li>
+          <strong>Run in non-interactive CLI mode</strong> — <code>--auto</code> auto-approves tool execution inside the sandbox:
+          <pre><code>opencode run --auto "Write a python script to benchmark disk I/O, execute it, and print the results."</code></pre>
+        </li>
+        <li>
+          <strong>Or launch the interactive TUI</strong>, then connect via its wizard instead of (or in addition to) the config file:
+          <pre><code>opencode</code></pre>
+          Inside the TUI, type <code>/connect</code>, select <strong>Local Server</strong>, and when prompted for an API key, type anything (e.g. <code>local</code>) — the local server doesn't check it.
+        </li>
+        <li>
+          <strong>Or run the web interface</strong>, bound to <code>0.0.0.0</code> so it's reachable across the hypervisor network:
+          <pre><code>opencode web --port 4096 --hostname 0.0.0.0</code></pre>
+          From your Mac's browser: <code>http://&lt;VM_IP&gt;:4096</code>.
+        </li>
+      </ol>
+
+      <p><strong>Accessing the Web UI from another PC on your LAN:</strong> external machines can't route directly into the VM's private subnet, so forward a port on the host. On the <strong>macOS host</strong>:</p>
+      <pre><code>brew install caddy
+caddy reverse-proxy --from :8081 --to &lt;VM_IP&gt;:4096</code></pre>
+      <p>Any machine on the LAN can then navigate to <code>http://&lt;HOST_IP&gt;:8081</code>.</p>
+
+      <h4>Agent Option B: Open Interpreter</h4>
+      <p>Open Interpreter provides a direct terminal agent loop designed for code execution.</p>
+      <ol>
+        <li>
+          <strong>Install:</strong>
+          <pre><code>pip install open-interpreter</code></pre>
+        </li>
+        <li>
+          <strong>Launch against the local endpoint</strong> — <code>-y</code> auto-approves code execution without a confirmation prompt each time:
+          <pre><code>interpreter \
+  --api_base http://127.0.0.1:&lt;PORT&gt;/v1 \
+  --model &lt;model-name&gt; \
+  --api_key local \
+  -y</code></pre>
+        </li>
+      </ol>
+
+      <h4>Agent Option C: Aider</h4>
+      <p>Aider is designed specifically for Git-integrated pair programming and repository modifications. It reads the endpoint from environment variables rather than dedicated CLI flags, and needs the <code>openai/</code> prefix on the model name so it routes through its OpenAI-compatible path:</p>
+      <ol>
+        <li>
+          <strong>Install:</strong>
+          <pre><code>python3 -m pip install aider-chat</code></pre>
+        </li>
+        <li>
+          <strong>Run inside a Git repository:</strong>
+          <pre><code>cd /path/to/project
+export OPENAI_API_BASE=http://127.0.0.1:&lt;PORT&gt;/v1
+export OPENAI_API_KEY=local
+aider --model openai/&lt;model-name&gt;</code></pre>
+        </li>
+      </ol>
+
+      <h4>Agent Option D: Goose</h4>
+      <p>Goose is an extensible open-source autonomous agent developed by Block.</p>
+      <ol>
+        <li>
+          <strong>Install:</strong>
+          <pre><code>curl -fsSL https://github.com/block/goose/releases/download/stable/download_cli.sh | CONFIGURE=false bash
+export PATH="$HOME/.local/bin:$PATH"</code></pre>
+        </li>
+        <li>
+          <strong>Configure a custom OpenAI-compatible provider:</strong>
+          <pre><code>goose configure
+# Select: Add Provider → Custom / OpenAI-compatible
+# Base URL: http://127.0.0.1:&lt;PORT&gt;/v1
+# API Key:  local
+# Model:    &lt;model-name&gt;</code></pre>
+        </li>
+        <li>
+          <strong>Start a one-shot autonomous run:</strong>
+          <pre><code>goose run --text "Audit this directory, find security misconfigurations in JSON files, and correct them."</code></pre>
+        </li>
+      </ol>
+
+      <hr style="border:none; border-top:1px solid var(--color-border); margin:32px 0;">
+      <p>Related reading: the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>, and a <a href="/blog/vm-inference-benchmark/">benchmark of what it actually costs</a> in inference speed. Or just <a href="https://apps.apple.com/app/velo-workspaces/id6805509975" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js"></script>
+</body>
+</html>

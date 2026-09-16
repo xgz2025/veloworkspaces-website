@@ -19,6 +19,7 @@ ENGLISH_ONLY_PAGES = [
     ("blog/ai-bridge-architecture/", "monthly", "0.6"),
     ("blog/mlx-vm-setup-guide/", "monthly", "0.6"),
     ("blog/vm-inference-benchmark/", "monthly", "0.6"),
+    ("blog/zero-tax-virtualization/", "monthly", "0.6"),
 ]
 
 def alternates_block(path, indent="    "):

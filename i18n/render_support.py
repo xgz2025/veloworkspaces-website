@@ -212,6 +212,7 @@ def render(code, seg, label):
               <li>{t['faq_aib_li3']}</li>
               <li>{t['faq_aib_li4']}</li>
             </ol>
+            <p style="margin-top:12px;"><a href="/blog/zero-tax-virtualization/">Full setup guide: MLX or Ollama + AI agents in a VM →</a></p>
           </div>
         </details>
       </div>

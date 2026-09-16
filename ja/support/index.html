@@ -261,14 +261,15 @@ sudo systemctl restart systemd-binfmt</code></pre>
       <div class="faq-group">
         <h2>AI ブリッジ</h2>
         <details class="faq-item">
-          <summary>AI ブリッジを Ollama に接続するには？</summary>
+          <summary>AI ブリッジを Ollama または MLX に接続するには？</summary>
           <div class="faq-answer">
             <ol>
-              <li>ワークスペースの外、あなたの Mac 上で Ollama をインストールして実行します。</li>
+              <li>ワークスペースの外、あなたの Mac 上で Ollama または MLX をインストールして実行します。</li>
               <li>ワークスペースで AI ブリッジを有効にします（AI サンドボックスプロファイルではデフォルトでオン、または自分でワークスペースの「統合」または「リソース」設定でオンにします）。</li>
               <li>ワークスペースを起動し、その AI ブリッジタブを開きます——ローカルエンドポイントのアドレスと、Linux ゲストの場合は接続を転送するための正確なコマンドが表示されます。</li>
               <li>ワークスペース内で、標準的な chat-completions API 形式を話すローカルサーバーに接続するのと同じように、ツールをそのアドレスに向けてください。</li>
             </ol>
+            <p style="margin-top:12px;"><a href="/blog/zero-tax-virtualization/">Full setup guide: MLX or Ollama + AI agents in a VM →</a></p>
           </div>
         </details>
       </div>

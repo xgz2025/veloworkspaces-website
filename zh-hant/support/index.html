@@ -261,14 +261,15 @@ sudo systemctl restart systemd-binfmt</code></pre>
       <div class="faq-group">
         <h2>AI 橋接</h2>
         <details class="faq-item">
-          <summary>如何將 AI 橋接連接到 Ollama？</summary>
+          <summary>如何將 AI 橋接連接到 Ollama 或 MLX？</summary>
           <div class="faq-answer">
             <ol>
-              <li>在工作區之外，於你的 Mac 上安裝並執行 Ollama。</li>
+              <li>在工作區之外，於你的 Mac 上安裝並執行 Ollama 或 MLX。</li>
               <li>為該工作區啟用 AI 橋接（在 AI 沙盒預設中預設為開啟，也可以自行在工作區的「整合」或「資源」設定中開啟）。</li>
               <li>啟動工作區，然後開啟其 AI 橋接分頁——其中會顯示本機端點位址，對於 Linux 虛擬機器，還會顯示轉發連線所需的確切指令。</li>
               <li>在工作區內，把你的工具指向這個位址，就像連接任何使用標準 chat-completions API 格式的本機伺服器一樣。</li>
             </ol>
+            <p style="margin-top:12px;"><a href="/blog/zero-tax-virtualization/">Full setup guide: MLX or Ollama + AI agents in a VM →</a></p>
           </div>
         </details>
       </div>
