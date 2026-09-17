@@ -37,7 +37,7 @@ def render(code, seg, label):
 <header class="site-header">
   <div class="container">
     <a class="brand" href="{p}/">
-      <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
       Velo Workspaces
     </a>
     <nav class="site-nav" aria-label="Primary">

@@ -133,6 +133,7 @@ p:last-child { margin-bottom: 0; }
 }
 .brand:hover { text-decoration: none; }
 .brand .mark { width: 28px; height: 28px; flex-shrink: 0; }
+.site-header .brand .mark { width: 48px; height: 48px; }
 
 .site-nav {
   display: flex;
