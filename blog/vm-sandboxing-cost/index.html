@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Sandboxing an AI Coding Agent in a VM Actually Costs on Apple Silicon — Velo Workspaces</title>
+<meta name="description" content="I benchmarked the same VM-sandboxing architecture against two inference engines, MLX and Ollama, and got two different answers about what it costs under load. Both are real — here's why they disagree.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/vm-sandboxing-cost/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="What Sandboxing an AI Coding Agent in a VM Actually Costs on Apple Silicon">
+<meta property="og:description" content="Two benchmarks, two inference engines, two different answers about what VM sandboxing costs under load — and a theory for why they disagree.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/vm-sandboxing-cost/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/velo-workspaces/id6805509975">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/#features">← Back to Velo Workspaces</a>
+      <div class="article-header">
+        <span class="eyebrow">Benchmark</span>
+        <h1>What Sandboxing an AI Coding Agent in a VM Actually Costs on Apple Silicon</h1>
+        <p class="article-lede">I benchmarked the same sandboxing architecture against two different inference engines and got two different answers about what it costs under load. Both are real. Here's why they disagree, and why I'm showing you both instead of picking the one that sounds better.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>The problem</h2>
+      <p>Most people running an AI coding agent locally give it a <code>subprocess</code> or <code>exec()</code> call with full access to their filesystem, network, and credentials. <a href="https://www.docker.com/blog/ai-coding-agent-horror-stories-security-risks/" target="_blank" rel="noopener">Docker's own engineering blog has documented real incidents</a> from exactly this. Indirect prompt injection makes it worse — a hostile instruction hidden in a file the agent reads can trigger commands with your full permissions, not just the ones you typed.</p>
+
+      <p>The "correct" fix is to run the agent in a VM. On Apple Silicon this runs into a real wall: <code>Virtualization.framework</code> doesn't expose the host GPU to a Linux guest. <a href="https://github.com/apple/container/discussions/62" target="_blank" rel="noopener">Confirmed directly by Apple's own container team</a> when people asked for it. A Linux guest gets <code>virtio-gpu</code>, a paravirtualized 2D framebuffer with no path to the host's Metal GPU. Run a 7B model inside the VM and it's dramatically slower than the same model on the host.</p>
+
+      <p>So on Apple Silicon, "safe" (inside a VM) and "fast" (on the GPU) pull in opposite directions — unless you stop treating "run the agent" and "run the model" as the same problem.</p>
+
+      <h2>The fix: split agent from model</h2>
+      <p>The dangerous part (executing LLM-generated code) and the expensive part (running the model) don't have to live in the same place. Model stays on the host, served by Ollama or MLX. Agent runs in the VM. A thin proxy (<code>socat</code>) inside the guest forwards <code>127.0.0.1:&lt;port&gt;</code> across a <strong>VirtIO-vsock channel</strong> — not a virtual NIC, a direct hypervisor-memory channel — to a small Swift listener on the host, which relays to whichever engine is running. From inside the VM you set <code>OPENAI_API_BASE</code> to <code>http://127.0.0.1:&lt;port&gt;/v1</code> and every OpenAI-compatible tool just works, no code changes, no awareness a VM boundary exists.</p>
+
+      <p>That's the whole mechanism. The question that actually matters is what it costs you.</p>
+
+      <h2>Benchmark 1: MLX, single request — near-zero</h2>
+      <p>Mac mini (Apple M4, 10 cores, 16GB RAM, macOS 26.6.2). Guest: Ubuntu Server 26.04 LTS, 4 vCPU, 4GB RAM. Model: <code>mlx-community/Qwen2.5-Coder-7B-Instruct-4bit</code> via <code>mlx_lm.server</code>. 5-run average, host vs. through the vsock bridge:</p>
+      <figure>
+        <img src="/assets/blog/mlx-chart1-single-request.png" alt="Bar chart comparing host vs VM single-request speed. Time to first token: 172.21 ms on host vs 174.27 ms via AI Bridge (+1%). Throughput: 24.09 tokens/sec on host vs 23.88 tokens/sec via AI Bridge (-1%).">
+      </figure>
+      <p>That's inside run-to-run noise. At single-request scale the vsock hop costs nothing measurable.</p>
+
+      <h3>Under load, and in a real agentic loop — small, real, consistent</h3>
+      <figure>
+        <img src="/assets/blog/mlx-chart2-concurrent-load.png" alt="Bar chart comparing host vs VM under 8-client concurrent load. Total wall time: 7.04 seconds on host vs 7.38 seconds via AI Bridge. Average per-client time: 6.24 seconds on host vs 6.39 seconds via AI Bridge.">
+      </figure>
+      <figure>
+        <img src="/assets/blog/mlx-chart3-agentic-loop.png" alt="Bar chart comparing host vs VM on three OpenCode agentic tasks. Math computation: 8.40s host vs 8.82s VM. System info: 4.50s host vs 4.55s VM. File I/O: 5.58s host vs 5.70s VM.">
+      </figure>
+      <p>8 parallel clients, averaged across 4 runs: the VM trails by ~5% on total wall time. Same direction on a real agentic loop (OpenCode, 5 iterations/task): the VM trails by <strong>1–5%</strong> across all three tasks, standard deviation under 0.2s on every task — a repeatable small gap, not a fluke.</p>
+
+      <p>Conclusion from this run: near-zero at single-request scale, a small honest single-digit tax under concurrency. That's the boring, expected result.</p>
+
+      <h2>Benchmark 2: Ollama, same questions, opposite answer under load</h2>
+      <p>Different session, same host class, model server swapped to Ollama (<code>qwen2.5-coder:7b</code>, Q4_K_M). Same three tests. Single-request speed tells the same unremarkable story:</p>
+      <div class="benchmark" style="margin-top:12px;">
+        <p class="benchmark-label">Mac mini (Apple M4), qwen2.5-coder:7b (Q4_K_M)</p>
+        <div class="benchmark-row">
+          <span class="benchmark-metric">Time to first token</span>
+          <span class="benchmark-values">
+            <strong>56&nbsp;ms</strong> host
+            <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <strong>59&nbsp;ms</strong> VM (AI Bridge)
+          </span>
+          <span class="benchmark-delta">+6%</span>
+        </div>
+        <div class="benchmark-row">
+          <span class="benchmark-metric">Throughput</span>
+          <span class="benchmark-values">
+            <strong>22.09&nbsp;tok/s</strong> host
+            <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <strong>21.78&nbsp;tok/s</strong> VM (AI Bridge)
+          </span>
+          <span class="benchmark-delta">&minus;1%</span>
+        </div>
+      </div>
+
+      <p>Under 8 concurrent clients, the story flips:</p>
+      <div class="benchmark" style="margin-top:12px;">
+        <p class="benchmark-label">8 parallel clients</p>
+        <div class="benchmark-row">
+          <span class="benchmark-metric">Total wall time</span>
+          <span class="benchmark-values">
+            <strong>15.04&nbsp;s</strong> host
+            <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <strong>12.73&nbsp;s</strong> VM (AI Bridge)
+          </span>
+          <span class="benchmark-delta">15% faster</span>
+        </div>
+        <div class="benchmark-row">
+          <span class="benchmark-metric">Avg. per-client time</span>
+          <span class="benchmark-values">
+            <strong>9.43&nbsp;s</strong> host
+            <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <strong>8.28&nbsp;s</strong> VM (AI Bridge)
+          </span>
+          <span class="benchmark-delta">12% faster</span>
+        </div>
+      </div>
+
+      <p><strong>The VM finished ~15% faster than the host.</strong> On a real agentic loop (Open Interpreter, 5 runs × 3 tasks):</p>
+      <div class="benchmark" style="margin-top:12px;">
+        <p class="benchmark-label">Open Interpreter, 5 runs × 3 tasks, mean ± std dev</p>
+        <div class="benchmark-row">
+          <span class="benchmark-metric">Math computation</span>
+          <span class="benchmark-values">
+            <strong>6.45&nbsp;s</strong> ±1.16s host
+            <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <strong>5.38&nbsp;s</strong> ±1.28s VM
+          </span>
+          <span class="benchmark-delta">17% faster</span>
+        </div>
+        <div class="benchmark-row">
+          <span class="benchmark-metric">System info</span>
+          <span class="benchmark-values">
+            <strong>7.14&nbsp;s</strong> ±1.12s host
+            <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <strong>5.82&nbsp;s</strong> ±1.07s VM
+          </span>
+          <span class="benchmark-delta">18% faster</span>
+        </div>
+        <div class="benchmark-row">
+          <span class="benchmark-metric">File I/O</span>
+          <span class="benchmark-values">
+            <strong>9.08&nbsp;s</strong> ±1.22s host
+            <svg class="benchmark-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <strong>6.56&nbsp;s</strong> ±1.38s VM
+          </span>
+          <span class="benchmark-delta">28% faster</span>
+        </div>
+      </div>
+
+      <p>The VM won by <strong>17–28%</strong>, consistently, tight variance, no bimodal weirdness. I did not expect this and don't fully trust a single explanation, but here's my current theory: on the host, the benchmark client and the Ollama server compete for the same physical cores; in the VM, the client gets its own dedicated vCPU slice, so it's not fighting the thing it's measuring. Separately, native macOS async I/O goes through <code>kqueue</code>, while traffic routed over vsock lands in Velo Workspaces' Swift host process, which proxies to Ollama using Grand Central Dispatch — GCD batches and streams those requests more efficiently than a raw Python client hammering the port directly, effectively an accidental reverse proxy. And on the agentic-loop side, every native <code>subprocess</code> spawn on macOS gets briefly intercepted by XProtect/Gatekeeper/Endpoint Security; that overhead doesn't exist for a process forking inside a minimized Ubuntu guest.</p>
+
+      <p>I'm not fully confident in that explanation. It's a theory that fits the data, not a proven mechanism.</p>
+
+      <h2>Why I'm showing you both instead of picking one</h2>
+      <p>If I'd only run the Ollama benchmark, I'd be telling you sandboxing is free <em>and</em> faster, which sounds too good to be true and would deserve exactly that skepticism. If I'd only run the MLX benchmark, I'd be telling you there's a small unavoidable tax under load, clean and modest and easy to believe. Neither framing is dishonest, but reporting only one would understate how much the specific inference engine's own I/O model apparently matters — possibly more than the VM boundary itself does. That's the actual finding here, and I only found it by not throwing away the "inconvenient" first result when the second one didn't match.</p>
+
+      <p>One methodology bug worth admitting: the first time I ran the Ollama numbers, I didn't fully stop all VMs and restart the model server between the host run and the VM run. Agentic-loop numbers came out wildly bimodal — some iterations 10x slower than others. A leftover process from the previous run, fighting the current one for scheduling, was enough to produce a dramatic-looking number that meant nothing. Full stop-and-restart before every single run made the bimodal pattern disappear completely. Every number above is from the disciplined re-run.</p>
+
+      <h2>Caveats</h2>
+      <p>Specific to this hardware (M4, 16GB), this exact model (7B, 4-bit), and this exact workload. Won't necessarily hold for a 70B model, an 8GB Mac, or a different agent framework's execution pattern. If you want to check that, or have a better explanation for the Ollama discrepancy than mine, <a href="https://github.com/xgz2025/veloworkspace-tools" target="_blank" rel="noopener">scripts and raw output are here</a> — <code>ai_perf_test.py</code>, <code>ai_load_test.py</code>, <code>opencode_perf_test.py</code>, all three tests, both engines.</p>
+
+      <hr style="border:none; border-top:1px solid var(--color-border); margin:32px 0;">
+
+      <p>This is the architecture behind <strong>AI Bridge</strong>, a feature of <a href="/">Velo Workspaces</a>, a macOS app I built for exactly this (disposable Linux/macOS VMs on Apple Silicon). Mentioning it plainly since it's the reason I ran these benchmarks in the first place. Related reading: the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>, and a <a href="/blog/zero-tax-virtualization/">common setup guide for MLX or Ollama + AI agents in a VM</a>.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js"></script>
+</body>
+</html>
