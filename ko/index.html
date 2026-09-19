@@ -43,7 +43,7 @@
   "url": "https://www.veloworkspaces.com/ko/",
   "offers": {
     "@type": "Offer",
-    "price": "24.99",
+    "price": "0",
     "priceCurrency": "USD"
   }
 }
@@ -180,7 +180,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3"/></svg>
           </div>
           <div>
-            <h3>AI 브리지 — 클라우드를 거치지 않는 로컬 모델 추론</h3>
+            <h3>AI 브리지 — 클라우드를 거치지 않는 로컬 모델 추론<span class="pricing-tag">Pro</span></h3>
             <p>Mac 자체 GPU에서 추론을 실행하고, 워크스페이스 내부에서 표준 chat-completions 엔드포인트로 그것에 접근하세요 — 어떤 로컬 서버에 접근하는 것과 똑같은 방식입니다. 머신을 절대 벗어나지 않는 모델을 대상으로 에이전트, 도구 호출, RAG 파이프라인을 구축하고 테스트하세요. API 키도, 사용 비용도 필요 없고, 데이터가 Mac 밖으로 나가지 않습니다.</p>
             <ul class="feature-list" style="margin-top:16px;">
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Ollama, MLX 같은 로컬 모델 서버와 함께 작동</li>
@@ -275,7 +275,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1" stroke-dasharray="2 2"/><path d="M14 3h7v7h-7z"/><path d="M14 14h7v7h-7z"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
           </div>
           <div>
-            <h3>일회용 워크스페이스 — QA는 원래 이래야 합니다</h3>
+            <h3>일회용 워크스페이스 — QA는 원래 이래야 합니다<span class="pricing-tag">Pro</span></h3>
             <p>정확히 한 번의 테스트 실행을 위한 깨끗한 VM을 실행하고, 닫는 순간 스스로 정리되게 하세요 — 지워야 할 스냅샷도 없고, “지난번에 뭔가 설치한 채로 남겨두지 않았나”라는, 통과한 테스트가 진짜인지 의심하게 만드는 걱정도 없습니다. 완전히 구성된 워크스페이스 — OS, 패키지, dotfiles, 전부 — 를 한 번 베이스 이미지로 봉인한 다음, copy-on-write를 이용해 몇 초 만에 그로부터 새 일회용 워크스페이스를 복제하면, 모든 테스트가 정확히 동일한, 검증된 상태에서 시작합니다.</p>
             <ul class="feature-list" style="margin-top:16px;">
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 현재 상태를 재사용 가능한 베이스 이미지로 클릭 한 번에 저장</li>
@@ -318,7 +318,7 @@
           <p>자신의 데스크톱 창인 것처럼, Mac과 Linux 워크스페이스 사이에서 복사하고 붙여넣으세요.</p>
         </div>
         <div class="card">
-          <h3>Linux용 Rosetta 2</h3>
+          <h3>Linux용 Rosetta 2<span class="pricing-tag">Pro</span></h3>
           <p>필요한 워크스페이스 안에서 x86_64 Linux 바이너리를 Apple 실리콘에서 거의 네이티브 속도로 실행하세요.</p>
         </div>
         <div class="card">
@@ -347,17 +347,45 @@
     </div>
   </section>
 
-  <section class="section" id="pricing" style="text-align:center;">
+  <section class="section" id="pricing">
     <div class="container">
-      <span class="eyebrow">가격</span>
-      <h2>단일 가격. 구독 없음.</h2>
-      <p style="max-width:52ch; margin:0 auto 28px;">$24.99, 일회성 결제. 기술 지원과 향후 모든 기능 업데이트를 포함합니다 — 반복 요금은 전혀 없습니다.</p>
-      <a class="btn btn-store" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" style="display:inline-flex;">
+      <div class="section-head center">
+        <span class="eyebrow">가격</span>
+        <h2>무료로 사용. Pro로 더 많은 기능을.</h2>
+        <p>모든 워크스페이스 기능은 무료로 제공됩니다. Velo Workspaces Pro는 AI 통합, 스냅샷, 그리고 파워 유저를 위한 몇 가지 편의 기능을 추가합니다 — 1주일 동안 무료로 체험해 보세요.</p>
+      </div>
+      <div class="grid grid-2">
+        <div class="card pricing-card">
+          <span class="pricing-tier-name">무료</span>
+          <p class="pricing-amount">$0</p>
+          <p class="pricing-note">계정도, 로그인도, 시간 제한도 없습니다.</p>
+          <ul class="feature-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 무제한 Linux 및 macOS 워크스페이스</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 콘솔, 공유 폴더, SSH, VS Code Remote</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 기존 복원 지점 복원 및 삭제</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 기존 베이스 이미지에서 워크스페이스 생성</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 진단 정보 내보내기</li>
+          </ul>
+        </div>
+        <div class="card pricing-card pricing-card-pro">
+          <span class="pricing-tier-name">Velo Workspaces Pro</span>
+          <p class="pricing-amount">$3.99<small>/월</small></p>
+          <p class="pricing-note">또는 연 $24.99, 또는 평생 이용 $79.99 일회성 결제. 1주일 동안 무료로 체험해 보세요.</p>
+          <ul class="feature-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> AI 브리지 — 워크스페이스 안에서 Mac에서 실행 중인 모델에 접근</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 복원 지점 — 워크스페이스를 망가뜨리기 전에 스냅샷을 찍고, 롤백</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 일회용 워크스페이스 — 실행하면, 닫는 순간 스스로 삭제됨</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 베이스 이미지 — 구성된 디스크를 봉인하고 몇 초 만에 새 워크스페이스를 시작</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Rosetta — Apple Silicon에서 x86-64 Linux 바이너리 실행</li>
+          </ul>
+          <a class="btn btn-store" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" style="display:inline-flex;">
             <svg class="btn-store-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M16.365 1.43c0 1.14-.415 2.198-1.244 3.176-.995 1.164-2.197 1.838-3.5 1.732a3.72 3.72 0 0 1-.028-.46c0-1.09.475-2.253 1.32-3.204.42-.483.955-.885 1.604-1.206.648-.316 1.26-.49 1.834-.518.018.16.014.32.014.48zm4.29 16.61c-.31.716-.677 1.377-1.103 1.988-.582.835-1.06 1.412-1.427 1.73-.568.51-1.176.772-1.827.788-.468 0-1.032-.133-1.688-.403-.658-.27-1.263-.403-1.816-.403-.58 0-1.202.133-1.869.403-.667.27-1.205.41-1.617.424-.625.027-1.246-.242-1.865-.808-.397-.345-.897-.944-1.5-1.797-.647-.912-1.18-1.97-1.598-3.177-.448-1.302-.673-2.563-.673-3.784 0-1.398.302-2.605.907-3.618a5.33 5.33 0 0 1 1.902-1.94 5.11 5.11 0 0 1 2.573-.727c.497 0 1.148.154 1.958.457.807.304 1.325.458 1.552.458.169 0 .747-.18 1.729-.539.93-.332 1.716-.47 2.36-.415 1.744.14 3.055.827 3.928 2.066-1.56.945-2.333 2.269-2.318 3.966.014 1.322.492 2.423 1.432 3.298.427.405.903.719 1.432.943-.115.334-.237.654-.366.962z"/>
             </svg>
             <span class="btn-store-text"><small>App Store에서</small><strong>다운로드</strong></span>
           </a>
+        </div>
+      </div>
     </div>
   </section>
 

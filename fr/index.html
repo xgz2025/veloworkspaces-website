@@ -43,7 +43,7 @@
   "url": "https://www.veloworkspaces.com/fr/",
   "offers": {
     "@type": "Offer",
-    "price": "24.99",
+    "price": "0",
     "priceCurrency": "USD"
   }
 }
@@ -180,7 +180,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3"/></svg>
           </div>
           <div>
-            <h3>Pont IA — inférence de modèle locale, sans cloud dans la boucle</h3>
+            <h3>Pont IA — inférence de modèle locale, sans cloud dans la boucle<span class="pricing-tag">Pro</span></h3>
             <p>Exécutez l'inférence sur le GPU de votre Mac et accédez-y depuis un espace de travail via un point de terminaison standard de type chat-completions — exactement comme vous accéderiez à n'importe quel serveur local. Construisez et testez des agents, des appels d'outils et des pipelines RAG face à un modèle qui ne quitte jamais la machine. Pas de clé API, pas de coût d'utilisation, aucune donnée ne quitte votre Mac.</p>
             <ul class="feature-list" style="margin-top:16px;">
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Fonctionne avec des serveurs de modèles locaux comme Ollama et MLX</li>
@@ -275,7 +275,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1" stroke-dasharray="2 2"/><path d="M14 3h7v7h-7z"/><path d="M14 14h7v7h-7z"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
           </div>
           <div>
-            <h3>Espaces de travail jetables — la QA comme elle devrait être</h3>
+            <h3>Espaces de travail jetables — la QA comme elle devrait être<span class="pricing-tag">Pro</span></h3>
             <p>Lancez une VM propre pour exactement un passage de test, et laissez-le se nettoyer tout seul dès que vous le fermez — plus de snapshot à penser à supprimer, plus ce doute du « est-ce qu'il restait quelque chose installé de la dernière fois » qui remet en cause la validité d'un test réussi. Scellez une fois pour toutes un espace de travail entièrement configuré — OS, paquets, dotfiles, tout — dans une image de base, puis clonez de nouveaux espaces de travail jetables à partir de celle-ci en quelques secondes grâce au copy-on-write, pour que chaque test parte exactement du même état sain et connu.</p>
             <ul class="feature-list" style="margin-top:16px;">
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Un clic pour enregistrer l'état actuel comme image de base réutilisable</li>
@@ -318,7 +318,7 @@
           <p>Copiez-collez entre votre Mac et un espace de travail Linux comme s'il s'agissait d'une fenêtre de votre propre bureau.</p>
         </div>
         <div class="card">
-          <h3>Rosetta 2 pour Linux</h3>
+          <h3>Rosetta 2 pour Linux<span class="pricing-tag">Pro</span></h3>
           <p>Exécutez des binaires Linux x86_64 à une vitesse quasi native sur Apple Silicon, à l'intérieur de l'espace de travail qui en a besoin.</p>
         </div>
         <div class="card">
@@ -347,17 +347,45 @@
     </div>
   </section>
 
-  <section class="section" id="pricing" style="text-align:center;">
+  <section class="section" id="pricing">
     <div class="container">
-      <span class="eyebrow">Tarifs</span>
-      <h2>Un seul prix. Aucun abonnement.</h2>
-      <p style="max-width:52ch; margin:0 auto 28px;">$24.99, en un seul paiement. Inclut le support technique et chaque future mise à jour de fonctionnalités — aucuns frais récurrents, jamais.</p>
-      <a class="btn btn-store" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" style="display:inline-flex;">
+      <div class="section-head center">
+        <span class="eyebrow">Tarifs</span>
+        <h2>Gratuit à l'usage. Pro débloque plus.</h2>
+        <p>Toutes les fonctionnalités d'espace de travail sont disponibles gratuitement. Velo Workspaces Pro ajoute l'intégration IA, les instantanés, et quelques commodités pour utilisateurs avancés — essayez-le gratuitement pendant une semaine.</p>
+      </div>
+      <div class="grid grid-2">
+        <div class="card pricing-card">
+          <span class="pricing-tier-name">Gratuit</span>
+          <p class="pricing-amount">$0</p>
+          <p class="pricing-note">Aucun compte, aucune connexion, aucune limite de temps.</p>
+          <ul class="feature-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Espaces de travail Linux et macOS illimités</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Console, dossiers partagés, SSH, VS Code Remote</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Restaurer et supprimer les points de restauration existants</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Créer un espace de travail à partir d'une image de base existante</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Export des diagnostics</li>
+          </ul>
+        </div>
+        <div class="card pricing-card pricing-card-pro">
+          <span class="pricing-tier-name">Velo Workspaces Pro</span>
+          <p class="pricing-amount">$3.99<small>/mois</small></p>
+          <p class="pricing-note">Ou $24.99/an, ou $79.99 une fois, à vie. Essayez gratuitement pendant une semaine.</p>
+          <ul class="feature-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Pont IA — accédez à un modèle exécuté sur votre Mac depuis un espace de travail</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Points de restauration — sauvegardez un espace de travail avant de le casser, et revenez en arrière</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Espaces de travail jetables — lancez-en un, il se supprime tout seul à la fermeture</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Images de base — scellez un disque configuré et démarrez de nouveaux espaces de travail à partir de celui-ci en quelques secondes</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Rosetta — exécutez des binaires Linux x86-64 sur Apple Silicon</li>
+          </ul>
+          <a class="btn btn-store" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" style="display:inline-flex;">
             <svg class="btn-store-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M16.365 1.43c0 1.14-.415 2.198-1.244 3.176-.995 1.164-2.197 1.838-3.5 1.732a3.72 3.72 0 0 1-.028-.46c0-1.09.475-2.253 1.32-3.204.42-.483.955-.885 1.604-1.206.648-.316 1.26-.49 1.834-.518.018.16.014.32.014.48zm4.29 16.61c-.31.716-.677 1.377-1.103 1.988-.582.835-1.06 1.412-1.427 1.73-.568.51-1.176.772-1.827.788-.468 0-1.032-.133-1.688-.403-.658-.27-1.263-.403-1.816-.403-.58 0-1.202.133-1.869.403-.667.27-1.205.41-1.617.424-.625.027-1.246-.242-1.865-.808-.397-.345-.897-.944-1.5-1.797-.647-.912-1.18-1.97-1.598-3.177-.448-1.302-.673-2.563-.673-3.784 0-1.398.302-2.605.907-3.618a5.33 5.33 0 0 1 1.902-1.94 5.11 5.11 0 0 1 2.573-.727c.497 0 1.148.154 1.958.457.807.304 1.325.458 1.552.458.169 0 .747-.18 1.729-.539.93-.332 1.716-.47 2.36-.415 1.744.14 3.055.827 3.928 2.066-1.56.945-2.333 2.269-2.318 3.966.014 1.322.492 2.423 1.432 3.298.427.405.903.719 1.432.943-.115.334-.237.654-.366.962z"/>
             </svg>
             <span class="btn-store-text"><small>Télécharger dans l'</small><strong>App Store</strong></span>
           </a>
+        </div>
+      </div>
     </div>
   </section>
 

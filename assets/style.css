@@ -406,6 +406,56 @@ p:last-child { margin-bottom: 0; }
   color: var(--color-primary);
 }
 
+/* ---------- Pricing tiers ---------- */
+
+.pricing-card {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+.pricing-card.pricing-card-pro {
+  border-color: var(--color-primary);
+  border-width: 2px;
+}
+.pricing-card .pricing-tier-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-text-secondary);
+}
+.pricing-card.pricing-card-pro .pricing-tier-name { color: var(--color-primary); }
+.pricing-card .pricing-amount {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-top: 6px;
+  letter-spacing: -0.02em;
+}
+.pricing-card .pricing-amount small {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+.pricing-card .pricing-note {
+  margin-top: 4px;
+  color: var(--color-text-secondary);
+  font-size: 0.88rem;
+}
+.pricing-card .feature-list { margin: 20px 0 24px; flex-grow: 1; }
+.pricing-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  color: var(--color-primary);
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
 /* ---------- Benchmark strip (AI Bridge card) ---------- */
 
 .benchmark {

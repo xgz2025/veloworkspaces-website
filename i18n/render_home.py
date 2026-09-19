@@ -199,7 +199,7 @@ def render(code, seg, label):
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3"/></svg>
           </div>
           <div>
-            <h3>{t['aib_h3']}</h3>
+            <h3>{t['aib_h3']}<span class="pricing-tag">{t['pro_tag']}</span></h3>
             <p>{t['aib_p']}</p>
             <ul class="feature-list" style="margin-top:16px;">
               <li>{check_svg()} {t['aib_li1']}</li>
@@ -290,7 +290,7 @@ def render(code, seg, label):
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1" stroke-dasharray="2 2"/><path d="M14 3h7v7h-7z"/><path d="M14 14h7v7h-7z"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
           </div>
           <div>
-            <h3>{t['disp_h3']}</h3>
+            <h3>{t['disp_h3']}<span class="pricing-tag">{t['pro_tag']}</span></h3>
             <p>{t['disp_p']}</p>
             <ul class="feature-list" style="margin-top:16px;">
               <li>{check_svg()} {t['disp_li1']}</li>
@@ -329,7 +329,7 @@ def render(code, seg, label):
           <p>{t['int_clip_p']}</p>
         </div>
         <div class="card">
-          <h3>{t['int_rosetta_h']}</h3>
+          <h3>{t['int_rosetta_h']}<span class="pricing-tag">{t['pro_tag']}</span></h3>
           <p>{t['int_rosetta_p']}</p>
         </div>
         <div class="card">
@@ -358,12 +358,40 @@ def render(code, seg, label):
     </div>
   </section>
 
-  <section class="section" id="pricing" style="text-align:center;">
+  <section class="section" id="pricing">
     <div class="container">
-      <span class="eyebrow">{t['pricing_eyebrow']}</span>
-      <h2>{t['pricing_h2']}</h2>
-      <p style="max-width:52ch; margin:0 auto 28px;">{t['pricing_p']}</p>
-      {store_button(t, "display:inline-flex;")}
+      <div class="section-head center">
+        <span class="eyebrow">{t['pricing_eyebrow']}</span>
+        <h2>{t['pricing_h2']}</h2>
+        <p>{t['pricing_p']}</p>
+      </div>
+      <div class="grid grid-2">
+        <div class="card pricing-card">
+          <span class="pricing-tier-name">{t['pricing_free_tier']}</span>
+          <p class="pricing-amount">{t['pricing_free_amount']}</p>
+          <p class="pricing-note">{t['pricing_free_note']}</p>
+          <ul class="feature-list">
+            <li>{check_svg()} {t['pricing_free_li1']}</li>
+            <li>{check_svg()} {t['pricing_free_li2']}</li>
+            <li>{check_svg()} {t['pricing_free_li3']}</li>
+            <li>{check_svg()} {t['pricing_free_li4']}</li>
+            <li>{check_svg()} {t['pricing_free_li5']}</li>
+          </ul>
+        </div>
+        <div class="card pricing-card pricing-card-pro">
+          <span class="pricing-tier-name">{t['pricing_pro_tier']}</span>
+          <p class="pricing-amount">{t['pricing_pro_amount']}<small>{t['pricing_pro_amount_unit']}</small></p>
+          <p class="pricing-note">{t['pricing_pro_note']}</p>
+          <ul class="feature-list">
+            <li>{check_svg()} {t['pricing_pro_li1']}</li>
+            <li>{check_svg()} {t['pricing_pro_li2']}</li>
+            <li>{check_svg()} {t['pricing_pro_li3']}</li>
+            <li>{check_svg()} {t['pricing_pro_li4']}</li>
+            <li>{check_svg()} {t['pricing_pro_li5']}</li>
+          </ul>
+          {store_button(t, "display:inline-flex;")}
+        </div>
+      </div>
     </div>
   </section>
 
