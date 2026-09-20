@@ -487,6 +487,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.veloworkspaces.com/blog/ai-agent-security-risks/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.veloworkspaces.com/blog/velo-vs-parallels-vs-utm/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

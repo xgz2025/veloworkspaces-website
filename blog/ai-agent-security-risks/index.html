@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Actually Goes Wrong When AI Coding Agents Run Unsandboxed — and Which Isolation Level Stops It — Velo Workspaces</title>
+<meta name="description" content="Four real 2026 incidents — a Cursor allowlist bypass, a zero-click Copilot data leak, and a nation-state espionage campaign run through Claude Code — and which level of sandboxing would have actually contained each one.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/ai-agent-security-risks/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="What Actually Goes Wrong When AI Coding Agents Run Unsandboxed — and Which Isolation Level Stops It">
+<meta property="og:description" content="Four real 2026 incidents, and which level of sandboxing would have actually contained each one — not just slowed it down.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/ai-agent-security-risks/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Security</span>
+        <h1>What Actually Goes Wrong When AI Coding Agents Run Unsandboxed — and Which Isolation Level Stops It</h1>
+        <p class="article-lede">AI coding agents run real commands with real permissions now, and 2026 produced enough documented incidents to stop treating this as theoretical. Four real cases, in increasing order of severity, and which level of sandboxing would have actually contained each one — not just slowed it down.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>The year this stopped being theoretical</h2>
+      <p>According to OWASP's 2026 LLM security tracking, prompt injection attacks against production AI systems surged 340% year over year, making them the fastest-growing category of attack they track. Coding agents specifically drive most of that new attack surface: 28 of the 53 agentic projects OWASP tracks are coding agents, and the five fastest-growing tools — Claude Code, Gemini CLI, Codex, Cline, and Aider — are all in that category. A separate 2026 enterprise survey found 88% of organizations reported a confirmed or suspected AI agent security incident in the past year.</p>
+
+      <p>Those are the kind of numbers that are easy to skim past. So instead of citing more of them, here are four specific, documented 2026 incidents, in increasing order of severity, and what they actually reveal about where the real boundary needs to sit.</p>
+
+      <h2>Incident 1: the allowlist itself was the hole</h2>
+      <p><strong>CVE-2026-22708</strong>, disclosed by Pillar Security against Cursor's agentic IDE. Cursor's Auto-Run mode lets you allowlist commands you trust, so you're not re-approving every shell call the agent wants to make. The problem: shell built-ins like <code>export</code>, <code>typeset</code>, and <code>declare</code> were implicitly trusted and never had to appear on the allowlist themselves. That meant anything that could get text in front of the agent — a README, a dependency file, a GitHub issue — could quietly use one of those built-ins to poison an environment variable, such as Git's <code>PAGER</code>. The next time the developer approved something as mundane as <code>git branch</code>, a command they'd already vetted and trusted, the poisoned environment made it execute the attacker's code instead.</p>
+      <p>The allowlist wasn't misconfigured. It worked exactly as designed. The hole was in what silently counted as "a command" in the first place — and that's a class of edge case, not a single bug.</p>
+
+      <h2>Incident 2: indirect prompt injection turning a bug report into a backdoor</h2>
+      <p>Indirect prompt injection is the general mechanism behind most of this: a coding agent reading a GitHub issue, a dependency's README, or a web page has no reliable way to distinguish "data I'm reading" from "an instruction I was given." A coding agent asked to fix a bug can instead be steered into inserting a backdoor. An agent built to monitor a repo's issues can treat a malicious issue, posted by anyone, as an expected instruction to act on.</p>
+      <p>Cursor's agent produced a concrete version of this too: an indirect prompt injection got it to create a malicious <code>.cursor/mcp.json</code> configuration file without user approval, and that malicious MCP configuration became the attacker's path to remote code execution. Notice this is a distinct failure from Incident 1 — the allowlist and the approval flow both worked fine here. The agent just wasn't doing the task it was asked to do.</p>
+
+      <h2>Incident 3: you don't even need code execution</h2>
+      <p><strong>EchoLeak (CVE-2025-32711)</strong>, a zero-click vulnerability in Microsoft 365 Copilot disclosed by Aim Security, CVSS 9.3. A single crafted email, no user interaction required: when Copilot ingested it during routine summarization, hidden instructions in the email caused it to access files across OneDrive, SharePoint, and Teams that it already had standing permission to read, and exfiltrate them to an attacker-controlled destination. Researchers call the underlying mechanism "LLM scope violation" — untrusted external content manipulating the model into using its own legitimate access in an illegitimate way, entirely in natural language, no shell command or malware involved.</p>
+      <p>This is the case that matters most for being honest about what sandboxing does and doesn't solve: a code-execution sandbox doesn't stop this class of attack by itself. If an agent's job is to read your files or call APIs on your behalf, isolating <em>where its code runs</em> doesn't help if the actual exfiltration path is "convince the model, in plain English, to hand over data it can already see." Execution isolation is the right answer to Incidents 1 and 2. It isn't the answer to this one — that's a scoping problem (what data and credentials a session can reach at all), and it has to be solved separately.</p>
+
+      <h2>Incident 4: how far this scales once an agent is autonomous enough</h2>
+      <p>In September 2025, Anthropic's own Threat Intelligence team detected and later disrupted what it <a href="https://www.anthropic.com/news/disrupting-AI-espionage" target="_blank" rel="noopener">reported</a> as the first largely autonomous, AI-orchestrated cyber espionage campaign at scale. A Chinese state-sponsored group, tracked as GTG-1002, tricked Claude Code into believing it was conducting authorized defensive security testing, then used it to carry out reconnaissance, vulnerability discovery, exploitation, credential harvesting, and data exfiltration against roughly 30 organizations across tech, finance, chemical manufacturing, and government — with the agent handling an estimated 80–90% of the tactical work autonomously, and human operators stepping in mainly for target selection and strategic approval.</p>
+      <p>This one isn't a sandboxing story in the same sense as the first three — it's an attacker using an agent as the weapon, not a victim's agent getting compromised. But it's the clearest evidence yet of how much leverage a coding agent now has once you multiply real tool access by real autonomy. That's the actual scale of what "should I let this thing run unsandboxed on my machine" is a question about in 2026.</p>
+
+      <h2>The common thread</h2>
+      <p>In each of the first three incidents, something that depended on the model behaving correctly, or on a list of edge cases being complete, sat between "read some text" and "do something harmful" — a permission prompt, an allowlist, or the model's own judgment about what counted as an instruction. Each was bypassed or routed around a different way. That's not one bug to patch: allowlists will keep having new edge cases like shell built-ins, and prompt injection defenses are an active, unsolved arms race as of today, not a shipped fix.</p>
+      <p>The boundary that doesn't depend on any of that working is isolation — what the agent's process can actually touch on disk, on the network, and on the host, regardless of what it decides to do.</p>
+
+      <h2>Not all isolation is the same boundary</h2>
+      <p>"Sandboxed" gets used loosely. These are meaningfully different guarantees:</p>
+      <div class="article-table-wrap">
+        <table>
+          <thead><tr><th>Isolation level</th><th>Shared with the host</th><th>If it's escaped</th><th>Overhead</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>No sandbox</td>
+              <td>Everything</td>
+              <td>N/A — the agent already has your shell</td>
+              <td>None</td>
+            </tr>
+            <tr>
+              <td>In-process language sandbox (e.g. a JS VM-style sandbox)</td>
+              <td>Host kernel, often the same process memory space</td>
+              <td>Same host access as no sandbox at all</td>
+              <td>Low</td>
+            </tr>
+            <tr>
+              <td>OS container (Docker, etc.)</td>
+              <td>Host kernel</td>
+              <td>Host kernel access, if there's a kernel bug or the container is privileged/misconfigured</td>
+              <td>Low–medium</td>
+            </tr>
+            <tr>
+              <td>gVisor (user-space kernel)</td>
+              <td>Physical hardware only — syscalls are intercepted before the real kernel</td>
+              <td>gVisor's own user-space kernel — a much smaller, purpose-built attack surface, not Linux itself</td>
+              <td>~10–30% on I/O-heavy workloads</td>
+            </tr>
+            <tr>
+              <td>MicroVM / full VM (Firecracker, Kata, Apple's Virtualization.framework)</td>
+              <td>Physical hardware only — a dedicated kernel per workload</td>
+              <td>A hypervisor breakout — a categorically harder, rarer bug class than a kernel or container-runtime bug</td>
+              <td>Architecture-dependent</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The middle rows aren't hypothetical either. In mid-2026, a wave of 13 critical CVEs was disclosed against <code>vm2</code>, a widely used JavaScript sandboxing library, in a single patch cycle — real evidence that a "sandbox" implemented as a language-level trick, sharing the same process and kernel as the code it's meant to contain, keeps getting broken, because holding that boundary is a matter of catching every escape in review, not a hardware-enforced guarantee. gVisor is a real step up from that — Google's own <a href="https://gvisor.dev/" target="_blank" rel="noopener">gVisor</a> intercepts syscalls in user space before they reach the host kernel — but the isolation is genuinely weaker than a VM's, which is why production guidance in this space (Northflank's, among others) tends to land on <a href="https://northflank.com/blog/how-to-sandbox-ai-agents" target="_blank" rel="noopener">a Firecracker- or Kata-class microVM as the minimum acceptable isolation for a production agent execution sandbox</a>.</p>
+
+      <h2>Where Velo Workspaces sits, and why the GPU question mattered</h2>
+      <p>Disposable Workspaces on Apple Silicon run on Apple's own Virtualization.framework — the bottom row above: a dedicated kernel per workspace, and the workspace itself is deleted the moment you close it, so a successful compromise doesn't outlive the session. That's not a novel technique; it's the same class of boundary Firecracker and Kata provide elsewhere.</p>
+      <p>The historical tradeoff for that level of isolation has been giving up your host GPU for anything running inside it — which is exactly why <strong>AI Bridge</strong> exists: the untrusted, disposable part (the agent's actual code execution) stays inside the VM, while the model server stays on the host, outside that boundary entirely, reached over a vsock channel rather than living inside the guest. See the <a href="/blog/ai-bridge-architecture/">architecture behind that split</a> and what it <a href="/blog/vm-sandboxing-cost/">actually costs in inference speed</a>, benchmarked rather than asserted — or how it compares to other VM apps on the same hardware in the <a href="/blog/velo-vs-parallels-vs-utm/">Parallels and UTM comparison</a>.</p>
+      <p>One honest limit, straight from Incident 3: this isolates code execution. It doesn't by itself solve the "the model was talked into handing over data it can already see" class of attack — that's a matter of scoping what files and long-lived credentials a given workspace can reach in the first place, and it's worth doing deliberately no matter which app or which isolation level you're using.</p>
+
+      <h2>What to actually do</h2>
+      <ul>
+        <li><strong>Don't treat an allowlist or approval prompt as your security boundary.</strong> Incident 1 shows it's a convenience feature that can develop edge cases, not an enforcement mechanism.</li>
+        <li><strong>If an agent executes generated code, run it somewhere an escape means a hypervisor breakout, not a shell on your actual account</strong> — a microVM or full VM, not a container alone.</li>
+        <li><strong>Make the environment disposable by default</strong>, so a successful compromise doesn't persist past the session that caused it.</li>
+        <li><strong>Separately, scope what data and long-lived credentials the session can reach at all.</strong> Sandboxing execution doesn't fix a model that can be talked into handing over something it's already allowed to see.</li>
+        <li><strong>Assume prompt injection defenses will keep having new bypasses found.</strong> Isolation shouldn't depend on them holding.</li>
+      </ul>
+
+      <p>Related reading: the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>, what VM isolation actually <a href="/blog/vm-sandboxing-cost/">costs in inference speed</a>, and a <a href="/blog/zero-tax-virtualization/">complete setup guide</a> for running an agent this way. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
