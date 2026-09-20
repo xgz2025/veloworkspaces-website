@@ -16,6 +16,7 @@ PAGES = [
 # which would otherwise emit alternate links to /de/blog/... paths that
 # don't exist.
 ENGLISH_ONLY_PAGES = [
+    ("blog/", "weekly", "0.7"),
     ("blog/ai-bridge-architecture/", "monthly", "0.6"),
     ("blog/mlx-vm-setup-guide/", "monthly", "0.6"),
     ("blog/vm-inference-benchmark/", "monthly", "0.6"),

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blog — Velo Workspaces</title>
+<meta name="description" content="Guides, benchmarks, and architecture deep dives on running AI agents, Linux VMs, and disposable workspaces on Apple Silicon.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Blog — Velo Workspaces">
+<meta property="og:description" content="Guides, benchmarks, and architecture deep dives on running AI agents, Linux VMs, and disposable workspaces on Apple Silicon.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <div class="article-header">
+        <span class="eyebrow">Blog</span>
+        <h1>Guides, benchmarks, and architecture deep dives.</h1>
+        <p class="article-lede">Everything we've written about running AI agents, Linux VMs, and disposable workspaces on Apple Silicon — how it works, what it costs, and how to set it up.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="blog-index-list">
+
+        <a class="blog-index-card" href="/blog/zero-tax-virtualization/">
+          <span class="eyebrow">Complete guide</span>
+          <h2>Zero-Tax Virtualization: Running AI Agents Safely in Velo Workspaces</h2>
+          <p>A complete guide to running AI coding agents inside an isolated Linux VM on Apple Silicon, with the model — MLX or Ollama, your choice — served at near-native speed on the host GPU via AI Bridge.</p>
+        </a>
+
+        <a class="blog-index-card" href="/blog/vm-sandboxing-cost/">
+          <span class="eyebrow">Benchmark</span>
+          <h2>What Sandboxing an AI Coding Agent in a VM Actually Costs on Apple Silicon</h2>
+          <p>I benchmarked the same sandboxing architecture against two different inference engines and got two different answers about what it costs under load. Both are real. Here's why they disagree, and why I'm showing you both instead of picking the one that sounds better.</p>
+        </a>
+
+        <a class="blog-index-card" href="/blog/ai-bridge-architecture/">
+          <span class="eyebrow">Architecture</span>
+          <h2>An Architecture to Run AI Agents Safely and Efficiently in a Linux VM on Apple Silicon</h2>
+          <p>How to let an AI agent run generated code safely in a VM without giving up GPU acceleration — the architecture behind AI Bridge, based on vsock, and the benchmark numbers behind it.</p>
+        </a>
+
+        <a class="blog-index-card" href="/blog/vm-inference-benchmark/">
+          <span class="eyebrow">Benchmark</span>
+          <h2>I Sandboxed My AI Coding Agent in a VM — It Cost Me Near-Zero GPU Speed</h2>
+          <p>Three benchmarks on Apple Silicon. Single-request speed, concurrent load, and a real agentic coding loop, to measure what a Linux VM actually costs you when the model itself stays on the host GPU.</p>
+        </a>
+
+        <a class="blog-index-card" href="/blog/mlx-vm-setup-guide/">
+          <span class="eyebrow">Setup guide</span>
+          <h2>Run an AI Agent Inside a Linux VM with Local LLMs on macOS at Near-Native Performance</h2>
+          <p>A practical setup guide: MLX on the host, a disposable Linux VM for the agent OpenCode, and a vsock bridge that connects them at near-native speed — a fully local deployment.</p>
+        </a>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
