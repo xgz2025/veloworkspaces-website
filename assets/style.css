@@ -140,6 +140,11 @@ p:last-child { margin-bottom: 0; }
   align-items: center;
   gap: 24px;
 }
+.site-nav .nav-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 28px;
+}
 .site-nav a:not(.btn) {
   color: var(--color-text-secondary);
   font-size: 0.95rem;
