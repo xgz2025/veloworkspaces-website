@@ -126,7 +126,7 @@
       <ul>
         <li><strong>Don't treat an allowlist or approval prompt as your security boundary.</strong> Incident 1 shows it's a convenience feature that can develop edge cases, not an enforcement mechanism.</li>
         <li><strong>If an agent executes generated code, run it somewhere an escape means a hypervisor breakout, not a shell on your actual account</strong> — a microVM or full VM, not a container alone.</li>
-        <li><strong>Make the environment disposable by default</strong>, so a successful compromise doesn't persist past the session that caused it.</li>
+        <li><strong>Make the environment disposable by default</strong>, so a successful compromise doesn't persist past the session that caused it — the same property that makes <a href="/blog/qa-devops-disposable-vm-workflow/">a flaky test's leftover state not outlive its run</a>, for a very different reason.</li>
         <li><strong>Separately, scope what data and long-lived credentials the session can reach at all.</strong> Sandboxing execution doesn't fix a model that can be talked into handing over something it's already allowed to see.</li>
         <li><strong>Assume prompt injection defenses will keep having new bypasses found.</strong> Isolation shouldn't depend on them holding.</li>
       </ul>
