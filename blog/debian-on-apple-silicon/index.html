@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Running Debian on Apple Silicon: What's Different from Ubuntu — Velo Workspaces</title>
+<meta name="description" content="Debian's cloud images offer a nocloud variant that skips the cloud-init dance Ubuntu's images require, and Debian's default networking doesn't hit the Netplan clone gotcha Ubuntu Server does. What's actually different, running Debian as a guest on Apple Silicon.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/debian-on-apple-silicon/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Running Debian on Apple Silicon: What's Different from Ubuntu">
+<meta property="og:description" content="Debian's nocloud cloud image variant, why the Ubuntu Netplan clone gotcha doesn't apply the same way, and what's actually different running Debian as a guest on Apple Silicon.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/debian-on-apple-silicon/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Guide</span>
+        <h1>Running Debian on Apple Silicon: What's Different from Ubuntu</h1>
+        <p class="article-lede">Second in the OS-specific series. Same underlying fact as Ubuntu — native arm64, not emulation — but different defaults once you're actually inside: a cloud image variant built specifically to skip cloud-init entirely, and networking that sidesteps the clone gotcha Ubuntu Server hits.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>Same CPU story, different distro defaults</h2>
+      <p>Debian on an Apple Silicon Mac runs the same way <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu does</a>: natively on arm64, not emulated. Debian 13 "Trixie," the current stable release, ships arm64 as one of its full, officially supported architectures — alongside amd64, armhf, armel, ppc64el, riscv64, and s390x — not a secondary or best-effort build. One thing worth disambiguating up front: Debian 13 also added real driver support for Apple Silicon MacBook hardware specifically (trackpad/keyboard controllers, for projects like Asahi Linux that install Debian directly on the bare metal). That's a different thing entirely from what this post and Velo Workspaces are about — Debian running as a <em>guest</em> inside a VM on the Mac, where none of that bare-metal driver work is relevant, because the guest never touches the physical trackpad or keyboard controller at all.</p>
+
+      <h2>The cloud image variant that skips cloud-init entirely</h2>
+      <p>This is the most useful thing to know about Debian specifically, and it's genuinely different from Ubuntu's situation. Debian publishes several official cloud image variants: <strong>genericcloud</strong> (a trimmed hardware-driver set meant for any virtualized environment) and <strong>nocloud</strong> — which, as the name says, skips cloud-init entirely and boots straight to a usable system rather than waiting on a datasource that was never going to show up. Ubuntu's cloud images assume cloud-init by default, which means wiring up a NoCloud datasource by hand (boot arguments, a seed server) if you're setting things up yourself outside a tool that automates it. Debian's <code>nocloud</code> variant is built for exactly the plain-local-VM case this sidesteps — there's no datasource dance to get wrong in the first place.</p>
+      <p>The one piece that doesn't go away: Debian's cloud images ship as qcow2, and Apple's Virtualization framework — like the <code>vfkit</code> tooling built on top of it — can't boot a qcow2 file directly, so it still needs converting to raw format first. That conversion step is the same tax Ubuntu's images carry; the cloud-init wiring is the part Debian's <code>nocloud</code> variant specifically removes.</p>
+
+      <h2>What "download an official image" does here</h2>
+      <p>Same value proposition as the Ubuntu image picker, applied to Debian's specific set of tradeoffs: choose "download an official image," pick Debian, and Velo Workspaces fetches it directly from Debian's own source, picks a variant suited to running as a local guest, handles the qcow2-to-raw conversion, and gets you to a running, logged-in workspace — rather than a choice between cloud image variants and a manual conversion step.</p>
+
+      <h2>Networking: no Netplan, so the Ubuntu clone gotcha doesn't apply the same way</h2>
+      <p>The Ubuntu post covers a specific, documented gotcha: a workspace cloned from a saved Ubuntu Server base image can come up without an IP address, because Ubuntu Server's Netplan configuration binds to the base image's original MAC address rather than matching by interface name, and every cloned workspace gets a fresh MAC. That failure mode is a Netplan-specific interaction, not a general "cloning a Linux VM" problem — and Debian doesn't default to Netplan. Debian's traditional networking still runs through <strong>ifupdown</strong> and <code>/etc/network/interfaces</code>, which identifies interfaces by name (<code>eth0</code>, <code>ens3</code>), not by MAC address, so the specific mismatch that traps a cloned Ubuntu Server workspace isn't the same trap here. Worth being precise rather than overclaiming: this makes that <em>particular</em> bug unlikely by default on Debian, not a guarantee that a cloned VM's networking can never need attention for other reasons — it's one specific, well-understood interaction that doesn't carry over, not a blanket "Debian doesn't have networking gotchas."</p>
+
+      <h2>Rosetta, briefly</h2>
+      <p>Debian uses the same <code>apt</code> and <code>update-binfmts</code> tooling as Ubuntu for registering Rosetta as a binary format handler, so the process is effectively identical between the two — mount the <code>rosetta</code> VirtioFS share, install <code>binfmt-support</code>, then register it with Apple's published magic bytes and mask. The exact commands are in the <a href="/support/">support FAQ</a>; the same real-world caveat from the Ubuntu piece applies here too — Rosetta translates a single dynamically-linked binary well, but it doesn't conjure up x86-64 packages that were never built for arm64 in the first place.</p>
+
+      <h2>Debian or Ubuntu, for this kind of workspace</h2>
+      <p>Neither is a wrong choice for a disposable dev, QA, or DevOps workspace, and the differences are more about what you're optimizing for than any hard requirement. Debian's release cadence is more conservative — packages change less often, which is exactly what you want when the point of a base image is that it stays a known-good, unsurprising starting point for months. Ubuntu tends to have newer packages and broader out-of-the-box hardware/driver enablement work upstream, which matters more when you're following a guide or a CI config that specifically assumes Ubuntu's package versions. If you don't have a specific reason to need one, Debian's smaller default footprint and more conservative base make it a reasonable default for a workspace you're going to seal as a long-lived base image and reuse for months.</p>
+
+      <p>Related reading: <a href="/blog/ubuntu-on-apple-silicon/">the Ubuntu piece this one is paired with</a>, the <a href="/blog/qa-devops-disposable-vm-workflow/">disposable VM workflow for QA and DevOps</a>, and <a href="/blog/arm-virtualization-performance/">why VMs on Apple Silicon perform the way they do</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc. Debian is a registered trademark of Software in the Public Interest, Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
