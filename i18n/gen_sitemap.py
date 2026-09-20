@@ -17,6 +17,7 @@ PAGES = [
 # don't exist.
 ENGLISH_ONLY_PAGES = [
     ("blog/", "weekly", "0.7"),
+    ("blog/ubuntu-on-apple-silicon/", "monthly", "0.6"),
     ("blog/qa-devops-disposable-vm-workflow/", "monthly", "0.6"),
     ("blog/arm-virtualization-performance/", "monthly", "0.6"),
     ("blog/ai-agent-security-risks/", "monthly", "0.6"),

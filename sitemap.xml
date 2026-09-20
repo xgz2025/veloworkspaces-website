@@ -487,6 +487,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.veloworkspaces.com/blog/ubuntu-on-apple-silicon/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.veloworkspaces.com/blog/qa-devops-disposable-vm-workflow/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
