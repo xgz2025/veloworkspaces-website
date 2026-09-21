@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Base Images as Versioned Infrastructure: A Naming Convention That Actually Holds Up — Velo Workspaces</title>
+<meta name="description" content="Velo Workspaces tracks nothing about a base image's lineage — no version field, no parent chain, no rename after sealing. Verified against the app's own source: why your naming convention is the only version control you get, and one that holds up.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/base-image-versioning/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Base Images as Versioned Infrastructure: A Naming Convention That Actually Holds Up">
+<meta property="og:description" content="No version field, no parent chain, no rename after sealing. Why your naming convention is the only version control a base image gets.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/base-image-versioning/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Workflow</span>
+        <h1>Base Images as Versioned Infrastructure: A Naming Convention That Actually Holds Up</h1>
+        <p class="article-lede">Our own QA/DevOps post said to "version your base image as deliberately as you version the script that builds it." Fair advice — but Velo Workspaces itself gives you nothing to do that with. No version field, no parent chain, no rename after sealing. Here's what the app actually tracks, and a naming convention that covers the gap.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>What "Save as Base Image" actually gives you</h2>
+      <p>Stop a workspace, and its detail view offers <strong>Save as Base Image</strong>: a confirmation sheet with one editable text field, pre-filled with the workspace's own name, and a Save button. Click it, and the app copies the workspace's disk into <code>~/Library/Application Support/VeloWorkspaces/BaseImages/</code> using an APFS copy-on-write clone, then marks that copy immutable at the filesystem level — a real <code>chflags</code>-style flag, not just an app-level "don't touch this" convention. For a macOS guest, the same seal also copies its <code>hardware.bin</code>, <code>machine.bin</code>, and <code>auxiliary.img</code> platform files into a matching metadata folder beside the disk, the same identity files <a href="/blog/macos-guests-on-apple-silicon/">covered in the macOS guests post</a> — skip that step and a clone fails to boot with "macOS hardware model data not found."</p>
+      <p>That's genuinely the whole mechanism. There's no build step, no provisioning script the app runs on your behalf, no manifest describing what's inside. A base image is a sealed, read-only copy of a disk you configured by hand, plus a small metadata record: a display name, the OS family and version, the file size, a creation timestamp, and — for reference only — the name of the workspace it was sealed from.</p>
+
+      <h2>Re-sealing never overwrites, and renaming isn't an option</h2>
+      <p>Two behaviors are worth knowing before you rely on this for anything real. First: saving the same workspace as a base image a second time creates an entirely independent record and file, not an overwrite of the first one. That's deliberate — an early version of this feature named the destination file after the <em>source workspace's</em> ID, so a second seal of the same workspace tried to overwrite a file the first seal had just made immutable, which either failed outright or silently clobbered a base image other workspaces might already be cloning from. The fix was to name every sealed file after the base image record's own ID instead, so every "Save as Base Image" click produces a new, independent generation, however many times you reseal the same source.</p>
+      <p>Second: that name field is a one-shot decision. Preferences → Base Images lists what you've sealed — name, OS, size, and "created <em>&lt;date&gt;</em> from <em>&lt;workspace&gt;</em>" — with exactly two actions per row: Delete and Export. There is no rename. Whatever you type in that confirmation sheet is the name that base image carries for as long as it exists, so it's worth treating that field as the one moment version information actually gets recorded, not an afterthought you'll clean up later.</p>
+
+      <h2>Which means your naming convention is the only version control you get</h2>
+      <p>The <code>sourceWorkspaceDisplayName</code> field looks like lineage tracking, but it isn't — it's a single, flat pointer to the workspace a base image was sealed from, captured once, for display. It does not chain. Clone a workspace from base image A, install a new toolchain on it, and seal that as base image B, and B's record points to the <em>workspace</em> you customized, not to A. Nothing anywhere records "B was derived from A." Look at Preferences → Base Images a few months into a real project and it's a flat, sorted-by-date list of names — nothing groups related generations, nothing shows what changed between two entries with similar names.</p>
+      <p>That's not a missing feature so much as a deliberate scope boundary: the app seals a disk and clones from it, and stops there. Anything resembling version history has to live in the one field you actually control — the display name — because nothing else will remember it for you. A convention that has worked well in practice:</p>
+      <div class="article-table-wrap">
+        <table>
+          <thead><tr><th>Part</th><th>Example</th><th>Why it's there</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>OS + version</td>
+              <td><code>ubuntu-24.04</code></td>
+              <td>Which official image this ultimately traces back to</td>
+            </tr>
+            <tr>
+              <td>Role</td>
+              <td><code>ci-runner</code></td>
+              <td>What this base image is for, not just what OS it runs</td>
+            </tr>
+            <tr>
+              <td>What changed from the last one</td>
+              <td><code>node22</code></td>
+              <td>The one piece of context <code>sourceWorkspaceDisplayName</code> can't give you back</td>
+            </tr>
+            <tr>
+              <td>Date sealed</td>
+              <td><code>2026.09</code></td>
+              <td>Sorts correctly next to every other base image in the flat list</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Strung together: <code>ubuntu-24.04-ci-runner-node22-2026.09</code>. Reseal the same lineage next month with an updated dependency and it becomes <code>ubuntu-24.04-ci-runner-node22-2026.10</code> — sealed as a brand-new, independent record either way, so the only thing distinguishing "this is the same lineage, one generation later" from "this is an unrelated image that happens to share a prefix" is that the name says so.</p>
+
+      <h2>"Patch in place" isn't actually an option here — which simplifies the decision</h2>
+      <p>The QA/DevOps post framed this as "cut a new one vs. patch in place," which is the right question for tools that let you mutate a golden image directly. It doesn't quite apply to Velo Workspaces: a sealed base image is filesystem-immutable, so there is no in-place patch operation to reach for in the first place. The only way to change anything is to clone a workspace from the current base image, make the change inside that workspace, and seal the result as a new record. Every change is a new generation, always — which removes a decision that trips people up with other tools (mutate the golden image and risk two people's clones now booting differently) at the cost of a decision this app leaves entirely to you: whether that new generation's name makes its relationship to the last one obvious, or just adds another unlabeled entry to the list.</p>
+      <p>The cost of that discipline is low specifically because sealing and cloning are both APFS copy-on-write operations rather than full rebuilds — sealing a workspace's disk and cloning from a base image both use <code>clonefile()</code> under the hood, which completes near-instantly on the same volume rather than copying data byte for byte. Cutting a new generation costs you a naming decision, not meaningful time or disk pressure at the moment you do it.</p>
+
+      <h2>Pruning is manual too — and each entry is a full copy, not a diff</h2>
+      <p>Nothing expires a base image automatically, and there's no "unused in 90 days" prompt. Each one is a complete, standalone copy of a disk, not a layer or a diff against another base image, so an accumulating list of generations costs real, visible space — the size shown next to each entry in Preferences → Base Images is the actual disk usage, not an estimate. A workable discipline: keep the most recent generation or two per name-prefix plus one deliberately pinned "known good" (name it accordingly — <code>ubuntu-24.04-ci-runner-node22-stable</code>, say — so it doesn't get lost in the timestamp sort), and delete the rest from that same Preferences pane once you've confirmed nothing still depends on them.</p>
+      <p>Export exists for the same reason backups exist anywhere: Preferences → Base Images can export the selected image's disk to a file — raw format only, which is the one format a base image has — useful for archiving a generation outside the app's own managed directory before you delete it, or moving one to another Mac.</p>
+
+      <h2>What to actually do</h2>
+      <ul>
+        <li><strong>Get the name right at seal time.</strong> There's no rename afterward — the confirmation sheet's text field is the only chance to record what this base image is and how it relates to the last one.</li>
+        <li><strong>Put OS, role, what changed, and a date in the name</strong>, in that order or your own consistent order — since the app tracks none of it, the name is the only place that survives.</li>
+        <li><strong>Treat every reseal as a new, independent generation</strong>, because that's what it actually is — there's no in-place patch to reach for instead, and no relationship to the previous generation beyond what the name says.</li>
+        <li><strong>Prune manually and on purpose.</strong> Nothing expires automatically, and each entry is a full copy costing real disk space — keep recent generations plus one pinned known-good per lineage, export before deleting anything you might need later.</li>
+      </ul>
+
+      <p>This extends the base-image half of the <a href="/blog/qa-devops-disposable-vm-workflow/">QA/DevOps disposable VM workflow post</a> — that post covers why sealing a base image once and cloning a disposable workspace per run fixes flaky-test and non-idempotent-script bugs at the source; this one covers keeping the base images themselves manageable as they accumulate. If you're building a Linux base image in the first place, the <a href="/blog/guest-os-performance-tuning/">guest OS performance tuning post</a> covers settings worth baking into it before you seal — I/O scheduler, zram vs. swap, filesystem journaling — rather than re-tuning every clone by hand. And if macOS is one of the guest types you're sealing, see <a href="/blog/macos-guests-on-apple-silicon/">what's different about a macOS base image specifically</a>, including why its identity lives beside the disk rather than inside it. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>

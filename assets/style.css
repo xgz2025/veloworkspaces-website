@@ -720,10 +720,26 @@ pre code { background: none; padding: 0; }
 /* ---------- Blog index (/blog/) ---------- */
 
 .blog-index-list {
-  display: grid;
-  gap: 16px;
   max-width: 760px;
   margin: 0 auto;
+}
+.blog-index-group {
+  margin-bottom: 40px;
+}
+.blog-index-group:last-child {
+  margin-bottom: 0;
+}
+.blog-index-group h2 {
+  margin-bottom: 6px;
+}
+.blog-index-group-desc {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  margin: 0 0 18px;
+}
+.blog-index-cards {
+  display: grid;
+  gap: 16px;
 }
 .blog-index-card {
   display: block;
