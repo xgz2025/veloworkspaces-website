@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Velo Workspaces vs. GitHub Codespaces vs. Ona (Formerly Gitpod): Local and Free vs. Cloud and Metered — Velo Workspaces</title>
+<meta name="description" content="Cloud dev environments and Velo Workspaces share a pitch — disposable, isolated environments — but the honest comparison is local-and-free vs. cloud-and-metered, and cloud environments have no local GPU story at all anymore.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/velo-vs-codespaces-vs-ona/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Velo Workspaces vs. GitHub Codespaces vs. Ona (Formerly Gitpod): Local and Free vs. Cloud and Metered">
+<meta property="og:description" content="Cloud dev environments and Velo Workspaces share a pitch, but the honest comparison is local-and-free vs. cloud-and-metered, with no local GPU story on the cloud side at all.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/velo-vs-codespaces-vs-ona/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Comparison</span>
+        <h1>Velo Workspaces vs. GitHub Codespaces vs. Ona (Formerly Gitpod): Local and Free vs. Cloud and Metered</h1>
+        <p class="article-lede">"Disposable, isolated dev environment" is the shared pitch across all three of these. The honest comparison underneath it is local-and-free versus cloud-and-metered — and, as of a 2025 change worth knowing about, the cloud side of that has no local-GPU story at all anymore.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <p><strong>Disclosure:</strong> I built Velo Workspaces, so treat this the way you'd treat any vendor-written comparison. Every factual claim about Codespaces and Ona is sourced below, and I say plainly where the cloud tools are simply the right answer. Pricing and product positioning change fast in this space — this reflects what was publicly documented as of September 2026.</p>
+
+      <h2>The short version</h2>
+      <ul>
+        <li><strong>GitHub Codespaces</strong> is a cloud-hosted dev container, deeply integrated with GitHub itself, billed by the compute-hour and by storage.</li>
+        <li><strong>Ona</strong> — the product formerly known as Gitpod — is also a cloud-hosted environment, but as of its October 2025 relaunch it's positioned less as "your cloud IDE" and more as infrastructure for running AI coding agents at scale, priced in credits.</li>
+        <li><strong>Velo Workspaces</strong> runs locally, on a Mac you already own, as a one-time purchase with no usage-based billing at all.</li>
+      </ul>
+      <p>If what you need is a dev environment reachable from any browser on any device, or a team onboarding flow where nobody installs anything locally, this article isn't going to talk you out of Codespaces. If you're weighing "cloud" against "local" as an actual tradeoff rather than assuming cloud is strictly more convenient, keep reading.</p>
+
+      <h2>Pricing, as of September 2026</h2>
+      <div class="article-table-wrap">
+        <table>
+          <thead><tr><th></th><th>Velo Workspaces</th><th>GitHub Codespaces</th><th>Ona (formerly Gitpod)</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Price</td>
+              <td>$79.99, one time</td>
+              <td>Free: 120 core-hours + 15 GB storage/mo. Beyond that: $0.18–$2.88/core-hour (by machine size) + $0.07/GiB-month storage.</td>
+              <td>Core plan: $20/mo for 80–2,200 OCU credits, depending on tier</td>
+            </tr>
+            <tr>
+              <td>Model</td>
+              <td>One-time purchase, no metering</td>
+              <td>Usage-metered: compute-hours + storage, indefinitely</td>
+              <td>Credit-based subscription</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.85rem;">Codespaces pricing per <a href="https://github.com/pricing" target="_blank" rel="noopener">github.com/pricing</a> and the <a href="https://github.com/pricing/calculator" target="_blank" rel="noopener">GitHub pricing calculator</a>. Ona pricing per <a href="https://www.gitpod.io/blog/introducing-gitpod-flex-faq" target="_blank" rel="noopener">gitpod.io's own FAQ on the transition</a>. Confirm current pricing directly — both of these have changed meaningfully in the past year.</p>
+
+      <h2>Gitpod became Ona — worth knowing before you go looking for it</h2>
+      <p>If you know Gitpod from an "Open in Gitpod" README badge or a pay-as-you-go free tier, that specific product — Gitpod Classic — was sunset on October 15, 2025. The company rebranded as <strong>Ona</strong> and repositioned around orchestrating AI coding agents at scale rather than being primarily a cloud IDE, moving from simple hourly billing to a credit system (Ona Compute Units). Cloud dev environments are still part of what Ona offers — environments scaling up to 32 vCPUs, 128 GB RAM, and 200 GB disk on Ona-managed AWS infrastructure — but the product you'd have compared against a few years ago isn't quite the product being sold under that name today.</p>
+
+      <h2>The one thing cloud dev environments structurally cannot do</h2>
+      <p>This isn't a pricing-tier limitation, it's architectural: a cloud dev environment runs on someone else's hardware, full stop, so there's no equivalent to what <a href="/blog/ai-bridge-architecture/">AI Bridge</a> does — reaching a model running on your own Mac's GPU from inside an isolated sandbox, at full native speed, with no API cost and no data leaving the machine. It gets more specific than "GPUs cost extra": GitHub deprecated Codespaces' GPU machine type entirely in August 2025, following the underlying Azure GPU VM series being retired, and as of this writing neither Codespaces nor Ona's published plans offer a GPU-backed machine option at all. If local-model inference against your own hardware is part of the workflow — testing an agent, running embeddings, anything that wants a GPU — that's not a tier you can pay your way into with either of these right now. It's just not there.</p>
+
+      <h2>The other side of that tradeoff, fairly stated</h2>
+      <p>None of this makes Codespaces or Ona the wrong choice generally — cloud environments genuinely solve problems local ones don't. Reachable from a browser on any device, including one that isn't a Mac at all. No local hardware requirements, so a contributor on a Chromebook or an iPad can still work. Easier to hand a running environment to a teammate or spin up dozens for a class or a hackathon without provisioning laptops. And it doesn't tie up your own machine's CPU, memory, or battery while it runs, since the compute lives elsewhere. Those are real advantages, not marketing.</p>
+
+      <h2>Metered vs. one-time, and why the usage pattern matters</h2>
+      <p>This blog has covered, more than once, that <a href="/blog/qa-devops-disposable-vm-workflow/">disposability works best as the default</a> — spin up a fresh environment per test run or per experiment, throw it away, repeat, rather than reusing one long-lived environment and hoping it's still clean. That exact usage pattern is precisely what racks up cost fastest under compute-hour-plus-storage billing: more environments created and destroyed means more billed hours and more storage-months, without a ceiling. Locally, after the one-time purchase, creating and discarding workspaces all day costs nothing more, no matter how many times you do it — the cost structure doesn't fight the workflow this blog has been describing.</p>
+
+      <h2>Which one should you actually use</h2>
+      <ul>
+        <li><strong>You need a dev environment reachable from any device, or a frictionless onboarding flow for a team.</strong> Use Codespaces — deep GitHub integration, prebuilds, nothing to install locally.</li>
+        <li><strong>You're building enterprise workflows around orchestrating AI coding agents at scale specifically.</strong> That's what Ona is built for now; worth evaluating on those terms rather than as a Gitpod-Classic replacement.</li>
+        <li><strong>You want local-model inference against your own GPU, you create and discard environments constantly, and you're not looking to pay by the hour for it.</strong> That's specifically what Velo Workspaces is built for.</li>
+      </ul>
+
+      <p>Related reading: the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>, the <a href="/blog/qa-devops-disposable-vm-workflow/">disposable VM workflow for QA and DevOps</a>, and how Velo Workspaces compares to <a href="/blog/velo-vs-parallels-vs-utm/">Parallels and UTM</a> and to <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">Docker Desktop and OrbStack</a> on other axes. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc. GitHub and GitHub Codespaces are trademarks of GitHub, Inc. Ona and Gitpod are trademarks of Gitpod GmbH.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
