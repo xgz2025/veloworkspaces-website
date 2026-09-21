@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Building and Testing AI Agents on Apple Silicon: A Guide for AI Researchers — Velo Workspaces</title>
+<meta name="description" content="AI Bridge supports four local model backends, not just Ollama and MLX — plus the AI Sandbox profile's actual specs, a real gotcha when switching backends mid-experiment, and why disposability matters for agent development specifically.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/ai-researchers-agent-testing/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Building and Testing AI Agents on Apple Silicon: A Guide for AI Researchers">
+<meta property="og:description" content="AI Bridge supports four local model backends, not just Ollama and MLX, plus a real gotcha when switching backends mid-experiment.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/ai-researchers-agent-testing/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Guide</span>
+        <h1>Building and Testing AI Agents on Apple Silicon: A Guide for AI Researchers</h1>
+        <p class="article-lede">Building a RAG pipeline or a tool-calling agent means running code you don't fully trust yet, against a model you want at full local speed. AI Bridge and the AI Sandbox profile are built for exactly that split — and AI Bridge supports more backends than earlier posts on this blog have shown.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>The actual problem this solves</h2>
+      <p>Developing an agent — a RAG pipeline, a tool-calling loop, anything that lets an LLM decide what code to run next — means two things are true at once. The agent needs to execute generated code, which you don't want happening against your real filesystem and credentials while you're still finding its bugs; that's the exact risk profile covered in this blog's own <a href="/blog/ai-agent-security-risks/">security deep dive</a>. And it needs a model to actually call, ideally fast and local, so an iteration loop isn't paying cloud API latency and cost on every single test run. The <strong>AI Sandbox</strong> profile and <strong>AI Bridge</strong> are built around exactly that split: the agent's code runs isolated inside a disposable VM, while the model stays on the host, at full native GPU speed, reached over a vsock channel rather than an internet round trip.</p>
+
+      <h2>The AI Sandbox profile, concretely</h2>
+      <p>Worth citing exact numbers rather than "sized appropriately": the AI Sandbox profile provisions 8 CPU cores, 16 GB of RAM, and 64 GB of storage — enough headroom for an agent framework and its dependencies (LangChain, a vector store, whatever tool-calling library you're using) to run comfortably alongside the guest side of the AI Bridge connection, without the model itself eating into that budget, since the model process lives on the host, not inside the sandbox.</p>
+
+      <h2>AI Bridge supports more backends than you'd think</h2>
+      <p>Earlier posts on this blog described AI Bridge as "Ollama or MLX, your choice." That undersold it. AI Bridge actually supports four provider types, each with its own default port and setup path:</p>
+      <div class="article-table-wrap">
+        <table>
+          <thead><tr><th>Provider</th><th>Default port</th><th>Setup</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Ollama</td>
+              <td>11434</td>
+              <td><code>ollama serve</code>, then <code>ollama pull &lt;model&gt;</code></td>
+            </tr>
+            <tr>
+              <td>MLX</td>
+              <td>8080</td>
+              <td><code>pip install mlx-lm</code>, then <code>python -m mlx_lm.server --model &lt;model&gt;</code></td>
+            </tr>
+            <tr>
+              <td>llama-server</td>
+              <td>8080</td>
+              <td>Build or install llama.cpp, then <code>llama-server -m &lt;model.gguf&gt; --port 8080</code></td>
+            </tr>
+            <tr>
+              <td>Custom</td>
+              <td>your choice</td>
+              <td>Point AI Bridge at any OpenAI-compatible endpoint already running on the host</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The practical value for research specifically: you can A/B the same agent against genuinely different serving stacks — Ollama's convenience, MLX's native Apple Silicon speed, llama.cpp's low-level control over quantization and sampling — without touching the workspace or the agent code at all, just the provider setting. And <strong>Custom</strong> means AI Bridge isn't limited to those three named options: point it at vLLM, LM Studio, text-generation-webui, or a local proxy in front of a cloud model for cost comparison, anything speaking the OpenAI-compatible API on a host port.</p>
+
+      <h2>A real gotcha when switching backends mid-experiment</h2>
+      <p>Worth knowing before it costs you a confusing debugging session: switching providers re-points AI Bridge's host-side listener on a running workspace immediately, no restart needed on the host. But the guest side is a <code>socat</code> forwarder unit, a file on the guest's own disk that still names the <em>old</em> port. A plain workspace restart doesn't fix this — the forwarder unit doesn't re-read anything on restart, since nothing about a restart touches that file. The fix is re-running the guest-side setup command again after switching providers, the same one you ran the first time, so the forwarder actually points at the new port. If a provider switch appears to do nothing, this is very likely why.</p>
+
+      <h2>Built-in status, so you know if it's the bridge or your code</h2>
+      <p>AI Bridge tracks its own connection health as one of five states — disabled, preparing, ready, degraded, or failed — with a human-readable reason for the last two, surfaced directly in the workspace UI. That matters more for agent development than it sounds: when a test run fails, checking AI Bridge's status first rules out "the endpoint itself isn't reachable" before you spend time debugging your agent's prompt or tool-calling logic instead of the actual problem.</p>
+
+      <h2>Why disposability matters here specifically</h2>
+      <p>An agent you're actively developing is exactly the thing the <a href="/blog/ai-agent-security-risks/">security deep dive</a> is about: code whose behavior you don't fully trust yet, potentially executing shell commands or writing files based on what a model decides to do. A bad run — an agent that goes off-script, installs the wrong thing, corrupts its own working directory — costs nothing in a disposable AI Sandbox workspace. Close it, clone a fresh one from your sealed base image, and try again with the same starting state every time. That's the same <a href="/blog/qa-devops-disposable-vm-workflow/">disposable-workspace pattern</a> covered for QA and DevOps, applied to a research loop where "did that fail because of my prompt or because the environment drifted" is exactly the ambiguity worth eliminating.</p>
+
+      <p>Related reading: the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>, the <a href="/blog/vm-inference-benchmark/">full inference benchmark</a> against MLX, and the <a href="/blog/mlx-vm-setup-guide/">step-by-step MLX setup guide</a> this post's provider table extends. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
