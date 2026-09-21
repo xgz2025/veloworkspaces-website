@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Velo Workspaces vs. Docker Desktop vs. OrbStack: Do You Need a VM, or Is a Container Enough? — Velo Workspaces</title>
+<meta name="description" content="An honest comparison on a different axis than most: pricing, and the real question underneath it — containers share one kernel, a VM gets its own. Where Docker Desktop, OrbStack, and Velo Workspaces actually sit on that line.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/velo-vs-docker-desktop-vs-orbstack/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Velo Workspaces vs. Docker Desktop vs. OrbStack: Do You Need a VM, or Is a Container Enough?">
+<meta property="og:description" content="Pricing, and the real question underneath it — containers share one kernel, a VM gets its own. Where each of these actually sits on that line.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/velo-vs-docker-desktop-vs-orbstack/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Comparison</span>
+        <h1>Velo Workspaces vs. Docker Desktop vs. OrbStack: Do You Need a VM, or Is a Container Enough?</h1>
+        <p class="article-lede">A different comparison axis than the usual "which VM app" question. Docker Desktop and OrbStack both do the same job — run containers on a Mac, well — while Velo Workspaces does a genuinely different one. The pricing is worth knowing, but the real question underneath it is whether a shared kernel is the isolation boundary you actually need.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <p><strong>Disclosure:</strong> I built Velo Workspaces, so read this the way you'd read any vendor-written comparison — every factual claim about Docker Desktop and OrbStack is sourced below, and I say plainly where each of them is simply the better tool for the job. Pricing and features change; this reflects what was publicly documented as of September 2026.</p>
+
+      <h2>The short version</h2>
+      <ul>
+        <li><strong>Docker Desktop</strong> is the standard way to run containers on a Mac — the biggest ecosystem, the default most tutorials and CI configs assume.</li>
+        <li><strong>OrbStack</strong> does the same job — containers, plus lightweight Linux environments — built from scratch for Apple Silicon specifically, with real, measured speed and battery-life advantages over Docker Desktop.</li>
+        <li><strong>Velo Workspaces</strong> isn't a faster or slower way to do that job. It's built around giving each workspace a fully separate VM with its own kernel, rather than running everything through one shared VM the way both of the others do.</li>
+      </ul>
+      <p>If what you need is to build, run, and ship containers, this article isn't going to talk you out of Docker Desktop or OrbStack — both are genuinely good at that. If what you're actually asking is "how strong an isolation boundary do I need," keep reading.</p>
+
+      <h2>Pricing, as of September 2026</h2>
+      <div class="article-table-wrap">
+        <table>
+          <thead><tr><th></th><th>Velo Workspaces</th><th>Docker Desktop</th><th>OrbStack</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Price</td>
+              <td>$79.99, one time</td>
+              <td>Personal: free. Pro: $9–$11/mo. Team: $15–$16/user/mo. Business: $24/user/mo.</td>
+              <td>Free for personal, non-commercial use. Pro (required for any commercial/work use): $8/user/mo, billed annually.</td>
+            </tr>
+            <tr>
+              <td>Model</td>
+              <td>One-time purchase</td>
+              <td>Free tier restricted by company size/revenue; subscription for most commercial use</td>
+              <td>Free for personal use; subscription required the moment it's used for work</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.85rem;">Docker pricing per <a href="https://www.docker.com/pricing/" target="_blank" rel="noopener">docker.com/pricing</a> — commercial organizations above 250 employees or $10M revenue require a paid plan even on Personal's feature set. OrbStack pricing and licensing per <a href="https://docs.orbstack.dev/licensing" target="_blank" rel="noopener">docs.orbstack.dev/licensing</a>. Confirm current pricing directly before deciding.</p>
+
+      <h2>The real question isn't "which tool" — it's "container or VM"</h2>
+      <p>This is worth being precise about, because the two are genuinely different guarantees, not different tiers of the same one. A container uses OS-level isolation — Linux namespaces and cgroups — while sharing the host's actual kernel with every other container on the same machine. A VM is a separate system with its own kernel entirely. The practical difference: a namespace boundary is enforced in software by that shared kernel, while a hypervisor boundary is enforced by the hardware itself, and no amount of additional software hardening — seccomp profiles, AppArmor policies — fully closes that gap. A kernel-level vulnerability can affect every container sharing that kernel at once; a problem inside one VM stays inside that VM. This is exactly the isolation-level distinction covered in this blog's own <a href="/blog/ai-agent-security-risks/">security deep dive</a>, where containers and microVMs sit in genuinely different rows of the same table, not adjacent points on one scale.</p>
+
+      <h2>Where Docker Desktop and OrbStack actually sit</h2>
+      <p>Both run containers on top of a single Linux VM on the Mac — that VM is the thing giving containers a Linux kernel to share in the first place, since macOS itself doesn't have one. Docker Desktop lets you pick the VM backend: Apple's own Virtualization framework, QEMU (being phased out on Apple Silicon), or Docker's new first-party <strong>Docker VMM</strong>, in public beta as of mid-2026 and aimed at faster container startup and file I/O than the third-party hypervisor it replaces. OrbStack built its own optimized VM implementation from the ground up specifically for this, which is a real part of why it benchmarks faster and lighter than Docker Desktop on the same Mac.</p>
+      <p>Here's the detail worth knowing if you've looked at OrbStack's <strong>Linux machines</strong> feature and assumed it was the same thing as a separate VM: it isn't, quite. A machine feels like a full, independent VM — its own filesystem, a real init system, systemd or OpenRC running normally — but every machine and every container in OrbStack still shares that one underlying kernel. OrbStack's own documentation is direct about this: machines "are not independent VMs," just built to be functionally indistinguishable from one for most purposes. That's a genuinely useful feature. It's still the container tier of the isolation table above, not the microVM/full-VM one, no matter how VM-like it feels day to day.</p>
+
+      <h2>Where Velo Workspaces sits</h2>
+      <p>Every workspace runs on Apple's Virtualization.framework directly, with its own dedicated kernel — the same tier as Firecracker or Kata elsewhere, covered in more depth in the <a href="/blog/arm-virtualization-performance/">ARM virtualization deep dive</a>. That's the whole architectural difference from both tools above: not "also containers, but nicer," but a separate VM per workspace as the default unit, the same isolation boundary this blog's security post argues you actually want for sandboxing code you don't fully trust yet — an AI agent's generated output, or <a href="/blog/qa-devops-disposable-vm-workflow/">a disposable QA or CI run</a> you want to know started from a genuinely clean, unshared state.</p>
+
+      <h2>Which one should you actually use</h2>
+      <ul>
+        <li><strong>You build, run, or ship containers as your normal workflow, deploy to Kubernetes, follow tutorials and CI configs that assume Docker.</strong> Use Docker Desktop — it's the industry default for a reason, and nothing here competes with that ecosystem.</li>
+        <li><strong>You want the same container workflow, faster and lighter, and you're on Apple Silicon specifically.</strong> OrbStack is a genuinely well-built, faster alternative doing the same job — a tooling choice, not an isolation-model choice.</li>
+        <li><strong>You want a fast, VM-like environment for general Linux work without needing a fully separate kernel per instance.</strong> OrbStack's machines are a good fit for exactly that.</li>
+        <li><strong>You want to sandbox code you don't fully trust — an AI coding agent, an untested install script — or you want disposable, base-image-cloneable environments that don't share a kernel with anything else on the Mac.</strong> That's specifically what Velo Workspaces is built for.</li>
+      </ul>
+
+      <p>Related reading: the <a href="/blog/ai-agent-security-risks/">security deep dive</a> this isolation table comes from, <a href="/blog/arm-virtualization-performance/">why VMs on Apple Silicon perform the way they do</a>, and how Velo Workspaces <a href="/blog/velo-vs-parallels-vs-utm/">compares to Parallels and UTM</a> specifically as a VM app. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc. Docker and Docker Desktop are trademarks of Docker, Inc. OrbStack is a trademark of Orbital Labs, Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
