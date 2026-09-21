@@ -219,6 +219,17 @@ def render(code, seg, label):
       </div>
 
       <div class="faq-group">
+        <h2>{t['faq_diag_h2']}</h2>
+        <details class="faq-item">
+          <summary>{t['faq_diag_q']}</summary>
+          <div class="faq-answer">
+            <p>{t['faq_diag_a1']}</p>
+            <p>{t['faq_diag_a2']}</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
         <h2>{t['faq_disp_h2']}</h2>
         <details class="faq-item">
           <summary>{t['faq_disp1_q']}</summary>
