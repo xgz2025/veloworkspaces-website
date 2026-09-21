@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Actually Leaves Your Mac When You Use AI Bridge (and What Doesn't) — Velo Workspaces</title>
+<meta name="description" content="Verified against the app's own source rather than repeated as a slogan: why AI Bridge's channel is structurally incapable of reaching anywhere but your Mac's own loopback interface, and what that claim does and doesn't cover.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/ai-bridge-data-privacy/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="What Actually Leaves Your Mac When You Use AI Bridge (and What Doesn't)">
+<meta property="og:description" content="Why AI Bridge's channel is structurally incapable of reaching anywhere but your Mac's own loopback interface, verified against the app's own source.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/ai-bridge-data-privacy/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Privacy</span>
+        <h1>What Actually Leaves Your Mac When You Use AI Bridge (and What Doesn't)</h1>
+        <p class="article-lede">This blog has said "stays on your Mac" more than once. Worth verifying that at the code level rather than repeating it as a slogan — so here's what AI Bridge's actual channel can and can't reach, and exactly why, rather than a restated promise.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>The model server never leaves your Mac's loopback interface</h2>
+      <p>Start with the ordinary part: Ollama, MLX, and llama-server all bind to <code>127.0.0.1</code> by default when you start them — the host's own loopback interface, not a real network address. That alone means the model server isn't reachable from another device on your LAN, let alone the internet, unless someone deliberately reconfigures it to bind elsewhere. Nothing Velo Workspaces does changes that default; it's just how these tools already work.</p>
+
+      <h2>AI Bridge can't reach anywhere else, even if you tried</h2>
+      <p>This is the part worth being precise about, because it isn't a setting or a promise — it's how the code is actually written. The vsock proxy that connects a guest to the model server has its target host hardcoded to <code>127.0.0.1</code>, checked directly against the app's own source rather than assumed. Even the <strong>Custom</strong> provider option, which lets you point AI Bridge at any OpenAI-compatible server — covered in the <a href="/blog/ai-researchers-agent-testing/">AI Researchers post</a> — only ever contributes a <em>port number</em> to that connection; whatever host or scheme you typed as part of that URL is discarded, and the proxy still dials the Mac's own loopback on that port. There's no field in the app's configuration that could route this channel to a genuinely remote address, because the code that opens the connection never reads one.</p>
+      <p>It goes a step further than that, too. The guest's regular network device — the one it uses for everything else, like <code>apt</code> or <code>git</code> — explicitly does <em>not</em> reach the model server either. A request sent to the guest's normal network gateway "arrives at the host's network stack having never touched the bridge," per the engineering comment describing exactly this failure mode, because the model server is bound to loopback and the gateway address is a different, unrelated door. AI Bridge's traffic takes an entirely separate path: <a href="/blog/ai-bridge-architecture/">vsock</a>, a hypervisor-only channel addressed by machine ID rather than IP, proxied to the host's loopback on the host side. It never enters the IP networking stack that would let it reach a LAN or the internet, at any point in that path.</p>
+
+      <h2>No collector on the other end, either</h2>
+      <p>The channel being closed only matters if something's actually listening for the traffic on the other end — so it's worth confirming there isn't one. There is no analytics SDK, crash-reporting library, or telemetry collector anywhere in the Velo Workspaces codebase. That's not "collection you can opt out of" — there's no code path that collects anything to opt out of in the first place.</p>
+      <p>One thing worth flagging plainly rather than glossing over: this blog and the app's own Preferences pane have described diagnostics and crash reporting as an active, opt-in-but-available toggle. Checking the app's current source directly, that toggle was actually removed from Preferences — the engineering rationale on record is that a control promising data collection which doesn't happen is worse than no control at all, since it implies a choice that has no effect either way. That's a stronger privacy position than "off by default," not a weaker one — but it means some of Velo Workspaces' own published material describing an active toggle is currently out of date, and that's worth correcting rather than leaving as-is.</p>
+
+      <h2>What this doesn't cover</h2>
+      <p>Precision matters here, so it's worth stating the boundary of this claim rather than overstating it. Everything above describes <strong>AI Bridge's own channel</strong> specifically — the model server, and the vsock path a guest uses to reach it. It says nothing about the guest's normal internet access, which is unrelated and still there: a workspace can still <code>apt install</code>, <code>git clone</code>, or run anything else that talks to the internet over its regular network device, the same as any VM would. AI Bridge doesn't grant that access and doesn't take it away — it's simply a separate, narrower channel that only ever does one thing: proxy requests to a model server on your own Mac's loopback, nothing else, and nowhere else.</p>
+
+      <p>Related reading: the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>, <a href="/blog/ai-researchers-agent-testing/">building and testing agents</a> against a local model, and the <a href="/blog/ai-agent-security-risks/">security deep dive</a> on what isolation levels actually protect against. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
