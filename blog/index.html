@@ -66,19 +66,19 @@
         <a class="blog-index-card" href="/blog/fedora-on-apple-silicon/">
           <span class="eyebrow">Guide</span>
           <h2>Running Fedora on Apple Silicon: What's Different from Ubuntu and Debian</h2>
-          <p>SELinux enforcing by default, two different networking stacks depending which image you start from, and a Rosetta mechanism that isn't apt/update-binfmts at all.</p>
+          <p>SELinux enforcing by default, NetworkManager rather than Debian's ifupdown or Ubuntu's Netplan, and a Rosetta mechanism that isn't apt/update-binfmts at all.</p>
         </a>
 
         <a class="blog-index-card" href="/blog/debian-on-apple-silicon/">
           <span class="eyebrow">Guide</span>
           <h2>Running Debian on Apple Silicon: What's Different from Ubuntu</h2>
-          <p>Debian's nocloud image variant skips the cloud-init dance Ubuntu's images require, and Debian's default networking doesn't hit the Netplan clone gotcha Ubuntu Server does.</p>
+          <p>Same ISO-based official-image picker as Ubuntu, a different installer experience (debian-installer vs. Subiquity), and networking defaults that sidestep Ubuntu Server's Netplan clone gotcha.</p>
         </a>
 
         <a class="blog-index-card" href="/blog/ubuntu-on-apple-silicon/">
           <span class="eyebrow">Guide</span>
           <h2>Running Ubuntu on Apple Silicon: What's Different, and What Actually Trips People Up</h2>
-          <p>Ubuntu on an Apple Silicon Mac runs natively on arm64, not emulated — which changes what actually breaks. Image formats, cloud-init, the netplan/MAC-address gotcha on cloned VMs, and Rosetta's real limits.</p>
+          <p>Ubuntu on an Apple Silicon Mac runs natively on arm64, not emulated — which changes what actually breaks. What the official-image picker actually does, the netplan/MAC-address gotcha on cloned VMs, and Rosetta's real limits.</p>
         </a>
 
         <a class="blog-index-card" href="/blog/qa-devops-disposable-vm-workflow/">

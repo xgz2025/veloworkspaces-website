@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Running Debian on Apple Silicon: What's Different from Ubuntu — Velo Workspaces</title>
-<meta name="description" content="Debian's cloud images offer a nocloud variant that skips the cloud-init dance Ubuntu's images require, and Debian's default networking doesn't hit the Netplan clone gotcha Ubuntu Server does. What's actually different, running Debian as a guest on Apple Silicon.">
+<meta name="description" content="Debian's official-image picker downloads the installer ISO, same mechanism as Ubuntu — but a different installer (debian-installer vs. Subiquity), and networking defaults that sidestep Ubuntu Server's Netplan clone gotcha. What's actually different running Debian as a guest on Apple Silicon.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/debian-on-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="Running Debian on Apple Silicon: What's Different from Ubuntu">
-<meta property="og:description" content="Debian's nocloud cloud image variant, why the Ubuntu Netplan clone gotcha doesn't apply the same way, and what's actually different running Debian as a guest on Apple Silicon.">
+<meta property="og:description" content="Same ISO-based official-image picker as Ubuntu, a different installer experience, and why the Ubuntu Netplan clone gotcha doesn't apply the same way here.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/debian-on-apple-silicon/">
 </head>
 <body>
@@ -43,7 +43,7 @@
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>Running Debian on Apple Silicon: What's Different from Ubuntu</h1>
-        <p class="article-lede">Second in the OS-specific series. Same underlying fact as Ubuntu — native arm64, not emulation — but different defaults once you're actually inside: a cloud image variant built specifically to skip cloud-init entirely, and networking that sidesteps the clone gotcha Ubuntu Server hits.</p>
+        <p class="article-lede">Second in the OS-specific series. Same underlying facts as Ubuntu — native arm64, not emulation, and the same ISO-based official-image picker — but a different installer once you're actually running it, and networking defaults that sidestep the clone gotcha Ubuntu Server hits.</p>
       </div>
     </div>
   </section>
@@ -54,12 +54,9 @@
       <h2>Same CPU story, different distro defaults</h2>
       <p>Debian on an Apple Silicon Mac runs the same way <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu does</a>: natively on arm64, not emulated. Debian 13 "Trixie," the current stable release, ships arm64 as one of its full, officially supported architectures — alongside amd64, armhf, armel, ppc64el, riscv64, and s390x — not a secondary or best-effort build. One thing worth disambiguating up front: Debian 13 also added real driver support for Apple Silicon MacBook hardware specifically (trackpad/keyboard controllers, for projects like Asahi Linux that install Debian directly on the bare metal). That's a different thing entirely from what this post and Velo Workspaces are about — Debian running as a <em>guest</em> inside a VM on the Mac, where none of that bare-metal driver work is relevant, because the guest never touches the physical trackpad or keyboard controller at all.</p>
 
-      <h2>The cloud image variant that skips cloud-init entirely</h2>
-      <p>This is the most useful thing to know about Debian specifically, and it's genuinely different from Ubuntu's situation. Debian publishes several official cloud image variants: <strong>genericcloud</strong> (a trimmed hardware-driver set meant for any virtualized environment) and <strong>nocloud</strong> — which, as the name says, skips cloud-init entirely and boots straight to a usable system rather than waiting on a datasource that was never going to show up. Ubuntu's cloud images assume cloud-init by default, which means wiring up a NoCloud datasource by hand (boot arguments, a seed server) if you're setting things up yourself outside a tool that automates it. Debian's <code>nocloud</code> variant is built for exactly the plain-local-VM case this sidesteps — there's no datasource dance to get wrong in the first place.</p>
-      <p>The one piece that doesn't go away: Debian's cloud images ship as qcow2, and Apple's Virtualization framework — like the <code>vfkit</code> tooling built on top of it — can't boot a qcow2 file directly, so it still needs converting to raw format first. That conversion step is the same tax Ubuntu's images carry; the cloud-init wiring is the part Debian's <code>nocloud</code> variant specifically removes.</p>
-
-      <h2>What "download an official image" does here</h2>
-      <p>Same value proposition as the Ubuntu image picker, applied to Debian's specific set of tradeoffs: choose "download an official image," pick Debian, and Velo Workspaces fetches it directly from Debian's own source, picks a variant suited to running as a local guest, handles the qcow2-to-raw conversion, and gets you to a running, logged-in workspace — rather than a choice between cloud image variants and a manual conversion step.</p>
+      <h2>Same picker mechanism as Ubuntu, a different installer once you're in it</h2>
+      <p>Like Ubuntu, "download an official image" fetches Debian's installer ISO directly from Debian's own source and boots it — not a cloud image, and no unattended provisioning behind the scenes. You go through Debian's own installer yourself, the same interactive flow you'd get booting that ISO anywhere else.</p>
+      <p>What's actually different from Ubuntu is the installer itself. Debian's ISO uses the traditional <strong>debian-installer</strong> (<code>d-i</code>) — the same text-based, menu-driven installer Debian has shipped for decades: locale, keyboard layout, mirror selection, partitioning, then <code>tasksel</code> for package sets. Ubuntu Server's installer, <strong>Subiquity</strong>, is Canonical's own newer, more streamlined take on the same job — fewer screens, more opinionated defaults, less to decide along the way. Neither is harder exactly, just a different number of explicit decisions the installer asks of you before you land at a shell.</p>
 
       <h2>Networking: no Netplan, so the Ubuntu clone gotcha doesn't apply the same way</h2>
       <p>The Ubuntu post covers a specific, documented gotcha: a workspace cloned from a saved Ubuntu Server base image can come up without an IP address, because Ubuntu Server's Netplan configuration binds to the base image's original MAC address rather than matching by interface name, and every cloned workspace gets a fresh MAC. That failure mode is a Netplan-specific interaction, not a general "cloning a Linux VM" problem — and Debian doesn't default to Netplan. Debian's traditional networking still runs through <strong>ifupdown</strong> and <code>/etc/network/interfaces</code>, which identifies interfaces by name (<code>eth0</code>, <code>ens3</code>), not by MAC address, so the specific mismatch that traps a cloned Ubuntu Server workspace isn't the same trap here. Worth being precise rather than overclaiming: this makes that <em>particular</em> bug unlikely by default on Debian, not a guarantee that a cloned VM's networking can never need attention for other reasons — it's one specific, well-understood interaction that doesn't carry over, not a blanket "Debian doesn't have networking gotchas."</p>
