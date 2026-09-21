@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Running Arch Linux on Apple Silicon: What's Different from Ubuntu, Debian, and Fedora — Velo Workspaces</title>
+<meta name="description" content="What most people mean by 'Arch Linux on Apple Silicon' is actually Arch Linux ARM, a separate project — plus why the image you pick matters more than it does for Ubuntu, Debian, or Fedora, and why nothing is configured for you by default, starting with networking.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/arch-linux-on-apple-silicon/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Running Arch Linux on Apple Silicon: What's Different from Ubuntu, Debian, and Fedora">
+<meta property="og:description" content="What most people mean by 'Arch Linux on Apple Silicon' is actually a separate project, plus why nothing is configured for you by default, starting with networking.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/arch-linux-on-apple-silicon/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Guide</span>
+        <h1>Running Arch Linux on Apple Silicon: What's Different from Ubuntu, Debian, and Fedora</h1>
+        <p class="article-lede">Fourth in the OS-specific series, and the odd one out. The three before this all ship an official arm64 build from the same project that ships the x86 one. Arch doesn't — and that one fact changes almost everything else worth knowing here, starting with which image to actually download.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>The fact that changes everything else in this post</h2>
+      <p>Arch Linux's own official port targets x86_64 only — there is no official arm64 build of Arch Linux itself. What runs on aarch64, including on Apple Silicon, comes from <strong>Arch Linux ARM</strong>, a separate, community-run project at <a href="https://archlinuxarm.org/" target="_blank" rel="noopener">archlinuxarm.org</a> with its own maintainers and its own build infrastructure, closely affiliated with Arch but not the same project shipping the same official artifact the way Ubuntu, Debian, and Fedora's arm64 builds are. This isn't a knock on Arch Linux ARM's quality — it's a real, actively maintained project, and in July 2026 Collabora even used it as the base for an official Arch-derived arm64 port for Valve's Steam Frame headset. It's an accuracy point worth having going in: what most people mean by "Arch Linux on Apple Silicon" is Arch Linux ARM specifically, a related but distinct project from the one you'd be thinking of on x86.</p>
+
+      <h2>Rolling release removes one question, and raises another</h2>
+      <p>Ubuntu, Debian, and Fedora all made this series answer "which release is current." Arch sidesteps that entirely — there's no version number, just a continuously updated package set, so "which release" isn't a question you have to think about. The tradeoff it introduces instead is well documented on Arch's own wiki: a <strong>partial upgrade</strong> — installing or updating an individual package without fully syncing the system first — is explicitly unsupported and a real source of breakage, because Arch doesn't maintain compatibility between arbitrarily-old and arbitrarily-new package versions the way a point-release distro does between patch levels. Not a reason to avoid it, just the specific discipline rolling release actually asks of you in exchange for always-current packages.</p>
+
+      <h2>Picking the right image is a bigger deal here than for the other three</h2>
+      <p>Ubuntu, Debian, and Fedora each publish one obvious generic cloud/VM image. Arch Linux ARM's downloads are organized by target <em>hardware platform</em> instead — plenty of them built for specific single-board computers with SBC-specific kernels and bootloaders that won't boot correctly in a generic VM at all. The one that's actually meant for this use case is specifically the <a href="https://archlinuxarm.org/platforms/armv8/generic" target="_blank" rel="noopener">"Generic AArch64" build</a>, not any of the Raspberry Pi or other board-specific images on the same downloads page. Grab the wrong one and you won't get a subtly-different environment — you'll get a kernel built for hardware you don't have, and it won't boot.</p>
+
+      <h2>No official-image picker here — you're on the local-file path</h2>
+      <p>Unlike Ubuntu, Debian, and Fedora, Arch Linux ARM isn't in Velo Workspaces' curated "download an official image" list, consistent with it not being a first-party arm64 build of a major distro the way the other three are. The workflow is still straightforward, just one step less automated: download the Generic AArch64 image from archlinuxarm.org yourself, then use "choose a local OS image file" (or "boot from an existing virtual disk") when creating the workspace, instead of the one-click fetch-and-convert flow the other three posts in this series describe. You lose the automatic download step; you don't lose anything about how the workspace itself runs once it's booted.</p>
+
+      <h2>Nothing is configured for you, starting with networking</h2>
+      <p>This is the real, practical difference from every other distro in this series, and it's worth knowing before you're staring at a workspace with no network rather than debugging a specific gotcha. Arch's minimal install profile has no network management dependencies at all — no NetworkManager, no systemd-networkd enabled, nothing — by design, on the philosophy that Arch configures as little as possible for you and leaves the choice explicit. Fedora surprises people with something unexpected turned on (SELinux enforcing); Arch is the opposite failure mode — nothing is turned on, including the thing you need most immediately to do anything else. Enable a network stack yourself before you do anything that needs the internet:</p>
+      <pre><code>sudo systemctl enable --now systemd-networkd systemd-resolved</code></pre>
+      <p>That's the minimal, sufficient choice for a VM guest specifically — no wifi to manage, no need for NetworkManager's broader feature set, just a wired virtio-net interface that needs a DHCP lease.</p>
+
+      <h2>When Arch actually makes sense for this kind of workspace</h2>
+      <p>Reach for it when you specifically want the newest possible packages and kernel with no distro-imposed release cadence, and you're genuinely comfortable configuring a minimal base yourself — that's real time cost, not a one-time inconvenience, since a fresh install gives you close to nothing pre-set. Every setting in the <a href="/blog/guest-os-performance-tuning/">guest OS performance tuning post</a> — scheduler, TRIM, swap, filesystem mount options — is entirely on you here, with no distro defaults to start from either direction. If you want a distro's own official, tested arm64 build with a foundation or company actually standing behind that specific artifact, Ubuntu, Debian, or Fedora are the steadier choice, specifically because they're the primary project's own port rather than a satellite one.</p>
+
+      <p>Related reading: <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu</a>, <a href="/blog/debian-on-apple-silicon/">Debian</a>, and <a href="/blog/fedora-on-apple-silicon/">Fedora</a> on Apple Silicon, the first three in this series; the <a href="/blog/qa-devops-disposable-vm-workflow/">disposable VM workflow for QA and DevOps</a>; and <a href="/blog/guest-os-performance-tuning/">guest OS performance tuning</a> once you're up and running. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc. Arch Linux is a trademark of Judd Vinet. Arch Linux ARM is an independent project not affiliated with Velo Workspaces.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
