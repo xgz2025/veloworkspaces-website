@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One Workspace Per Project: A Disposable Dev Environment Habit for Software Engineers — Velo Workspaces</title>
+<meta name="description" content="Disposable VMs and base images get framed as a QA or DevOps thing on this blog so far. Here's the same mechanism as a daily coding habit for Software Engineers: one clean environment per project, a colleague's exact setup reproduced exactly, and trying a new framework without touching your main Mac.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/software-engineers-disposable-workspaces/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="One Workspace Per Project: A Disposable Dev Environment Habit for Software Engineers">
+<meta property="og:description" content="A clean environment per project, a colleague's exact setup reproduced exactly, and trying a new framework without touching your main Mac.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/software-engineers-disposable-workspaces/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Guide</span>
+        <h1>One Workspace Per Project: A Disposable Dev Environment Habit for Software Engineers</h1>
+        <p class="article-lede">Disposable workspaces and base images have come up on this blog mostly as a QA or DevOps thing — a clean VM per test run, a fresh clone before shipping a script. The same mechanism is just as useful as a daily habit for regular development work, not just testing it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>Version managers scope the runtime. They don't scope everything else</h2>
+      <p>nvm, pyenv, and rbenv genuinely solve one problem well: which language runtime a given project uses. They don't touch the rest of what actually differs between projects — global npm packages installed once and forgotten, a system library one project needed that now shadows a different version another project expects, Homebrew formulae that drifted since the last time you set up a machine, a stray environment variable in <code>~/.zshrc</code> that only one project's build script depends on. "It works on my machine" is really "it works on my machine <em>today</em>" — the same Mac, six months and a dozen projects later, is a different machine than the one the setup instructions were written against, and version managers were never scoped to catch that.</p>
+
+      <h2>What "one workspace per project" looks like in practice</h2>
+      <p>The <strong>Ubuntu Developer</strong> template exists for exactly this — its own description is "For coding, shared projects, and VS Code Remote," and it carries a "Best for most developers" badge. Its <strong>Code &amp; Build</strong> profile provisions 4 CPU cores, 8 GB of RAM, and 100 GB of storage: sized for a real toolchain and its dependencies, not a minimal test runner. The habit itself is simple: one workspace per project, not one workspace you reuse and half-remember the history of.</p>
+      <p>The practical split that makes this work day to day: your actual project files — the ones with git history, the ones your editor has open — live in a <strong>shared folder</strong> on your Mac, mounted straight into the guest (automatically under <code>/Volumes/My Shared Files</code> for a macOS guest, or via a per-folder <code>mount -t virtiofs</code> command shown right in the app for Linux). The OS, the compiler toolchain, the system packages, and everything a fresh <code>apt install</code> would touch stay inside the disposable guest instead of your host. Edit with <a href="/blog/vscode-continue-ai-bridge/">VS Code Remote-SSH</a> connected straight into the workspace, and the experience is indistinguishable from working locally — except a broken system package or a dependency you regret installing stays contained to a VM you can throw away, rather than a Mac you use for everything else.</p>
+
+      <h2>Matching a colleague's setup exactly, not just similarly</h2>
+      <p>A README's setup instructions are a description someone else has to correctly interpret — which package manager version, which system libraries, which order to run things in. A sealed <strong>base image</strong> is the actual disk, not a description of one. Configure a project's environment once, seal it, and everyone on the project clones the identical toolchain instead of independently reconstructing something close to it. The <a href="/blog/base-image-versioning/">base image versioning post</a> covers the naming discipline worth adopting once you're doing this regularly — the app tracks no lineage between generations, so a name like <code>ubuntu-24.04-project-x-node22-2026.09</code> is the only record of what's actually in a given image. Handing that exact image to a teammate is a real, supported action too: Preferences → Base Images can export the selected image to a raw disk file, which is a genuine copy of the environment rather than a shared cloud reference — move it to another Mac, or archive it before a generation gets pruned.</p>
+
+      <h2>Trying a new framework without touching your main Mac's global state</h2>
+      <p>The smaller, more frequent version of the same idea: evaluating a new library or framework doesn't need a whole new named project, just a workspace you're willing to throw away. Clone a <strong>Disposable Workspace</strong> from your usual dev base image, run whatever the new tool's own quickstart tells you to — <code>npm create</code>, a fresh interpreter install, a system package you're not sure you'll keep — and close it when you're done forming an opinion. None of it touches your Mac's global npm cache, your actual Homebrew install, or any lockfile you'd otherwise have to remember to revert. Cloning is copy-on-write, so starting one of these costs seconds, not the minutes a fresh install would take on bare metal.</p>
+
+      <h2>Where a VM is actually the right call, and where it's overkill</h2>
+      <p>Worth being honest about the tradeoff, in the same spirit as the <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">Docker Desktop / OrbStack comparison</a> on this blog: for pure per-project dependency isolation on a single OS, a container is often lighter-weight and faster to spin up than a VM, and a good language-level version manager plus Docker Compose covers a lot of this same ground. A full Linux VM earns its overhead specifically when you want the isolation to include the OS itself — a genuinely different kernel and system package set, not just an app-level sandbox sharing your Mac's kernel — or when you want a guest's installed system packages and root-level changes to be as disposable as its project files. If today's actual pain point is "node_modules is a mess," a container solves it more cheaply. If it's "I no longer trust what's installed system-wide on my own Mac," that's the problem this workflow is actually for.</p>
+
+      <h2>What to actually do</h2>
+      <ul>
+        <li><strong>One workspace per project</strong>, not one long-lived workspace you reuse indefinitely and stop trusting the history of.</li>
+        <li><strong>Keep project files in a shared folder</strong>, so the guest holds the toolchain and system state, not the only copy of your work.</li>
+        <li><strong>Seal a base image once a project's setup is right</strong>, and hand teammates the actual disk via export rather than a setup doc they have to reinterpret.</li>
+        <li><strong>Reach for a Disposable Workspace, not your main Mac,</strong> the moment you're evaluating something you're not sure you'll keep.</li>
+      </ul>
+
+      <p>Related reading: <a href="/blog/base-image-versioning/">a naming convention for base images</a> once you're sealing them regularly, <a href="/blog/qa-devops-disposable-vm-workflow/">the same disposable-workspace pattern applied to QA and DevOps</a>, <a href="/blog/vscode-continue-ai-bridge/">editing inside a workspace with VS Code Remote</a>, and <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">when a container is the better fit instead</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
