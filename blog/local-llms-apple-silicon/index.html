@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Run Local LLMs on Apple Silicon — Velo Workspaces</title>
+<meta name="description" content="MLX, Ollama, llama.cpp, and LM Studio — what each one actually is, GGUF vs. MLX model formats, and running a model directly on your Mac without wrapping it in a VM or an agent workflow.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/local-llms-apple-silicon/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="How to Run Local LLMs on Apple Silicon">
+<meta property="og:description" content="MLX, Ollama, llama.cpp, and LM Studio — what each one actually is, model formats, and running a model directly on your Mac.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/local-llms-apple-silicon/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Guide</span>
+        <h1>How to Run Local LLMs on Apple Silicon</h1>
+        <p class="article-lede">This is about the model, on its own — what tool to install, what format to pull, and how to actually talk to it. Not wrapped in a VM, not wired up to a coding agent. If you want that part too, <a href="/blog/zero-tax-virtualization/">the complete AI agent guide</a> covers it in depth; this page is the more basic thing underneath it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>Four names, four different things</h2>
+      <p>These get used almost interchangeably in casual conversation, and they're not the same kind of tool:</p>
+      <ul>
+        <li><strong>llama.cpp</strong> is the inference engine underneath most of this ecosystem — a C++ implementation that runs <strong>GGUF</strong>-format models across NVIDIA, AMD, Intel, and plain CPU, not Apple-specific at all.</li>
+        <li><strong>MLX</strong> is Apple's own array framework and inference library, built specifically for Apple Silicon's unified memory architecture, running its own MLX-format models.</li>
+        <li><strong>Ollama</strong> is a friendly CLI and local API server wrapped around an inference backend — historically llama.cpp underneath, though that changed recently and specifically for Apple Silicon (more below).</li>
+        <li><strong>LM Studio</strong> is a desktop GUI app that runs both GGUF and MLX models side by side in the same interface, and is the easiest on-ramp if you don't yet know which format or engine you want.</li>
+      </ul>
+
+      <h2>A real, recent change worth knowing about</h2>
+      <p>As of <strong>Ollama 0.19</strong> (March 2026), Ollama replaced its Metal-backed llama.cpp inference path with Apple's own MLX framework on Macs with <strong>32GB or more of unified memory</strong> — a substantial speed improvement on supported hardware. 8GB and 16GB Macs still run the older Metal/llama.cpp path unchanged. If you're on a 32GB+ Mac, "MLX vs. Ollama" is a less clean-cut choice than it used to be: for many models, Ollama is now MLX under the hood, not a genuinely separate engine. Worth checking your installed Ollama version and hardware tier before assuming older comparisons still describe your setup exactly.</p>
+
+      <h2>Model formats: GGUF vs. MLX, briefly</h2>
+      <p>GGUF is llama.cpp's own model container format — broad, well-supported, with the longest tail of available conversions (older models, fine-tunes, merges) because the ecosystem around it is the largest. MLX-format models are built specifically for Apple's framework, and on the same chip an MLX build is commonly meaningfully faster than the equivalent GGUF for supported models. Neither format is strictly better — GGUF wins on breadth and portability, MLX wins on Apple Silicon-specific speed for models that have an MLX conversion available. (Quantization — the 4-bit, 8-bit tradeoffs that actually determine how much RAM a given model needs — is its own topic, covered on its own rather than folded in here.)</p>
+
+      <h2>Where models actually come from</h2>
+      <p>MLX-format models are published on <a href="https://huggingface.co/models?library=mlx-lm" target="_blank" rel="noopener">Hugging Face</a>, generally under the <code>mlx-community</code> organization; Ollama pulls from its own <a href="https://ollama.com/library" target="_blank" rel="noopener">library</a>. Both move fast — new releases and their MLX/GGUF conversions can lag each other by days to weeks, so treat any specific model tag you read (including on this blog) as a snapshot rather than a permanent recommendation, and check the source directly before pulling.</p>
+
+      <h2>How much RAM you actually need</h2>
+      <p>This blog already has a detailed RAM-to-model-size table, broken down from 16GB through 128GB+ Macs with specific MLX and Ollama tags per tier — see <a href="/blog/zero-tax-virtualization/">Section 3 of the complete AI agent guide</a> rather than a second copy of the same table here. The short version: reserve roughly 20–25% of total unified memory for the OS and display compositor before budgeting the rest for model weights and KV cache, since both the model and macOS itself draw from the same pool.</p>
+
+      <h2>Using a model with nothing else involved</h2>
+      <p>None of this requires a VM or an agent. LM Studio gives you a chat window the moment a model finishes downloading. Ollama's own <code>ollama run &lt;model&gt;</code> drops you into a REPL directly in Terminal. Either one also exposes an OpenAI-compatible local API — <code>http://127.0.0.1:11434/v1</code> for Ollama, whatever port you configure for MLX or LM Studio's server mode — that any script, editor plugin, or app that speaks the OpenAI API format can point at, with nothing more exotic than an environment variable pointing somewhere on your own machine.</p>
+
+      <h2>When you'll actually want isolation</h2>
+      <p>The model itself is inert — it's the code an agent generates and executes against that model that creates risk, and that's a different problem from "how do I run a model at all," worth its own guide rather than a section here. If what you're actually building is an AI coding agent, not just a chat window, see <a href="/blog/zero-tax-virtualization/">the complete AI agent guide</a> for the full VM-isolated setup, <a href="/blog/ai-bridge-architecture/">the AI Bridge architecture</a> for how the model stays on the host GPU while the agent runs isolated, and <a href="/blog/mlx-vm-setup-guide/">the MLX + OpenCode setup guide</a> for one concrete, complete walkthrough.</p>
+
+      <p>Related reading: <a href="/blog/zero-tax-virtualization/">running AI agents safely in an isolated VM</a>, <a href="/blog/ai-bridge-architecture/">the AI Bridge architecture</a>, and <a href="/blog/vm-sandboxing-cost/">what isolation actually costs</a>, benchmarked across MLX and Ollama. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>

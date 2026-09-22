@@ -97,6 +97,7 @@
       </ul>
 
       <h2>3. Choose Your Model (Purpose and Host RAM Requirements)</h2>
+      <p><em>Just want to run a model on its own, with no VM or agent involved yet? <a href="/blog/local-llms-apple-silicon/">The basics are covered separately</a> — this section assumes you're headed toward the full agent setup below.</em></p>
       <p>Both engines use macOS Unified Memory dynamically. Because the OS, display compositor, and the model's KV cache share this pool, reserve at least 20–25% of total host RAM for operating overhead.</p>
       <p>Model identifiers below are verified as of this writing — always confirm current availability and exact tags at <a href="https://huggingface.co/models?library=mlx-lm" target="_blank" rel="noopener">huggingface.co/models?library=mlx-lm</a> (MLX) or <a href="https://ollama.com/library" target="_blank" rel="noopener">ollama.com/library</a> (Ollama) before pulling, since libraries change.</p>
 
