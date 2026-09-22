@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Disposable VMs for Testing Untrusted Software — Velo Workspaces</title>
+<meta name="description" content="curl | bash, a GitHub repo's install script, an unfamiliar build system — none of them are sandboxed by design, and the risk has nothing to do with AI agents. A disposable workspace is the boundary, whoever or whatever is running the code.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/disposable-vms-untrusted-software/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Disposable VMs for Testing Untrusted Software">
+<meta property="og:description" content="curl | bash, a GitHub repo's install script, an unfamiliar build system — a disposable workspace is the boundary.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/disposable-vms-untrusted-software/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Guide</span>
+        <h1>Disposable VMs for Testing Untrusted Software</h1>
+        <p class="article-lede">This blog has covered AI agents running untrusted code at length. This is the version without an agent involved at all — you, choosing to run an install script, a build, or a tool you found on GitHub, on your own Mac. The risk is the same shape; the boundary that actually helps is too.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2><code>curl | bash</code>: convenient, and exactly as trusting as it looks</h2>
+      <p>Piping a remote script straight into a shell is a genuinely common install pattern, and it means trusting three things at once: the script's actual contents (which you almost never read first), the domain serving it (not compromised, not typosquatted), and the integrity of everything in between at the moment you ran it — the same URL can serve different content to a browser preview than to a piped <code>curl</code> request. None of that is unique to this pattern, but the "just run this one command" framing makes it easy to skip the moment of "wait, what does this actually do" that a downloaded, inspected file would prompt.</p>
+
+      <h2>A GitHub repo's own setup steps run the same way</h2>
+      <p><code>npm install</code>, <code>pip install -e .</code>, and <code>make</code> aren't sandboxed by the tool running them — they execute whatever the project's install hooks, <code>setup.py</code>, or Makefile say to, the identical mechanism covered in <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents use your computer</a>, minus the agent. Cloning an unfamiliar repository and following its own README's setup instructions is running code you haven't reviewed, whether or not anything about the workflow involves AI at all.</p>
+
+      <h2>"Building from source" isn't inherently safer</h2>
+      <p>There's a common instinct that compiling something yourself is more trustworthy than grabbing a prebuilt binary — sometimes true for supply-chain reasons, but it doesn't touch this specific risk at all. A build script can do anything a shell script can, because it typically is one, or invokes one. "I built it myself" tells you something about where the binary came from; it tells you nothing about whether the build process itself did something you wouldn't have wanted.</p>
+
+      <h2>Dependencies you didn't choose to audit</h2>
+      <p>Even a project whose own code you trust pulls in a dependency tree you almost certainly haven't reviewed — and any one of those transitive packages running its own install hooks is the same risk one level removed. This is the general shape of supply-chain risk, and it applies whether you're installing a tool for yourself or setting an agent loose to do the same thing.</p>
+
+      <h2>The boundary that actually helps, either way</h2>
+      <p>None of the above gets meaningfully safer by being more careful about which untrusted software you run — the fix is the same one this blog keeps arriving at for AI agents specifically: run it somewhere a bad outcome doesn't reach your actual account, covered in <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>. Try the install, the build, the new tool inside a disposable workspace; if it's fine, keep using it from wherever you'd normally install real tools; if it's not, close the workspace and nothing about your actual Mac was ever at risk.</p>
+
+      <p>Related reading: <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents use your computer</a>, for the identical mechanism with an agent involved, <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>, and <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment actually is</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
