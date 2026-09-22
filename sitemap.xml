@@ -557,6 +557,21 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.veloworkspaces.com/blog/kali-linux-on-apple-silicon/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/blog/rocky-linux-on-apple-silicon/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.veloworkspaces.com/blog/ai-bridge-data-privacy/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

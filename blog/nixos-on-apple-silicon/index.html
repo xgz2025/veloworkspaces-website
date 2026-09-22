@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Running NixOS on Apple Silicon — Velo Workspaces</title>
+<meta name="description" content="The official aarch64 ISO is minimal-only — no graphical installer, unlike x86_64. What that means in practice, the local-file path since NixOS isn't in Velo's official-image picker, and how a Nix configuration compares to a base image as a reproducibility primitive.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Running NixOS on Apple Silicon">
+<meta property="og:description" content="The official aarch64 ISO is minimal-only. What that means in practice, and how a Nix configuration compares to a base image as a reproducibility primitive.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Guide</span>
+        <h1>Running NixOS on Apple Silicon</h1>
+        <p class="article-lede">NixOS's whole pitch is reproducibility — a system described entirely in one declarative file. That makes it an interesting counterpoint to how this blog usually talks about reproducibility, which is base images and disk clones. Here's what's actually different about the arm64 download, and where the two approaches to "reproducible" actually diverge.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>The aarch64 ISO is minimal-only — a real, current gap</h2>
+      <p>Worth knowing before you go looking for the wrong thing: NixOS's <a href="https://nixos.org/download/" target="_blank" rel="noopener">official downloads</a> offer both a minimal and a graphical installer ISO for x86_64, but only the minimal (terminal-only) ISO for aarch64 — there's no official graphical installer for Apple Silicon's architecture as of this writing. That's not a bug in your download, it's the current state of NixOS's own release infrastructure. The <a href="https://github.com/nix-community/nixos-images" target="_blank" rel="noopener">nix-community project</a> publishes its own aarch64 installer images that fill part of that gap, unofficially. For a VM guest specifically, the minimal ISO is genuinely fine — you're installing over a text console either way for a headless or lightly-used workspace, and NixOS's actual configuration happens in a text file regardless of which installer put the base system there.</p>
+
+      <h2>Not in the official-image picker — the local-file path</h2>
+      <p>Like Kali and Arch, NixOS isn't part of Velo Workspaces' curated official-image list. Download the minimal aarch64 ISO from nixos.org yourself and use "choose a local OS image file" when creating the workspace. The installer walks you through partitioning and generates an initial <code>configuration.nix</code> for you, or you can supply your own from the start if you already have one.</p>
+
+      <h2>Two different answers to "how do I get the same environment back"</h2>
+      <p>This is the genuinely interesting comparison, not a gotcha: Velo Workspaces' own answer to reproducibility is <a href="/blog/base-image-versioning/">a sealed base image</a> — a disk-level snapshot you clone from, fast because it's copy-on-write, but opaque as a description of what's actually inside it (a display name is the only record you get, as that post covers in depth). NixOS's answer is the opposite shape: a <code>configuration.nix</code> file is a complete, human-readable, version-controllable description of the system — every package, every service, every setting — that <code>nixos-rebuild</code> can reproduce deterministically on any NixOS machine that reads it. One is fast and disk-based; the other is precise and text-based. They're not actually competing solutions to the same problem — a NixOS guest can use both at once, sealing a configured NixOS install as a Velo base image for fast day-to-day cloning, while the same box's <code>configuration.nix</code> stays the portable, readable record of what's in it, useful even outside Velo entirely.</p>
+
+      <h2>What actually trips people up</h2>
+      <p>The declarative model is also the thing that surprises people coming from an imperative distro: installing a package with <code>nix-env</code> outside of <code>configuration.nix</code> works, but it's a mutation the file doesn't know about — the next time you rebuild from the file, that ad hoc install is gone, because the file is the only thing NixOS considers the actual source of truth. That's a deliberate design choice, not a bug, but it catches people who reach for the familiar "just install it" habit from Ubuntu or Debian and expect it to stick the way <code>apt install</code> does.</p>
+
+      <p>Related reading: <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>, <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment actually is</a>, and <a href="/blog/arch-linux-on-apple-silicon/">Arch Linux on Apple Silicon</a>, another distro on the local-file path. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
