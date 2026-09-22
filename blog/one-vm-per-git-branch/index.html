@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One VM Per Git Branch: Isolated Development Workflows — Velo Workspaces</title>
+<meta name="description" content="Switching branches contaminates more than your working directory — node_modules and build artifacts from one branch don't just stay put. Pairing git worktrees with one workspace per worktree fixes both halves of the problem at once.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/one-vm-per-git-branch/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="One VM Per Git Branch: Isolated Development Workflows">
+<meta property="og:description" content="Pairing git worktrees with one workspace per worktree fixes both halves of the branch-switching problem at once.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/one-vm-per-git-branch/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Workflow</span>
+        <h1>One VM Per Git Branch: Isolated Development Workflows</h1>
+        <p class="article-lede">Switching branches contaminates more than your working directory. <code>node_modules</code> installed for one branch's dependency versions doesn't magically become correct for another's; a stale build artifact from yesterday's branch can quietly poison today's. One workspace per project, covered elsewhere on this blog, doesn't fully solve this — the finer-grained version is one per branch.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>The problem is two problems, not one</h2>
+      <p>Switching branches in a single working directory conflates two genuinely different things: which source files are checked out, and what's been built or installed on top of them. Git handles the first part fine — that's literally what <code>checkout</code> does. It has no opinion at all about the second: <code>node_modules</code>, compiled build output, a Python virtualenv, anything your toolchain generated for the branch you were just on, all of it just sits there, potentially wrong for the branch you switched to, until something rebuilds it or you remember to clean it yourself.</p>
+
+      <h2>The pairing that actually fixes both halves</h2>
+      <p>Git already has a feature for the first half: <a href="https://git-scm.com/docs/git-worktree" target="_blank" rel="noopener"><code>git worktree</code></a> gives a second branch its own working directory — <code>git worktree add ../feature-a feature-a</code> — while sharing the same underlying repository history and objects with the main checkout. No stashing, no losing your place in one branch to look at another; both exist as real directories on disk simultaneously. Pair that with the second half: one Velo workspace per worktree, each cloned from the same base image, so each branch also gets its own isolated toolchain, its own <code>node_modules</code>, its own build cache — none of it shared, none of it stale from a branch you're not currently working on.</p>
+
+      <h2>What actually lives where</h2>
+      <p>This follows the same host/guest split already covered in <a href="/blog/software-engineers-disposable-workspaces/">the one-workspace-per-project post</a>: each git worktree directory is its own shared folder, mounted into its own workspace, so the source files and git history live on the host where your editor already expects them. What's different per branch lives inside each workspace's own disk instead — dependencies, build artifacts, anything a fresh install would generate — cloned once from a shared base image so every new branch workspace starts from the same known-good toolchain rather than a fresh setup each time.</p>
+      <pre><code>main
+ ├── worktree: main        → workspace: proj-main
+ ├── worktree: feature-a   → workspace: proj-feature-a
+ ├── worktree: feature-b   → workspace: proj-feature-b
+ └── worktree: experiment  → workspace: proj-experiment</code></pre>
+
+      <h2>Naming and cleanup</h2>
+      <p>Name each workspace after its branch, the same discipline <a href="/blog/base-image-versioning/">the base-image naming post</a> argues for — <code>proj-feature-a</code> rather than a generic name you'll have three duplicates of within a week. This is a middle case in the spectrum <a href="/blog/disposable-vm-vs-snapshot/">covered between disposability and snapshots</a>: a per-branch workspace isn't thrown away after one run the way a CI workspace is, but it isn't meant to live forever either. Delete it (and its worktree) when the branch merges or gets abandoned, the same moment you'd delete the branch itself.</p>
+
+      <h2>When this is overkill</h2>
+      <p>A one-line hotfix branch doesn't need its own VM — the overhead of a new worktree and a new workspace costs more than the branch-switching friction it would save. This pattern earns its keep specifically when branches have genuinely divergent dependencies or long-running build state worth protecting from each other, not as a blanket habit for every branch you ever create.</p>
+
+      <p>Related reading: <a href="/blog/software-engineers-disposable-workspaces/">one workspace per project</a>, <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>, and <a href="/blog/disposable-vm-vs-snapshot/">disposable VM vs. snapshot</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
