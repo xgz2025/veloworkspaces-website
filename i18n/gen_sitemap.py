@@ -26,6 +26,7 @@ ENGLISH_ONLY_PAGES = [
     ("blog/why-arm-vms-feel-native/", "monthly", "0.6"),
     ("blog/local-llms-apple-silicon/", "monthly", "0.6"),
     ("blog/llm-ram-requirements-mac/", "monthly", "0.6"),
+    ("blog/what-is-a-disposable-development-environment/", "monthly", "0.6"),
     ("blog/ai-bridge-data-privacy/", "monthly", "0.6"),
     ("blog/velo-vs-codespaces-vs-ona/", "monthly", "0.6"),
     ("blog/velo-vs-docker-desktop-vs-orbstack/", "monthly", "0.6"),

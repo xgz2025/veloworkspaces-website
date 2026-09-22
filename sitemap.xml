@@ -532,6 +532,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.veloworkspaces.com/blog/what-is-a-disposable-development-environment/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.veloworkspaces.com/blog/ai-bridge-data-privacy/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Is a Disposable Development Environment? — Velo Workspaces</title>
+<meta name="description" content="A canonical definition: create, use, discard, recreate — and how that's a genuinely different guarantee from a snapshot, a container, or a cloud dev environment, not just a stricter version of the same thing.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/what-is-a-disposable-development-environment/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="What Is a Disposable Development Environment?">
+<meta property="og:description" content="A canonical definition: create, use, discard, recreate — and how that's genuinely different from a snapshot, a container, or a cloud dev environment.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/what-is-a-disposable-development-environment/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Fundamentals</span>
+        <h1>What Is a Disposable Development Environment?</h1>
+        <p class="article-lede">This blog uses the term constantly and has mostly assumed you already know what it means. Here's the actual definition, and the three things people most often confuse it with — a snapshot, a container, and a cloud dev environment — none of which are the same guarantee, even though all three get called "disposable" in casual conversation.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>The pattern: create, use, discard, recreate</h2>
+      <p>A disposable development environment is one where destruction is the default, not an exception you have to remember to trigger. You create it — usually from a known-good starting point, not from scratch every time — use it for exactly one task, and it's gone the moment that task ends, with nothing about the environment surviving to affect the next one. When you need the same setup again, you recreate it fresh from that same known-good starting point, rather than reusing the one you just finished with. The defining property isn't that the environment <em>can</em> be deleted — almost anything can be deleted. It's that deletion is the expected, routine end state, not a cleanup step someone has to remember.</p>
+
+      <h2>Not the same as a snapshot</h2>
+      <p>A snapshot exists to get you <em>back</em> to a state — it's built around preservation. A disposable environment exists to get you <em>away</em> from a state — it's built around discarding it on purpose. These sound like opposites because they largely are: a snapshot's whole job is remembering; a disposable environment's whole job is forgetting, deliberately, so the next run can't inherit anything the last one left behind.</p>
+
+      <h2>Not the same as a container</h2>
+      <p>This is a common conflation worth untangling: disposability and the isolation mechanism underneath it are two separate, orthogonal properties. A container can be disposable (many CI pipelines already treat them that way) or long-lived (a container that's been running in production for months). A VM can be disposable or persistent the same way. "Disposable" describes the lifecycle policy — what happens when you're done — not the isolation boundary itself, which is a completely different question covered in <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>. You can have a disposable environment built on either one.</p>
+
+      <h2>Not the same as a cloud dev environment</h2>
+      <p>Cloud dev environments often get marketed with disposability-adjacent language — "ephemeral," "throwaway" — but the default behavior usually runs the other direction: they persist until you explicitly stop or delete them, and cost accrues the whole time they're sitting idle, forgotten. That's disposable-if-you-remember-to, which is a meaningfully weaker guarantee than disposable-by-default. The fuller comparison, including where cloud environments do and don't have a local GPU story at all, is in <a href="/blog/velo-vs-codespaces-vs-ona/">the Codespaces and Ona comparison</a>.</p>
+
+      <h2>The reusable half of the pattern: a known-good starting point</h2>
+      <p>"Just recreate it" only works in practice if recreating is fast and cheap — otherwise disposability is a nice idea nobody actually follows under deadline pressure, and the old habit of reusing a slowly-accumulating environment creeps back in. That's what a base image is actually for: a sealed, known-good starting point that a fresh disposable environment clones from in seconds rather than being built from scratch each time. See <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a> for how that half of the mechanism actually works.</p>
+
+      <h2>Why the guarantee matters more than it sounds like it should</h2>
+      <p>The payoff isn't abstract. It removes a specific, recurring doubt — "am I sure nothing's left over from last time" — by making the answer structurally yes rather than probably. A test failure that reproduces against a genuinely identical starting state is real; one that doesn't reproduce is far more likely a genuine race condition than leftover state from three runs ago, which is a meaningfully easier bug to triage. See this play out concretely in <a href="/blog/qa-devops-disposable-vm-workflow/">the QA/DevOps disposable VM workflow</a> and, for the daily-habit version of the same idea, <a href="/blog/software-engineers-disposable-workspaces/">one workspace per project</a>.</p>
+
+      <p>Related reading: <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>, <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>, and <a href="/blog/apple-silicon-vms-explained/">what a VM on Apple Silicon actually is</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
