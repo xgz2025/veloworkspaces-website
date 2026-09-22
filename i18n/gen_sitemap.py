@@ -65,6 +65,12 @@ ENGLISH_ONLY_PAGES = [
     ("blog/vscode-continue-ai-bridge/", "monthly", "0.6"),
     ("blog/software-engineers-disposable-workspaces/", "monthly", "0.6"),
     ("blog/base-image-vs-snapshot-vs-clone/", "monthly", "0.6"),
+    ("blog/rosetta-2-linux-vms-explained/", "monthly", "0.6"),
+    ("blog/can-you-run-x86-linux-on-apple-silicon/", "monthly", "0.6"),
+    ("blog/running-x86-docker-images-arm64-mac/", "monthly", "0.6"),
+    ("blog/arm64-linux-compatibility-problems/", "monthly", "0.6"),
+    ("blog/llm-quantization-explained-mac/", "monthly", "0.6"),
+    ("blog/local-vs-cloud-llm-coding-agents/", "monthly", "0.6"),
 ]
 
 def alternates_block(path, indent="    "):

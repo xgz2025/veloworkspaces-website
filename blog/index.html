@@ -179,6 +179,36 @@
         </div>
 
         <div class="blog-index-group">
+          <h2>Compatibility &amp; Rosetta</h2>
+          <p class="blog-index-group-desc">When arm64 isn't enough on its own — running x86 software, and knowing which fix actually applies.</p>
+          <div class="blog-index-cards">
+            <a class="blog-index-card" href="/blog/rosetta-2-linux-vms-explained/">
+              <span class="eyebrow">Deep dive</span>
+              <h2>Rosetta 2 in Linux VMs: What It Actually Does</h2>
+              <p>Toggling Rosetta support on doesn't set up translation by itself — it attaches a VirtioFS share and stops there. Verified against the app's own source: the three layers that actually have to work.</p>
+            </a>
+
+            <a class="blog-index-card" href="/blog/can-you-run-x86-linux-on-apple-silicon/">
+              <span class="eyebrow">Fundamentals</span>
+              <h2>Can You Install x86 Linux on an Apple Silicon Mac?</h2>
+              <p>Short answer: not as a full guest OS through Virtualization.framework — a categorical limit, not a missing feature. What actually can do it, and why the software you need probably doesn't require it at all.</p>
+            </a>
+
+            <a class="blog-index-card" href="/blog/running-x86-docker-images-arm64-mac/">
+              <span class="eyebrow">Guide</span>
+              <h2>Running x86 Docker Images on an Apple Silicon Mac</h2>
+              <p><code>docker pull --platform linux/amd64</code> works, but the mechanism underneath is slow software emulation by default. A Linux VM with Rosetta for Linux already set up may already be routing those containers through something faster.</p>
+            </a>
+
+            <a class="blog-index-card" href="/blog/arm64-linux-compatibility-problems/">
+              <span class="eyebrow">Guide</span>
+              <h2>ARM64 Compatibility Problems: Why Does My Linux Software Not Run?</h2>
+              <p>A decision tree for four different reasons arm64 Linux software fails, each with a genuinely different fix — missing native build, single x86-only binary, container image, or true architecture-specific code.</p>
+            </a>
+          </div>
+        </div>
+
+        <div class="blog-index-group">
           <h2>Setting up AI agents &amp; local models</h2>
           <p class="blog-index-group-desc">AI Bridge, local model backends, and building or testing agents against them.</p>
           <div class="blog-index-cards">
@@ -192,6 +222,12 @@
               <span class="eyebrow">Guide</span>
               <h2>How Much RAM Do You Need for Local LLMs on a Mac?</h2>
               <p>The actual math behind a model's memory footprint — weights, KV cache, and why a model that fits fine at first can run out of memory an hour into a long session.</p>
+            </a>
+
+            <a class="blog-index-card" href="/blog/llm-quantization-explained-mac/">
+              <span class="eyebrow">Fundamentals</span>
+              <h2>LLM Quantization Explained for Mac Users</h2>
+              <p>4-bit, 8-bit, Q4_K_M, Q5_K_M — the labels on every GGUF download. What quantization actually does to a model, and how to pick a level instead of defaulting to whatever a guide happened to mention.</p>
             </a>
 
             <a class="blog-index-card" href="/blog/mlx-vm-setup-guide/">
@@ -222,6 +258,12 @@
               <span class="eyebrow">Privacy</span>
               <h2>What Actually Leaves Your Mac When You Use AI Bridge (and What Doesn't)</h2>
               <p>Verified against the app's own source rather than repeated as a slogan: why AI Bridge's channel is structurally incapable of reaching anywhere but your Mac's own loopback interface.</p>
+            </a>
+
+            <a class="blog-index-card" href="/blog/local-vs-cloud-llm-coding-agents/">
+              <span class="eyebrow">Fundamentals</span>
+              <h2>Local LLM vs. Cloud LLM for Coding Agents</h2>
+              <p>Not a verdict — a decision framework. Cloud models still win on raw capability and context; local models win on cost at volume, privacy, and offline reliability.</p>
             </a>
           </div>
         </div>

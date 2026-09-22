@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARM64 Compatibility Problems: Why Does My Linux Software Not Run? — Velo Workspaces</title>
+<meta name="description" content="A decision tree for the four different reasons arm64 Linux software fails to run, each with a genuinely different fix — missing native build, single x86-only binary, container image, or true architecture-specific code — rather than one generic workaround.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/arm64-linux-compatibility-problems/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="ARM64 Compatibility Problems: Why Does My Linux Software Not Run?">
+<meta property="og:description" content="Four different reasons arm64 Linux software fails, each with a genuinely different fix — a decision tree instead of one generic workaround.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/arm64-linux-compatibility-problems/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Guide</span>
+        <h1>ARM64 Compatibility Problems: Why Does My Linux Software Not Run?</h1>
+        <p class="article-lede">"It doesn't work on arm64" is four different problems wearing one complaint, and this blog has a specific, working answer for three of them, covered in depth elsewhere. What's missing is the triage step — figuring out which one you actually have before reaching for a fix built for a different one.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>Start here: what actually fails?</h2>
+      <p>Before anything else, get precise about the failure. "Command not found" or a package manager reporting nothing available is a different problem from a binary that exists but crashes or refuses to start, which is different again from a Docker pull failing to find a matching image. The error itself usually already tells you which of the four cases below you're in — the mistake is reaching for the same fix (usually "just emulate it") regardless of which one it is.</p>
+
+      <h2>1. The package genuinely has no arm64 build</h2>
+      <p>Check first whether this is real before working around it: a distro's arm64 ports repository doesn't always mirror every package available for amd64, and pulling an amd64 <code>.deb</code> by hand for a package that's simply missing on arm64 gets you a plain 404, not a working install. <a href="/blog/ubuntu-on-apple-silicon/">The Ubuntu post's Rosetta section</a> covers this gap concretely, including exactly where it bites. If a native arm64 build genuinely doesn't exist, building from source is sometimes viable — but watch for hardcoded <code>x86_64</code> in a project's build scripts or autotools target triples, which look like a compatibility failure but are really just a build script someone never updated for a second architecture.</p>
+
+      <h2>2. It's one binary, not a whole ecosystem</h2>
+      <p>A single, self-contained x86_64 executable — a CLI tool, a compiled binary someone handed you directly — is the case Rosetta for Linux is built for. <a href="/blog/rosetta-2-linux-vms-explained/">The full setup is covered here</a>: it translates that one binary, running natively inside an accelerated arm64 guest, and it's meaningfully faster than any of the emulation options below. It stops being the right tool the moment the binary drags in x86_64-only shared libraries or a whole dependency tree that also isn't built for arm64 — at that point you're back in case 1 or 3, not case 2.</p>
+
+      <h2>3. It's a container image</h2>
+      <p>An amd64-only Docker image is its own case with its own mechanism — QEMU emulation by default, sometimes faster if Rosetta for Linux is already set up in the same guest — <a href="/blog/running-x86-docker-images-arm64-mac/">covered in full here</a>. Worth distinguishing explicitly from case 2: a container failing to find a matching architecture in its manifest is a Docker/registry problem, not something <code>update-binfmts</code> alone fixes, even though the same kernel facility ends up involved either way.</p>
+
+      <h2>4. It genuinely needs a different CPU architecture</h2>
+      <p>The rare, real case: software with architecture-specific assembly or SIMD intrinsics written assuming x86, an out-of-tree kernel module with no arm64 port, or a requirement to actually verify behavior on the CPU architecture your users run rather than a translated stand-in for it. None of the above helps here — that's <a href="/blog/can-you-run-x86-linux-on-apple-silicon/">full QEMU-based emulation of a genuinely different architecture</a>, accepting the real performance cost that comes with it, or an actual x86_64 machine somewhere in the loop.</p>
+
+      <h2>The triage, short version</h2>
+      <table>
+        <thead><tr><th>Symptom</th><th>Likely case</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td>Package manager: nothing found</td><td>1 — missing native build</td><td>Confirm it's really missing, then build from source or find an alternative</td></tr>
+          <tr><td>One binary won't execute</td><td>2 — single x86_64 binary</td><td><a href="/blog/rosetta-2-linux-vms-explained/">Rosetta for Linux</a></td></tr>
+          <tr><td><code>docker pull</code> can't find your architecture</td><td>3 — container image</td><td><a href="/blog/running-x86-docker-images-arm64-mac/">amd64 image emulation</a></td></tr>
+          <tr><td>Needs a real x86 CPU to behave correctly</td><td>4 — true architecture dependency</td><td><a href="/blog/can-you-run-x86-linux-on-apple-silicon/">Full QEMU emulation</a></td></tr>
+        </tbody>
+      </table>
+
+      <p>Related reading: <a href="/blog/rosetta-2-linux-vms-explained/">Rosetta 2 in Linux VMs</a>, <a href="/blog/running-x86-docker-images-arm64-mac/">running x86 Docker images on an Apple Silicon Mac</a>, <a href="/blog/can-you-run-x86-linux-on-apple-silicon/">can you install x86 Linux on an Apple Silicon Mac</a>, and <a href="/blog/arm64-vs-x86-apple-silicon/">ARM64 vs. x86-64 on Apple Silicon</a> for the broader picture this all sits inside. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>

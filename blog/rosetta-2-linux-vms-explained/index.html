@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rosetta 2 in Linux VMs: What It Actually Does — Velo Workspaces</title>
+<meta name="description" content="Toggling Rosetta support on doesn't set up translation by itself — it attaches a VirtioFS share and stops there. Verified against the app's own source: the three layers that actually have to work, and why the failure mode is silence, not an error.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/rosetta-2-linux-vms-explained/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Rosetta 2 in Linux VMs: What It Actually Does">
+<meta property="og:description" content="Toggling Rosetta support on doesn't set up translation by itself. Verified against the app's own source: the three layers that actually have to work.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/rosetta-2-linux-vms-explained/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Deep dive</span>
+        <h1>Rosetta 2 in Linux VMs: What It Actually Does</h1>
+        <p class="article-lede"><a href="/blog/arm64-vs-x86-apple-silicon/">Rosetta for Linux is a different mechanism from Rosetta for macOS apps</a> — that post covers the distinction. This one is the mechanism itself: verified against Velo's own source, what a workspace's Rosetta toggle actually attaches, what it deliberately leaves for you to do inside the guest, and why getting one of three layers wrong looks like nothing happening at all rather than an error.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>Three layers, and all three have to work</h2>
+      <p>"Enable Rosetta" sounds like one switch. It's actually three independent things, each satisfied differently, each silently doing nothing if it isn't:</p>
+      <ol>
+        <li><strong>Rosetta itself has to be installed on the host</strong> — a one-time <code>softwareupdate --install-rosetta</code>, unrelated to Velo entirely.</li>
+        <li><strong>The workspace's Rosetta toggle has to be on</strong> — which attaches a resource to the VM. That's all it does.</li>
+        <li><strong>The guest has to be told to use it</strong> — a one-time setup command run inside the Linux VM itself, covered below.</li>
+      </ol>
+      <p>Skip any one of the three and x86_64 binaries just fail to run, the same way they would with no Rosetta involved at all — there's no distinct error pointing at which layer is missing.</p>
+
+      <h2>What the toggle actually attaches</h2>
+      <p>Turning Rosetta on for a workspace calls straight into Apple's own <code>VZLinuxRosettaDirectoryShare</code> API and wires the result in as a VirtioFS device tagged <code>"rosetta"</code> — the same kind of device this blog's <a href="/blog/how-virtualization-framework-works/">device inventory post</a> covers for shared folders, just carrying Apple's translator binary instead of a folder you picked. That's the entire effect. No package gets installed in the guest, no configuration file gets written, nothing about the guest's boot process changes.</p>
+      <p>Here's the layer-one dependency made concrete: if Rosetta isn't installed on the host, the API this device is built from reports itself unavailable, and Velo's own device-construction code returns nothing — the workspace boots exactly as it would with the toggle off, no warning at VM-creation time. Velo's separate capability-check pass does know the difference and surfaces a plain note when Rosetta isn't installed — worth checking there first if a workspace with the toggle on behaves like it's off, rather than assuming the guest-side setup below was done wrong.</p>
+
+      <h2>Setting it up inside the guest</h2>
+      <p>The share being present doesn't make the guest kernel route x86_64 binaries through it — Linux has to be told to, via <code>binfmt_misc</code>, the same kernel facility that lets it dispatch a script by its shebang line or a Java jar by its class-file magic bytes. Three steps, run once per workspace (or once per base image, if you seal it afterward):</p>
+      <ol>
+        <li>Mount the share Velo attached: <code>sudo mount -t virtiofs rosetta /media/rosetta</code> (after <code>mkdir -p</code> on the mount point).</li>
+        <li>Install the package that lets the kernel register a custom interpreter: <code>sudo apt-get install -y binfmt-support</code> on Ubuntu or Debian.</li>
+        <li>Register Rosetta as the handler for the x86_64 ELF magic bytes with <code>update-binfmts --install</code>, pointing it at the mounted translator.</li>
+      </ol>
+      <p>One flag in that last step is worth understanding rather than copy-pasting blind: <code>--fix-binary yes</code>. It tells the kernel to open the interpreter's file descriptor once, at registration time, and hold onto it — rather than re-resolving the interpreter's path on every single exec. The practical effect is that the translation keeps working even from inside a mount namespace, chroot, or container that can't itself see <code>/media/rosetta</code>. That detail matters more than it looks: it's the same mechanism that determines whether <a href="/blog/running-x86-docker-images-arm64-mac/">an x86_64 Docker container</a> pulled inside this same guest gets fast translation or falls back to slow software emulation.</p>
+
+      <h2>The gotcha in the other direction: when the app itself is translated</h2>
+      <p>There's a second, easy-to-miss way Rosetta can be involved that has nothing to do with the guest at all. Velo Workspaces ships as a universal binary — <code>arm64</code> and <code>x86_64</code> slices in one app — and macOS normally launches the native slice automatically. But it's possible to end up running the <code>x86_64</code> slice on an Apple Silicon Mac anyway (a Rosetta-forced launch, or occasionally a download or update that landed the wrong slice), and when that happens, the app itself is the thing under translation, checkable via <code>sysctl.proc_translated</code>.</p>
+      <p>Velo's own capability detection checks for exactly this, because the consequence isn't a performance hit you'd just shrug off — a whole set of Apple-Silicon-exclusive APIs stop being available to the app in that state, and Rosetta-for-Linux is one of them, alongside Windows 11 ARM guests and hibernate/restore. If Rosetta support looks unavailable on a Mac you're sure is Apple Silicon, this is worth ruling out before anything guest-side: check Activity Monitor's "Kind" column for the running app, or just reinstall from the App Store, which always serves the correct slice.</p>
+
+      <h2>What this doesn't fix</h2>
+      <p>None of the above turns a Linux guest into something that can run x86_64 <em>software with x86_64-only dependencies</em> — only individual, dynamically-linked binaries. <a href="/blog/ubuntu-on-apple-silicon/">The Ubuntu post's Rosetta section</a> covers that limit concretely, including where it actually breaks. And if what's actually needed is a full x86_64 operating system rather than a handful of translated binaries inside an arm64 one, that's a different tool entirely — see <a href="/blog/can-you-run-x86-linux-on-apple-silicon/">can you install x86 Linux on an Apple Silicon Mac</a> for what Rosetta does and doesn't substitute for there.</p>
+
+      <p>Related reading: <a href="/blog/arm64-vs-x86-apple-silicon/">ARM64 vs. x86-64 on Apple Silicon</a> for how this fits alongside macOS-app Rosetta and multi-arch containers, <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu on Apple Silicon</a> for Rosetta's real-world limits, and <a href="/blog/how-virtualization-framework-works/">the device inventory post</a> for how VirtioFS devices work generally. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
