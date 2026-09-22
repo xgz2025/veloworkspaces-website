@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Disposable VM vs. Snapshot: What's the Difference? — Velo Workspaces</title>
+<meta name="description" content="Verified against the app's own source: a restore point copies a workspace's disk and saved state so you can go back to it. A disposable workspace deletes the bundle outright. Two real mechanisms, built for opposite goals.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/disposable-vm-vs-snapshot/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Disposable VM vs. Snapshot: What's the Difference?">
+<meta property="og:description" content="A restore point copies a workspace's disk and saved state so you can go back to it. A disposable workspace deletes the bundle outright.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/disposable-vm-vs-snapshot/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Fundamentals</span>
+        <h1>Disposable VM vs. Snapshot: What's the Difference?</h1>
+        <p class="article-lede"><a href="/blog/what-is-a-disposable-development-environment/">The conceptual answer</a> is that a snapshot preserves state on purpose, and a disposable environment discards it on purpose. This is the concrete version — what Velo Workspaces' own restore points actually copy on disk, and what "disposable" actually does instead, verified against the app's own source rather than asserted.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>What a restore point actually copies</h2>
+      <p>A Velo restore point is a real, literal copy: creating one copies the workspace's primary disk image, and — if the workspace was hibernated rather than just powered off — its saved VM state too, into a dedicated snapshot folder on disk. Restoring one reverses that copy, bringing the workspace's disk (and saved state, if the snapshot has one) back to exactly what it was at that moment. Restoring isn't destructive to fail into, either: the app backs up the workspace's <em>current</em> disk and state before overwriting anything, and rolls that backup back into place automatically if the restore itself hits an error partway through.</p>
+
+      <h2>What a disposable workspace does instead</h2>
+      <p>Nothing is copied or preserved at all — that's the entire point. Closing a Disposable Workspace deletes its bundle outright: the disk, any state on it, gone. There's no snapshot involved anywhere in that path, because a disposable workspace was never meant to be returned to. The next one you create doesn't restore from the one you just closed; it clones fresh from a base image, a separate, sealed artifact that was never part of the workspace you just threw away — see <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a> for that half of the mechanism.</p>
+
+      <h2>Why you'd reach for each</h2>
+      <p>A restore point is for a single working session you want to be able to rewind — take one before trying something risky (a migration, a config change you're not sure about), and if it goes wrong, restore rather than starting the whole environment over from scratch. Disposability is for the opposite goal: guaranteeing nothing from this run carries into the next one, which matters most exactly where <a href="/blog/what-is-a-disposable-development-environment/">the disposability post</a> covers it — testing, QA, and anywhere an AI agent's generated code is running.</p>
+
+      <h2>Not mutually exclusive</h2>
+      <p>These aren't competing features you pick one of forever — they answer different questions, and a single Mac's set of workspaces can use both at once. A long-lived project workspace might lean on restore points as checkpoints during a risky refactor, while a completely different, disposable workspace handles the next CI run with no snapshot involved at all. Which one a given workspace needs depends on whether you want to be able to go back to it, not on some general rule about which pattern is "better."</p>
+
+      <p>Related reading: <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment actually is</a>, <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>, and <a href="/blog/qa-devops-disposable-vm-workflow/">the disposable VM workflow for QA and DevOps</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
