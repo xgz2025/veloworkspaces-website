@@ -52,6 +52,8 @@
   <section class="section">
     <div class="container article-body">
 
+      <p><em>New to what a VM on Apple Silicon actually is? <a href="/blog/apple-silicon-vms-explained/">Start with the fundamentals</a> — this post picks up from there.</em></p>
+
       <h2>Four things actually determine VM performance</h2>
       <p>"Which hypervisor is fastest" is the wrong question — nearly every serious hypervisor on a given CPU architecture converges on similar numbers, because they're all constrained by the same four things: how expensive it is to trap from guest to host on the <strong>CPU</strong>, how much overhead the <strong>memory</strong> translation path adds, how <strong>interrupts</strong> get delivered into the guest, and whether <strong>I/O</strong> devices are emulated, paravirtualized, or handed to the guest directly. ARM and x86 answer these differently at the architecture level, and that's what actually explains why VM performance differs between platforms — not brand, not marketing.</p>
 

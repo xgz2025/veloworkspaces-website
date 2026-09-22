@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apple Silicon Virtual Machines, Explained — Velo Workspaces</title>
+<meta name="description" content="What a virtual machine actually is on an Apple Silicon Mac, how Virtualization.framework exposes Linux and macOS guests, why it's hardware virtualization rather than emulation, and when a VM is actually the right tool.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/apple-silicon-vms-explained/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Apple Silicon Virtual Machines, Explained">
+<meta property="og:description" content="What a virtual machine actually is on an Apple Silicon Mac, how Virtualization.framework exposes Linux and macOS guests, and when a VM is actually the right tool.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/apple-silicon-vms-explained/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Fundamentals</span>
+        <h1>Apple Silicon Virtual Machines, Explained</h1>
+        <p class="article-lede">Every other post on this blog assumes you already know what a virtual machine is on an Apple Silicon Mac, how it differs from emulation, and what Virtualization.framework actually gives you. This is the page that assumption points back to — the mechanics, not the marketing, and no benchmark numbers you can't find sourced elsewhere on this blog.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>What a virtual machine actually is</h2>
+      <p>A virtual machine is a complete, isolated copy of a computer running as software inside another computer. Not a sandboxed process, not a chroot, not a container sharing the host's kernel — a VM boots its own kernel, manages its own memory, and runs entirely unaware it isn't real hardware. The software that makes this possible, the <strong>hypervisor</strong>, sits between the guest OS and the physical CPU, intercepting the handful of privileged operations a guest can't be allowed to do directly (touching real physical memory it doesn't own, talking to real hardware devices) and letting everything else run at full speed.</p>
+      <p>That "everything else runs at full speed" part is the entire point, and it's also the part people most often get wrong when they haven't looked closely at how virtualization actually works on this hardware.</p>
+
+      <h2>Hardware virtualization, not emulation</h2>
+      <p>These two get conflated constantly, and the distinction matters for performance:</p>
+      <ul>
+        <li><strong>Emulation</strong> translates every instruction from one CPU architecture to another in software — an x86 emulator running on ARM has to decode and re-implement x86 instructions one at a time. It works for anything, and it's slow, because every single instruction pays a translation tax.</li>
+        <li><strong>Hardware virtualization</strong> runs the guest's instructions <em>directly</em> on the real CPU, at full native speed, and only traps to the hypervisor for the small set of operations that need arbitration — memory mapping, interrupts, device access. The guest and the host are the same architecture; the CPU itself has dedicated silicon for keeping them safely apart.</li>
+      </ul>
+      <p>A Linux VM on an Apple Silicon Mac is the second kind. ARM64 guest, ARM64 host, ARM64 silicon underneath — there's no instruction translation happening for the VM itself. (Rosetta is a separate, narrower thing layered on top for running <em>x86_64 binaries inside</em> an ARM64 Linux guest — not what makes the VM itself work. More on that below.)</p>
+
+      <h2>What Virtualization.framework actually gives you</h2>
+      <p>Apple's <a href="https://developer.apple.com/documentation/virtualization" target="_blank" rel="noopener">Virtualization.framework</a> is the high-level API for creating and managing VMs on Apple Silicon — the layer Velo Workspaces and most other VM apps on macOS are built on. A <code>VZVirtualMachineConfiguration</code> is where you declare what a VM gets: how much CPU and memory, a boot loader, and a list of devices. Those devices follow the <strong>VIRTIO</strong> specification — a standard set of paravirtualized interfaces for network, storage, socket, serial, entropy, and memory-balloon devices, so the guest talks to an efficient purpose-built interface instead of the hypervisor pretending to be a specific real piece of hardware. (The full mechanics of why paravirtualization is fast — and where it isn't the whole story — are in <a href="/blog/arm-virtualization-performance/">the performance deep dive</a>; this page stays at the "what exists" level.)</p>
+
+      <h2>Linux guests and macOS guests aren't the same offer</h2>
+      <p>Virtualization.framework supports two kinds of guests, and they come with different rules:</p>
+      <div class="article-table-wrap">
+        <table>
+          <thead><tr><th></th><th>Linux guest</th><th>macOS guest</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Runs on</td>
+              <td>Apple Silicon and Intel Macs</td>
+              <td>Apple Silicon Macs only</td>
+            </tr>
+            <tr>
+              <td>Image source</td>
+              <td>Official distro installer ISO</td>
+              <td>Official IPSW restore image, downloaded directly from Apple</td>
+            </tr>
+            <tr>
+              <td>x86_64 binary support</td>
+              <td>Rosetta for Linux, if the guest opts in</td>
+              <td>Not applicable — macOS guests only run Apple-silicon macOS</td>
+            </tr>
+            <tr>
+              <td>GPU acceleration</td>
+              <td>None — paravirtualized 2D framebuffer only</td>
+              <td>Real Metal-accelerated graphics</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>That last row surprises people. A macOS guest gets genuine hardware-accelerated graphics through Virtualization.framework's Mac-specific graphics device. A Linux guest doesn't — more on why below. See <a href="/blog/ubuntu-on-apple-silicon/">what's specifically different about Ubuntu</a>, or the full rundown of <a href="/blog/macos-guests-on-apple-silicon/">what a macOS guest actually gets</a> that a Linux one doesn't.</p>
+
+      <h2>CPU and memory: hardware-assisted, not simulated</h2>
+      <p>Under the hood, Apple's <a href="https://developer.apple.com/documentation/hypervisor" target="_blank" rel="noopener">Hypervisor framework</a> gives Virtualization.framework access to ARM's actual virtualization extensions — a dedicated CPU exception level for the hypervisor (EL2), and a second stage of memory translation so the guest can manage its own page tables while the host still controls what physical memory it can really touch. None of that is simulated in software; it's silicon built for exactly this. That's the short version — the full explanation of why it doesn't cost what you'd expect, with the actual numbers, is in <a href="/blog/arm-virtualization-performance/">the ARM virtualization performance deep dive</a>.</p>
+
+      <h2>Where the GPU story is different — and why AI Bridge exists</h2>
+      <p>This is the one real limitation worth knowing up front: Virtualization.framework gives a Linux guest <code>virtio-gpu</code>, a paravirtualized 2D framebuffer, with no path to the host's actual GPU — confirmed directly by Apple's own container team in <a href="https://github.com/apple/container/discussions/62" target="_blank" rel="noopener">public discussion</a>. It's a deliberate limitation, not a bug: there's no SR-IOV-equivalent standard yet for slicing up a GPU this way on Apple Silicon. That's a real constraint if what you want is a Linux VM doing GPU compute directly inside the guest.</p>
+      <p>It's also exactly why AI Bridge works the way it does, rather than trying to solve a problem the platform doesn't support: the model server stays on the host, on the real GPU, and the guest reaches it over a lightweight paravirtualized socket channel instead. See the <a href="/blog/ai-bridge-architecture/">full architecture</a> and <a href="/blog/zero-tax-virtualization/">the complete guide to running AI agents this way</a>.</p>
+
+      <h2>Where VM overhead actually comes from</h2>
+      <p>Four things, and only four: CPU trap cost, memory translation overhead, interrupt delivery, and I/O device access. Apple Silicon's hardware virtualization extensions make the first three cheap by design — dedicated exception level, TLB-cached two-stage translation, hardware-assisted interrupt delivery. The fourth, I/O, is where the paravirtualization-vs-passthrough tradeoff above actually shows up in practice. None of this is asserted here — it's measured, with real numbers, in <a href="/blog/arm-virtualization-performance/">the performance deep dive</a> and in <a href="/blog/vm-inference-benchmark/">the inference benchmark</a> this blog has published.</p>
+
+      <h2>When a VM is actually the right tool</h2>
+      <p>A VM makes sense when you need a genuinely separate kernel — a different OS entirely, a security boundary a shared-kernel container can't give you, or a clean, disposable environment you can throw away and recreate identically. It's the wrong tool when a container would do: if the workload just needs dependency isolation on the same Linux kernel, a container starts faster and uses less memory, and there's no reason to pay for a second kernel you don't need. That tradeoff — and where Docker Desktop, OrbStack, and a real disposable VM actually sit on it — is covered in <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">do you need a VM, or is a container enough?</a></p>
+
+      <p>Related reading: <a href="/blog/arm-virtualization-performance/">what actually determines VM performance on ARM</a>, <a href="/blog/ai-bridge-architecture/">the architecture behind AI Bridge</a>, and <a href="/blog/zero-tax-virtualization/">the complete guide</a> to running AI agents this way. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>

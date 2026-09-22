@@ -18,6 +18,7 @@ PAGES = [
 ENGLISH_ONLY_PAGES = [
     ("roadmap/", "weekly", "0.6"),
     ("blog/", "weekly", "0.7"),
+    ("blog/apple-silicon-vms-explained/", "monthly", "0.6"),
     ("blog/ai-bridge-data-privacy/", "monthly", "0.6"),
     ("blog/velo-vs-codespaces-vs-ona/", "monthly", "0.6"),
     ("blog/velo-vs-docker-desktop-vs-orbstack/", "monthly", "0.6"),
