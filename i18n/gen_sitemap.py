@@ -21,6 +21,7 @@ ENGLISH_ONLY_PAGES = [
     ("blog/apple-silicon-vms-explained/", "monthly", "0.6"),
     ("blog/how-virtualization-framework-works/", "monthly", "0.6"),
     ("blog/virtualization-framework-vs-qemu/", "monthly", "0.6"),
+    ("blog/vm-vs-container-vs-sandbox/", "monthly", "0.6"),
     ("blog/ai-bridge-data-privacy/", "monthly", "0.6"),
     ("blog/velo-vs-codespaces-vs-ona/", "monthly", "0.6"),
     ("blog/velo-vs-docker-desktop-vs-orbstack/", "monthly", "0.6"),
