@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
-from gen_locales import ALL_LOCALES, url_for, lang_switch_html, hreflang_tags, nav_prefix
+from gen_locales import ALL_LOCALES, url_for, lang_switch_html, hreflang_tags, nav_prefix, english_only_tag
 from content_home import HOME
 
 REPO = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
@@ -102,7 +102,7 @@ def render(code, seg, label):
         <a href="{p}/#features">{t['nav_features']}</a>
         <a href="{p}/#pricing">{t['nav_pricing']}</a>
         <a href="{p}/support/">{t['nav_support']}</a>
-        <a href="/roadmap/">{t['nav_roadmap']}</a>
+        <a href="/roadmap/">{t['nav_roadmap']}{english_only_tag(code)}</a>
       </span>
       {switcher}
       <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">{t['nav_download']}</a>
@@ -430,7 +430,7 @@ def render(code, seg, label):
       </a>
       <nav class="footer-links" aria-label="Footer">
         <a href="{p}/support/">{t['nav_support']}</a>
-        <a href="/roadmap/">{t['nav_roadmap']}</a>
+        <a href="/roadmap/">{t['nav_roadmap']}{english_only_tag(code)}</a>
         <a href="{p}/privacy/">{t['nav_privacy']}</a>
         <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
       </nav>

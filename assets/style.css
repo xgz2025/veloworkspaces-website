@@ -152,6 +152,14 @@ p:last-child { margin-bottom: 0; }
 }
 .site-nav a:not(.btn):hover { color: var(--color-text); text-decoration: none; }
 
+.nav-lang-tag {
+  font-size: 0.65em;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  opacity: 0.55;
+  vertical-align: super;
+}
+
 @media (max-width: 640px) {
   .site-nav .nav-links { display: none; }
 }

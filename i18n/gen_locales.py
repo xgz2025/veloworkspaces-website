@@ -59,5 +59,13 @@ def nav_prefix(seg):
     """Root-relative prefix for same-site links, '' for English, '/xx' for others."""
     return "" if seg == "" else f"/{seg}"
 
+def english_only_tag(code):
+    """Small inline marker for nav links to English-only pages (Blog, Roadmap) —
+    shown on every locale but English, since the link text is translated but the
+    destination content is not."""
+    if code == "en":
+        return ""
+    return ' <span class="nav-lang-tag">EN</span>'
+
 if __name__ == "__main__":
     print("locale registry ready:", [l[0] for l in ALL_LOCALES])
