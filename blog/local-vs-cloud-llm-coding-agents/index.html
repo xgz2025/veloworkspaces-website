@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Local LLM vs. Cloud LLM for Coding Agents — Velo Workspaces</title>
+<meta name="description" content="Not a verdict — a decision framework. Cloud models still win on raw capability and context; local models win on cost at volume, privacy, and offline reliability. What actually determines which one is right for a given agent workflow.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/local-vs-cloud-llm-coding-agents/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Local LLM vs. Cloud LLM for Coding Agents">
+<meta property="og:description" content="Cloud models win on raw capability and context; local models win on cost at volume, privacy, and offline reliability. A decision framework, not a verdict.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/local-vs-cloud-llm-coding-agents/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Fundamentals</span>
+        <h1>Local LLM vs. Cloud LLM for Coding Agents</h1>
+        <p class="article-lede">Not a verdict, because there isn't a universal one — this blog runs both local models and cloud-backed agents in isolated VMs, and the right choice genuinely depends on the workload. What actually determines it, laid out plainly rather than argued toward a predetermined answer.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>Where cloud models still clearly win</h2>
+      <p>Raw capability, first: the largest frontier cloud models remain meaningfully stronger than anything that fits in consumer unified memory, on the harder end of coding tasks — multi-file refactors, subtle bug diagnosis, reasoning through an unfamiliar codebase's architecture. That gap has narrowed considerably as local models and quantization have improved, but it hasn't closed, and pretending otherwise sets up a frustrating experience on genuinely hard problems. Context window is the second, related advantage: cloud models commonly offer context windows well beyond what's practical to hold in local unified memory at the same time as the model weights themselves — see <a href="/blog/llm-ram-requirements-mac/">the RAM math post</a> for exactly why KV cache, not weights, is what actually runs out first on a long local session.</p>
+      <p>Zero local setup is the third: point an agent at a cloud API key and it works immediately, with no model download, no quantization decision, no hardware ceiling to think about — genuinely the lower-friction path if you're not already committed to a local workflow.</p>
+
+      <h2>Where local models win</h2>
+      <p>Cost at volume is the most concrete: a local model's marginal cost per token, once downloaded, is electricity — no per-request billing, which matters a great deal for an agent that might make dozens of tool calls and self-corrections per task, each one a separate model invocation. <a href="/blog/vm-sandboxing-cost/">This blog's own benchmarks</a> quantify the isolation overhead side of that equation, but the API-cost side is the more consequential one for anyone running agents constantly rather than occasionally.</p>
+      <p>Privacy is the second, and it's categorical rather than a matter of degree for some workloads: a local model never sends your code anywhere, which matters directly for proprietary codebases, client work under an NDA, or anything regulatorily sensitive — <a href="/blog/ai-bridge-data-privacy/">the AI Bridge data privacy post</a> covers exactly what does and doesn't leave the Mac in Velo's own architecture. Offline reliability is the third: a local model keeps working on a plane, on a bad connection, or during a cloud provider's outage, none of which is hypothetical for anyone who's actually depended on a cloud API during an incident.</p>
+
+      <h2>The isolation question applies to both, differently</h2>
+      <p>Worth being clear about a common conflation: running a model locally and running an agent in an isolated VM are separate decisions, not the same one. <a href="/blog/zero-tax-virtualization/">This blog's own agent-isolation architecture</a> sandboxes the agent's <em>actions</em> — filesystem access, command execution — regardless of whether the model behind it runs on your GPU or a cloud API. A cloud-backed agent still benefits from VM isolation, for exactly the reasons covered in <a href="/blog/ai-agent-security-risks/">the AI agent security risks post</a>; a local model doesn't automatically make an ungoverned agent safer, because the risk lives in what the agent does, not in where the model's weights happen to live.</p>
+
+      <h2>A practical pattern, not a rule</h2>
+      <p>Plenty of real workflows split the difference rather than picking one exclusively: a local model for the high-volume, lower-stakes loop — linting fixes, small refactors, routine boilerplate, anything run constantly where cost and latency compound — and a cloud model reserved for the harder, less frequent problem that actually benefits from frontier capability. <a href="/blog/ai-bridge-architecture/">The AI Bridge architecture</a> supports pointing at either kind of backend from the same isolated agent setup, which makes switching a configuration change rather than a rebuild — worth designing for that flexibility even if you start out leaning one way.</p>
+
+      <h2>The actual decision</h2>
+      <ul>
+        <li><strong>Cost-sensitive, high-volume, or offline-dependent →</strong> lean local, and see <a href="/blog/llm-quantization-explained-mac/">the quantization post</a> for getting the most capability out of the memory you have.</li>
+        <li><strong>Privacy-critical or regulatorily sensitive →</strong> local isn't optional, it's the requirement — start there regardless of the capability tradeoff.</li>
+        <li><strong>Hard, infrequent, high-stakes problems →</strong> lean cloud, and isolate the agent regardless of which backend it's calling.</li>
+        <li><strong>Not sure yet →</strong> build the agent setup to support both from the start, and let real usage tell you where the balance actually sits.</li>
+      </ul>
+
+      <p>Related reading: <a href="/blog/llm-ram-requirements-mac/">how much RAM local LLMs need</a>, <a href="/blog/llm-quantization-explained-mac/">LLM quantization explained</a>, <a href="/blog/ai-bridge-data-privacy/">what actually leaves your Mac with AI Bridge</a>, and <a href="/blog/vm-sandboxing-cost/">what sandboxing an agent actually costs</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
