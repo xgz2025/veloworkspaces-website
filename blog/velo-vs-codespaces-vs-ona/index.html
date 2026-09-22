@@ -57,7 +57,7 @@
       <ul>
         <li><strong>GitHub Codespaces</strong> is a cloud-hosted dev container, deeply integrated with GitHub itself, billed by the compute-hour and by storage.</li>
         <li><strong>Ona</strong> — the product formerly known as Gitpod — is also a cloud-hosted environment, but as of its October 2025 relaunch it's positioned less as "your cloud IDE" and more as infrastructure for running AI coding agents at scale, priced in credits.</li>
-        <li><strong>Velo Workspaces</strong> runs locally, on a Mac you already own, as a one-time purchase with no usage-based billing at all.</li>
+        <li><strong>Velo Workspaces</strong> runs locally, on a Mac you already own. The app itself is free; AI Bridge and disposable workspaces — the two features this comparison is actually about — are part of Velo Workspaces Pro, a flat $3.99/month, $24.99/year, or $79.99 once for life, never metered by usage.</li>
       </ul>
       <p>If what you need is a dev environment reachable from any browser on any device, or a team onboarding flow where nobody installs anything locally, this article isn't going to talk you out of Codespaces. If you're weighing "cloud" against "local" as an actual tradeoff rather than assuming cloud is strictly more convenient, keep reading.</p>
 
@@ -68,13 +68,13 @@
           <tbody>
             <tr>
               <td>Price</td>
-              <td>$79.99, one time</td>
+              <td>Free app. Pro (AI Bridge, disposable workspaces, and more): $3.99/mo, $24.99/yr, or $79.99 once for life</td>
               <td>Free: 120 core-hours + 15 GB storage/mo. Beyond that: $0.18–$2.88/core-hour (by machine size) + $0.07/GiB-month storage.</td>
               <td>Core plan: $20/mo for 80–2,200 OCU credits, depending on tier</td>
             </tr>
             <tr>
               <td>Model</td>
-              <td>One-time purchase, no metering</td>
+              <td>Free download + flat-rate Pro subscription or lifetime purchase, never metered</td>
               <td>Usage-metered: compute-hours + storage, indefinitely</td>
               <td>Credit-based subscription</td>
             </tr>
@@ -92,8 +92,8 @@
       <h2>The other side of that tradeoff, fairly stated</h2>
       <p>None of this makes Codespaces or Ona the wrong choice generally — cloud environments genuinely solve problems local ones don't. Reachable from a browser on any device, including one that isn't a Mac at all. No local hardware requirements, so a contributor on a Chromebook or an iPad can still work. Easier to hand a running environment to a teammate or spin up dozens for a class or a hackathon without provisioning laptops. And it doesn't tie up your own machine's CPU, memory, or battery while it runs, since the compute lives elsewhere. Those are real advantages, not marketing.</p>
 
-      <h2>Metered vs. one-time, and why the usage pattern matters</h2>
-      <p>This blog has covered, more than once, that <a href="/blog/qa-devops-disposable-vm-workflow/">disposability works best as the default</a> — spin up a fresh environment per test run or per experiment, throw it away, repeat, rather than reusing one long-lived environment and hoping it's still clean. That exact usage pattern is precisely what racks up cost fastest under compute-hour-plus-storage billing: more environments created and destroyed means more billed hours and more storage-months, without a ceiling. Locally, after the one-time purchase, creating and discarding workspaces all day costs nothing more, no matter how many times you do it — the cost structure doesn't fight the workflow this blog has been describing.</p>
+      <h2>Metered vs. flat-rate, and why the usage pattern matters</h2>
+      <p>This blog has covered, more than once, that <a href="/blog/qa-devops-disposable-vm-workflow/">disposability works best as the default</a> — spin up a fresh environment per test run or per experiment, throw it away, repeat, rather than reusing one long-lived environment and hoping it's still clean. That exact usage pattern is precisely what racks up cost fastest under compute-hour-plus-storage billing: more environments created and destroyed means more billed hours and more storage-months, without a ceiling. Locally, once you're on Pro, creating and discarding workspaces all day costs nothing more, no matter how many times you do it — $3.99 a month (less, annualized, or nothing further after the one-time lifetime option) regardless of usage, because the cost structure doesn't fight the workflow this blog has been describing.</p>
 
       <h2>Which one should you actually use</h2>
       <ul>

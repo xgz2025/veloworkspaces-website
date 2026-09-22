@@ -381,6 +381,7 @@ def render(code, seg, label):
         <div class="card pricing-card pricing-card-pro">
           <span class="pricing-tier-name">{t['pricing_pro_tier']}</span>
           <p class="pricing-amount">{t['pricing_pro_amount']}<small>{t['pricing_pro_amount_unit']}</small></p>
+          <span class="trial-badge">{t['pricing_trial_badge']}</span>
           <p class="pricing-note">{t['pricing_pro_note']}</p>
           <ul class="feature-list">
             <li>{check_svg()} {t['pricing_pro_li1']}</li>

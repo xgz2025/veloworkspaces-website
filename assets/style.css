@@ -447,6 +447,17 @@ p:last-child { margin-bottom: 0; }
   font-size: 0.88rem;
 }
 .pricing-card .feature-list { margin: 20px 0 24px; flex-grow: 1; }
+.trial-badge {
+  display: inline-block;
+  align-self: flex-start;
+  margin-top: 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-accent-devops) 16%, transparent);
+  color: var(--color-accent-devops);
+}
 .pricing-tag {
   display: inline-block;
   font-size: 0.7rem;
