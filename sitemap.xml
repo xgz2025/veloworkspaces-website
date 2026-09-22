@@ -482,6 +482,11 @@
     <priority>0.3</priority>
   </url>
   <url>
+    <loc>https://www.veloworkspaces.com/roadmap/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.veloworkspaces.com/blog/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roadmap — Velo Workspaces</title>
+<meta name="description" content="What's shipped in Velo Workspaces, what's actively being built, and what's planned next — sourced from the app's own release notes, not a vote count.">
+<link rel="canonical" href="https://www.veloworkspaces.com/roadmap/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Roadmap — Velo Workspaces">
+<meta property="og:description" content="What's shipped, what's actively being built, and what's planned next for Velo Workspaces.">
+<meta property="og:url" content="https://www.veloworkspaces.com/roadmap/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/" aria-current="page">Roadmap</a>
+        <a href="/blog/">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <div class="article-header">
+        <span class="eyebrow">Roadmap</span>
+        <h1>What's shipped, what's in progress, and what's next.</h1>
+        <p class="article-lede">Pulled from the app's own release notes, not a vote count sitting at a number that never moves. If something here matters to you, or you want to see something that isn't, email us — see the bottom of this page.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Shipped</h2>
+
+      <div class="card" style="margin-bottom:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px;">
+          <h3 style="margin:0;">v1.1.0 <span class="roadmap-status shipped">Shipped</span></h3>
+          <span class="roadmap-date">September 2026</span>
+        </div>
+        <p>Velo Workspaces is now free to download. Anyone who already owns it keeps everything they paid for, permanently, at no further cost — nothing to restore, nothing to sign up for. New users can create and run as many Linux and macOS workspaces as they like for free, with the console, shared folders, SSH, the VS Code Remote helper, and diagnostics export all included.</p>
+        <p><strong>Velo Workspaces Pro</strong> adds five things — AI Bridge, restore points, disposable workspaces, base images, and Rosetta — for $3.99/month, $24.99/year, or $79.99 once for life, with a free week to try it. Pro gates <em>creating</em> new things; it never revokes access to what you already have. If a subscription ends, existing workspaces still start, restore points still restore, and base images still work. See the full breakdown on the <a href="/#pricing">pricing section</a>.</p>
+        <ul class="feature-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Diagnostics now opens in its own window, like Preferences</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Support and Feedback moved into the sidebar; the Help menu opens the support page in your language</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Fixed shared folders occasionally coming back in a different order after a relaunch</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Fixed CPU usage not updating in the Overview and Resources tabs</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px;">
+          <h3 style="margin:0;">v1.0.1 <span class="roadmap-status shipped">Shipped</span></h3>
+        </div>
+        <p>AI Bridge provider fixes and a real stability fix. Previously, every workspace forwarded its AI Bridge traffic to Ollama's default port (11434) no matter which provider was actually selected — if you ran MLX or llama-server on 8080, requests from the workspace arrived at a port with nothing listening. The bridge now forwards to the port the selected provider actually serves, and switching providers applies immediately, without a restart.</p>
+        <p>Also fixed: a real crash. An AI Bridge connection that closed while data was still in flight — a cancelled generation, a client timing out, a benchmark saturating the channel — could take the whole app down, along with every running workspace. Rare in ordinary use (a thousand consecutive streamed completions never triggered it), but a cancelled transfer reproduced it reliably.</p>
+        <ul class="feature-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Host provider is now selectable for disposable workspaces, at creation — the only moment it can be set before the workspace deletes itself</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Typed CPU, memory, or storage values in Advanced Settings are no longer discarded if the cursor was still in the field</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Lower latency on the AI Bridge connection to the inference server</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Clearer diagnostics: logs now show both the channel port a workspace dials and the host port its traffic forwards to</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2>In progress</h2>
+      <p style="max-width:640px; color:var(--color-text-secondary); margin-bottom:24px;">Actively being built. No committed release date — this section updates when that changes, not on a schedule.</p>
+      <div class="card">
+        <h3>NoCloud cidata seed for cloud and raw images <span class="roadmap-status in-progress">In progress</span></h3>
+        <p>Today, the official-image picker downloads a distro's installer ISO and boots it — you go through that distro's normal interactive install yourself. That's fine for an ISO, but it doesn't help with a cloud or raw disk image, which expects a small labeled seed volume (<code>user-data</code> and <code>meta-data</code>, the NoCloud <code>cidata</code> convention <a href="https://cloudinit.readthedocs.io/" target="_blank" rel="noopener">cloud-init</a> looks for) to create an account on first boot — without it, a cloud image has no way to know what username or password to set up, which is exactly the failure mode behind trying a Debian 13 nocloud raw image today.</p>
+        <p>The plan: build that seed volume locally (a small ISO9660 image containing the two files you configure) and attach it the same way the app already attaches an installer ISO — as a read-only virtual storage device, a mechanism that already exists for every Linux workspace. A cloud image with a seed attached boots straight to a working login in seconds, instead of requiring a full interactive install.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Planned</h2>
+      <p style="max-width:640px; color:var(--color-text-secondary); margin-bottom:24px;">Not yet started. Order isn't a commitment — it's roughly the order we'd expect to get to them.</p>
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>Guest OS auto-install <span class="roadmap-status planned">Planned</span></h3>
+          <p>Unattended installs for Ubuntu (autoinstall), Debian (preseed), and Fedora (kickstart) — automating the interactive installer itself, for scripted, repeatable provisioning. Builds on the same seed-volume mechanism as the NoCloud work above, extended to three distro-specific answer-file formats.</p>
+        </div>
+        <div class="card">
+          <h3>Scriptable workspace creation <span class="roadmap-status planned">Planned</span></h3>
+          <p>A custom URL scheme (<code>veloworkspaces://create?...</code>), invokable from any shell via <code>open</code> — triggering workspace actions from a script or a CI step without a new installed binary or a sandbox exception.</p>
+        </div>
+        <div class="card">
+          <h3>Shortcuts app / App Intents <span class="roadmap-status planned">Planned</span></h3>
+          <p>Native macOS Shortcuts support for common workspace actions, so they compose into your own automations without needing a terminal at all.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="text-align:center;">
+    <div class="container">
+      <h2>Have a request?</h2>
+      <p style="max-width:52ch; margin:0 auto 20px;">This page reflects what we're actually planning, not a poll — but if there's something you want that isn't here, we do read email.</p>
+      <a class="btn btn-primary" href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>

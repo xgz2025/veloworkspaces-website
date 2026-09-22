@@ -472,6 +472,36 @@ p:last-child { margin-bottom: 0; }
   vertical-align: middle;
 }
 
+/* ---------- Roadmap ---------- */
+
+.roadmap-status {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+.roadmap-status.shipped {
+  background: color-mix(in srgb, var(--color-accent-devops) 16%, transparent);
+  color: var(--color-accent-devops);
+}
+.roadmap-status.in-progress {
+  background: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  color: var(--color-primary);
+}
+.roadmap-status.planned {
+  background: color-mix(in srgb, var(--color-text-secondary) 14%, transparent);
+  color: var(--color-text-secondary);
+}
+.roadmap-date {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
 /* ---------- Benchmark strip (AI Bridge card) ---------- */
 
 .benchmark {

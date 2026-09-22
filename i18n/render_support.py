@@ -72,6 +72,7 @@ def render(code, seg, label):
         <a href="{p}/#features">{t['nav_features']}</a>
         <a href="{p}/#pricing">{t['nav_pricing']}</a>
         <a href="{p}/support/">{t['nav_support']}</a>
+        <a href="/roadmap/">{t['nav_roadmap']}</a>
         <a href="/blog/">{t['nav_blog']}</a>
       </span>
       {switcher}
@@ -305,6 +306,7 @@ sudo netplan apply</code></pre>
       </a>
       <nav class="footer-links" aria-label="Footer">
         <a href="/blog/">{t['nav_blog']}</a>
+        <a href="/roadmap/">{t['nav_roadmap']}</a>
         <a href="{p}/support/">{t['nav_support']}</a>
         <a href="{p}/privacy/">{t['nav_privacy']}</a>
         <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
