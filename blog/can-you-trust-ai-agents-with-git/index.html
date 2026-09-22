@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Can You Trust an AI Coding Agent With Your Git Repository? — Velo Workspaces</title>
+<meta name="description" content="Commits and pushes are the least interesting part. The real risk chain runs through dependency installs, Git hooks that bypass Git's own safety property, and what ends up committed without anyone meaning it to.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/can-you-trust-ai-agents-with-git/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Can You Trust an AI Coding Agent With Your Git Repository?">
+<meta property="og:description" content="The real risk chain runs through dependency installs, Git hooks, and what ends up committed without anyone meaning it to.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/can-you-trust-ai-agents-with-git/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Security</span>
+        <h1>Can You Trust an AI Coding Agent With Your Git Repository?</h1>
+        <p class="article-lede">"It can run <code>git commit</code>" isn't the interesting risk — <a href="/blog/how-ai-coding-agents-use-your-computer/">that's just the mechanism</a>, the same as any other command. The real risk chain runs through what a fresh clone's dependency install can trigger, a safety property of Git hooks that's easy to accidentally bypass, and what ends up committed without anyone specifically deciding it should be.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>Commits and pushes: not the interesting part</h2>
+      <p>An agent running <code>git add</code>, <code>git commit</code>, or <code>git push</code> is doing exactly what those commands always do — there's no special trust tier inside Git for who's typing. The access it needs to push — a credential helper, a loaded SSH key — is <a href="/blog/what-can-ai-agents-access-on-your-mac/">the same access already covered</a> for the account in general. That's real, but it's not specific to Git; it's the same filesystem-access story with a Git-shaped example.</p>
+
+      <h2>Where it actually gets interesting: hooks</h2>
+      <p>Git has a real, deliberate safety property most people don't know about: hooks live in <code>.git/hooks/</code>, which is <em>not</em> part of the tracked working tree — a plain <code>git clone</code> doesn't install a malicious hook script from the repository you just cloned, by design. That property is exactly what gets bypassed when a project uses a hook-management tool (Husky, the <code>pre-commit</code> framework, Lefthook) that version-controls hook scripts and symlinks or copies them into <code>.git/hooks/</code> as part of setup. Once that's happened, a hook committed to the repository — potentially by a PR, potentially by an agent — can execute automatically on the next commit or checkout, which is the exact safety property Git built in specifically not existing anymore for that project.</p>
+      <p>There's a documented CVE-class version of this too: a symlink pointing a checkout path at a submodule's hooks directory can cause a submodule's post-checkout hook to run unintentionally after checkout, patched in current Git but a real historical vulnerability class, not a theoretical one.</p>
+
+      <h2>The chain that actually matters: install scripts feed hooks</h2>
+      <p><a href="/blog/how-ai-coding-agents-use-your-computer/">Dependency installation already runs arbitrary code by design</a> — that's not new here. What's specific to Git is how directly that connects to the hooks problem above: an <code>npm install</code> in a project using Husky commonly runs a <code>postinstall</code> script that installs Git hooks as a normal, intended part of setup. An agent that clones a repository and runs its stated setup steps — exactly what it was asked to do — can end up with hooks installed that execute on every subsequent commit, without ever having been told "install a Git hook."</p>
+
+      <h2>What ends up committed isn't always what you'd have committed</h2>
+      <p>A human developer has an instinct for what shouldn't go in a commit — a stray <code>.env</code> file, a debug print with a token in it, a half-finished credential test. An agent doesn't have that instinct unless something explicitly gives it one; it stages and commits whatever the task seemed to call for. <a href="/blog/what-can-ai-agents-access-on-your-mac/">The realistic scenario covered separately</a> — an agent reading a <code>.env</code> file while debugging — becomes a genuinely different problem the moment that file's contents end up copied into a generated fix, a test fixture, or a commit message.</p>
+
+      <h2>The actual mitigation</h2>
+      <p>None of this is solved by asking the agent to be more careful — it's the same conclusion as everywhere else on this blog: the boundary has to sit outside the agent's own process. A disposable workspace that's discarded after the task, covered in <a href="/blog/what-is-a-disposable-development-environment/">what is a disposable development environment</a>, means a hook that got installed, or a credential that got read, doesn't outlive the session that caused it. Combined with the isolation levels in <a href="/blog/ai-agent-security-risks/">the security deep dive</a>, that's the actual answer — not a more disciplined agent, an environment where its mistakes don't compound.</p>
+
+      <p>Related reading: <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents use your computer</a>, <a href="/blog/what-can-ai-agents-access-on-your-mac/">what an agent can actually access</a>, and <a href="/blog/zero-tax-virtualization/">running AI agents safely in an isolated VM</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
