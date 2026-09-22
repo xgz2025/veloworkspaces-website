@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Linux VM Networking Works on Apple Silicon — Velo Workspaces</title>
+<meta name="description" content="Three genuinely different paths, not one: host to guest is direct, guest to the internet is transparent NAT, and an external LAN client needs an explicit port forward — with the real Caddy command that does it.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/linux-vm-networking-apple-silicon/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="How Linux VM Networking Works on Apple Silicon">
+<meta property="og:description" content="Host to guest is direct, guest to the internet is transparent NAT, and an external LAN client needs an explicit port forward.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/linux-vm-networking-apple-silicon/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Guide</span>
+        <h1>How Linux VM Networking Works on Apple Silicon</h1>
+        <p class="article-lede">"Can this VM reach the network" isn't one question — it's three, and each has a different answer. Host talking to guest, guest talking out to the internet, and something else on your LAN talking to the guest are three genuinely different paths, and only two of them work without you doing anything extra.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>The device underneath all three</h2>
+      <p>Every Linux guest gets a <code>VZVirtioNetworkDeviceConfiguration</code> paired with a <code>VZNATNetworkDeviceAttachment</code> — covered in <a href="/blog/how-virtualization-framework-works/">the device inventory post</a> — which puts the guest behind NAT on a private virtual subnet, with the Mac itself acting as the NAT gateway. Every network path below is a consequence of that one fact.</p>
+
+      <h2>Path 1: host to guest — direct, no extra step</h2>
+      <p>Because the host <em>is</em> the NAT gateway, it can already see into the guest's private subnet. Your Mac's own browser or terminal reaches a service running in the guest by its VM IP address directly — <code>http://&lt;VM_IP&gt;:&lt;port&gt;</code> — with nothing to configure. This is the path used throughout <a href="/blog/zero-tax-virtualization/">the complete AI agent guide</a> for reaching a web UI running inside the VM from the host's own browser.</p>
+
+      <h2>Path 2: guest to the internet — transparent NAT</h2>
+      <p>Outbound traffic from the guest works the ordinary way any NAT'd device's does: the guest gets a private address via DHCP, and the host's NAT translation handles everything going out. Nothing about this needs configuring either — it's the same shape as a laptop behind a home router reaching the wider internet.</p>
+
+      <h2>Path 3: an external LAN device to the guest — this one needs a forward</h2>
+      <p>This is the real gotcha, and it's worth understanding precisely rather than treating as a mystery: another machine on your LAN — a phone, a second Mac, anything that isn't the host itself — can't route directly into the guest's private virtual subnet the way the host can, because that subnet doesn't exist anywhere on the physical LAN. The fix is an explicit forward on the host, not a guest-side setting. A real, working example already used on this blog: <code>caddy reverse-proxy --from :8081 --to &lt;VM_IP&gt;:4096</code> makes the host listen on port 8081 and forward to the guest's port 4096, so any LAN device can reach <code>http://&lt;HOST_IP&gt;:8081</code> and land on the guest's service. The external port doesn't have to match the internal one — a genuinely useful property when the guest's own port is already claimed by something else on the host.</p>
+
+      <h2>One more detail: the guest's address doesn't drift</h2>
+      <p>Velo derives each guest's MAC address deterministically from the workspace's own ID rather than randomizing it — covered in <a href="/blog/how-virtualization-framework-works/">the device inventory post</a> — which is what lets a guest keep the same DHCP lease, and therefore the same VM IP, across restarts. Without that, the address in a Path 1 or Path 3 command above would be a moving target every time the workspace restarted.</p>
+
+      <h2>Why Path 3 needs a forward at all: NAT-only, for now</h2>
+      <p>Bridged networking — where the guest would get its own address directly on your LAN, making Path 3 as direct as Path 1 — requires the <code>com.apple.vm.networking</code> entitlement, which isn't yet part of the app. <a href="/blog/kali-linux-on-apple-silicon/">The Kali Linux post</a> covers a concrete case where this actually matters: a testing toolkit built around seeing other devices on the LAN runs into exactly this NAT boundary, which a manual port forward doesn't fully substitute for.</p>
+
+      <p>Related reading: <a href="/blog/how-virtualization-framework-works/">the Virtualization.framework device inventory</a>, <a href="/blog/zero-tax-virtualization/">the complete AI agent guide</a> this networking supports, and <a href="/blog/kali-linux-on-apple-silicon/">Kali Linux on Apple Silicon</a>, where the NAT boundary matters most concretely. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
