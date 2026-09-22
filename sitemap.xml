@@ -517,6 +517,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.veloworkspaces.com/blog/why-arm-vms-feel-native/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.veloworkspaces.com/blog/ai-bridge-data-privacy/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
