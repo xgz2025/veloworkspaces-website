@@ -68,6 +68,7 @@
         <li>The <strong>model</strong> runs on the host, on Ollama or MLX, with full native Metal GPU access.</li>
         <li><strong>AI Bridge</strong> connects the two over a direct vsock channel, so the agent inside the VM talks to the model exactly like it would talk to any local server.</li>
       </ul>
+      <p style="font-size:0.9rem; color:var(--color-text-secondary);"><em>Note: as of Ollama 0.19 (March 2026), Ollama itself runs on Apple's MLX framework on Macs with 32GB+ unified memory, rather than the separate llama.cpp-based engine described below — the two are less independent than this post's benchmarks originally found them.</em></p>
 
       <figure>
         <pre><code>┌───────────────────────────────────────────────────────────────────┐

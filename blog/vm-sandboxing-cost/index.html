@@ -64,6 +64,8 @@
 
       <p>That's the whole mechanism. The question that actually matters is what it costs you.</p>
 
+      <p style="font-size:0.9rem; color:var(--color-text-secondary);"><em>Note: the benchmarks below reflect MLX and Ollama as two independent engines, which they were at the time. As of Ollama 0.19 (March 2026), Ollama runs on MLX under the hood on Macs with 32GB+ unified memory — worth knowing before assuming this exact gap still holds on that hardware tier today.</em></p>
+
       <h2>Benchmark 1: MLX, single request — near-zero</h2>
       <p>Mac mini (Apple M4, 10 cores, 16GB RAM, macOS 26.6.2). Guest: Ubuntu Server 26.04 LTS, 4 vCPU, 4GB RAM. Model: <code>mlx-community/Qwen2.5-Coder-7B-Instruct-4bit</code> via <code>mlx_lm.server</code>. 5-run average, host vs. through the vsock bridge:</p>
       <figure>
