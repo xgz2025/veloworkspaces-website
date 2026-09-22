@@ -512,6 +512,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.veloworkspaces.com/blog/arm64-vs-x86-apple-silicon/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.veloworkspaces.com/blog/ai-bridge-data-privacy/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARM64 vs. x86-64 on Apple Silicon: What Developers Need to Know — Velo Workspaces</title>
+<meta name="description" content="Native ARM64 binaries, Rosetta 2 (two different mechanisms wearing the same name), universal binaries, Homebrew's split install paths, multi-arch containers, and which macOS CI runners are arm64-native now.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/arm64-vs-x86-apple-silicon/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="ARM64 vs. x86-64 on Apple Silicon: What Developers Need to Know">
+<meta property="og:description" content="Native ARM64 binaries, Rosetta 2, universal binaries, package managers, multi-arch containers, and which CI runners are arm64-native now.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/arm64-vs-x86-apple-silicon/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Fundamentals</span>
+        <h1>ARM64 vs. x86-64 on Apple Silicon: What Developers Need to Know</h1>
+        <p class="article-lede">"Rosetta" means two different things depending on whether you're talking about a macOS app or a Linux guest. Homebrew installs to two different places depending on which chip generation you're on. And whether your CI actually tests what ships depends on whether the runner matches the architecture your users are actually running. None of this is exotic — it's just scattered, and worth having in one place.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+      <h2>Native ARM64: the default now, not the exception</h2>
+      <p>Every Apple Silicon Mac's CPU is ARM64. A macOS app compiled for <code>arm64</code> runs directly on it, no translation involved — and so does a Linux guest running an <code>arm64</code> kernel and userland, which is what Virtualization.framework actually boots, covered in <a href="/blog/apple-silicon-vms-explained/">the VM fundamentals post</a>. This is the fast, unremarkable path: native code talking to native silicon. Everything below this section is about what happens when the software you need wasn't built for that.</p>
+
+      <h2>Rosetta 2 for macOS apps — and why it's a different thing from Rosetta for Linux</h2>
+      <p>This is worth being precise about, because the name is reused for two mechanically different things. <strong>Rosetta 2 for macOS apps</strong> is the host-level translation layer that lets an x86_64-only Mac app launch and run on Apple Silicon at all, transparently, the moment you double-click it — no setup, no opt-in. <strong>Rosetta for Linux</strong>, covered in depth in <a href="/blog/ubuntu-on-apple-silicon/">the Ubuntu on Apple Silicon post</a>, is a separate, guest-side mechanism: Velo Workspaces wires it into a Linux VM as a VirtioFS share plus a one-time <code>binfmt</code> registration, and it only translates binaries you explicitly ask it to, inside the guest. Same brand name, same underlying Apple technology, genuinely different integration point and different limits — don't assume a fact about one applies to the other.</p>
+      <p><strong>Universal binaries</strong> are the third piece of this picture, and the reason well-maintained macOS apps don't need Rosetta at all: a single app bundle can ship both an <code>arm64</code> slice and an <code>x86_64</code> slice, built with Apple's <code>lipo</code> tooling, and the OS picks the right one automatically at launch. An app that's still x86_64-only simply hasn't shipped that second slice yet — it's a build configuration gap, not a platform limitation.</p>
+
+      <h2>Package managers: two install prefixes, on purpose</h2>
+      <p>Homebrew makes this split visible in the filesystem itself: on Apple Silicon it installs to <code>/opt/homebrew</code>, while an Intel Mac (or a Rosetta-mode Homebrew install, launched via <code>arch -x86_64</code>) uses <code>/usr/local</code>. That's a deliberate choice, not an accident — Apple recommends third-party software use <code>/opt</code> on Apple Silicon rather than the historically Intel-associated <code>/usr/local</code>, and keeping two separate prefixes lets both hierarchies coexist without one silently shadowing the other. The same underlying problem shows up a level down inside a Linux guest, where a distro's arm64 ports repository doesn't always mirror every package available for amd64 — the exact gap covered concretely in <a href="/blog/ubuntu-on-apple-silicon/">the Ubuntu post's Rosetta section</a>.</p>
+
+      <h2>Containers: an image is really several images wearing one name</h2>
+      <p>A modern multi-arch container image isn't one image — it's a manifest list pointing at separate <code>arm64</code> and <code>amd64</code> builds, with the registry serving whichever one matches the pulling machine automatically. That's what makes <code>docker pull</code> "just work" identically on an Apple Silicon Mac and an x86 CI server for a well-maintained image. Ask for the architecture your machine doesn't have — <code>docker pull --platform linux/amd64</code> on Apple Silicon — and Docker Desktop doesn't magically run x86 code natively; it falls back to QEMU's software emulation under the hood, the same TCG mechanism covered in <a href="/blog/virtualization-framework-vs-qemu/">the Virtualization.framework vs. QEMU post</a>. It works, but it's genuinely emulated, not accelerated, and it's noticeably slower for anything CPU-heavy.</p>
+
+      <h2>CI/CD: check what your runner actually is</h2>
+      <p>This one has shifted recently enough to be worth stating plainly: GitHub Actions' <code>macos-26</code> label — the current default macOS runner — runs natively on Apple Silicon (<code>arm64</code>), with a separate <code>macos-26-intel</code> label for x64, and Intel-based macOS runners are being <a href="https://github.blog/changelog/2026-02-26-macos-26-is-now-generally-available-for-github-hosted-runners/" target="_blank" rel="noopener">phased out entirely by August 2027</a>. If your build matrix still assumes "the macOS runner" means x86_64, it's testing an architecture fewer and fewer of your actual users are running. Explicitly matching CI runner architecture to what ships is a small check worth adding, not an edge case.</p>
+
+      <h2>The practical version</h2>
+      <p>Architecture mismatch bites in a small number of predictable places: a dependency that only ships x86_64 binaries, a container image built without a multi-arch manifest, a CI runner testing the wrong architecture, or a Linux guest missing an arm64 package your distro's ports repo never built. None of these are Apple Silicon being unusually difficult — they're the ordinary cost of a platform transition that's now several years in, mostly finished, with a shrinking set of specific gaps rather than a blanket compatibility problem.</p>
+
+      <p>Related reading: <a href="/blog/apple-silicon-vms-explained/">what a VM on Apple Silicon actually is</a>, <a href="/blog/ubuntu-on-apple-silicon/">Rosetta for Linux in depth</a>, <a href="/blog/virtualization-framework-vs-qemu/">Virtualization.framework vs. QEMU</a>, and <a href="/blog/arch-linux-on-apple-silicon/">why Arch Linux has no official arm64 build at all</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
