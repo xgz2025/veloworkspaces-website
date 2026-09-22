@@ -35,6 +35,7 @@ ENGLISH_ONLY_PAGES = [
     ("blog/nixos-on-apple-silicon/", "monthly", "0.6"),
     ("blog/rocky-linux-on-apple-silicon/", "monthly", "0.6"),
     ("blog/best-linux-distro-apple-silicon/", "monthly", "0.6"),
+    ("blog/linux-server-vs-desktop-vm-mac/", "monthly", "0.6"),
     ("blog/ai-bridge-data-privacy/", "monthly", "0.6"),
     ("blog/velo-vs-codespaces-vs-ona/", "monthly", "0.6"),
     ("blog/velo-vs-docker-desktop-vs-orbstack/", "monthly", "0.6"),
