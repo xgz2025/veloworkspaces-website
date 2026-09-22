@@ -119,7 +119,7 @@ def render(code, seg, label):
       </div>
 
       <div class="card">
-        <h3>{t['gs2_h3']}</h3>
+        <h3>{t['gs2_h3']}<span class="pricing-tag">{t['pro_tag']}</span></h3>
         <ol class="steps" style="margin-top:20px;">
           <li>
             <div>
@@ -184,7 +184,7 @@ def render(code, seg, label):
       </div>
 
       <div class="faq-group">
-        <h2>{t['faq_rosetta_h2']}</h2>
+        <h2>{t['faq_rosetta_h2']}<span class="pricing-tag">{t['pro_tag']}</span></h2>
         <details class="faq-item">
           <summary>{t['faq_rosetta_deb_q']}</summary>
           <div class="faq-answer">
@@ -203,7 +203,7 @@ def render(code, seg, label):
       </div>
 
       <div class="faq-group">
-        <h2>{t['faq_aib_h2']}</h2>
+        <h2>{t['faq_aib_h2']}<span class="pricing-tag">{t['pro_tag']}</span></h2>
         <details class="faq-item">
           <summary>{t['faq_aib_q']}</summary>
           <div class="faq-answer">
@@ -238,7 +238,7 @@ def render(code, seg, label):
           </div>
         </details>
         <details class="faq-item">
-          <summary>{t['faq_disp2_q']}</summary>
+          <summary>{t['faq_disp2_q']}<span class="pricing-tag">{t['pro_tag']}</span></summary>
           <div class="faq-answer">
             <p>{t['faq_disp2_a_pre']} <strong>{t['faq_disp2_a_strong']}</strong> {t['faq_disp2_a_post']}</p>
           </div>

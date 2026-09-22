@@ -2,6 +2,7 @@
 SUPPORT = {}
 
 SUPPORT["en"] = dict(
+    pro_tag="Pro",
     title="Support &amp; FAQ — Velo Workspaces",
     meta_description="Getting started with Velo Workspaces, how to use Disposable Workspaces, enabling Rosetta on Fedora and Debian, shared folder access, clipboard troubleshooting, and more.",
     og_title="Support & FAQ — Velo Workspaces",
@@ -143,6 +144,7 @@ sudo systemctl restart systemd-binfmt""",
 )
 
 SUPPORT["de"] = dict(
+    pro_tag="Pro",
     title="Support &amp; FAQ — Velo Workspaces",
     meta_description="Erste Schritte mit Velo Workspaces, Nutzung von Einweg-Arbeitsbereichen, Aktivieren von Rosetta unter Fedora und Debian, Zugriff auf gemeinsame Ordner, Fehlerbehebung bei der Zwischenablage und mehr.",
     og_title="Support & FAQ — Velo Workspaces",
@@ -284,6 +286,7 @@ sudo systemctl restart systemd-binfmt""",
 )
 
 SUPPORT["fr"] = dict(
+    pro_tag="Pro",
     title="Support &amp; FAQ — Velo Workspaces",
     meta_description="Prise en main de Velo Workspaces, comment utiliser les espaces de travail jetables, activer Rosetta sur Fedora et Debian, accès aux dossiers partagés, dépannage du presse-papiers, et plus.",
     og_title="Support & FAQ — Velo Workspaces",
@@ -425,6 +428,7 @@ sudo systemctl restart systemd-binfmt""",
 )
 
 SUPPORT["it"] = dict(
+    pro_tag="Pro",
     title="Supporto &amp; FAQ — Velo Workspaces",
     meta_description="Guida introduttiva a Velo Workspaces, come usare i workspace usa e getta, abilitare Rosetta su Fedora e Debian, accesso alle cartelle condivise, risoluzione problemi degli appunti, e altro.",
     og_title="Supporto & FAQ — Velo Workspaces",
@@ -566,6 +570,7 @@ sudo systemctl restart systemd-binfmt""",
 )
 
 SUPPORT["es"] = dict(
+    pro_tag="Pro",
     title="Soporte y preguntas frecuentes — Velo Workspaces",
     meta_description="Primeros pasos con Velo Workspaces, cómo usar los espacios de trabajo desechables, activar Rosetta en Fedora y Debian, acceso a carpetas compartidas, solución de problemas del portapapeles, y más.",
     og_title="Soporte y preguntas frecuentes — Velo Workspaces",
@@ -707,6 +712,7 @@ sudo systemctl restart systemd-binfmt""",
 )
 
 SUPPORT["pt-BR"] = dict(
+    pro_tag="Pro",
     title="Suporte e FAQ — Velo Workspaces",
     meta_description="Primeiros passos com o Velo Workspaces, como usar workspaces descartáveis, ativar o Rosetta no Fedora e Debian, acesso a pastas compartilhadas, solução de problemas da área de transferência, e mais.",
     og_title="Suporte e FAQ — Velo Workspaces",
@@ -848,6 +854,7 @@ sudo systemctl restart systemd-binfmt""",
 )
 
 SUPPORT["ja"] = dict(
+    pro_tag="Pro",
     title="サポート & FAQ — Velo Workspaces",
     meta_description="Velo Workspaces の使い始め方、使い捨てワークスペースの使い方、Fedora と Debian での Rosetta の有効化、共有フォルダへのアクセス、クリップボードのトラブルシューティングなど。",
     og_title="サポート & FAQ — Velo Workspaces",
@@ -989,6 +996,7 @@ sudo systemctl restart systemd-binfmt""",
 )
 
 SUPPORT["ko"] = dict(
+    pro_tag="Pro",
     title="지원 및 FAQ — Velo Workspaces",
     meta_description="Velo Workspaces 시작하기, 일회용 워크스페이스 사용법, Fedora와 Debian에서 Rosetta 활성화, 공유 폴더 접근, 클립보드 문제 해결 등.",
     og_title="지원 및 FAQ — Velo Workspaces",
@@ -1130,6 +1138,7 @@ sudo systemctl restart systemd-binfmt""",
 )
 
 SUPPORT["zh-Hans"] = dict(
+    pro_tag="Pro",
     title="支持与常见问题 — Velo Workspaces",
     meta_description="Velo Workspaces 入门指南、如何使用用后即焚工作区、在 Fedora 与 Debian 上启用 Rosetta、共享文件夹访问、剪贴板故障排查等。",
     og_title="支持与常见问题 — Velo Workspaces",
@@ -1271,6 +1280,7 @@ sudo systemctl restart systemd-binfmt""",
 )
 
 SUPPORT["zh-Hant"] = dict(
+    pro_tag="Pro",
     title="支援與常見問題 — Velo Workspaces",
     meta_description="Velo Workspaces 入門指南、如何使用用後即焚工作區、在 Fedora 與 Debian 上啟用 Rosetta、共用資料夾存取、剪貼簿疑難排解等。",
     og_title="支援與常見問題 — Velo Workspaces",
