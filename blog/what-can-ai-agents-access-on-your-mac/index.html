@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Can an AI Coding Agent Actually Access on Your Mac? — Velo Workspaces</title>
+<meta name="description" content="A concrete inventory of what actually lives in a typical home directory — SSH keys, cloud credentials, GitHub CLI tokens, shell history — and a realistic scenario of an agent touching all of it without any malicious intent at all.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/what-can-ai-agents-access-on-your-mac/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="What Can an AI Coding Agent Actually Access on Your Mac?">
+<meta property="og:description" content="A concrete inventory of what actually lives in a typical home directory, and a realistic scenario of an agent touching all of it without any malicious intent at all.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/what-can-ai-agents-access-on-your-mac/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Security</span>
+        <h1>What Can an AI Coding Agent Actually Access on Your Mac?</h1>
+        <p class="article-lede"><a href="/blog/how-ai-coding-agents-use-your-computer/">The mechanism</a> is that an agent can read whatever your account can read. This is the concrete inventory: what actually lives in a typical home directory worth worrying about, and a realistic scenario where an agent touches all of it doing nothing malicious at all.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>The inventory, specifically</h2>
+      <p>Not a hypothetical list — these are real, common paths that exist on most developer Macs, unremarkable to the tools that put them there:</p>
+      <ul>
+        <li><strong>SSH keys</strong> — <code>~/.ssh/</code>, private keys with no passphrase in many developer setups, ready to authenticate to every server and Git host they're registered with.</li>
+        <li><strong>Cloud credentials</strong> — <code>~/.aws/credentials</code>, plaintext access keys for an AWS account, often with far broader permissions than whatever task they were originally set up for.</li>
+        <li><strong>GitHub CLI tokens</strong> — <code>~/.config/gh/hosts.yml</code> (or the OS keyring, depending on configuration), enough to act as you against every repository your account can reach.</li>
+        <li><strong>Container registry auth</strong> — <code>~/.docker/config.json</code>, credentials for whatever private registries you've logged into.</li>
+        <li><strong>Package manager tokens</strong> — <code>~/.npmrc</code> can carry an npm auth token with publish access to your packages.</li>
+        <li><strong>Shell history</strong> — <code>~/.bash_history</code> or <code>~/.zsh_history</code>, a plaintext log that often includes commands with credentials pasted directly into them.</li>
+        <li><strong>Project-local secrets</strong> — <code>.env</code> files, sitting in the working directory of whatever project the agent was pointed at, often already in <code>.gitignore</code> specifically because they're not meant to leave the machine.</li>
+        <li><strong>Browser data</strong> — session cookies and saved credentials, stored on disk in whatever format the browser uses, readable by anything with filesystem access to the profile directory.</li>
+      </ul>
+
+      <h2>A realistic scenario — no malice required</h2>
+      <p>Here's the version that doesn't need a hypothetical attacker at all. You ask an agent to debug why a deploy script keeps failing. In the course of investigating, it runs <code>aws configure list</code> to check what credentials are active, greps the project directory for anything mentioning the failing service — which happens to include a <code>.env</code> file with a database password — and, trying to reproduce the failure locally, reads <code>~/.ssh/config</code> to understand how the deploy target is reached. None of that is the agent doing anything wrong. It's exactly what a competent engineer troubleshooting the same problem would look at. The difference is that a human engineer has judgment about what to do with a credential they stumble across; an agent's next action is just whatever the model decides comes next, and if that decision gets steered by something it wasn't supposed to trust — a comment in a file, a string in a bug report — there's no human pause between "read the credential" and "use it."</p>
+
+      <h2>Why this list, not a scarier one</h2>
+      <p>None of the above requires an agent that's been compromised, jailbroken, or is acting outside its instructions. It's what's reachable by design, the moment an agent runs with the same filesystem access as the account that launched it — which is the whole point of <a href="/blog/how-ai-coding-agents-use-your-computer/">the mechanism post</a> this one builds on. The fix isn't a smarter agent that knows not to look at these files; it's running the agent somewhere this list simply isn't reachable at all, covered in <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>.</p>
+
+      <p>Related reading: <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents use your computer</a>, <a href="/blog/ai-agent-security-risks/">what actually goes wrong when an agent runs unsandboxed</a>, and <a href="/blog/zero-tax-virtualization/">running AI agents safely in an isolated VM</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>

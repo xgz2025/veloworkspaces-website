@@ -28,6 +28,7 @@ ENGLISH_ONLY_PAGES = [
     ("blog/llm-ram-requirements-mac/", "monthly", "0.6"),
     ("blog/what-is-a-disposable-development-environment/", "monthly", "0.6"),
     ("blog/how-ai-coding-agents-use-your-computer/", "monthly", "0.6"),
+    ("blog/what-can-ai-agents-access-on-your-mac/", "monthly", "0.6"),
     ("blog/ai-bridge-data-privacy/", "monthly", "0.6"),
     ("blog/velo-vs-codespaces-vs-ona/", "monthly", "0.6"),
     ("blog/velo-vs-docker-desktop-vs-orbstack/", "monthly", "0.6"),
