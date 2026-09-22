@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Much RAM Do You Need for Local LLMs on a Mac? — Velo Workspaces</title>
+<meta name="description" content="The actual math behind a model's memory footprint — weights, KV cache, and why a model that fits fine at first can run out of memory an hour into a long session.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/llm-ram-requirements-mac/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="How Much RAM Do You Need for Local LLMs on a Mac?">
+<meta property="og:description" content="The actual math behind a model's memory footprint — weights, KV cache, and why a model that fits fine at first can run out of memory later.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/llm-ram-requirements-mac/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Guide</span>
+        <h1>How Much RAM Do You Need for Local LLMs on a Mac?</h1>
+        <p class="article-lede">This blog already has <a href="/blog/zero-tax-virtualization/">a tier-by-tier table</a> for the specific models it recommends. This is the math behind it — so you can work out the answer for any model, not just the ones already tabulated, and understand why a model that fit fine when you started a session can run out of room an hour later.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>Two numbers, not one</h2>
+      <p>A model's memory footprint isn't a single static figure — it's two genuinely different things added together: the <strong>weights</strong>, which are fixed the moment you pick a model and a quantization level, and the <strong>KV cache</strong>, which grows as a conversation gets longer. Sizing for weights alone is the mistake that makes a model work fine in a quick test and then run out of memory in a real session.</p>
+
+      <h2>Weights: the simple part</h2>
+      <p>Weight memory is roughly parameter count times bytes-per-parameter. A model's name tells you the first number — "7B" means 7 billion parameters — and quantization tells you the second: 4-bit quantization is roughly 0.5 bytes per parameter, so a 7B model at 4-bit lands around 3.5GB just for weights. Double the bit-width and you roughly double that figure. This is the part every model card and download page already tells you, directly or indirectly, and it's the part most "how much RAM" answers stop at — which is exactly the gap that causes surprises later.</p>
+
+      <h2>KV cache: the part that grows on you</h2>
+      <p>The key-value cache stores intermediate attention state for every token in the current context, and unlike weights, it scales with how long the conversation gets. The actual formula: <code>2 × layers × KV-heads × head-dimension × tokens × bytes-per-element</code> — each of those numbers is in the model's own config, and most inference tools will report the resulting figure directly rather than making you compute it by hand. The practical upshot is what matters here: for a short exchange, weights dominate and KV cache is nearly irrelevant. For a long agentic session with a large context window — exactly the kind of multi-turn, tool-calling conversation an AI coding agent produces — KV cache can grow to rival or exceed the weights themselves. That's the mechanism behind "it worked when I started, then got slow or crashed later": nothing changed about the model, the context just kept growing.</p>
+
+      <h2>The other consumer: macOS itself</h2>
+      <p>Unified memory means the model isn't the only thing drawing from the pool — the OS and display compositor need their share too, which is why <a href="/blog/zero-tax-virtualization/">the existing model-sizing table</a> reserves roughly 20–25% of total RAM for that overhead before budgeting the rest. That reserve isn't a made-up safety margin; it's covering real, measured system usage that doesn't show up in a naive "weights + KV cache" calculation.</p>
+
+      <h2>Putting it together</h2>
+      <p>A workable estimate for any model, not just the ones already tabulated on this blog: take the parameter count times bytes-per-parameter for weights, add a KV cache estimate scaled to how long a session you actually expect (short chat: small; long agentic session: meaningfully more), then make sure the total leaves that 20–25% headroom for macOS. If a model's weights alone already eat most of your unified memory, there's no room left for KV cache to grow into — that's the model to size down, not the one to fight with swap.</p>
+
+      <h2>What it looks like when you get it wrong</h2>
+      <p>Memory pressure on a Mac doesn't usually announce itself as a hard crash — it shows up as swapping, and an inference engine that was fast a minute ago suddenly isn't, with no error message pointing at the actual cause. If a model that felt snappy at the start of a session gets progressively slower rather than staying consistent, check context length and KV cache growth before assuming something's wrong with the model or the engine itself.</p>
+
+      <p>Related reading: <a href="/blog/zero-tax-virtualization/">the tier-by-tier model table this post explains the math behind</a>, <a href="/blog/local-llms-apple-silicon/">the broader landscape of local LLM tools</a>, and <a href="/blog/how-virtualization-framework-works/">the memory-balloon device</a> that handles the VM side of memory allocation. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
