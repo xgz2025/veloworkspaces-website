@@ -41,6 +41,7 @@ ENGLISH_ONLY_PAGES = [
     ("blog/one-vm-per-git-branch/", "monthly", "0.6"),
     ("blog/clean-room-bug-reproduction/", "monthly", "0.6"),
     ("blog/disposable-vms-untrusted-software/", "monthly", "0.6"),
+    ("blog/disposable-workspaces-devops-ci/", "monthly", "0.6"),
     ("blog/ai-bridge-data-privacy/", "monthly", "0.6"),
     ("blog/velo-vs-codespaces-vs-ona/", "monthly", "0.6"),
     ("blog/velo-vs-docker-desktop-vs-orbstack/", "monthly", "0.6"),
