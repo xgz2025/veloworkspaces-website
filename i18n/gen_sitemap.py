@@ -77,6 +77,10 @@ ENGLISH_ONLY_PAGES = [
     ("blog/how-much-memory-linux-vm-mac/", "monthly", "0.6"),
     ("blog/how-many-linux-vms-apple-silicon/", "monthly", "0.6"),
     ("blog/vm-startup-performance-apple-silicon/", "monthly", "0.6"),
+    ("blog/apple-containers-vs-linux-vms/", "monthly", "0.6"),
+    ("blog/apple-containers-vs-docker-vs-orbstack/", "monthly", "0.6"),
+    ("blog/local-vs-cloud-development-environments/", "monthly", "0.6"),
+    ("blog/modern-local-development-stack-apple-silicon/", "monthly", "0.7"),
 ]
 
 def alternates_block(path, indent="    "):

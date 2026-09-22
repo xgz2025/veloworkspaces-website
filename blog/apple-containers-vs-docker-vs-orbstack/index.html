@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apple Containers vs. Docker Desktop vs. OrbStack — Velo Workspaces</title>
+<meta name="description" content="A one-VM-per-container tool that ships free and Apache-licensed, up against two mature, shared-VM tools with the ecosystem Apple's doesn't have yet. What Apple Containers actually gets right, and what it's honestly still missing.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/apple-containers-vs-docker-vs-orbstack/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Apple Containers vs. Docker Desktop vs. OrbStack">
+<meta property="og:description" content="A one-VM-per-container tool that's free and Apache-licensed, up against two mature, shared-VM tools with the ecosystem Apple's doesn't have yet.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/apple-containers-vs-docker-vs-orbstack/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Comparison</span>
+        <h1>Apple Containers vs. Docker Desktop vs. OrbStack</h1>
+        <p class="article-lede">Not a Velo Workspaces comparison — Apple's own <code>container</code> tool doesn't compete with what Velo does at all, covered separately in <a href="/blog/apple-containers-vs-linux-vms/">Apple Containers vs. Linux VMs</a>. This is squarely about the three real options for running containers on a Mac today, and what's genuinely different about the newest of the three.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>Three different answers to "how do I get a Linux kernel on this Mac"</h2>
+      <p>All three tools solve the same underlying problem — macOS has no Linux kernel of its own, so running Linux containers means getting one from somewhere — but they solve it differently enough that "which is fastest" undersells the actual differences. <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">Docker Desktop and OrbStack</a> both run every container inside one shared Linux VM; Apple's own tool, reaching a stable 1.0 in June 2026 after its WWDC 2025 introduction, gives each container its own dedicated, lightweight VM instead, built directly on Virtualization.framework — the architecture covered in full in <a href="/blog/apple-containers-vs-linux-vms/">the companion post</a>.</p>
+
+      <h2>What Apple's tool actually gets right</h2>
+      <ul>
+        <li><strong>Stronger isolation by default, with no extra setup.</strong> Every container getting its own VM instead of sharing one means a kernel-level compromise in one container doesn't automatically reach the others — the same isolation-tier distinction this blog's <a href="/blog/ai-agent-security-risks/">security deep dive</a> covers for containers vs. VMs generally, except here it comes free with the default configuration rather than requiring you to reach for it.</li>
+        <li><strong>Genuinely fast for what it's built to do.</strong> A purpose-built minimal kernel with a small Swift init process is reported to boot in under a second — tuned specifically for spinning up one container quickly, not for general-purpose use.</li>
+        <li><strong>Free and open source, with no commercial-use catch.</strong> Apache-licensed, no company-size or revenue threshold that triggers a paid tier the way Docker Desktop's licensing does, no personal-vs-commercial split the way OrbStack's does.</li>
+        <li><strong>OCI-compatible, so existing images and workflows aren't stranded.</strong> Docker Hub images run unmodified; anything built with it pushes to any standard registry.</li>
+      </ul>
+
+      <h2>What it's honestly still missing</h2>
+      <p>Worth being direct about this rather than treating a 1.0 release as feature-complete: Apple's tool is Apple Silicon-only, with no path for an Intel Mac. There's no Docker Compose equivalent for orchestrating multi-container setups, and no confirmed native Kubernetes integration — both real gaps if your workflow already depends on either. It's also simply newer, with a far smaller ecosystem of tutorials, Stack Overflow answers, and CI integrations built up around it than Docker has accumulated over a decade. None of that makes it a bad tool; it makes it a young one, in the specific ways young tools are young.</p>
+
+      <h2>Where Docker Desktop and OrbStack still win</h2>
+      <p><a href="/blog/velo-vs-docker-desktop-vs-orbstack/">The full comparison</a> covers both in depth, but the short version relevant here: Docker Desktop remains the industry default that every tutorial, CI config, and onboarding doc assumes, with the largest ecosystem by a wide margin and its own newer first-party VM backend (Docker VMM) aimed at closing the performance gap. OrbStack's own published numbers claim substantial filesystem-performance advantages over Docker Desktop's default backend, specifically on small-file and metadata-heavy operations — real numbers worth checking against your own workload rather than assuming they generalize, but a genuine, measured strength of its purpose-built VM implementation. Both also support macOS on Intel; Apple's tool doesn't.</p>
+
+      <h2>Which one to actually reach for</h2>
+      <ul>
+        <li><strong>Already deep in Docker's ecosystem — Compose, Kubernetes, CI configs built around it.</strong> Stay on Docker Desktop; nothing here is worth the migration friction yet.</li>
+        <li><strong>Want the fastest filesystem performance for a container-heavy local workflow.</strong> OrbStack's own benchmarks are worth testing against your specific workload before committing to the subscription.</li>
+        <li><strong>Want free, strong-isolation-by-default containers on Apple Silicon, and your workflow doesn't need Compose or Kubernetes.</strong> Apple's <code>container</code> is a genuinely good, no-cost fit — just budget for a smaller ecosystem around it than Docker's.</li>
+      </ul>
+
+      <p>Related reading: <a href="/blog/apple-containers-vs-linux-vms/">Apple Containers vs. Linux VMs</a> for how Apple's tool relates to a full Velo workspace rather than to other container tools, <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">the full Docker Desktop and OrbStack comparison</a>, and <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a> for the general isolation primer. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>

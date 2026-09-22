@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Modern Local Development Stack on Apple Silicon — Velo Workspaces</title>
+<meta name="description" content="A map through everything this blog covers: Apple Silicon virtualization fundamentals, running Linux and AI agents locally, disposable workspace workflows, real performance numbers, and how it all compares to the alternatives — organized as one path, not 60 separate posts.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/modern-local-development-stack-apple-silicon/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="The Modern Local Development Stack on Apple Silicon">
+<meta property="og:description" content="A map through everything this blog covers, organized as one path: fundamentals, Linux and AI agents locally, disposable workflows, real numbers, and how it compares.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/modern-local-development-stack-apple-silicon/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Guide</span>
+        <h1>The Modern Local Development Stack on Apple Silicon</h1>
+        <p class="article-lede">This blog has grown into dozens of posts, each answering one specific question well. This one is different on purpose: a map through the whole stack — what a VM on Apple Silicon actually is, running Linux and AI agents locally, building a disposable-by-default workflow, what things actually cost, and how it compares to the alternatives — organized as one coherent path instead of a flat list.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>Start with what's actually running under you</h2>
+      <p>Everything else on this page builds on one mechanism: <a href="/blog/apple-silicon-vms-explained/">Apple Silicon Virtual Machines, Explained</a> covers what Virtualization.framework actually is, and <a href="/blog/how-virtualization-framework-works/">how it works</a> goes device by device — boot loaders, storage, networking, the platform-identity gotcha that silently breaks hibernate. If you're deciding between virtualization and the alternatives, <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a> and <a href="/blog/virtualization-framework-vs-qemu/">Virtualization.framework vs. QEMU</a> cover the actual isolation and emulation-reach tradeoffs, not marketing claims. And <a href="/blog/arm64-vs-x86-apple-silicon/">ARM64 vs. x86-64</a> plus <a href="/blog/why-arm-vms-feel-native/">why ARM VMs feel native</a> cover the architecture underneath all of it.</p>
+
+      <h2>Pick a Linux distro, and know its actual gotchas</h2>
+      <p>Every mainstream distro runs natively on Apple Silicon now, but "runs" isn't the same as "nothing to know" — this blog has a dedicated, source-verified post per distro: <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu</a>, <a href="/blog/debian-on-apple-silicon/">Debian</a>, <a href="/blog/fedora-on-apple-silicon/">Fedora</a>, <a href="/blog/arch-linux-on-apple-silicon/">Arch</a>, <a href="/blog/kali-linux-on-apple-silicon/">Kali</a>, <a href="/blog/nixos-on-apple-silicon/">NixOS</a>, and <a href="/blog/rocky-linux-on-apple-silicon/">Rocky</a>, plus <a href="/blog/best-linux-distro-apple-silicon/">a roundup on which one actually fits your workload</a>, <a href="/blog/linux-server-vs-desktop-vm-mac/">server vs. desktop images</a>, and <a href="/blog/linux-vm-networking-apple-silicon/">how VM networking actually works</a>. Need something outside Linux entirely? See <a href="/blog/macos-guests-on-apple-silicon/">running macOS guests</a>.</p>
+
+      <h2>When arm64 alone isn't enough</h2>
+      <p>x86 software doesn't just disappear on Apple Silicon — <a href="/blog/rosetta-2-linux-vms-explained/">Rosetta 2 in Linux VMs</a> covers the real mechanism for translating individual binaries, <a href="/blog/can-you-run-x86-linux-on-apple-silicon/">can you install x86 Linux at all</a> answers the whole-OS version of that question honestly, and <a href="/blog/running-x86-docker-images-arm64-mac/">running x86 Docker images</a> covers the container-specific case, including a real performance shortcut most people miss. If something just won't run and you're not sure why, <a href="/blog/arm64-linux-compatibility-problems/">this triage guide</a> is built to sort that out fast rather than guessing.</p>
+
+      <h2>Running AI agents and local models, safely and fast</h2>
+      <p>This is the deepest vein on the blog, and it's worth reading roughly in this order: <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents actually use your computer</a>, then <a href="/blog/what-can-ai-agents-access-on-your-mac/">what they can access</a>, <a href="/blog/can-you-trust-ai-agents-with-git/">the Git-specific risk</a>, and <a href="/blog/ai-agent-security-risks/">what actually goes wrong unsandboxed</a> — real, dated incidents, not hypotheticals. From there, <a href="/blog/zero-tax-virtualization/">the complete guide to running agents in an isolated VM</a> ties it together, backed by <a href="/blog/ai-bridge-architecture/">the AI Bridge architecture</a> and <a href="/blog/ai-bridge-data-privacy/">exactly what does and doesn't leave your Mac</a>. On the model side: <a href="/blog/local-llms-apple-silicon/">the tools and formats landscape</a>, <a href="/blog/llm-ram-requirements-mac/">how much RAM you actually need</a>, <a href="/blog/llm-quantization-explained-mac/">what quantization actually does</a>, and <a href="/blog/local-vs-cloud-llm-coding-agents/">local vs. cloud model tradeoffs for agents specifically</a>. A checklist to pull it all together: <a href="/blog/safe-local-ai-agent-environment-checklist/">building a safe local AI agent environment</a>.</p>
+
+      <h2>Building a disposable-by-default workflow</h2>
+      <p>The workflow habit this blog argues for throughout: <a href="/blog/what-is-a-disposable-development-environment/">what disposability actually means</a>, <a href="/blog/disposable-vm-vs-snapshot/">how it differs from a snapshot</a>, and <a href="/blog/base-image-vs-snapshot-vs-clone/">how base image, snapshot, and clone relate</a> once those terms start blurring together. Applied to real workflows: <a href="/blog/one-vm-per-git-branch/">one VM per Git branch</a>, <a href="/blog/clean-room-bug-reproduction/">clean-room bug reproduction</a>, <a href="/blog/disposable-vms-untrusted-software/">testing untrusted software safely</a>, <a href="/blog/qa-devops-disposable-vm-workflow/">the QA/DevOps disposable workflow</a>, <a href="/blog/disposable-workspaces-devops-ci/">matching your actual CI environment</a>, and <a href="/blog/software-engineers-disposable-workspaces/">making it a daily coding habit</a>, not just a testing one. Managing the images underneath all of it: <a href="/blog/base-image-versioning/">versioning base images</a> and <a href="/blog/guest-os-performance-tuning/">tuning guest OS performance</a> before you seal one.</p>
+
+      <h2>What things actually cost — real numbers, sourced</h2>
+      <p>Where this blog tries hardest not to assert from memory: <a href="/blog/arm-virtualization-performance/">why ARM VMs perform the way they do</a> architecturally, then the practical deep dives on <a href="/blog/linux-vm-cpu-performance-apple-silicon/">CPU</a>, <a href="/blog/linux-vm-disk-performance-apple-silicon/">disk</a>, and <a href="/blog/linux-vm-network-performance-apple-silicon/">network</a> performance, plus sizing guides for <a href="/blog/how-much-memory-linux-vm-mac/">memory</a> and <a href="/blog/how-many-linux-vms-apple-silicon/">how many VMs you can actually run</a>, and <a href="/blog/vm-startup-performance-apple-silicon/">what determines boot time</a>. For AI workloads specifically: <a href="/blog/vm-inference-benchmark/">the full inference benchmark</a> and <a href="/blog/vm-sandboxing-cost/">what sandboxing costs across two different inference engines</a>.</p>
+
+      <h2>How it all compares</h2>
+      <p>Honest, sourced comparisons rather than a sales pitch: against other Mac virtualization apps in <a href="/blog/velo-vs-parallels-vs-utm/">Velo vs. Parallels vs. UTM</a>; against container tooling in <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">Velo vs. Docker Desktop vs. OrbStack</a> and, for Apple's own newer entrant, <a href="/blog/apple-containers-vs-docker-vs-orbstack/">Apple Containers vs. Docker Desktop vs. OrbStack</a> and <a href="/blog/apple-containers-vs-linux-vms/">Apple Containers vs. Linux VMs</a>; and against cloud dev environments in <a href="/blog/velo-vs-codespaces-vs-ona/">Velo vs. GitHub Codespaces vs. Ona</a>, with <a href="/blog/local-vs-cloud-development-environments/">the category-level tradeoffs</a> underneath that comparison covered separately. If you're building or testing agents specifically for research rather than product work, see <a href="/blog/ai-researchers-agent-testing/">the AI researchers guide</a>.</p>
+
+      <h2>Where to actually start</h2>
+      <ul>
+        <li><strong>New to VMs on Apple Silicon entirely</strong> → <a href="/blog/apple-silicon-vms-explained/">start with the fundamentals</a>, then pick a distro.</li>
+        <li><strong>Running an AI coding agent, and want it safe</strong> → <a href="/blog/ai-agent-security-risks/">read the real incidents first</a>, then <a href="/blog/zero-tax-virtualization/">the complete guide</a>.</li>
+        <li><strong>QA, DevOps, or CI work</strong> → <a href="/blog/qa-devops-disposable-vm-workflow/">the disposable VM workflow</a> is the fastest path to the actual payoff.</li>
+        <li><strong>Deciding whether you even need this over Docker or a cloud IDE</strong> → the comparison section above, read against your actual constraints, not a generic recommendation.</li>
+      </ul>
+
+      <p>This page will get denser as the blog grows — it's meant to be revisited, not read once. Or skip the reading and <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
