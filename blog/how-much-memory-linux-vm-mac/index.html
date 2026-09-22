@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Much Memory Should You Give a Linux VM on a Mac? — Velo Workspaces</title>
+<meta name="description" content="Not an LLM sizing question — general dev, build, and CI workloads. Velo's own workload-profile defaults, what the memory balloon device actually does, and why the framework's allowed range isn't a recommendation.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/how-much-memory-linux-vm-mac/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="How Much Memory Should You Give a Linux VM on a Mac?">
+<meta property="og:description" content="Velo's own workload-profile defaults, what the memory balloon device actually does, and why the framework's allowed range isn't a recommendation.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/how-much-memory-linux-vm-mac/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Guide</span>
+        <h1>How Much Memory Should You Give a Linux VM on a Mac?</h1>
+        <p class="article-lede">Not an LLM question — <a href="/blog/llm-ram-requirements-mac/">that math is covered separately</a>, and it's genuinely different because a model's memory footprint is a known, calculable quantity. General dev, build, and CI workloads don't work that way; here's how to size for them anyway, and what actually happens to memory you assign but the guest isn't using.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>The framework's allowed range isn't a recommendation</h2>
+      <p>Velo clamps whatever memory size you request into <code>VZVirtualMachineConfiguration.minimumAllowedMemorySize</code> and <code>.maximumAllowedMemorySize</code> — verified directly against the source. That range exists to keep a configuration valid, not to suggest what's actually a good idea; the framework will happily accept a memory size the host can't comfortably spare, and a workspace maxed out against that ceiling on a Mac that also needs RAM for everything else running competes with the host the same way an overcommitted process would.</p>
+
+      <h2>What Velo's own defaults imply</h2>
+      <p>Velo's built-in workload profiles pair memory with vCPU count deliberately, and the pairing itself is informative: <strong>Study & Office</strong> defaults to 4GB, <strong>Code & Build</strong> to 8GB, <strong>DevOps Lab</strong> to 12GB, and <strong>AI Sandbox</strong> — the profile expected to also run a local model or an agent workload — to 16GB. None of these are guesses; they're calibrated to what each workload class realistically needs headroom for, and they're a reasonable starting point to adjust from rather than a fixed rule. A plain shell + editor session rarely needs more than the Study & Office tier; a real build with a dependency-heavy install step benefits from the Code & Build tier's extra headroom for compiler and linker memory use, which spikes well above steady-state usage during the build itself, not just at idle.</p>
+
+      <h2>The memory balloon device: what "assigned" doesn't mean "locked away"</h2>
+      <p>Every Linux workspace gets a <code>VZVirtioTraditionalMemoryBalloonDeviceConfiguration</code> — a virtio balloon device, verified against Velo's source. The balloon exists specifically so that memory you've assigned to a VM isn't necessarily memory permanently unavailable to the host: it lets the hypervisor reclaim memory the guest currently isn't using, and give it back later if the guest needs it again, with the guest's own kernel cooperating through its virtio-balloon driver rather than the reclaim happening behind its back. This is standard Linux and standard Virtualization.framework behavior, not something Velo tunes with custom policy — the device is created with its defaults, and the framework and guest kernel handle the actual inflate/deflate behavior between them.</p>
+      <p>The practical implication is worth being precise about rather than overstating: the balloon device means a generously-sized workspace doesn't necessarily starve the host the way a naive, non-reclaimable allocation would if the guest is mostly idle — but it's not a substitute for reasonable sizing, and how aggressively memory actually gets reclaimed depends on framework and guest-kernel behavior neither this post nor Velo's own code controls in detail. Size for what the workload needs; don't treat the balloon device as a reason sizing doesn't matter.</p>
+
+      <h2>A sizing approach that isn't guessing</h2>
+      <ol>
+        <li><strong>Start from the closest workload profile</strong> above rather than an arbitrary number.</li>
+        <li><strong>Watch for swap activity inside the guest</strong> during the actual workload, not at idle — <code>free -h</code> or <code>vmstat</code> showing swap in use under real load is the clearest sign a workspace is undersized, more reliable than watching the number look "full."</li>
+        <li><strong>Size to the peak, not the average</strong> — a build's linker step or a test suite's worst moment matters more than its steady-state footprint, the same lesson <a href="/blog/llm-ram-requirements-mac/">the LLM RAM math post</a> makes for KV cache growth during a long session.</li>
+        <li><strong>Leave real headroom on the host</strong> — macOS itself, plus whatever else is running, needs its own share of unified memory; a workspace sized to consume everything technically available leaves nothing for that.</li>
+      </ol>
+
+      <p>Related reading: <a href="/blog/llm-ram-requirements-mac/">how much RAM local LLMs actually need</a>, a genuinely different and more calculable question, <a href="/blog/linux-vm-cpu-performance-apple-silicon/">how vCPU core allocation works</a>, and <a href="/blog/how-many-linux-vms-apple-silicon/">how many workspaces you can realistically run at once</a>, which this post's sizing approach feeds directly into. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>

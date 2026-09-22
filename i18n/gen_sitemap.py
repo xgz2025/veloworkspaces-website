@@ -71,6 +71,12 @@ ENGLISH_ONLY_PAGES = [
     ("blog/arm64-linux-compatibility-problems/", "monthly", "0.6"),
     ("blog/llm-quantization-explained-mac/", "monthly", "0.6"),
     ("blog/local-vs-cloud-llm-coding-agents/", "monthly", "0.6"),
+    ("blog/linux-vm-cpu-performance-apple-silicon/", "monthly", "0.6"),
+    ("blog/linux-vm-disk-performance-apple-silicon/", "monthly", "0.6"),
+    ("blog/linux-vm-network-performance-apple-silicon/", "monthly", "0.6"),
+    ("blog/how-much-memory-linux-vm-mac/", "monthly", "0.6"),
+    ("blog/how-many-linux-vms-apple-silicon/", "monthly", "0.6"),
+    ("blog/vm-startup-performance-apple-silicon/", "monthly", "0.6"),
 ]
 
 def alternates_block(path, indent="    "):

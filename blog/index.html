@@ -397,6 +397,42 @@
               <h2>Paravirtualization vs. Hardware Passthrough: What Actually Determines VM Performance on ARM</h2>
               <p>Why ARM's EL2 exception level, hardware interrupt virtualization, and two-stage memory translation make VMs on Apple Silicon feel different from x86 — and what paravirtualization vs. hardware passthrough actually trades off.</p>
             </a>
+
+            <a class="blog-index-card" href="/blog/linux-vm-cpu-performance-apple-silicon/">
+              <span class="eyebrow">Deep dive</span>
+              <h2>Linux VM CPU Performance on Apple Silicon: How Core Allocation Actually Works</h2>
+              <p>Every vCPU behaves like a P-core-priority thread on the host — there's no way to put a virtual CPU on an efficiency core. What that means for how many vCPUs actually helps.</p>
+            </a>
+
+            <a class="blog-index-card" href="/blog/linux-vm-disk-performance-apple-silicon/">
+              <span class="eyebrow">Deep dive</span>
+              <h2>Linux VM Disk Performance on Apple Silicon: virtio-blk vs. virtio-fs</h2>
+              <p>Where you put your files matters more than any disk setting. Verified against Velo's own source, including a caching-mode tradeoff most VM tools don't explain.</p>
+            </a>
+
+            <a class="blog-index-card" href="/blog/linux-vm-network-performance-apple-silicon/">
+              <span class="eyebrow">Deep dive</span>
+              <h2>Linux VM Network Performance on Apple Silicon: NAT, vmnet, and a Real Gotcha</h2>
+              <p>Every workspace gets kernel-level NAT through vmnet, not a userspace proxy. A stable per-workspace MAC address, and the VPN routing-table gotcha worth knowing in advance.</p>
+            </a>
+
+            <a class="blog-index-card" href="/blog/how-much-memory-linux-vm-mac/">
+              <span class="eyebrow">Guide</span>
+              <h2>How Much Memory Should You Give a Linux VM on a Mac?</h2>
+              <p>Not an LLM sizing question — general dev, build, and CI workloads. Velo's own workload-profile defaults, and what the memory balloon device actually does.</p>
+            </a>
+
+            <a class="blog-index-card" href="/blog/how-many-linux-vms-apple-silicon/">
+              <span class="eyebrow">Guide</span>
+              <h2>How Many Linux VMs Can You Run on an Apple Silicon Mac?</h2>
+              <p>Not a single number — three separate budgets that all have to hold at once: unified memory, CPU contention, and disk space, which costs far less per workspace than it looks like.</p>
+            </a>
+
+            <a class="blog-index-card" href="/blog/vm-startup-performance-apple-silicon/">
+              <span class="eyebrow">Deep dive</span>
+              <h2>VM Startup Performance on Apple Silicon: What Actually Determines Boot Time</h2>
+              <p>Velo trades some boot speed for broad distro compatibility on purpose — verified against the source. Why NVRAM only gets built once, and why restoring a hibernated workspace skips boot entirely.</p>
+            </a>
           </div>
         </div>
 

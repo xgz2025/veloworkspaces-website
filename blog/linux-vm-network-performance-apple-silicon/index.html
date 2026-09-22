@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linux VM Network Performance on Apple Silicon: NAT, vmnet, and a Real Gotcha — Velo Workspaces</title>
+<meta name="description" content="Every workspace gets kernel-level NAT networking through vmnet, not a userspace proxy — genuinely fast. Verified against Velo's own source: what NAT-only actually means today, a stable per-workspace MAC address, and the VPN routing-table gotcha worth knowing in advance.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/linux-vm-network-performance-apple-silicon/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Linux VM Network Performance on Apple Silicon: NAT, vmnet, and a Real Gotcha">
+<meta property="og:description" content="Every workspace gets kernel-level NAT through vmnet, genuinely fast — plus a stable per-workspace MAC and a VPN routing-table gotcha worth knowing in advance.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/linux-vm-network-performance-apple-silicon/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Deep dive</span>
+        <h1>Linux VM Network Performance on Apple Silicon: NAT, vmnet, and a Real Gotcha</h1>
+        <p class="article-lede">Verified against Velo's own source: what kind of networking every workspace actually gets today, why NAT-only isn't the slow, hacky path it sounds like, and a specific host-side failure mode worth knowing about before it costs you a debugging session.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>NAT is the only mode — verified, not assumed</h2>
+      <p>Every Linux workspace's network device is attached through <code>VZNATNetworkDeviceAttachment</code>, with no alternative offered today. Bridged networking — giving a guest its own address directly on the host's network, indistinguishable from another physical machine — requires a separate <code>com.apple.vm.networking</code> entitlement that Velo doesn't currently request. That's a real, deliberate scope decision, not a bug or an oversight: NAT covers the overwhelming majority of what a development or testing workspace actually needs (outbound access, the guest reaching the internet and the host) without asking for a broader networking entitlement to get there.</p>
+
+      <h2>NAT here isn't the slow kind</h2>
+      <p>"NAT" carries a reputation for being the slower, more indirect networking mode in some virtualization tools, and it's worth being precise about why that reputation doesn't carry over here. Apple's <code>VZNATNetworkDeviceAttachment</code> is backed by <strong>vmnet</strong>, a kernel-level networking framework — address translation and port forwarding happen in the kernel's own network stack, not in a userspace proxy process relaying packets between the guest and the internet. That distinction is exactly why NAT-based VMs on this stack are reported to substantially outperform userspace-proxied alternatives for throughput-heavy traffic, and why NAT throughput in the low gigabits per second is realistic on modern hardware rather than a theoretical ceiling nobody actually reaches.</p>
+
+      <h2>A stable MAC address, and why it exists</h2>
+      <p>Each workspace's virtio-net device gets a MAC address deterministically derived from the workspace's own UUID, not randomized on every boot. That's a deliberate choice for two concrete reasons: it lets the guest keep the same DHCP lease across restarts instead of re-negotiating a new address every time, and it lets Velo's own IP-resolution code find a running workspace's address by searching the host's ARP table — without needing a live handle on the <code>VZNetworkDevice</code> object itself, which doesn't expose its own MAC address for lookup. Small detail, but it's the reason a workspace's IP tends to stay predictable across restarts rather than shifting around.</p>
+
+      <h2>The gotcha: a host-side VPN can break this silently</h2>
+      <p>Worth knowing before it costs you a confusing debugging session: NAT networking here depends on the host's own routing table pointing traffic through vmnet's NAT path correctly. A VPN client that rewrites the host's routing table — which is exactly what most VPN clients do, by design, to route the host's own traffic through the tunnel — can break a workspace's connectivity as a side effect, with nothing about the workspace's own configuration having changed. If a workspace that was reaching the internet fine suddenly can't, and nothing in Velo or the guest changed, check whether a VPN connected or reconnected on the host around the same time before assuming the workspace itself is at fault.</p>
+
+      <h2>What this means in practice</h2>
+      <ul>
+        <li><strong>Outbound access is fast and doesn't need tuning</strong> — vmnet's kernel-level NAT is the right default for the overwhelming majority of workspace use.</li>
+        <li><strong>Don't expect true bridged networking yet</strong> — a workspace isn't addressable as its own device on the host's LAN today; NAT is the only mode.</li>
+        <li><strong>Rule out a host-side VPN first</strong> if a previously-working workspace suddenly loses connectivity — it's a genuinely common, easy-to-miss cause that has nothing to do with the guest.</li>
+      </ul>
+
+      <p>Related reading: <a href="/blog/how-virtualization-framework-works/">the device inventory post</a> for how the network device fits alongside Velo's other paravirtualized hardware, <a href="/blog/linux-vm-disk-performance-apple-silicon/">disk performance and the virtio-blk/virtio-fs split</a>, and <a href="/blog/linux-vm-cpu-performance-apple-silicon/">how vCPU core allocation actually works</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>

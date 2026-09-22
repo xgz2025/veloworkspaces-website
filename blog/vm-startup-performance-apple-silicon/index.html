@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VM Startup Performance on Apple Silicon: What Actually Determines Boot Time — Velo Workspaces</title>
+<meta name="description" content="Velo trades some boot speed for broad distro compatibility on purpose — verified against the source. VZEFIBootLoader vs. the direct-kernel-boot alternative, why NVRAM only gets built once, and why restoring a hibernated workspace skips boot entirely.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/vm-startup-performance-apple-silicon/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="VM Startup Performance on Apple Silicon: What Actually Determines Boot Time">
+<meta property="og:description" content="Velo trades some boot speed for broad distro compatibility on purpose. VZEFIBootLoader vs. direct kernel boot, and why restoring a hibernated workspace skips boot entirely.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/vm-startup-performance-apple-silicon/">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Deep dive</span>
+        <h1>VM Startup Performance on Apple Silicon: What Actually Determines Boot Time</h1>
+        <p class="article-lede">A workspace's boot loader choice, verified against Velo's own source, is a deliberate tradeoff — not the fastest theoretical path, on purpose. What that tradeoff actually is, what only happens once, and the one case where "startup" isn't really a boot at all.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>The boot loader choice, briefly — full mechanism covered elsewhere</h2>
+      <p>Velo boots every Linux workspace through <code>VZEFIBootLoader</code> rather than the faster direct-kernel-boot alternative, trading some raw boot speed for genuine compatibility with any distro's own GRUB or systemd-boot — <a href="/blog/how-virtualization-framework-works/">the device inventory post's boot loader section</a> covers the full mechanism, including why the EFI variable store is created once and reused rather than rebuilt on every boot. What that post doesn't get into, and what actually matters for "how long until this workspace is usable": how those pieces add up across a workspace's actual lifecycle, and the one case where none of it applies at all.</p>
+      <p>One direct consequence worth calling out here rather than just linking past: when an installer's bootloader writes no fallback boot entry and a fresh install comes up to an empty EFI shell — <a href="/blog/ubuntu-on-apple-silicon/">covered in the Ubuntu post</a> — that's EFI firmware correctly finding nothing to boot, not a startup failure specific to Velo. A direct kernel boot wouldn't have that failure mode, because there'd be no firmware boot-order logic to fail in the first place — one more facet of the same speed-for-compatibility trade.</p>
+
+      <h2>Where startup time actually goes, across a workspace's lifecycle</h2>
+      <p>Put the pieces together and a workspace's "startup cost" isn't one number, it's front-loaded: a workspace's <strong>very first boot</strong> pays for NVRAM creation and, if it's a fresh install, the installer's own heavy disk activity — cache-accelerated per <a href="/blog/linux-vm-disk-performance-apple-silicon/">the disk performance post</a>, but still real work. <strong>Every boot after that</strong> is cheaper by construction: NVRAM already exists and just loads, there's no installer in the loop, and EFI firmware is doing what it does on real hardware — finding an already-installed OS and handing off to its existing boot loader. The gap between "first boot of a fresh install" and "the fifth ordinary restart of the same workspace" is real and it isn't subtle.</p>
+
+      <h2>The case where "startup" isn't a boot at all</h2>
+      <p>Everything above describes an actual firmware-and-kernel boot sequence. Restoring a hibernated workspace is a categorically different operation: <a href="/blog/disposable-vm-vs-snapshot/">covered in depth here</a>, a save/restore cycle serializes the VM's live memory and device state to disk and reloads it directly, resuming execution from exactly where it left off — no firmware boot, no kernel init, no systemd unit ordering, none of it. It's not a fast boot; it's not a boot at all. Not every configuration supports it — Velo's own <code>SaveRestoreSupport.probe</code> check rules it out for configurations using device types that don't support save/restore, most commonly the graphics device and serial console — but where it's available, it's the actual fast path for "get back to a working workspace quickly," not a faster boot loader.</p>
+
+      <h2>What actually determines how fast a workspace comes up</h2>
+      <ul>
+        <li><strong>First boot costs the most</strong> — NVRAM creation, and if it's a fresh install, the installer's own heavy disk activity, cache-accelerated but still real work.</li>
+        <li><strong>Every boot after that is cheaper</strong> — NVRAM already exists, no installer in the loop, just EFI firmware finding and booting an already-installed OS.</li>
+        <li><strong>Restore, where available, beats any boot</strong> — it isn't a fast boot, it's not booting at all, and it's the right tool when what you actually want is "back to exactly where I left off," not "started fresh."</li>
+      </ul>
+
+      <p>Related reading: <a href="/blog/linux-vm-disk-performance-apple-silicon/">disk performance and the caching-mode tradeoff</a>, <a href="/blog/disposable-vm-vs-snapshot/">disposable VM vs. snapshot</a> for the restore path in full, and <a href="/blog/ubuntu-on-apple-silicon/">the Ubuntu post's EFI-shell gotcha</a>, a real consequence of the boot-loader choice covered here. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
