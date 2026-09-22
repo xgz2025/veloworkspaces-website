@@ -93,6 +93,8 @@
 
       <p><strong>The value this targets specifically:</strong> get real isolation for the part that's actually risky (arbitrary generated code execution) without paying a GPU-virtualization tax for the part that's actually expensive (inference), and without copying a 10–50GB model file into every VM you spin up.</p>
 
+      <p>Vsock itself is just another Virtualization.framework device — <code>VZVirtioSocketDeviceConfiguration</code>, the same paravirtualization pattern as the network and storage devices every VM gets. See <a href="/blog/how-virtualization-framework-works/">the full device inventory</a> for where it fits alongside the rest.</p>
+
       <h2>The results</h2>
       <p>I wanted to know how close this actually gets to "no tax" so I benchmarked it properly rather than asserting it.</p>
 
