@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Running x86 Docker Images on an Apple Silicon Mac — Velo Workspaces</title>
-<meta name="description" content="docker pull --platform linux/amd64 works, but the mechanism underneath it is slow software emulation by default. A Linux VM that already has Rosetta for Linux set up may already be routing those containers through something faster, via the same binfmt flag.">
+<meta name="description" content="docker pull --platform linux/amd64 works but defaults to slow emulation. A Rosetta-enabled Velo VM may already route those containers through something faster.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/running-x86-docker-images-arm64-mac/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
@@ -20,7 +20,7 @@
   "@context": "https://schema.org",
   "@type": "BlogPosting",
   "headline": "Running x86 Docker Images on an Apple Silicon Mac",
-  "description": "docker pull --platform linux/amd64 works, but the mechanism underneath it is slow software emulation by default. A Linux VM that already has Rosetta for Linux set up may already be routing those containers through something faster, via the same binfmt flag.",
+  "description": "docker pull --platform linux/amd64 works but defaults to slow emulation. A Rosetta-enabled Velo VM may already route those containers through something faster.",
   "datePublished": "2026-09-22",
   "dateModified": "2026-09-22",
   "author": {

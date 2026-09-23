@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Linux VM Disk Performance on Apple Silicon: virtio-blk vs. virtio-fs — Velo Workspaces</title>
-<meta name="description" content="Where you put your files matters more than any disk setting: a workspace's own disk (virtio-blk) is meaningfully faster than a shared folder (virtio-fs) for the same operation. Verified against Velo's own source, including a caching-mode tradeoff most VM tools don't explain.">
+<meta name="description" content="A workspace's own disk is meaningfully faster than a shared folder for the same operation — and Velo's own caching-mode choice explains why.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/linux-vm-disk-performance-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
@@ -20,7 +20,7 @@
   "@context": "https://schema.org",
   "@type": "BlogPosting",
   "headline": "Linux VM Disk Performance on Apple Silicon: virtio-blk vs. virtio-fs",
-  "description": "Where you put your files matters more than any disk setting: a workspace's own disk (virtio-blk) is meaningfully faster than a shared folder (virtio-fs) for the same operation. Verified against Velo's own source, including a caching-mode tradeoff most VM tools don't explain.",
+  "description": "A workspace's own disk is meaningfully faster than a shared folder for the same operation — and Velo's own caching-mode choice explains why.",
   "datePublished": "2026-09-22",
   "dateModified": "2026-09-22",
   "author": {
