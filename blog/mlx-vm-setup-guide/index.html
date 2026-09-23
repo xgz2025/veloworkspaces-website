@@ -14,7 +14,7 @@
 <meta property="og:description" content="A practical setup guide: MLX on the host, a disposable Linux VM for the OpenCode agent, and a vsock bridge that connects them at near-native speed.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/mlx-vm-setup-guide/">
 <meta property="article:published_time" content="2026-09-13">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-23">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -22,7 +22,7 @@
   "headline": "Run an AI Agent in a Linux VM with Local LLMs on macOS",
   "description": "A practical setup guide: MLX on the host, a disposable Linux VM for the OpenCode agent, and a vsock bridge that connects them at near-native speed.",
   "datePublished": "2026-09-13",
-  "dateModified": "2026-09-22",
+  "dateModified": "2026-09-23",
   "author": {
     "@type": "Person",
     "name": "Gaoliang Luo",
@@ -74,7 +74,7 @@
         <span class="eyebrow">Setup guide</span>
         <h1>Run an AI Agent Inside a Linux VM with Local LLMs on macOS at Near-Native Performance</h1>
         <p class="article-lede">A practical setup guide: MLX on the host, a disposable Linux VM for the agent OpenCode, and a vsock bridge that connects them at near-native speed — a fully local deployment.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 13, 2026 · Updated September 22, 2026</p>
+        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 13, 2026 · Updated September 23, 2026</p>
       </div>
     </div>
   </section>
@@ -89,6 +89,7 @@
 
       <h2>Choosing a VM app</h2>
       <p>Apple's Virtualization.framework doesn't expose the host GPU to a Linux guest. Run your model inside the VM under that constraint and you're CPU-bound only, which for a 7B+ model is a real, felt slowdown, not a minor inconvenience. So the actual goal of this guide is narrower than "put the agent in a VM": keep the model on the host's GPU, keep only the agent's code execution inside the VM, and connect the two fast enough that the split doesn't cost you anything you'd notice. Velo Workspaces has a fast, purpose-built channel, AI Bridge, for exactly this split.</p>
+      <p style="font-size:0.9rem; color:var(--color-text-secondary);"><em>Update, September 2026: that constraint is currently true, not permanently true. The <a href="https://github.com/trycua/cua" target="_blank" rel="noopener">Cua</a> project has since published a software shim that spoofs GPU-capability flags and gets real, benchmarked speedups out of a Linux guest without any change from Apple — a workaround for one inference engine, not official passthrough, but worth knowing about.</em></p>
 
       <figure>
         <pre><code>┌───────────────────────────────────────────────────────────────────┐

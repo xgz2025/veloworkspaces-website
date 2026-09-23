@@ -14,7 +14,7 @@
 <meta property="og:description" content="Two benchmarks, two inference engines, two different answers about what VM sandboxing costs under load — and a theory for why they disagree.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/vm-sandboxing-cost/">
 <meta property="article:published_time" content="2026-09-17">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-23">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -22,7 +22,7 @@
   "headline": "What Sandboxing an AI Coding Agent in a VM Actually Costs",
   "description": "Two benchmarks, two inference engines, two different answers about what VM sandboxing costs under load — and a theory for why they disagree.",
   "datePublished": "2026-09-17",
-  "dateModified": "2026-09-22",
+  "dateModified": "2026-09-23",
   "author": {
     "@type": "Person",
     "name": "Gaoliang Luo",
@@ -74,7 +74,7 @@
         <span class="eyebrow">Benchmark</span>
         <h1>What Sandboxing an AI Coding Agent in a VM Actually Costs on Apple Silicon</h1>
         <p class="article-lede">I benchmarked the same sandboxing architecture against two different inference engines and got two different answers about what it costs under load. Both are real. Here's why they disagree, and why I'm showing you both instead of picking the one that sounds better.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 17, 2026 · Updated September 22, 2026</p>
+        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 17, 2026 · Updated September 23, 2026</p>
       </div>
     </div>
   </section>
@@ -86,6 +86,7 @@
       <p>Most people running an AI coding agent locally give it a <code>subprocess</code> or <code>exec()</code> call with full access to their filesystem, network, and credentials. <a href="https://www.docker.com/blog/ai-coding-agent-horror-stories-security-risks/" target="_blank" rel="noopener">Docker's own engineering blog has documented real incidents</a> from exactly this. Indirect prompt injection makes it worse — a hostile instruction hidden in a file the agent reads can trigger commands with your full permissions, not just the ones you typed.</p>
 
       <p>The "correct" fix is to run the agent in a VM. On Apple Silicon this runs into a real wall: <code>Virtualization.framework</code> doesn't expose the host GPU to a Linux guest. <a href="https://github.com/apple/container/discussions/62" target="_blank" rel="noopener">Confirmed directly by Apple's own container team</a> when people asked for it. A Linux guest gets <code>virtio-gpu</code>, a paravirtualized 2D framebuffer with no path to the host's Metal GPU. Run a 7B model inside the VM and it's dramatically slower than the same model on the host.</p>
+      <p style="font-size:0.9rem; color:var(--color-text-secondary);"><em>Update, September 2026: that wall is currently true, not permanently true — the <a href="https://github.com/trycua/cua" target="_blank" rel="noopener">Cua</a> project has since published a software shim that spoofs GPU-capability flags and gets real, benchmarked speedups out of a Linux guest without any change from Apple. Worth knowing about, even though it doesn't change what's benchmarked below.</em></p>
 
       <p>So on Apple Silicon, "safe" (inside a VM) and "fast" (on the GPU) pull in opposite directions — unless you stop treating "run the agent" and "run the model" as the same problem.</p>
 

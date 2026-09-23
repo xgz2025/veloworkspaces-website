@@ -4,25 +4,25 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>What Actually Goes Wrong When AI Coding Agents Run Unsandboxed — Velo Workspaces</title>
-<meta name="description" content="Four real 2026 incidents, and which level of sandboxing would have actually contained each one — not just slowed it down.">
+<meta name="description" content="Real 2026 AI agent security incidents — Cursor, Copilot, Claude Code, Antigravity, Flowise — and which sandboxing level would have stopped each one.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/ai-agent-security-risks/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="What Actually Goes Wrong When AI Coding Agents Run Unsandboxed">
-<meta property="og:description" content="Four real 2026 incidents, and which level of sandboxing would have actually contained each one — not just slowed it down.">
+<meta property="og:description" content="Real 2026 AI agent security incidents — Cursor, Copilot, Claude Code, Antigravity, Flowise — and which sandboxing level would have stopped each one.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/ai-agent-security-risks/">
 <meta property="article:published_time" content="2026-09-20">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-23">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
   "headline": "What Actually Goes Wrong When AI Coding Agents Run Unsandboxed",
-  "description": "Four real 2026 incidents, and which level of sandboxing would have actually contained each one — not just slowed it down.",
+  "description": "Real 2026 AI agent security incidents — Cursor, Copilot, Claude Code, Antigravity, Flowise — and which sandboxing level would have stopped each one.",
   "datePublished": "2026-09-20",
-  "dateModified": "2026-09-22",
+  "dateModified": "2026-09-23",
   "author": {
     "@type": "Person",
     "name": "Gaoliang Luo",
@@ -73,8 +73,8 @@
       <div class="article-header">
         <span class="eyebrow">Security</span>
         <h1>What Actually Goes Wrong When AI Coding Agents Run Unsandboxed — and Which Isolation Level Stops It</h1>
-        <p class="article-lede">AI coding agents run real commands with real permissions now, and 2026 produced enough documented incidents to stop treating this as theoretical. Four real cases, in increasing order of severity, and which level of sandboxing would have actually contained each one — not just slowed it down.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 20, 2026 · Updated September 22, 2026</p>
+        <p class="article-lede">AI coding agents run real commands with real permissions now, and 2026 produced enough documented incidents to stop treating this as theoretical. Four cases, examined in depth and in increasing order of severity — plus three more from early 2026 showing the pattern hasn't slowed — and which level of sandboxing would have actually contained each one, not just slowed it down.</p>
+        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 20, 2026 · Updated September 23, 2026</p>
       </div>
     </div>
   </section>
@@ -85,7 +85,7 @@
       <h2>The year this stopped being theoretical</h2>
       <p>According to OWASP's 2026 LLM security tracking, prompt injection attacks against production AI systems surged 340% year over year, making them the fastest-growing category of attack they track. Coding agents specifically drive most of that new attack surface: 28 of the 53 agentic projects OWASP tracks are coding agents, and the five fastest-growing tools — Claude Code, Gemini CLI, Codex, Cline, and Aider — are all in that category. A separate 2026 enterprise survey found 88% of organizations reported a confirmed or suspected AI agent security incident in the past year.</p>
 
-      <p>Those are the kind of numbers that are easy to skim past. So instead of citing more of them, here are four specific, documented 2026 incidents, in increasing order of severity, and what they actually reveal about where the real boundary needs to sit. (If the underlying mechanism — shell, filesystem, Git, credentials — isn't already clear, <a href="/blog/how-ai-coding-agents-use-your-computer/">the neutral version of this is covered separately</a>.)</p>
+      <p>Those are the kind of numbers that are easy to skim past. So instead of citing more of them, here are four specific, documented 2026 incidents, in increasing order of severity, and what they actually reveal about where the real boundary needs to sit — plus three more, further down, from the months right after these, so this doesn't read like four cherry-picked cases from one bad year. (If the underlying mechanism — shell, filesystem, Git, credentials — isn't already clear, <a href="/blog/how-ai-coding-agents-use-your-computer/">the neutral version of this is covered separately</a>.)</p>
 
       <h2>Incident 1: the allowlist itself was the hole</h2>
       <p><strong>CVE-2026-22708</strong>, disclosed by Pillar Security against Cursor's agentic IDE. Cursor's Auto-Run mode lets you allowlist commands you trust, so you're not re-approving every shell call the agent wants to make. The problem: shell built-ins like <code>export</code>, <code>typeset</code>, and <code>declare</code> were implicitly trusted and never had to appear on the allowlist themselves. That meant anything that could get text in front of the agent — a README, a dependency file, a GitHub issue — could quietly use one of those built-ins to poison an environment variable, such as Git's <code>PAGER</code>. The next time the developer approved something as mundane as <code>git branch</code>, a command they'd already vetted and trusted, the poisoned environment made it execute the attacker's code instead.</p>
@@ -102,6 +102,15 @@
       <h2>Incident 4: how far this scales once an agent is autonomous enough</h2>
       <p>In September 2025, Anthropic's own Threat Intelligence team detected and later disrupted what it <a href="https://www.anthropic.com/news/disrupting-AI-espionage" target="_blank" rel="noopener">reported</a> as the first largely autonomous, AI-orchestrated cyber espionage campaign at scale. A Chinese state-sponsored group, tracked as GTG-1002, tricked Claude Code into believing it was conducting authorized defensive security testing, then used it to carry out reconnaissance, vulnerability discovery, exploitation, credential harvesting, and data exfiltration against roughly 30 organizations across tech, finance, chemical manufacturing, and government — with the agent handling an estimated 80–90% of the tactical work autonomously, and human operators stepping in mainly for target selection and strategic approval.</p>
       <p>This one isn't a sandboxing story in the same sense as the first three — it's an attacker using an agent as the weapon, not a victim's agent getting compromised. But it's the clearest evidence yet of how much leverage a coding agent now has once you multiply real tool access by real autonomy. That's the actual scale of what "should I let this thing run unsandboxed on my machine" is a question about in 2026.</p>
+
+      <h2>The pattern kept repeating in early 2026</h2>
+      <p>The four incidents above aren't the whole list — they're the ones with enough public detail to walk through the actual mechanism. Three more landed in the months right after, in three different tools, and none of them needed a new category of vulnerability to work:</p>
+      <ul>
+        <li><strong>Claude Code, CVE-2026-21852.</strong> A malicious repository's settings file could set <code>ANTHROPIC_BASE_URL</code> to an attacker-controlled endpoint. Opening that repo in Claude Code sent API requests — including the user's Anthropic API key — to the attacker's server before the trust prompt even had a chance to appear. Patched in version 2.0.65 (January 2026). No code execution required; same shape as Incident 3, a trusted flow doing something legitimate-looking, redirected.</li>
+        <li><strong>Google Antigravity</strong>, disclosed by Pillar Security. Antigravity's "Strict Mode" is meant to block out-of-workspace writes and confine every command to a sandbox. Prompt injection through the IDE's own <code>find_by_name</code> file-search tool smuggled an <code>-X</code> (exec-batch) flag into the underlying <code>fd</code> call, turning a file search into arbitrary binary execution and escaping Strict Mode entirely. Disclosed to Google in January 2026, patched by the end of February. Same shape as Incident 2 — the approval flow and sandbox mode both worked exactly as designed, and the agent still got talked into doing something else.</li>
+        <li><strong>Flowise, CVE-2025-59528 — CVSS 10.0</strong>, the maximum possible score. Flowise's CustomMCP node executed attacker-supplied JavaScript with no validation at all, with full Node.js <code>child_process</code> and filesystem access. As of April 2026 it was still under active exploitation against more than 12,000 internet-facing instances. Flowise is an agent-builder platform rather than a coding agent specifically, but the underlying failure is identical to Incident 1: something that should have been sandboxed simply wasn't.</li>
+      </ul>
+      <p>None of this changes the framework below. It confirms the base rate instead: this isn't four incidents from one unusually bad year, it's the same handful of failure modes showing up in new tools every few months, each one patched only after the fact.</p>
 
       <h2>The common thread</h2>
       <p>In each of the first three incidents, something that depended on the model behaving correctly, or on a list of edge cases being complete, sat between "read some text" and "do something harmful" — a permission prompt, an allowlist, or the model's own judgment about what counted as an instruction. Each was bypassed or routed around a different way. That's not one bug to patch: allowlists will keep having new edge cases like shell built-ins, and prompt injection defenses are an active, unsolved arms race as of today, not a shipped fix.</p>

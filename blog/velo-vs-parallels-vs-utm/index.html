@@ -14,7 +14,7 @@
 <meta property="og:description" content="An honest, sourced comparison — pricing, Linux GPU/AI acceleration, and disposable-workspace workflows on Apple Silicon.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/velo-vs-parallels-vs-utm/">
 <meta property="article:published_time" content="2026-09-20">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-23">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -22,7 +22,7 @@
   "headline": "Velo Workspaces vs. Parallels Desktop vs. UTM",
   "description": "An honest, sourced comparison — pricing, Linux GPU/AI acceleration, and disposable-workspace workflows on Apple Silicon.",
   "datePublished": "2026-09-20",
-  "dateModified": "2026-09-22",
+  "dateModified": "2026-09-23",
   "author": {
     "@type": "Person",
     "name": "Gaoliang Luo",
@@ -74,7 +74,7 @@
         <span class="eyebrow">Comparison</span>
         <h1>Velo Workspaces vs. Parallels Desktop vs. UTM: Disposable Linux VMs on Apple Silicon</h1>
         <p class="article-lede">Three genuinely different tools, not three competitors for the same job. Here's an honest, sourced comparison — pricing, what each one actually does with a Linux guest's GPU, and which one fits which workflow.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 20, 2026 · Updated September 22, 2026</p>
+        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 20, 2026 · Updated September 23, 2026</p>
       </div>
     </div>
   </section>
@@ -117,6 +117,7 @@
 
       <h2>What each one does with a Linux guest's GPU</h2>
       <p>This is the part worth reading carefully, because it's more nuanced than "one of these supports GPU and the others don't." All three are bound by the same underlying constraint on Apple Silicon: <strong>Apple's own Virtualization.framework does not expose the host GPU to a Linux guest</strong> — a Linux VM gets <code>virtio-gpu</code>, a paravirtualized 2D framebuffer, nothing more. That's confirmed directly by Apple's own container team in <a href="https://github.com/apple/container/discussions/62" target="_blank" rel="noopener">public GitHub discussions</a>. No app built on top of that framework can simply switch it on.</p>
+      <p style="font-size:0.9rem; color:var(--color-text-secondary);"><em>Update, September 2026: that constraint is currently true, not permanently true. The <a href="https://github.com/trycua/cua" target="_blank" rel="noopener">Cua</a> project has since published a user-space shim that spoofs the GPU-capability flags <code>llama.cpp</code> queries and gets real, benchmarked speedups (they report 11–16×) out of a Linux guest — a software workaround for one inference engine, not an Apple-sanctioned change to Virtualization.framework, but worth knowing about if you're evaluating this tradeoff yourself.</em></p>
 
       <p>Each tool works around that constraint differently:</p>
 
