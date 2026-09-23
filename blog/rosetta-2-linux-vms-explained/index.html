@@ -13,6 +13,35 @@
 <meta property="og:title" content="Rosetta 2 in Linux VMs: What It Actually Does">
 <meta property="og:description" content="Toggling Rosetta support on doesn't set up translation by itself. Verified against the app's own source: the three layers that actually have to work.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/rosetta-2-linux-vms-explained/">
+<meta property="article:published_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-22">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Rosetta 2 in Linux VMs: What It Actually Does",
+  "description": "Toggling Rosetta support on doesn't set up translation by itself — it attaches a VirtioFS share and stops there. Verified against the app's own source: the three layers that actually have to work, and why the failure mode is silence, not an error.",
+  "datePublished": "2026-09-22",
+  "dateModified": "2026-09-22",
+  "author": {
+    "@type": "Person",
+    "name": "Gaoliang Luo",
+    "url": "https://www.veloworkspaces.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Velo Workspaces",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.veloworkspaces.com/assets/icon.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.veloworkspaces.com/blog/rosetta-2-linux-vms-explained/"
+  }
+}
+</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -45,6 +74,7 @@
         <span class="eyebrow">Deep dive</span>
         <h1>Rosetta 2 in Linux VMs: What It Actually Does</h1>
         <p class="article-lede"><a href="/blog/arm64-vs-x86-apple-silicon/">Rosetta for Linux is a different mechanism from Rosetta for macOS apps</a> — that post covers the distinction. This one is the mechanism itself: verified against Velo's own source, what a workspace's Rosetta toggle actually attaches, what it deliberately leaves for you to do inside the guest, and why getting one of three layers wrong looks like nothing happening at all rather than an error.</p>
+        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
       </div>
     </div>
   </section>

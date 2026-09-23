@@ -13,6 +13,35 @@
 <meta property="og:title" content="How Apple Virtualization.framework Works">
 <meta property="og:description" content="The real device inventory behind a Virtualization.framework VM — boot loaders, storage, networking, graphics, shared folders, vsock, and the gotcha that silently breaks hibernate.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/how-virtualization-framework-works/">
+<meta property="article:published_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-22">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "How Apple Virtualization.framework Works",
+  "description": "The real device inventory behind a Virtualization.framework VM — boot loaders, storage, networking, graphics, shared folders, vsock, and the platform-identity gotcha that silently breaks hibernate — verified against a real app's own configuration code.",
+  "datePublished": "2026-09-22",
+  "dateModified": "2026-09-22",
+  "author": {
+    "@type": "Person",
+    "name": "Gaoliang Luo",
+    "url": "https://www.veloworkspaces.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Velo Workspaces",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.veloworkspaces.com/assets/icon.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.veloworkspaces.com/blog/how-virtualization-framework-works/"
+  }
+}
+</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -45,6 +74,7 @@
         <span class="eyebrow">Architecture</span>
         <h1>How Apple Virtualization.framework Works</h1>
         <p class="article-lede">Most Virtualization.framework write-ups stop at "here's a hello-world VM." This one goes device by device through what a real, shipping app's configuration code actually declares — storage, networking, graphics, shared folders, and the one identity object that silently breaks hibernate if you get it wrong. Read <a href="/blog/apple-silicon-vms-explained/">the fundamentals</a> first if "VM vs. emulation" is still unclear; this picks up from there.</p>
+        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
       </div>
     </div>
   </section>

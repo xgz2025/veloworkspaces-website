@@ -13,6 +13,35 @@
 <meta property="og:title" content="Running x86 Docker Images on an Apple Silicon Mac">
 <meta property="og:description" content="docker pull --platform linux/amd64 works but defaults to slow software emulation. A Rosetta-enabled Velo Linux VM may already be routing those containers through something faster.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/running-x86-docker-images-arm64-mac/">
+<meta property="article:published_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-22">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Running x86 Docker Images on an Apple Silicon Mac",
+  "description": "docker pull --platform linux/amd64 works, but the mechanism underneath it is slow software emulation by default. A Linux VM that already has Rosetta for Linux set up may already be routing those containers through something faster, via the same binfmt flag.",
+  "datePublished": "2026-09-22",
+  "dateModified": "2026-09-22",
+  "author": {
+    "@type": "Person",
+    "name": "Gaoliang Luo",
+    "url": "https://www.veloworkspaces.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Velo Workspaces",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.veloworkspaces.com/assets/icon.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.veloworkspaces.com/blog/running-x86-docker-images-arm64-mac/"
+  }
+}
+</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -45,6 +74,7 @@
         <span class="eyebrow">Guide</span>
         <h1>Running x86 Docker Images on an Apple Silicon Mac</h1>
         <p class="article-lede"><a href="/blog/arm64-vs-x86-apple-silicon/">The multi-arch container basics</a> are covered elsewhere on this blog — what a manifest list is, why <code>docker pull</code> usually "just works." This is the narrower, more useful question: when you explicitly need an amd64-only image on an arm64 Mac, what's actually running it, how slow is that really, and — if you're running Docker inside a Velo Linux VM rather than Docker Desktop — a mechanism you may already have set up without realizing it applies here too.</p>
+        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
       </div>
     </div>
   </section>
