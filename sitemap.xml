@@ -687,6 +687,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.veloworkspaces.com/blog/claude-code-ai-bridge-setup/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.veloworkspaces.com/blog/mlx-vm-setup-guide/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
