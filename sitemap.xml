@@ -692,6 +692,16 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.veloworkspaces.com/blog/windows-on-apple-silicon/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/blog/migrating-to-velo-workspaces/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.veloworkspaces.com/blog/mlx-vm-setup-guide/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

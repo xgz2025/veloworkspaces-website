@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Migrating a Linux VM to Velo Workspaces From UTM, Fusion, or Parallels — Velo Workspaces</title>
+<meta name="description" content="Apple's Virtualization.framework only attaches raw images. Converting a QCOW2, VMDK, or Parallels disk with qemu-img, and bringing the VM into Velo.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/migrating-to-velo-workspaces/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Migrating a Linux VM to Velo Workspaces From UTM, Fusion, or Parallels">
+<meta property="og:description" content="Apple's Virtualization.framework only attaches raw images. Converting a QCOW2, VMDK, or Parallels disk with qemu-img, and bringing the VM into Velo.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/migrating-to-velo-workspaces/">
+<meta property="article:published_time" content="2026-09-23">
+<meta property="article:modified_time" content="2026-09-23">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Migrating a Linux VM to Velo Workspaces From UTM, Fusion, or Parallels",
+  "description": "Apple's Virtualization.framework only attaches raw images. Converting a QCOW2, VMDK, or Parallels disk with qemu-img, and bringing the VM into Velo.",
+  "datePublished": "2026-09-23",
+  "dateModified": "2026-09-23",
+  "author": {
+    "@type": "Person",
+    "name": "Gaoliang Luo",
+    "url": "https://www.veloworkspaces.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Velo Workspaces",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.veloworkspaces.com/assets/icon.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.veloworkspaces.com/blog/migrating-to-velo-workspaces/"
+  }
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:0;">
+    <div class="container">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Guide</span>
+        <h1>Migrating a Linux VM to Velo Workspaces From UTM, Fusion, or Parallels</h1>
+        <p class="article-lede">Apple's Virtualization.framework — what Velo Workspaces is built on — only attaches raw disk images. Every other hypervisor uses its own container format. Here's the actual conversion path, with the one command that matters and the mistakes that waste an hour if you don't know about them first.</p>
+        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 23, 2026</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body">
+
+      <h2>The constraint this whole guide is about</h2>
+      <p><code>VZDiskImageStorageDeviceAttachment</code> — the API Velo Workspaces and every other Virtualization.framework app use to attach a disk to a VM — reads <strong>raw</strong> disk images and nothing else. No QCOW2, no VMDK, no VHD or VHDX. Velo's own New Workspace Wizard will let you pick a file in any of those formats, detect what it actually is by reading its header rather than trusting the file extension, and tell you plainly what to do about it:</p>
+      <blockquote style="border-left:3px solid var(--color-border); padding-left:16px; margin:16px 0; color:var(--color-text-secondary);">"This is a [format] disk image, which Apple's Virtualization framework cannot read — it attaches raw images only. Convert it first with: <code>qemu-img convert -O raw source destination.img</code>"</blockquote>
+      <p>This guide is that command, expanded per source hypervisor, with the file-location and format details each one needs to actually work on the first try.</p>
+
+      <h2>Scope: Linux guests only</h2>
+      <p>This covers migrating a <strong>Linux</strong> VM. Velo Workspaces doesn't run Windows guests currently — see <a href="/blog/windows-on-apple-silicon/">why, and where to go instead</a> if that's what you're migrating. macOS guests aren't covered by this either, since UTM, VMware Fusion, and Parallels each handle a macOS guest's disk differently from a Linux one's plain filesystem.</p>
+
+      <h2>Before you start: install qemu-img</h2>
+      <p>All three conversions below use <a href="https://www.qemu.org/" target="_blank" rel="noopener">QEMU</a>'s own <code>qemu-img</code> tool — the reference implementation for every one of these formats, which is exactly why the app's own error message points at it rather than at a bundled converter. Install it via Homebrew:</p>
+      <pre><code>brew install qemu</code></pre>
+      <p><code>qemu-img</code> ships as part of the <code>qemu</code> formula; there's no separate package for it. Confirm it installed with <code>qemu-img --version</code>.</p>
+      <p style="font-size:0.9rem; color:var(--color-text-secondary);"><em>One more thing worth knowing before you run a conversion: a raw image is the disk's full allocated size written out sector-for-sector, not the compressed size the source format may have been using. Make sure you have free disk space at least equal to the guest's configured disk size before converting — a 64 GB QCOW2 that's only 8 GB on disk today still produces a 64 GB raw file.</em></p>
+
+      <h2>From UTM</h2>
+      <p>UTM's QEMU backend stores a Linux VM's disk as QCOW2. Right-click the <code>.utm</code> file in Finder, choose <strong>Show Package Contents</strong>, and look inside the <code>Data/</code> folder for a <code>.qcow2</code> file (if UTM was installed from the Mac App Store, the bundle itself lives under UTM's own sandboxed container rather than wherever you see it in Finder — Show Package Contents finds it either way).</p>
+      <pre><code>qemu-img convert -f qcow2 -O raw "/path/to/VMName.utm/Data/disk.qcow2" destination.img</code></pre>
+
+      <h2>From VMware Fusion</h2>
+      <p>Right-click the <code>.vmwarevm</code> bundle, <strong>Show Package Contents</strong>, and look for a <code>.vmdk</code> file. This is the one place to slow down: VMware sometimes stores a disk as one monolithic <code>.vmdk</code>, and sometimes as a small text-based <em>descriptor</em> file (a few KB) plus separate data files named like <code>diskname-s001.vmdk</code>, <code>diskname-s002.vmdk</code>, and so on. <strong>Always point <code>qemu-img</code> at the descriptor file</strong> — the small one, often just the plain <code>diskname.vmdk</code> — never at the numbered extent files directly. The descriptor references all the extents internally, and <code>qemu-img</code> follows those references and produces one complete raw file; pointing it at an extent file directly gives you a truncated, unusable image.</p>
+      <pre><code>qemu-img convert -f vmdk -O raw "/path/to/VMName.vmwarevm/Virtual Disk.vmdk" destination.img</code></pre>
+
+      <h2>From Parallels Desktop</h2>
+      <p>Parallels' bundle structure nests one level deeper: a <code>.pvm</code> bundle contains a <code>.hdd</code> package, which contains the actual data file, named something like <code>disk-0.hdd.0.{uuid}.hds</code>. Show Package Contents on the <code>.pvm</code>, then again on the <code>.hdd</code> inside it, to find the <code>.hds</code> file.</p>
+      <pre><code>qemu-img convert -f parallels "/path/to/VMName.pvm/disk.hdd/disk-0.hdd.0.{uuid}.hds" -O raw destination.img</code></pre>
+      <p style="font-size:0.9rem; color:var(--color-text-secondary);"><em>Honest caveat: QEMU's Parallels-format reader is less battle-tested than its QCOW2 or VMDK support — it's mostly documented in forensics and disk-recovery contexts rather than routine VM migration. If the conversion above errors or produces something that won't boot, convert the disk to Parallels' own "Plain" (uncompressed, fixed-size) format first with Parallels' own <code>prl_disk_tool convert --hdd /path/to/disk.hdd --plain</code>, then retry the <code>qemu-img</code> command against the resulting file.</em></p>
+
+      <h2>Importing the converted image into Velo Workspaces</h2>
+      <p>With a <code>.img</code> file in hand, create a new workspace in Velo Workspaces and choose it as the disk image when the wizard asks — the same import path the app's own error message above is guiding you toward in the first place. What comes across is the disk's actual contents: your installed packages, your files, your configuration. What doesn't: hypervisor-specific settings like shared folders, snapshots, or custom device configuration from UTM, Fusion, or Parallels — those live in each app's own VM definition, not on the disk itself, so they need to be reconfigured in Velo Workspaces directly.</p>
+      <p>One thing that usually <em>doesn't</em> need manual fixing: Linux mounts its filesystems by UUID, not by device path, so a guest built under QEMU's virtio devices generally boots fine under Apple's own virtio-based storage and network devices without editing <code>/etc/fstab</code>. If it doesn't come up cleanly on first boot, check the serial console output before assuming the disk conversion itself failed — it's more often a display or boot-loader question than a filesystem one.</p>
+
+      <p>Related reading: <a href="/blog/apple-silicon-vms-explained/">what a VM on Apple Silicon actually is</a>, <a href="/blog/velo-vs-parallels-vs-utm/">the full comparison against Parallels and UTM</a>, and <a href="/blog/how-virtualization-framework-works/">the real device inventory</a> behind the VM you're migrating into. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+</body>
+</html>
