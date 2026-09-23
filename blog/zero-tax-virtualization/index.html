@@ -13,6 +13,25 @@
 <meta property="og:title" content="Zero-Tax Virtualization: Running AI Agents Safely in Velo Workspaces">
 <meta property="og:description" content="A complete guide to running AI coding agents inside an isolated Linux VM on Apple Silicon, with the model — MLX or Ollama — served at near-native speed on the host GPU.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/zero-tax-virtualization/">
+<meta property="article:published_time" content="2026-09-16">
+<meta property="article:modified_time" content="2026-09-22">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Zero-Tax Virtualization: Running AI Agents Safely in Velo Workspaces",
+  "description": "A complete guide to running AI coding agents inside an isolated Linux VM on Apple Silicon, with the model — MLX or Ollama — served at near-native speed on the host GPU via AI Bridge.",
+  "datePublished": "2026-09-16",
+  "dateModified": "2026-09-22",
+  "author": { "@type": "Organization", "name": "Velo Workspaces", "url": "https://www.veloworkspaces.com/" },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Velo Workspaces",
+    "logo": { "@type": "ImageObject", "url": "https://www.veloworkspaces.com/assets/icon.png" }
+  },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://www.veloworkspaces.com/blog/zero-tax-virtualization/" }
+}
+</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -45,6 +64,7 @@
         <span class="eyebrow">Complete guide</span>
         <h1>Zero-Tax Virtualization: Running AI Agents Safely in Velo Workspaces</h1>
         <p class="article-lede">A complete guide to running AI coding agents inside an isolated Linux VM on Apple Silicon, with the model — MLX or Ollama, your choice — served at near-native speed on the host GPU via AI Bridge.</p>
+        <p style="font-size:0.9rem; color:var(--color-text-secondary);">Published September 16, 2026 · Updated September 22, 2026</p>
       </div>
     </div>
   </section>
@@ -53,12 +73,12 @@
     <div class="container article-body">
 
       <h2>1. Introduction: The Security vs. Performance Dilemma</h2>
-      <p>Running autonomous AI coding agents natively on your primary macOS machine introduces severe security liabilities. Modern agents execute terminal commands, install unverified dependencies via <code>pip</code> and <code>npm</code>, modify arbitrary files, and can be coerced through prompt injection attacks into exfiltrating environment variables, dotfiles, or macOS Keychain secrets.</p>
+      <p>Running autonomous AI coding agents natively on your primary macOS machine introduces severe security liabilities. Modern agents execute terminal commands, install unverified dependencies via <code>pip</code> and <code>npm</code>, modify arbitrary files, and can be coerced through prompt injection attacks into exfiltrating environment variables, dotfiles, or macOS Keychain secrets — not hypothetical risks; <a href="/blog/ai-agent-security-risks/">real, dated 2026 incidents</a> cover exactly this.</p>
 
       <p>The standard industry remedy is sandboxing agents inside a Linux virtual machine or container. On Apple Silicon, however, this immediately collides with a hypervisor-level barrier:</p>
       <ul>
         <li><strong>No Compute Passthrough:</strong> Apple's native <code>Virtualization.framework</code> does not expose the host Metal GPU to Linux guests. Linux VMs receive only a 2D paravirtualized framebuffer (<code>virtio-gpu</code>).</li>
-        <li><strong>The "Virtualization Tax":</strong> Attempting to run an LLM directly inside a Linux VM forces model inference onto virtualized CPU cores. Generation speeds crater by 80%+, making multi-turn agentic loops unusable.</li>
+        <li><strong>The "Virtualization Tax":</strong> Attempting to run an LLM directly inside a Linux VM forces model inference onto virtualized CPU cores instead of the GPU. Published CPU-vs-GPU inference benchmarks commonly show a 12×–47× slowdown for the same model on CPU alone — GPU-to-CPU memory bandwidth is itself typically 10–50× slower than the GPU's own high-bandwidth memory, which is most of where that gap comes from. That's not "slower," it's a different order of magnitude, unusable for a responsive multi-turn agentic loop.</li>
         <li><strong>Containers Share the Same Limitation:</strong> Docker Desktop, OrbStack, and Colima run atop Linux guest kernels and face the exact same GPU compute void.</li>
       </ul>
 
@@ -67,7 +87,7 @@
       <ol>
         <li><strong>Model on the Host:</strong> An inference server — <strong>Ollama</strong> or <strong>Apple MLX</strong> — runs natively on macOS, retaining full access to unified memory bandwidth and Metal GPU acceleration.</li>
         <li><strong>Agent in the VM:</strong> The agent framework executes inside an isolated Ubuntu Linux guest, restricting all file modifications and terminal execution to a sandboxed filesystem.</li>
-        <li><strong>VirtIO-vsock Transport:</strong> Traffic travels across hypervisor memory buffers via vsock rather than a traditional virtualized NAT network stack, reducing bridge overhead to single-digit milliseconds.</li>
+        <li><strong>VirtIO-vsock Transport:</strong> Traffic travels across hypervisor memory buffers via vsock rather than a traditional virtualized NAT network stack — kernel-level vsock benchmarks put the core send/transport path at roughly 8–23 microseconds, an order of magnitude below what a virtualized network stack costs. The end-to-end effect on a real inference request, measured against this exact setup, is in <a href="/blog/vm-inference-benchmark/">the full benchmark</a> and <a href="/blog/vm-sandboxing-cost/">the sandboxing-cost comparison</a> — single-digit-percent overhead, not a number you have to take on faith here.</li>
       </ol>
 
       <p>This guide covers <strong>both</strong> engines side by side. Pick one in Section 5 — everything downstream (VM setup, the vsock bridge, agent configuration) works identically either way, substituting the port your chosen engine listens on.</p>
@@ -386,6 +406,6 @@ export PATH="$HOME/.local/bin:$PATH"</code></pre>
   </div>
 </footer>
 
-<script src="/assets/app-store.js"></script>
+<script src="/assets/app-store.js?v=3"></script>
 </body>
 </html>
