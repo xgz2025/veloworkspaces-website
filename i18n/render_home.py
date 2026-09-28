@@ -44,10 +44,10 @@ def render(code, seg, label):
     switcher = lang_switch_html(seg, "", code)
     hreflang = hreflang_tags("")
 
-    og_image_block = '''<!-- TODO: add /assets/og-image.png (1200x630) and uncomment once it exists.
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og-image.png">
-<meta name="twitter:card" content="summary_large_image">
--->'''
+    og_image_block = '''<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">'''
 
     html = f'''<!doctype html>
 <html lang="{code}">
@@ -73,17 +73,37 @@ def render(code, seg, label):
 <script type="application/ld+json">
 {{
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "Velo Workspaces",
-  "operatingSystem": "macOS",
-  "applicationCategory": "DeveloperApplication",
-  "description": "{t['ld_description']}",
-  "url": "{canonical}",
-  "offers": {{
-    "@type": "Offer",
-    "price": "{t['price']}",
-    "priceCurrency": "{t['price_currency']}"
-  }}
+  "@graph": [
+    {{
+      "@type": "WebSite",
+      "name": "Velo Workspaces",
+      "url": "https://www.veloworkspaces.com/",
+      "inLanguage": "{code}"
+    }},
+    {{
+      "@type": "SoftwareApplication",
+      "name": "Velo Workspaces",
+      "operatingSystem": "macOS 14 or later",
+      "applicationCategory": "DeveloperApplication",
+      "softwareVersion": "1.2.0",
+      "description": "{t['ld_description']}",
+      "url": "{canonical}",
+      "downloadUrl": "https://apps.apple.com/app/id6805509975",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "screenshot": "https://www.veloworkspaces.com/assets/screenshots/software-engineers.webp",
+      "publisher": {{
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": "https://www.veloworkspaces.com/assets/icon.png"
+      }},
+      "offers": {{
+        "@type": "Offer",
+        "price": "{t['price']}",
+        "priceCurrency": "{t['price_currency']}"
+      }}
+    }}
+  ]
 }}
 </script>
 </head>
@@ -123,24 +143,65 @@ def render(code, seg, label):
         </p>
         <div class="hero-actions">
           {store_button(t)}
-          <a class="btn btn-outline" href="#personas">{t['hero_cta2']}</a>
+          <a class="btn btn-outline" href="#new">{t['hero_cta2']}</a>
         </div>
         <p class="hero-note">{t['hero_note']}</p>
       </div>
       <div class="hero-art">
         <div class="shot-tile" style="--accent: var(--color-accent-swe);">
-          <img src="/assets/screenshots/software-engineers.png" alt="{t['shot_swe']}" loading="eager" width="960" height="600">
+          <img src="/assets/screenshots/software-engineers.webp" fetchpriority="high" alt="{t['shot_swe']}" loading="eager" width="960" height="600">
         </div>
         <div class="shot-tile" style="--accent: var(--color-accent-ai);">
-          <img src="/assets/screenshots/ai-researchers.png" alt="{t['shot_ai']}" loading="eager" width="960" height="600">
+          <img src="/assets/screenshots/ai-researchers.webp" alt="{t['shot_ai']}" loading="eager" width="960" height="600">
         </div>
         <div class="shot-tile" style="--accent: var(--color-accent-devops);">
-          <img src="/assets/screenshots/devops-professionals.png" alt="{t['shot_devops']}" loading="eager" width="960" height="600">
+          <img src="/assets/screenshots/devops-professionals.webp" alt="{t['shot_devops']}" loading="eager" width="960" height="600">
         </div>
         <div class="shot-tile" style="--accent: var(--color-accent-qa);">
-          <img src="/assets/screenshots/qa-engineers.png" alt="{t['shot_qa']}" loading="eager" width="960" height="600">
+          <img src="/assets/screenshots/qa-engineers.webp" alt="{t['shot_qa']}" loading="eager" width="960" height="600">
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="new">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">{t['new_eyebrow']}</span>
+        <h2>{t['new_h2']}</h2>
+        <p>{t['new_p']}</p>
+      </div>
+      <div class="grid grid-4">
+        <div class="card persona-card" style="--accent: var(--color-accent-swe);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></svg>
+          </div>
+          <h3>{t['new_cloud_h']}</h3>
+          <p>{t['new_cloud_p']}</p>
+        </div>
+        <div class="card persona-card" style="--accent: var(--color-accent-devops);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><path d="M5 21h14"/></svg>
+          </div>
+          <h3>{t['new_auto_h']}</h3>
+          <p>{t['new_auto_p']}</p>
+        </div>
+        <div class="card persona-card" style="--accent: var(--color-accent-qa);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/></svg>
+          </div>
+          <h3>{t['new_lib_h']}</h3>
+          <p>{t['new_lib_p']}</p>
+        </div>
+        <div class="card persona-card" style="--accent: var(--color-accent-ai);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="6 10 9 13 6 16"/><line x1="12" y1="16" x2="17" y2="16"/></svg>
+          </div>
+          <h3>{t['new_term_h']}<span class="pricing-tag">{t['pro_tag']}</span></h3>
+          <p>{t['new_term_p']}</p>
+        </div>
+      </div>
+      <p style="text-align:center; margin-top:28px;"><a href="/blog/whats-new-in-velo-workspaces-1-2/">{t['new_link']} →</a></p>
     </div>
   </section>
 
@@ -350,12 +411,14 @@ def render(code, seg, label):
         <p>{t['os_p']}</p>
       </div>
       <div class="pill-row" style="justify-content:center;">
-        <span class="pill">Ubuntu Desktop</span>
-        <span class="pill">Ubuntu Server</span>
-        <span class="pill">Debian</span>
-        <span class="pill">Fedora Workstation</span>
+        <span class="pill">Ubuntu 26.04 &amp; 24.04</span>
+        <span class="pill">Debian 13 &amp; 12</span>
+        <span class="pill">Fedora 44</span>
+        <span class="pill">Rocky Linux 10 &amp; 9</span>
+        <span class="pill">Kali Linux</span>
+        <span class="pill">NixOS</span>
         <span class="pill">Alpine Linux</span>
-        <span class="pill">macOS guests</span>
+        <span class="pill">{t['os_macos']}</span>
       </div>
     </div>
   </section>
@@ -378,6 +441,7 @@ def render(code, seg, label):
             <li>{check_svg()} {t['pricing_free_li3']}</li>
             <li>{check_svg()} {t['pricing_free_li4']}</li>
             <li>{check_svg()} {t['pricing_free_li5']}</li>
+            <li>{check_svg()} {t['pricing_free_li6']}</li>
           </ul>
         </div>
         <div class="card pricing-card pricing-card-pro">
@@ -391,6 +455,7 @@ def render(code, seg, label):
             <li>{check_svg()} {t['pricing_pro_li3']}</li>
             <li>{check_svg()} {t['pricing_pro_li4']}</li>
             <li>{check_svg()} {t['pricing_pro_li5']}</li>
+            <li>{check_svg()} {t['pricing_pro_li6']}</li>
           </ul>
           {store_button(t, "display:inline-flex;")}
         </div>

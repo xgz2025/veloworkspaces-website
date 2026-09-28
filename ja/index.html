@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Velo Workspaces — Apple シリコン向け使い捨て VM &amp; AI サンドボックス</title>
-<meta name="description" content="Velo Workspaces は、Apple シリコン向けの使い捨て VM と AI サンドボックスのアプリです。実際の Linux・macOS 仮想マシンを備え、AI 研究者、QA エンジニア、DevOps プロフェッショナル、ソフトウェアエンジニアのために作られており、AI ブリッジによるローカル AI 推論と、ベースイメージから数秒で複製できる新しい VM を備えています。">
+<title>Velo Workspaces：Mac で約 1 分、Linux 仮想マシン</title>
+<meta name="description" content="Ubuntu、Debian、Fedora、Rocky Linux の仮想マシンを公式クラウドイメージから約 1 分で Mac 上に作成。使い捨てワークスペース、SSH ターミナル、ローカル AI。無料。">
 <link rel="canonical" href="https://www.veloworkspaces.com/ja/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
@@ -22,30 +22,50 @@
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Velo Workspaces — Apple シリコン向け使い捨て VM & AI サンドボックス">
-<meta property="og:description" content="Apple シリコン向けの使い捨て VM と AI サンドボックスのアプリ——実際の Linux・macOS 仮想マシン、AI ブリッジによるローカル AI 推論、再現可能な開発・DevOps ワークスペース。アカウント不要、クラウド依存なし。">
+<meta property="og:title" content="Velo Workspaces：Mac で約 1 分、Linux 仮想マシン">
+<meta property="og:description" content="公式クラウドイメージ、質問なしのインストール、内蔵 SSH ターミナル、使い捨てワークスペース、ローカル AI サンドボックス。Apple の Virtualization フレームワーク上で動作します。">
 <meta property="og:url" content="https://www.veloworkspaces.com/ja/">
-<!-- TODO: add /assets/og-image.png (1200x630) and uncomment once it exists.
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og-image.png">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
--->
-<meta name="twitter:title" content="Velo Workspaces — Apple シリコン向け使い捨て VM & AI サンドボックス">
-<meta name="twitter:description" content="Apple シリコン向けの使い捨て VM と AI サンドボックスのアプリ——実際の Linux・macOS 仮想マシン、AI ブリッジによるローカル AI 推論、再現可能な開発・DevOps ワークスペース。アカウント不要、クラウド依存なし。">
+<meta name="twitter:title" content="Velo Workspaces：Mac で約 1 分、Linux 仮想マシン">
+<meta name="twitter:description" content="公式クラウドイメージ、質問なしのインストール、内蔵 SSH ターミナル、使い捨てワークスペース、ローカル AI サンドボックス。Apple の Virtualization フレームワーク上で動作します。">
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "Velo Workspaces",
-  "operatingSystem": "macOS",
-  "applicationCategory": "DeveloperApplication",
-  "description": "Velo Workspaces は、Apple シリコン向けの使い捨て VM と AI サンドボックスのアプリで、AI ブリッジによるローカル AI モデル推論、再利用可能なベースイメージ、そしてソフトウェアエンジニア、QA エンジニア、DevOps プロフェッショナル、AI 研究者向けの統合機能を備えています。",
-  "url": "https://www.veloworkspaces.com/ja/",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  }
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "Velo Workspaces",
+      "url": "https://www.veloworkspaces.com/",
+      "inLanguage": "ja"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Velo Workspaces",
+      "operatingSystem": "macOS 14 or later",
+      "applicationCategory": "DeveloperApplication",
+      "softwareVersion": "1.2.0",
+      "description": "Velo Workspaces は Apple シリコン向けの Linux／macOS 仮想マシン用 Mac アプリです。公式クラウドイメージから約 1 分で Ubuntu、Debian、Fedora、Rocky Linux のワークスペースを作成し、Ubuntu、Fedora、Rocky Linux を質問なしでインストール。内蔵 SSH ターミナルでサインインでき、使い捨てワークスペースや AI ブリッジによるローカル AI 推論も使えます。",
+      "url": "https://www.veloworkspaces.com/ja/",
+      "downloadUrl": "https://apps.apple.com/app/id6805509975",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "screenshot": "https://www.veloworkspaces.com/assets/screenshots/software-engineers.webp",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": "https://www.veloworkspaces.com/assets/icon.png"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+  ]
 }
 </script>
 </head>
@@ -93,9 +113,9 @@
     <div class="container hero-grid">
       <div>
         <span class="eyebrow">Apple シリコン搭載 Mac 向け</span>
-        <h1>使い捨ての VM と AI サンドボックス——おもちゃの VM アプリではありません。</h1>
+        <h1>本物の Linux 仮想マシンを Mac に。約 1 分で準備完了。</h1>
         <p style="font-size:1.15rem; color:var(--color-text-secondary); max-width:52ch;">
-          Velo Workspaces は、AI 研究者、QA エンジニア、DevOps プロフェッショナル、ソフトウェアエンジニアが実際にどう働くかを軸に作られた、本物の分離された Linux と macOS の VM を Mac 上で実行します——ありきたりな「別の OS を動かす」目新しさではありません。
+          Ubuntu、Debian、Fedora、Rocky Linux から選び、ユーザ名とパスワードを決めるだけ。ワークスペースはディストリビューション公式のクラウドイメージから自動で設定されます。インストーラを使いたい場合も、Ubuntu、Fedora、Rocky Linux は自動でインストールされます。使い終わったらワークスペースは捨てても、AI エージェントに任せても構いません。
         </p>
         <div class="hero-actions">
           <a class="btn btn-store" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">
@@ -104,24 +124,65 @@
             </svg>
             <span class="btn-store-text"><small>App Store で</small><strong>ダウンロード</strong></span>
           </a>
-          <a class="btn btn-outline" href="#personas">何のために作られたか見る</a>
+          <a class="btn btn-outline" href="#new">1.2 の新機能</a>
         </div>
-        <p class="hero-note">Apple シリコン搭載 Mac、macOS 14 以降。アカウント不要。クラウド依存なし。</p>
+        <p class="hero-note">macOS 14 以降。Apple シリコン向けに設計。Linux ゲストは Intel 搭載 Mac でも動作します。アカウント不要。</p>
       </div>
       <div class="hero-art">
         <div class="shot-tile" style="--accent: var(--color-accent-swe);">
-          <img src="/assets/screenshots/software-engineers.png" alt="Velo Workspaces のワークスペース詳細ビュー、コード & ビルドプロファイル" loading="eager" width="960" height="600">
+          <img src="/assets/screenshots/software-engineers.webp" fetchpriority="high" alt="Velo Workspaces のワークスペース詳細ビュー、コード & ビルドプロファイル" loading="eager" width="960" height="600">
         </div>
         <div class="shot-tile" style="--accent: var(--color-accent-ai);">
-          <img src="/assets/screenshots/ai-researchers.png" alt="Velo Workspaces の AI ブリッジタブ、ローカルモデルに接続" loading="eager" width="960" height="600">
+          <img src="/assets/screenshots/ai-researchers.webp" alt="Velo Workspaces の AI ブリッジタブ、ローカルモデルに接続" loading="eager" width="960" height="600">
         </div>
         <div class="shot-tile" style="--accent: var(--color-accent-devops);">
-          <img src="/assets/screenshots/devops-professionals.png" alt="Velo Workspaces の DevOps ラボワークスペース、シリアルコンソール付き" loading="eager" width="960" height="600">
+          <img src="/assets/screenshots/devops-professionals.webp" alt="Velo Workspaces の DevOps ラボワークスペース、シリアルコンソール付き" loading="eager" width="960" height="600">
         </div>
         <div class="shot-tile" style="--accent: var(--color-accent-qa);">
-          <img src="/assets/screenshots/qa-engineers.png" alt="Velo Workspaces の使い捨てワークスペースとベースイメージライブラリ" loading="eager" width="960" height="600">
+          <img src="/assets/screenshots/qa-engineers.webp" alt="Velo Workspaces の使い捨てワークスペースとベースイメージライブラリ" loading="eager" width="960" height="600">
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="new">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">1.2 の新機能</span>
+        <h2>何もない状態から Linux のシェルまで、もっと速く。</h2>
+        <p>バージョン 1.2 は最初の数分に注力しました。イメージを用意し、インストールし、サインインするまでです。</p>
+      </div>
+      <div class="grid grid-4">
+        <div class="card persona-card" style="--accent: var(--color-accent-swe);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></svg>
+          </div>
+          <h3>クラウドイメージ</h3>
+          <p>Ubuntu、Debian、Fedora、Rocky Linux は公式クラウドイメージから起動し、初回起動時にユーザ名、パスワード、SSH 鍵、ディスクサイズを使って自動で設定されます。インストーラは不要で、通常は約 1 分で使えます。</p>
+        </div>
+        <div class="card persona-card" style="--accent: var(--color-accent-devops);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><path d="M5 21h14"/></svg>
+          </div>
+          <h3>自動インストール</h3>
+          <p>フルインストーラを使いたい場合も、Ubuntu Server と Desktop、Fedora、Rocky Linux はそのままインストールを始め、Mac の言語、キーボード配列、タイムゾーンですべての質問に答え、完了したシステムで再起動します。</p>
+        </div>
+        <div class="card persona-card" style="--accent: var(--color-accent-qa);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/></svg>
+          </div>
+          <h3>イメージライブラリ</h3>
+          <p>公式イメージを 1 か所で管理。各プロジェクトのサーバから直接ダウンロードし、公開されているチェックサムで照合します。一時停止と再開、新しいワークスペースごとのイメージの再利用、手持ちの ISO や QCOW2 ファイルの読み込みに対応します。</p>
+        </div>
+        <div class="card persona-card" style="--accent: var(--color-accent-ai);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="6 10 9 13 6 16"/><line x1="12" y1="16" x2="17" y2="16"/></svg>
+          </div>
+          <h3>内蔵 SSH ターミナル<span class="pricing-tag">Pro</span></h3>
+          <p>「ターミナルを開く」は Mac のキーチェーンに保管された鍵でサインインし、ワークスペースのホスト鍵を確認します。タブ、文字サイズ、カラースキームに対応。ssh コマンドは引き続き無料で、ターミナル、VS Code、別のコンピュータから使えます。</p>
+        </div>
+      </div>
+      <p style="text-align:center; margin-top:28px;"><a href="/blog/whats-new-in-velo-workspaces-1-2/">1.2 の新機能を読む（英語） →</a></p>
     </div>
   </section>
 
@@ -308,8 +369,8 @@
           <p>ホストのフォルダをそのままワークスペースに共有——macOS ゲストでは自動マウント、Linux にはコピー & ペースト可能なコマンドを用意。</p>
         </div>
         <div class="card">
-          <h3>SSH & VS Code、ワンクリックで</h3>
-          <p>どのワークスペースにもすばやい SSH アクセス、さらに生成される VS Code Remote-SSH 設定で、ゲストが起動した瞬間にエディタが接続。</p>
+          <h3>SSH、VS Code、ほかのコンピュータ</h3>
+          <p>ssh コマンドのコピー、生成された VS Code Remote-SSH 設定の利用、そして ssh -J で Mac を経由し、ネットワーク上の別のコンピュータからワークスペースへの接続ができます。</p>
         </div>
         <div class="card">
           <h3>シリアルコンソール</h3>
@@ -335,16 +396,18 @@
     <div class="container">
       <div class="section-head center">
         <span class="eyebrow">ゲスト OS</span>
-        <h2>本当に必要な Linux VM を実行する。</h2>
-        <p>ミラーではなく各プロジェクトの公式ソースから直接取得——さらに Metal アクセラレーションによるほぼネイティブなグラフィックスを備えた macOS ゲストも利用可能。</p>
+        <h2>本当に必要な Linux を動かす。</h2>
+        <p>Ubuntu、Debian、Fedora、Rocky Linux の公式クラウドイメージ。これらに加えて Kali Linux、NixOS、Alpine のインストーラ。Apple シリコンでは macOS ゲストも。すべてのイメージは各プロジェクトのサーバから直接取得します。</p>
       </div>
       <div class="pill-row" style="justify-content:center;">
-        <span class="pill">Ubuntu Desktop</span>
-        <span class="pill">Ubuntu Server</span>
-        <span class="pill">Debian</span>
-        <span class="pill">Fedora Workstation</span>
+        <span class="pill">Ubuntu 26.04 &amp; 24.04</span>
+        <span class="pill">Debian 13 &amp; 12</span>
+        <span class="pill">Fedora 44</span>
+        <span class="pill">Rocky Linux 10 &amp; 9</span>
+        <span class="pill">Kali Linux</span>
+        <span class="pill">NixOS</span>
         <span class="pill">Alpine Linux</span>
-        <span class="pill">macOS guests</span>
+        <span class="pill">macOS（Apple シリコン）</span>
       </div>
     </div>
   </section>
@@ -353,8 +416,8 @@
     <div class="container">
       <div class="section-head center">
         <span class="eyebrow">料金</span>
-        <h2>無料で使えます。Pro でさらに解放。</h2>
-        <p>すべてのワークスペース機能は無料でご利用いただけます。Velo Workspaces Pro は AI 統合、スナップショット、そしていくつかのパワーユーザー向けの利便機能を追加します——1週間無料でお試しください。</p>
+        <h2>無料で使えます。必要なときは Pro を。</h2>
+        <p>Linux と macOS のワークスペースの作成と実行は無料で、クラウドイメージと自動インストールも含まれます。Pro では内蔵ターミナル、AI ブリッジ、使い捨て環境のためのツールが加わります。1 週間無料でお試しいただけます。</p>
       </div>
       <div class="grid grid-2">
         <div class="card pricing-card">
@@ -363,6 +426,7 @@
           <p class="pricing-note">アカウント不要、サインイン不要、期限なし。</p>
           <ul class="feature-list">
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 無制限の Linux および macOS ワークスペース</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> クラウドイメージ、自動インストール、イメージライブラリ</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> コンソール、共有フォルダ、SSH、VS Code Remote</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 既存の復元ポイントの復元と削除</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 既存のベースイメージからワークスペースを作成</li>
@@ -375,6 +439,7 @@
           <span class="trial-badge">7日間無料トライアル</span>
           <p class="pricing-note">または年額 $24.99、または生涯一括 $79.99。</p>
           <ul class="feature-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 内蔵 SSH ターミナル——Mac の鍵でサインイン、タブとカラースキームに対応</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> AI ブリッジ——ワークスペース内から Mac 上で動作するモデルにアクセス</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 復元ポイント——壊す前にワークスペースをスナップショットし、ロールバック</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 使い捨てワークスペース——起動すれば、閉じたときに自動的に削除</li>

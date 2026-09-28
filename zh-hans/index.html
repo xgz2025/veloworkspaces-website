@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Velo Workspaces — 面向 Apple 芯片的用后即焚 VM 与 AI 沙盒</title>
-<meta name="description" content="Velo Workspaces 是一款面向 Apple 芯片的用后即焚 VM 与 AI 沙盒应用，提供真正的 Linux 与 macOS 虚拟机，专为 AI 研究人员、QA 工程师、DevOps 专业人士和软件工程师打造——通过 AI 桥接实现本地 AI 推理，并可从基础镜像在几秒内克隆出全新虚拟机。">
+<title>Velo Workspaces：约 1 分钟在 Mac 上用上 Linux 虚拟机</title>
+<meta name="description" content="用官方云镜像约 1 分钟在 Mac 上创建 Ubuntu、Debian、Fedora 和 Rocky Linux 虚拟机。用后即焚工作区、SSH 终端、本地 AI。免费下载。">
 <link rel="canonical" href="https://www.veloworkspaces.com/zh-hans/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
@@ -22,30 +22,50 @@
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Velo Workspaces — 面向 Apple 芯片的用后即焚 VM 与 AI 沙盒">
-<meta property="og:description" content="面向 Apple 芯片的用后即焚 VM 与 AI 沙盒应用——真正的 Linux 与 macOS 虚拟机，通过 AI 桥接实现本地 AI 推理，以及可复现的开发/DevOps 工作区。无需账号，不依赖云端。">
+<meta property="og:title" content="Velo Workspaces：约 1 分钟在 Mac 上用上 Linux 虚拟机">
+<meta property="og:description" content="官方云镜像、无需回答问题的自动安装、内置 SSH 终端、用后即焚工作区和本地 AI 沙盒，基于 Apple 的 Virtualization 框架。">
 <meta property="og:url" content="https://www.veloworkspaces.com/zh-hans/">
-<!-- TODO: add /assets/og-image.png (1200x630) and uncomment once it exists.
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og-image.png">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
--->
-<meta name="twitter:title" content="Velo Workspaces — 面向 Apple 芯片的用后即焚 VM 与 AI 沙盒">
-<meta name="twitter:description" content="面向 Apple 芯片的用后即焚 VM 与 AI 沙盒应用——真正的 Linux 与 macOS 虚拟机，通过 AI 桥接实现本地 AI 推理，以及可复现的开发/DevOps 工作区。无需账号，不依赖云端。">
+<meta name="twitter:title" content="Velo Workspaces：约 1 分钟在 Mac 上用上 Linux 虚拟机">
+<meta name="twitter:description" content="官方云镜像、无需回答问题的自动安装、内置 SSH 终端、用后即焚工作区和本地 AI 沙盒，基于 Apple 的 Virtualization 框架。">
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "Velo Workspaces",
-  "operatingSystem": "macOS",
-  "applicationCategory": "DeveloperApplication",
-  "description": "Velo Workspaces 是一款面向 Apple 芯片的用后即焚 VM 与 AI 沙盒应用，通过 AI 桥接提供本地 AI 模型推理、可复用的基础镜像，以及为软件工程师、QA 工程师、DevOps 专业人士和 AI 研究人员打造的各项集成功能。",
-  "url": "https://www.veloworkspaces.com/zh-hans/",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  }
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "Velo Workspaces",
+      "url": "https://www.veloworkspaces.com/",
+      "inLanguage": "zh-Hans"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Velo Workspaces",
+      "operatingSystem": "macOS 14 or later",
+      "applicationCategory": "DeveloperApplication",
+      "softwareVersion": "1.2.0",
+      "description": "Velo Workspaces 是一款面向 Apple 芯片的 Linux 与 macOS 虚拟机 Mac 应用。用官方云镜像约 1 分钟创建 Ubuntu、Debian、Fedora 或 Rocky Linux 工作区，自动安装 Ubuntu、Fedora 和 Rocky Linux，通过内置 SSH 终端登录，并使用用后即焚工作区和经由 AI 桥接的本地 AI 推理。",
+      "url": "https://www.veloworkspaces.com/zh-hans/",
+      "downloadUrl": "https://apps.apple.com/app/id6805509975",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "screenshot": "https://www.veloworkspaces.com/assets/screenshots/software-engineers.webp",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": "https://www.veloworkspaces.com/assets/icon.png"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+  ]
 }
 </script>
 </head>
@@ -93,9 +113,9 @@
     <div class="container hero-grid">
       <div>
         <span class="eyebrow">面向 Apple 芯片 Mac</span>
-        <h1>用后即焚的 VM 与 AI 沙盒——不是玩具级 VM 应用。</h1>
+        <h1>在 Mac 上运行真正的 Linux 虚拟机，约 1 分钟就绪。</h1>
         <p style="font-size:1.15rem; color:var(--color-text-secondary); max-width:52ch;">
-          Velo Workspaces 在你的 Mac 上运行真实、隔离的 Linux 与 macOS 虚拟机，围绕 AI 研究人员、QA 工程师、DevOps 专业人士和软件工程师的实际工作方式打造——而不是一个「再跑一个系统」式的猎奇玩具。
+          选择 Ubuntu、Debian、Fedora 或 Rocky Linux，设好用户名和密码，工作区就会用发行版的官方云镜像自行完成配置。想用安装程序？Ubuntu、Fedora 和 Rocky Linux 会自动安装。用完后，可以直接丢掉工作区，也可以交给 AI 智能体使用。
         </p>
         <div class="hero-actions">
           <a class="btn btn-store" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">
@@ -104,24 +124,65 @@
             </svg>
             <span class="btn-store-text"><small>下载</small><strong>App Store</strong></span>
           </a>
-          <a class="btn btn-outline" href="#personas">看看它是为什么而生</a>
+          <a class="btn btn-outline" href="#new">1.2 新功能</a>
         </div>
-        <p class="hero-note">Apple 芯片 Mac，macOS 14 或更高版本。无需账号，不依赖云端。</p>
+        <p class="hero-note">macOS 14 或更高版本。为 Apple 芯片打造；Linux 虚拟机也能在 Intel Mac 上运行。无需账号。</p>
       </div>
       <div class="hero-art">
         <div class="shot-tile" style="--accent: var(--color-accent-swe);">
-          <img src="/assets/screenshots/software-engineers.png" alt="Velo Workspaces 工作区详情视图，代码与构建预设" loading="eager" width="960" height="600">
+          <img src="/assets/screenshots/software-engineers.webp" fetchpriority="high" alt="Velo Workspaces 工作区详情视图，代码与构建预设" loading="eager" width="960" height="600">
         </div>
         <div class="shot-tile" style="--accent: var(--color-accent-ai);">
-          <img src="/assets/screenshots/ai-researchers.png" alt="Velo Workspaces AI 桥接标签页，已连接本地模型" loading="eager" width="960" height="600">
+          <img src="/assets/screenshots/ai-researchers.webp" alt="Velo Workspaces AI 桥接标签页，已连接本地模型" loading="eager" width="960" height="600">
         </div>
         <div class="shot-tile" style="--accent: var(--color-accent-devops);">
-          <img src="/assets/screenshots/devops-professionals.png" alt="Velo Workspaces DevOps 实验室工作区，带串口控制台" loading="eager" width="960" height="600">
+          <img src="/assets/screenshots/devops-professionals.webp" alt="Velo Workspaces DevOps 实验室工作区，带串口控制台" loading="eager" width="960" height="600">
         </div>
         <div class="shot-tile" style="--accent: var(--color-accent-qa);">
-          <img src="/assets/screenshots/qa-engineers.png" alt="Velo Workspaces 用后即焚工作区与基础镜像库" loading="eager" width="960" height="600">
+          <img src="/assets/screenshots/qa-engineers.webp" alt="Velo Workspaces 用后即焚工作区与基础镜像库" loading="eager" width="960" height="600">
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="new">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">1.2 新功能</span>
+        <h2>从零到 Linux 终端，更快一步。</h2>
+        <p>1.2 版专注于最开始的几分钟：获取镜像、完成安装、登录系统。</p>
+      </div>
+      <div class="grid grid-4">
+        <div class="card persona-card" style="--accent: var(--color-accent-swe);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></svg>
+          </div>
+          <h3>云镜像</h3>
+          <p>Ubuntu、Debian、Fedora 和 Rocky Linux 从官方云镜像启动，并在首次启动时按你的用户名、密码、SSH 密钥和磁盘大小自行配置。无需安装程序，通常约 1 分钟即可就绪。</p>
+        </div>
+        <div class="card persona-card" style="--accent: var(--color-accent-devops);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><path d="M5 21h14"/></svg>
+          </div>
+          <h3>自动安装</h3>
+          <p>想用完整安装程序？Ubuntu Server 与 Desktop、Fedora 和 Rocky Linux 会直接开始安装，用 Mac 的语言、键盘布局和时区回答所有问题，完成后重启进入已安装的系统。</p>
+        </div>
+        <div class="card persona-card" style="--accent: var(--color-accent-qa);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/></svg>
+          </div>
+          <h3>镜像库</h3>
+          <p>官方镜像集中在一处，直接从各项目自己的服务器下载，并用项目公布的校验和进行核验。支持暂停和继续、在每个新工作区中重复使用镜像，或导入你已有的 ISO 或 QCOW2 文件。</p>
+        </div>
+        <div class="card persona-card" style="--accent: var(--color-accent-ai);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="6 10 9 13 6 16"/><line x1="12" y1="16" x2="17" y2="16"/></svg>
+          </div>
+          <h3>内置 SSH 终端<span class="pricing-tag">Pro</span></h3>
+          <p>“打开终端”使用 Mac 钥匙串中保存的密钥登录，并核对工作区的主机密钥。支持标签页、文字大小和配色方案。ssh 命令依然免费，可用于“终端”、VS Code 或其他电脑。</p>
+        </div>
+      </div>
+      <p style="text-align:center; margin-top:28px;"><a href="/blog/whats-new-in-velo-workspaces-1-2/">阅读 1.2 新功能（英文） →</a></p>
     </div>
   </section>
 
@@ -308,8 +369,8 @@
           <p>将主机文件夹直接共享进工作区——macOS 虚拟机自动挂载，Linux 则提供可复制粘贴的挂载命令。</p>
         </div>
         <div class="card">
-          <h3>SSH 与 VS Code，一键直达</h3>
-          <p>快速 SSH 访问任意工作区，并自动生成 VS Code Remote-SSH 配置，虚拟机一启动编辑器即可连接。</p>
+          <h3>SSH、VS Code 与其他电脑</h3>
+          <p>拷贝 ssh 命令、打开自动生成的 VS Code Remote-SSH 配置，或用 ssh -J 经由你的 Mac 从网络中的另一台电脑连接工作区。</p>
         </div>
         <div class="card">
           <h3>串口控制台</h3>
@@ -335,16 +396,18 @@
     <div class="container">
       <div class="section-head center">
         <span class="eyebrow">虚拟机操作系统</span>
-        <h2>运行你真正需要的 Linux 虚拟机。</h2>
-        <p>直接取自各项目官方源，而非镜像站——此外还支持具备近乎原生、Metal 加速图形性能的 macOS 虚拟机。</p>
+        <h2>运行你真正需要的 Linux。</h2>
+        <p>Ubuntu、Debian、Fedora 和 Rocky Linux 的官方云镜像；这些发行版以及 Kali Linux、NixOS 和 Alpine 的安装程序；在 Apple 芯片上还可运行 macOS 虚拟机。所有镜像都直接来自各项目自己的服务器。</p>
       </div>
       <div class="pill-row" style="justify-content:center;">
-        <span class="pill">Ubuntu Desktop</span>
-        <span class="pill">Ubuntu Server</span>
-        <span class="pill">Debian</span>
-        <span class="pill">Fedora Workstation</span>
+        <span class="pill">Ubuntu 26.04 &amp; 24.04</span>
+        <span class="pill">Debian 13 &amp; 12</span>
+        <span class="pill">Fedora 44</span>
+        <span class="pill">Rocky Linux 10 &amp; 9</span>
+        <span class="pill">Kali Linux</span>
+        <span class="pill">NixOS</span>
         <span class="pill">Alpine Linux</span>
-        <span class="pill">macOS guests</span>
+        <span class="pill">macOS（Apple 芯片）</span>
       </div>
     </div>
   </section>
@@ -353,8 +416,8 @@
     <div class="container">
       <div class="section-head center">
         <span class="eyebrow">定价</span>
-        <h2>免费使用，Pro 解锁更多。</h2>
-        <p>所有工作区功能均可免费使用。Velo Workspaces Pro 增加了 AI 集成、快照，以及一些高级用户的便利功能——免费试用一周。</p>
+        <h2>免费使用，需要更多时升级 Pro。</h2>
+        <p>创建和运行 Linux 与 macOS 工作区完全免费，云镜像和自动安装也包括在内。Pro 增加内置终端、AI 桥接以及用后即焚环境所需的工具。可免费试用一周。</p>
       </div>
       <div class="grid grid-2">
         <div class="card pricing-card">
@@ -363,6 +426,7 @@
           <p class="pricing-note">无需账户，无需登录，无时间限制。</p>
           <ul class="feature-list">
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 无限数量的 Linux 与 macOS 工作区</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 云镜像、自动安装和镜像库</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 控制台、共享文件夹、SSH、VS Code Remote</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 还原与删除已有的还原点</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 从已有的基础镜像创建工作区</li>
@@ -375,6 +439,7 @@
           <span class="trial-badge">7 天免费试用</span>
           <p class="pricing-note">或按年 $24.99，或一次性买断 $79.99，永久使用。</p>
           <ul class="feature-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 内置 SSH 终端——用 Mac 的密钥登录，支持标签页和配色方案</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> AI 桥接——在工作区内直接访问 Mac 上运行的模型</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 还原点——在改动工作区之前创建快照，随时回滚</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 用后即焚工作区——启动后即用，关闭时自动删除</li>

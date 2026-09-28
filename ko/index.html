@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Velo Workspaces — Apple 실리콘용 일회용 VM &amp; AI 샌드박스</title>
-<meta name="description" content="Velo Workspaces는 Apple 실리콘용 일회용 VM 및 AI 샌드박스 앱입니다. 실제 Linux 및 macOS 가상 머신을 제공하며, AI 연구자, QA 엔지니어, DevOps 전문가, 소프트웨어 엔지니어를 위해 만들어졌습니다. AI 브리지를 통한 로컬 AI 추론과 베이스 이미지에서 몇 초 만에 복제되는 새 VM을 제공합니다.">
+<title>Velo Workspaces: 약 1분 만에 Mac에서 Linux VM</title>
+<meta name="description" content="공식 클라우드 이미지로 Ubuntu, Debian, Fedora, Rocky Linux VM을 약 1분 만에 Mac에서 만드세요. 일회용 워크스페이스, SSH 터미널, 로컬 AI. 무료.">
 <link rel="canonical" href="https://www.veloworkspaces.com/ko/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
@@ -22,30 +22,50 @@
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Velo Workspaces — Apple 실리콘용 일회용 VM & AI 샌드박스">
-<meta property="og:description" content="Apple 실리콘용 일회용 VM 및 AI 샌드박스 앱 — 실제 Linux 및 macOS 가상 머신, AI 브리지를 통한 로컬 AI 추론, 재현 가능한 개발/DevOps 워크스페이스. 계정 불필요, 클라우드 의존 없음.">
+<meta property="og:title" content="Velo Workspaces: 약 1분 만에 Mac에서 Linux VM">
+<meta property="og:description" content="공식 클라우드 이미지, 질문 없는 설치, 내장 SSH 터미널, 일회용 워크스페이스, 로컬 AI 샌드박스. Apple의 Virtualization 프레임워크 기반입니다.">
 <meta property="og:url" content="https://www.veloworkspaces.com/ko/">
-<!-- TODO: add /assets/og-image.png (1200x630) and uncomment once it exists.
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og-image.png">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
--->
-<meta name="twitter:title" content="Velo Workspaces — Apple 실리콘용 일회용 VM & AI 샌드박스">
-<meta name="twitter:description" content="Apple 실리콘용 일회용 VM 및 AI 샌드박스 앱 — 실제 Linux 및 macOS 가상 머신, AI 브리지를 통한 로컬 AI 추론, 재현 가능한 개발/DevOps 워크스페이스. 계정 불필요, 클라우드 의존 없음.">
+<meta name="twitter:title" content="Velo Workspaces: 약 1분 만에 Mac에서 Linux VM">
+<meta name="twitter:description" content="공식 클라우드 이미지, 질문 없는 설치, 내장 SSH 터미널, 일회용 워크스페이스, 로컬 AI 샌드박스. Apple의 Virtualization 프레임워크 기반입니다.">
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "Velo Workspaces",
-  "operatingSystem": "macOS",
-  "applicationCategory": "DeveloperApplication",
-  "description": "Velo Workspaces는 Apple 실리콘용 일회용 VM 및 AI 샌드박스 앱으로, AI 브리지를 통한 로컬 AI 모델 추론, 재사용 가능한 베이스 이미지, 그리고 소프트웨어 엔지니어, QA 엔지니어, DevOps 전문가, AI 연구자를 위한 통합 기능을 제공합니다.",
-  "url": "https://www.veloworkspaces.com/ko/",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  }
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "Velo Workspaces",
+      "url": "https://www.veloworkspaces.com/",
+      "inLanguage": "ko"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Velo Workspaces",
+      "operatingSystem": "macOS 14 or later",
+      "applicationCategory": "DeveloperApplication",
+      "softwareVersion": "1.2.0",
+      "description": "Velo Workspaces는 Apple 실리콘용 Linux 및 macOS 가상 머신을 위한 Mac 앱입니다. 공식 클라우드 이미지로 약 1분 만에 Ubuntu, Debian, Fedora, Rocky Linux 워크스페이스를 만들고, Ubuntu, Fedora, Rocky Linux를 질문 없이 설치하고, 내장 SSH 터미널로 로그인하며, 일회용 워크스페이스와 AI 브리지를 통한 로컬 AI 추론을 사용할 수 있습니다.",
+      "url": "https://www.veloworkspaces.com/ko/",
+      "downloadUrl": "https://apps.apple.com/app/id6805509975",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "screenshot": "https://www.veloworkspaces.com/assets/screenshots/software-engineers.webp",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": "https://www.veloworkspaces.com/assets/icon.png"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+  ]
 }
 </script>
 </head>
@@ -93,9 +113,9 @@
     <div class="container hero-grid">
       <div>
         <span class="eyebrow">Apple 실리콘 Mac 전용</span>
-        <h1>일회용 VM과 AI 샌드박스 — 장난감 같은 VM 앱이 아닙니다.</h1>
+        <h1>Mac에서 진짜 Linux VM을, 약 1분 만에.</h1>
         <p style="font-size:1.15rem; color:var(--color-text-secondary); max-width:52ch;">
-          Velo Workspaces는 AI 연구자, QA 엔지니어, DevOps 전문가, 소프트웨어 엔지니어가 실제로 일하는 방식을 중심으로 만들어진, 진짜 격리된 Linux 및 macOS VM을 Mac에서 실행합니다 — 흔한 “다른 OS 실행해보기” 같은 재미거리가 아닙니다.
+          Ubuntu, Debian, Fedora, Rocky Linux 중 하나를 고르고 사용자 이름과 암호를 정하면, 워크스페이스가 배포판의 공식 클라우드 이미지로 스스로 설정됩니다. 설치 프로그램을 원하시나요? Ubuntu, Fedora, Rocky Linux는 스스로 설치됩니다. 다 쓰면 워크스페이스를 버리거나 AI 에이전트에게 맡기세요.
         </p>
         <div class="hero-actions">
           <a class="btn btn-store" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">
@@ -104,24 +124,65 @@
             </svg>
             <span class="btn-store-text"><small>App Store에서</small><strong>다운로드</strong></span>
           </a>
-          <a class="btn btn-outline" href="#personas">무엇을 위해 만들어졌는지 보기</a>
+          <a class="btn btn-outline" href="#new">1.2의 새로운 기능</a>
         </div>
-        <p class="hero-note">Apple 실리콘 Mac, macOS 14 이상. 계정 불필요. 클라우드 의존 없음.</p>
+        <p class="hero-note">macOS 14 이상. Apple 실리콘용으로 설계했으며 Linux 게스트는 Intel Mac에서도 실행됩니다. 계정 불필요.</p>
       </div>
       <div class="hero-art">
         <div class="shot-tile" style="--accent: var(--color-accent-swe);">
-          <img src="/assets/screenshots/software-engineers.png" alt="Velo Workspaces 워크스페이스 상세 보기, 코드 및 빌드 프로필" loading="eager" width="960" height="600">
+          <img src="/assets/screenshots/software-engineers.webp" fetchpriority="high" alt="Velo Workspaces 워크스페이스 상세 보기, 코드 및 빌드 프로필" loading="eager" width="960" height="600">
         </div>
         <div class="shot-tile" style="--accent: var(--color-accent-ai);">
-          <img src="/assets/screenshots/ai-researchers.png" alt="Velo Workspaces AI 브리지 탭, 로컬 모델에 연결됨" loading="eager" width="960" height="600">
+          <img src="/assets/screenshots/ai-researchers.webp" alt="Velo Workspaces AI 브리지 탭, 로컬 모델에 연결됨" loading="eager" width="960" height="600">
         </div>
         <div class="shot-tile" style="--accent: var(--color-accent-devops);">
-          <img src="/assets/screenshots/devops-professionals.png" alt="Velo Workspaces DevOps 랩 워크스페이스, 시리얼 콘솔 포함" loading="eager" width="960" height="600">
+          <img src="/assets/screenshots/devops-professionals.webp" alt="Velo Workspaces DevOps 랩 워크스페이스, 시리얼 콘솔 포함" loading="eager" width="960" height="600">
         </div>
         <div class="shot-tile" style="--accent: var(--color-accent-qa);">
-          <img src="/assets/screenshots/qa-engineers.png" alt="Velo Workspaces 일회용 워크스페이스 및 베이스 이미지 라이브러리" loading="eager" width="960" height="600">
+          <img src="/assets/screenshots/qa-engineers.webp" alt="Velo Workspaces 일회용 워크스페이스 및 베이스 이미지 라이브러리" loading="eager" width="960" height="600">
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="new">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">1.2의 새로운 기능</span>
+        <h2>빈 Mac에서 Linux 셸까지, 더 빠르게.</h2>
+        <p>버전 1.2는 처음 몇 분에 집중했습니다. 이미지를 받고, 설치하고, 로그인하기까지입니다.</p>
+      </div>
+      <div class="grid grid-4">
+        <div class="card persona-card" style="--accent: var(--color-accent-swe);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></svg>
+          </div>
+          <h3>클라우드 이미지</h3>
+          <p>Ubuntu, Debian, Fedora, Rocky Linux가 공식 클라우드 이미지로 부팅하고, 첫 부팅 때 사용자 이름, 암호, SSH 키, 디스크 크기로 스스로 설정됩니다. 설치 프로그램 없이 보통 약 1분이면 준비됩니다.</p>
+        </div>
+        <div class="card persona-card" style="--accent: var(--color-accent-devops);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><path d="M5 21h14"/></svg>
+          </div>
+          <h3>자동 설치</h3>
+          <p>전체 설치 프로그램을 원한다면 Ubuntu Server와 Desktop, Fedora, Rocky Linux가 곧바로 설치를 시작하고, Mac의 언어, 키보드 배열, 시간대로 모든 질문에 답한 뒤 설치된 시스템으로 재시작합니다.</p>
+        </div>
+        <div class="card persona-card" style="--accent: var(--color-accent-qa);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/></svg>
+          </div>
+          <h3>이미지 라이브러리</h3>
+          <p>공식 이미지를 한곳에서 관리합니다. 각 프로젝트의 서버에서 직접 다운로드하고 공개된 체크섬으로 검증합니다. 일시 정지와 재개, 새 워크스페이스마다 이미지 재사용, 가지고 있는 ISO나 QCOW2 파일 가져오기를 지원합니다.</p>
+        </div>
+        <div class="card persona-card" style="--accent: var(--color-accent-ai);">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="6 10 9 13 6 16"/><line x1="12" y1="16" x2="17" y2="16"/></svg>
+          </div>
+          <h3>내장 SSH 터미널<span class="pricing-tag">Pro</span></h3>
+          <p>'터미널 열기'는 Mac의 키체인에 보관된 키로 로그인하고 워크스페이스의 호스트 키를 확인합니다. 탭, 텍스트 크기, 색상 구성표를 지원합니다. ssh 명령은 계속 무료로, 터미널, VS Code 또는 다른 컴퓨터에서 쓸 수 있습니다.</p>
+        </div>
+      </div>
+      <p style="text-align:center; margin-top:28px;"><a href="/blog/whats-new-in-velo-workspaces-1-2/">1.2의 새로운 기능 읽기(영어) →</a></p>
     </div>
   </section>
 
@@ -308,8 +369,8 @@
           <p>호스트 폴더를 워크스페이스로 곧바로 공유 — macOS 게스트에서는 자동 마운트, Linux에서는 복사해 붙여넣을 수 있는 명령어 제공.</p>
         </div>
         <div class="card">
-          <h3>SSH & VS Code, 클릭 한 번으로</h3>
-          <p>어떤 워크스페이스든 빠른 SSH 접속, 그리고 생성된 VS Code Remote-SSH 설정으로 게스트가 켜지는 즉시 에디터가 연결됩니다.</p>
+          <h3>SSH, VS Code, 다른 컴퓨터</h3>
+          <p>ssh 명령을 복사하거나, 생성된 VS Code Remote-SSH 설정을 열거나, ssh -J로 Mac을 거쳐 네트워크의 다른 컴퓨터에서 워크스페이스에 연결하세요.</p>
         </div>
         <div class="card">
           <h3>시리얼 콘솔</h3>
@@ -335,16 +396,18 @@
     <div class="container">
       <div class="section-head center">
         <span class="eyebrow">게스트 운영체제</span>
-        <h2>정말 필요한 Linux VM을 실행하세요.</h2>
-        <p>미러가 아니라 각 프로젝트의 공식 소스에서 직접 — 그리고 Metal 가속을 통한 거의 네이티브급 그래픽 성능의 macOS 게스트까지.</p>
+        <h2>정말 필요한 Linux를 실행하세요.</h2>
+        <p>Ubuntu, Debian, Fedora, Rocky Linux의 공식 클라우드 이미지. 이들과 함께 Kali Linux, NixOS, Alpine의 설치 프로그램. Apple 실리콘에서는 macOS 게스트까지. 모든 이미지는 각 프로젝트의 서버에서 직접 받습니다.</p>
       </div>
       <div class="pill-row" style="justify-content:center;">
-        <span class="pill">Ubuntu Desktop</span>
-        <span class="pill">Ubuntu Server</span>
-        <span class="pill">Debian</span>
-        <span class="pill">Fedora Workstation</span>
+        <span class="pill">Ubuntu 26.04 &amp; 24.04</span>
+        <span class="pill">Debian 13 &amp; 12</span>
+        <span class="pill">Fedora 44</span>
+        <span class="pill">Rocky Linux 10 &amp; 9</span>
+        <span class="pill">Kali Linux</span>
+        <span class="pill">NixOS</span>
         <span class="pill">Alpine Linux</span>
-        <span class="pill">macOS guests</span>
+        <span class="pill">macOS(Apple 실리콘)</span>
       </div>
     </div>
   </section>
@@ -353,8 +416,8 @@
     <div class="container">
       <div class="section-head center">
         <span class="eyebrow">가격</span>
-        <h2>무료로 사용. Pro로 더 많은 기능을.</h2>
-        <p>모든 워크스페이스 기능은 무료로 제공됩니다. Velo Workspaces Pro는 AI 통합, 스냅샷, 그리고 파워 유저를 위한 몇 가지 편의 기능을 추가합니다 — 1주일 동안 무료로 체험해 보세요.</p>
+        <h2>무료로 사용하세요. 더 필요할 땐 Pro.</h2>
+        <p>Linux와 macOS 워크스페이스의 생성과 실행은 무료이며, 클라우드 이미지와 자동 설치도 포함됩니다. Pro는 내장 터미널, AI 브리지, 일회용 환경을 위한 도구를 더합니다. 1주일 동안 무료로 체험해 보세요.</p>
       </div>
       <div class="grid grid-2">
         <div class="card pricing-card">
@@ -363,6 +426,7 @@
           <p class="pricing-note">계정도, 로그인도, 시간 제한도 없습니다.</p>
           <ul class="feature-list">
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 무제한 Linux 및 macOS 워크스페이스</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 클라우드 이미지, 자동 설치, 이미지 라이브러리</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 콘솔, 공유 폴더, SSH, VS Code Remote</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 기존 복원 지점 복원 및 삭제</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 기존 베이스 이미지에서 워크스페이스 생성</li>
@@ -375,6 +439,7 @@
           <span class="trial-badge">7일 무료 체험</span>
           <p class="pricing-note">또는 연 $24.99, 또는 평생 이용 $79.99 일회성 결제.</p>
           <ul class="feature-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 내장 SSH 터미널 — Mac의 키로 로그인, 탭과 색상 구성표 지원</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> AI 브리지 — 워크스페이스 안에서 Mac에서 실행 중인 모델에 접근</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 복원 지점 — 워크스페이스를 망가뜨리기 전에 스냅샷을 찍고, 롤백</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> 일회용 워크스페이스 — 실행하면, 닫는 순간 스스로 삭제됨</li>
