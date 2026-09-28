@@ -16,6 +16,10 @@ def render(code, seg, label):
 
     # FAQPage JSON-LD — plain text answers (not translated HTML), same 6 Q&A as English source.
     faq_entries = [
+        (t['ld_cloud_q'], t['ld_cloud_a']),
+        (t['ld_auto_q'], t['ld_auto_a']),
+        (t['ld_term_q'], t['ld_term_a']),
+        (t['ld_localnet_q'], t['ld_localnet_a']),
         (t['ld_shared_q'], t['ld_shared_a']),
         (t['ld_clip_q'], t['ld_clip_a']),
         (t['ld_deb_q'], t['ld_deb_a']),
@@ -52,6 +56,10 @@ def render(code, seg, label):
 <meta property="og:title" content="{t['og_title']}">
 <meta property="og:description" content="{t['og_description']}">
 <meta property="og:url" content="{canonical}">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 
 <script type="application/ld+json">
 {ld_json}
@@ -148,6 +156,59 @@ def render(code, seg, label):
   <section class="section section-alt">
     <div class="container">
       <h2 style="margin-bottom:32px;">{t['faq_h2']}</h2>
+
+      <div class="faq-group">
+        <h2>{t['faq_cloud_h2']}</h2>
+        <details class="faq-item">
+          <summary>{t['faq_cloud1_q']}</summary>
+          <div class="faq-answer">
+            <p>{t['faq_cloud1_a']}</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>{t['faq_cloud2_q']}</summary>
+          <div class="faq-answer">
+            <p>{t['faq_cloud2_a']}</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>{t['faq_cloud3_q']}</summary>
+          <div class="faq-answer">
+            <p>{t['faq_cloud3_a']}</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>{t['faq_cloud4_q']}</summary>
+          <div class="faq-answer">
+            <p>{t['faq_cloud4_a_pre']} <strong>{t['faq_cloud4_a_strong']}</strong> {t['faq_cloud4_a_post']}</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>{t['faq_ssh_h2']}</h2>
+        <details class="faq-item">
+          <summary>{t['faq_ssh1_q']}<span class="pricing-tag">{t['pro_tag']}</span></summary>
+          <div class="faq-answer">
+            <p>{t['faq_ssh1_a1']}</p>
+            <p>{t['faq_ssh1_a2']}</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>{t['faq_ssh2_q']}</summary>
+          <div class="faq-answer">
+            <p>{t['faq_ssh2_a1']}</p>
+            <p>{t['faq_ssh2_a2_pre']} <code>{t['faq_ssh2_a2_code']}</code> {t['faq_ssh2_a2_post']}</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>{t['faq_ssh3_q']}</summary>
+          <div class="faq-answer">
+            <p>{t['faq_ssh3_a1']}</p>
+            <p>{t['faq_ssh3_a2']}</p>
+          </div>
+        </details>
+      </div>
 
       <div class="faq-group">
         <h2>{t['faq_shared_h2']}</h2>

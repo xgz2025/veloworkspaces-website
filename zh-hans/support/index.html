@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>支持与常见问题 — Velo Workspaces</title>
-<meta name="description" content="Velo Workspaces 入门指南、如何使用用后即焚工作区、在 Fedora 与 Debian 上启用 Rosetta、共享文件夹访问、剪贴板故障排查等。">
+<title>Velo Workspaces 帮助：上手指南与常见问题</title>
+<meta name="description" content="如何用云镜像或 ISO 创建 Linux 虚拟机、打开 SSH 终端、挂载共享文件夹、在 Debian 和 Fedora 上启用 Rosetta，以及解决剪贴板问题。">
 <link rel="canonical" href="https://www.veloworkspaces.com/zh-hans/support/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
@@ -21,15 +21,51 @@
 <link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="支持与常见问题 — Velo Workspaces">
-<meta property="og:description" content="入门指南、用后即焚工作区、Fedora/Debian 上的 Rosetta、共享文件夹、剪贴板故障排查等。">
+<meta property="og:title" content="Velo Workspaces 帮助：上手指南与常见问题">
+<meta property="og:description" content="云镜像、自动安装、SSH 终端、共享文件夹、Debian 和 Fedora 上的 Rosetta，以及剪贴板问题。">
 <meta property="og:url" content="https://www.veloworkspaces.com/zh-hans/support/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "哪些 Linux 可以用云镜像创建？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ubuntu 26.04 和 24.04 LTS、Debian 13 和 12、Fedora 44 Cloud Base，以及 Rocky Linux 10 和 9。Velo Workspaces 下载发行方的官方镜像，cloud-init 在首次启动时设置你的账户和这台 Mac 的 SSH 密钥，通常约一分钟即可完成。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Velo Workspaces 可以自动运行哪些安装程序？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ubuntu Server 和 Desktop、Fedora Server 和 Everything，以及 Rocky Linux。开启自动安装后，App 会用你的账户、SSH 密钥、语言、键盘和时区回答安装程序的问题。Debian 安装程序、Fedora Workstation、Kali Linux、NixOS 和 Alpine Linux 需要手动安装。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "如何在工作区中打开终端？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "打开工作区的「访问」标签页，点击「打开终端」（Pro）。内置终端用保存在钥匙串中的密钥通过 SSH 登录。「访问」标签页中的 ssh 命令可免费用于你自己的终端或 VS Code。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "为什么 macOS 要为 Velo Workspaces 请求本地网络权限？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "工作区位于 Mac 内部的虚拟网络（192.168.64.x），macOS 把它算作本地网络。SSH 检查和终端会连接那里，所以 macOS 会询问一次。App 不会扫描你的网络。"
+      }
+    },
     {
       "@type": "Question",
       "name": "如何从工作区内部访问共享文件夹？",
@@ -139,20 +175,20 @@
         <ol class="steps" style="margin-top:20px;">
           <li>
             <div>
-              <h3>添加工作区</h3>
-              <p>在侧边栏中选择所需的工作区类型，然后点击右上角的「+」，并选取镜像来源：下载官方镜像、选择本地系统镜像文件，或从现有虚拟磁盘启动。</p>
+              <h3>选择系统来源</h3>
+              <p>在侧边栏选择一个库，然后点击右上角的「+」。想要约一分钟就能用的现成系统，选「云镜像」；想运行发行版自带的安装程序，选「安装镜像」；想从基础镜像或已有磁盘开始，选「从现有虚拟磁盘启动」。</p>
             </div>
           </li>
           <li>
             <div>
-              <h3>选择预设</h3>
-              <p>选择与你的工作匹配的预设——代码与构建、DevOps 实验室、AI 沙盒等——或者自行配置 CPU、内存和存储。</p>
+              <h3>选择镜像</h3>
+              <p>选择发行版和版本。镜像从发行方自己的服务器下载到你的镜像库，用官方公布的校验和验证，下次直接复用。已经有文件了？点击「选择文件…」。对于 Ubuntu、Fedora Server 和 Rocky Linux 的安装程序，保持「自动安装」开启，安装就会自己完成。</p>
             </div>
           </li>
           <li>
             <div>
-              <h3>确认并启动</h3>
-              <p>确认摘要信息，然后开始安装（如果是从基础镜像克隆，则为启动）。官方镜像会在你首次使用时直接从该项目自己的源下载。</p>
+              <h3>配置、确认并创建</h3>
+              <p>选择一个预设（Code &amp; Build、DevOps Lab、AI Sandbox 或 Office &amp; Study），或自行设置 CPU、内存和磁盘，然后输入用户名和密码。确认摘要后点击「创建工作区」。App 会为你创建账户，并加入这台 Mac 的 SSH 密钥。</p>
             </div>
           </li>
         </ol>
@@ -164,7 +200,7 @@
           <li>
             <div>
               <h3>添加用后即焚工作区</h3>
-              <p>在侧边栏中选择「用后即焚工作区」，然后点击右上角的「+」，并按照「如何创建工作区」中的相同步骤操作——最好选择「从现有虚拟磁盘启动」，这样能立即从已验证可用的状态开始。</p>
+              <p>在侧边栏选择「用后即焚工作区」，点击右上角的「+」，按上面的步骤操作。最快的方式是用已保存的基础镜像「从现有虚拟磁盘启动」：一个已验证可用的系统，几秒就能运行。</p>
             </div>
           </li>
           <li>
@@ -187,6 +223,59 @@
   <section class="section section-alt">
     <div class="container">
       <h2 style="margin-bottom:32px;">常见问题</h2>
+
+      <div class="faq-group">
+        <h2>云镜像与自动安装</h2>
+        <details class="faq-item">
+          <summary>哪些 Linux 可以用云镜像创建？</summary>
+          <div class="faq-answer">
+            <p>Ubuntu 26.04 和 24.04 LTS、Debian 13 和 12、Fedora 44 Cloud Base，以及 Rocky Linux 10 和 9。App 会下载发行方的官方镜像，转换为 Apple Virtualization 框架可用的格式，并把用户名、密码、这台 Mac 的 SSH 密钥和主机名交给 cloud-init。首次启动时系统会自行完成设置，并扩展到你选择的磁盘大小。下载完成后，通常约一分钟就能登录。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>哪些安装程序可以自动完成？</summary>
+          <div class="faq-answer">
+            <p>Ubuntu Server 和 Desktop、Fedora Server 和 Everything，以及 Rocky Linux（minimal 和 DVD）。在「镜像」步骤保持「自动安装」开启，App 会替你回答安装程序的问题：你的账户和 SSH 密钥，以及这台 Mac 的语言、键盘和时区。Ubuntu 安装程序在清空虚拟磁盘前会确认一次，请点击横幅中的「确认安装」。安装完成后，工作区会重启进入新系统。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>哪些系统需要手动安装？</summary>
+          <div class="faq-answer">
+            <p>Debian 安装程序、Fedora Workstation、Kali Linux、NixOS 和 Alpine Linux 会在工作区的显示画面中运行各自的安装程序，和在 PC 上一样。想要免手动的 Debian，请改用 Debian 云镜像。在搭载 Apple 芯片的 Mac 上，还可以用 Apple 的恢复镜像安装 macOS。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>能用已经下载好的 ISO 或云镜像吗？</summary>
+          <div class="faq-answer">
+            <p>可以。在「镜像」步骤点击 <strong>选择文件…</strong> ，或在「设置 › 镜像」中点击「导入…」。如果文件名出现在发行方的校验和列表中，App 会在使用前用官方校验和验证它。下载或导入的镜像都会保留在「设置 › 镜像」中（侧边栏的「镜像」也能打开），可以复用、验证或删除。</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>SSH 与终端</h2>
+        <details class="faq-item">
+          <summary>如何在工作区中打开终端？<span class="pricing-tag">Pro</span></summary>
+          <div class="faq-answer">
+            <p>启动工作区，打开它的「访问」标签页，点击「打开终端」。内置终端会用 App 为这台 Mac 生成并保存在钥匙串中的密钥通过 SSH 登录。用云镜像或自动安装创建的工作区已经信任这个密钥。</p>
+            <p>如果是你自己安装的系统，请在「访问」标签页输入用户名，用密码登录一次，然后点击「安装密钥」，之后就不再需要密码。你可以在「设置 › 访问」中复制、导入或导出密钥。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>可以用自己的终端或 VS Code，或从另一台电脑连接吗？</summary>
+          <div class="faq-answer">
+            <p>可以，而且免费。「访问」标签页会显示工作区的地址和可直接复制的 ssh 命令，以及供 VS Code Remote - SSH 扩展使用的 ~/.ssh/config 配置块。</p>
+            <p>工作区位于 Mac 内部的私有网络中，其他电脑需要经由你的 Mac 连接。在「系统设置 › 通用 › 共享」中打开「远程登录」，然后使用「访问」标签页中显示的 <code>ssh -J</code> 命令。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>为什么 macOS 询问是否允许 Velo Workspaces 查找本地网络上的设备？</summary>
+          <div class="faq-answer">
+            <p>工作区位于 Mac 内部的一个小型虚拟网络中（地址类似 192.168.64.x），macOS 把它算作本地网络。SSH 检查和终端会连接这个地址，所以 macOS 会询问一次。App 从不浏览或扫描你的网络，只连接它自己的工作区。</p>
+            <p>如果你选了「不允许」，「访问」标签页会显示「无本地网络访问权限」。请在「系统设置 › 隐私与安全性 › 本地网络」中重新打开。</p>
+          </div>
+        </details>
+      </div>
 
       <div class="faq-group">
         <h2>共享文件夹</h2>
@@ -298,13 +387,13 @@ sudo systemctl restart systemd-binfmt</code></pre>
         <details class="faq-item">
           <summary>如何把一个工作区变成可复用的基础镜像？<span class="pricing-tag">Pro</span></summary>
           <div class="faq-answer">
-            <p>停止该工作区，然后在已停止工作区显示的横幅中选择 <strong>保存为基础镜像</strong> 。之后再次保存同一个工作区会创建一个新的独立基础镜像，而不是覆盖之前的镜像——你可以在偏好设置 → 基础镜像中管理并删除不再需要的基础镜像。</p>
+            <p>停止该工作区，然后在已停止工作区显示的横幅中选择 <strong>保存为基础镜像</strong> 。之后再次保存同一个工作区，会创建一个新的独立基础镜像，旧的仍然保留。可以在「设置 › 镜像 › 基础镜像」中管理和删除基础镜像。</p>
           </div>
         </details>
         <details class="faq-item">
-          <summary>我的工作区和基础镜像存储在哪里？如何释放空间？</summary>
+          <summary>工作区和镜像存放在哪里？如何释放空间？</summary>
           <div class="faq-answer">
-            <p>工作区磁盘和基础镜像存放在你 Mac 上的 <code>~/Library/Application Support/VeloWorkspaces</code> 目录下。从库中删除不再需要的工作区，并在偏好设置 → 基础镜像中删除未使用的基础镜像，即可释放空间。</p>
+            <p>工作区磁盘和基础镜像存放在你 Mac 上的 <code>~/Library/Application Support/VeloWorkspaces</code> 目录下。要释放空间，请从库中删除不再需要的工作区，并在「设置 › 镜像」中删除不再使用的已下载镜像或基础镜像。</p>
           </div>
         </details>
       </div>

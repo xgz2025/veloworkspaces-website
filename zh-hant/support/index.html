@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>支援與常見問題 — Velo Workspaces</title>
-<meta name="description" content="Velo Workspaces 入門指南、如何使用用後即焚工作區、在 Fedora 與 Debian 上啟用 Rosetta、共用資料夾存取、剪貼簿疑難排解等。">
+<title>Velo Workspaces 說明：入門指南與常見問題</title>
+<meta name="description" content="如何用雲端映像或 ISO 建立 Linux 虛擬機器、開啟 SSH 終端機、掛載共享資料夾、在 Debian 與 Fedora 上啟用 Rosetta，以及排除剪貼簿問題。">
 <link rel="canonical" href="https://www.veloworkspaces.com/zh-hant/support/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
@@ -21,15 +21,51 @@
 <link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="支援與常見問題 — Velo Workspaces">
-<meta property="og:description" content="入門指南、用後即焚工作區、Fedora/Debian 上的 Rosetta、共用資料夾、剪貼簿疑難排解等。">
+<meta property="og:title" content="Velo Workspaces 說明：入門指南與常見問題">
+<meta property="og:description" content="雲端映像、自動安裝、SSH 終端機、共享資料夾、Debian 與 Fedora 上的 Rosetta，以及剪貼簿問題。">
 <meta property="og:url" content="https://www.veloworkspaces.com/zh-hant/support/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "哪些 Linux 可以用雲端映像建立？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ubuntu 26.04 與 24.04 LTS、Debian 13 與 12、Fedora 44 Cloud Base，以及 Rocky Linux 10 與 9。Velo Workspaces 下載發行方的官方映像，cloud-init 在首次開機時設定你的帳號與這台 Mac 的 SSH 金鑰，通常約一分鐘即可完成。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Velo Workspaces 可以自動執行哪些安裝程式？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ubuntu Server 與 Desktop、Fedora Server 與 Everything，以及 Rocky Linux。開啟自動安裝後，App 會用你的帳號、SSH 金鑰、語言、鍵盤與時區回答安裝程式的問題。Debian 安裝程式、Fedora Workstation、Kali Linux、NixOS 與 Alpine Linux 需要手動安裝。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "如何在工作區中開啟終端機？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "打開工作區的「存取」標籤頁，點擊「打開終端機」（Pro）。內建終端機用保存在鑰匙圈中的金鑰透過 SSH 登入。「存取」標籤頁中的 ssh 指令可免費用於你自己的終端機或 VS Code。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "為什麼 macOS 要為 Velo Workspaces 要求區域網路權限？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "工作區位於 Mac 內部的虛擬網路（192.168.64.x），macOS 把它視為區域網路。SSH 檢查與終端機會連線到那裡，所以 macOS 會詢問一次。App 不會掃描你的網路。"
+      }
+    },
     {
       "@type": "Question",
       "name": "如何從工作區內部存取共用資料夾？",
@@ -139,20 +175,20 @@
         <ol class="steps" style="margin-top:20px;">
           <li>
             <div>
-              <h3>新增工作區</h3>
-              <p>在側邊欄中選擇所需的工作區類型，然後點擊右上角的「+」，並選取映像檔來源：下載官方映像檔、選擇本機系統映像檔，或從現有虛擬磁碟啟動。</p>
+              <h3>選擇系統來源</h3>
+              <p>在側邊欄選擇一個資料庫，然後點擊右上角的「+」。想要約一分鐘就能用的現成系統，選「雲端映像」；想執行發行版本身的安裝程式，選「安裝映像」；想從基礎映像或現有磁碟開始，選「從現有的虛擬磁碟開機」。</p>
             </div>
           </li>
           <li>
             <div>
-              <h3>選擇預設</h3>
-              <p>選擇與你的工作相符的預設——程式碼與建構、DevOps 實驗室、AI 沙盒等——或者自行設定 CPU、記憶體與儲存空間。</p>
+              <h3>選擇映像</h3>
+              <p>選擇發行版與版本。映像會從發行方自己的伺服器下載到你的映像資料庫，以官方公布的檢查碼驗證，下次直接重複使用。已經有檔案了？點擊「選擇檔案…」。Ubuntu、Fedora Server 與 Rocky Linux 的安裝程式只要保持「自動安裝」開啟，安裝就會自行完成。</p>
             </div>
           </li>
           <li>
             <div>
-              <h3>確認並啟動</h3>
-              <p>確認摘要資訊，然後開始安裝（若是從基礎映像檔複製，則為開機）。官方映像檔會在你首次使用時直接從該專案自己的來源下載。</p>
+              <h3>設定、確認並建立</h3>
+              <p>選擇一個預設（Code &amp; Build、DevOps Lab、AI Sandbox 或 Office &amp; Study），或自行設定 CPU、記憶體與磁碟，再輸入使用者名稱與密碼。確認摘要後點擊「建立工作區」。App 會為你建立帳號，並加入這台 Mac 的 SSH 金鑰。</p>
             </div>
           </li>
         </ol>
@@ -164,7 +200,7 @@
           <li>
             <div>
               <h3>新增用後即焚工作區</h3>
-              <p>在側邊欄中選擇「用後即焚工作區」，然後點擊右上角的「+」，並依照「如何建立工作區」的相同步驟操作——最好選擇「從現有虛擬磁碟啟動」，這樣能立即從已驗證可用的狀態開始。</p>
+              <p>在側邊欄選擇「用後即焚工作區」，點擊右上角的「+」，依照上面的步驟操作。最快的方式是用已儲存的基礎映像「從現有的虛擬磁碟開機」：一個已驗證可用的系統，幾秒就能執行。</p>
             </div>
           </li>
           <li>
@@ -187,6 +223,59 @@
   <section class="section section-alt">
     <div class="container">
       <h2 style="margin-bottom:32px;">常見問題</h2>
+
+      <div class="faq-group">
+        <h2>雲端映像與自動安裝</h2>
+        <details class="faq-item">
+          <summary>哪些 Linux 可以用雲端映像建立？</summary>
+          <div class="faq-answer">
+            <p>Ubuntu 26.04 與 24.04 LTS、Debian 13 與 12、Fedora 44 Cloud Base，以及 Rocky Linux 10 與 9。App 會下載發行方的官方映像，轉換成 Apple Virtualization 框架可用的格式，並把使用者名稱、密碼、這台 Mac 的 SSH 金鑰與主機名稱交給 cloud-init。首次開機時系統會自行完成設定，並擴展到你選擇的磁碟大小。下載完成後，通常約一分鐘就能登入。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>哪些安裝程式可以自動完成？</summary>
+          <div class="faq-answer">
+            <p>Ubuntu Server 與 Desktop、Fedora Server 與 Everything，以及 Rocky Linux（minimal 與 DVD）。在「映像」步驟保持「自動安裝」開啟，App 會替你回答安裝程式的問題：你的帳號與 SSH 金鑰，以及這台 Mac 的語言、鍵盤與時區。Ubuntu 安裝程式在清除虛擬磁碟前會確認一次，請點擊橫幅中的「確認安裝」。安裝完成後，工作區會重新開機進入新系統。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>哪些系統需要手動安裝？</summary>
+          <div class="faq-answer">
+            <p>Debian 安裝程式、Fedora Workstation、Kali Linux、NixOS 與 Alpine Linux 會在工作區的顯示畫面中執行各自的安裝程式，和在 PC 上一樣。想要免手動的 Debian，請改用 Debian 雲端映像。在搭載 Apple 晶片的 Mac 上，也可以用 Apple 的回復映像安裝 macOS。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>可以用已經下載好的 ISO 或雲端映像嗎？</summary>
+          <div class="faq-answer">
+            <p>可以。在「映像」步驟點擊 <strong>選擇檔案…</strong> ，或在「設定 › 映像」中點擊「匯入⋯」。如果檔名出現在發行方的檢查碼清單中，App 會在使用前以官方檢查碼驗證。下載或匯入的映像都會保留在「設定 › 映像」中（側邊欄的「映像」也能開啟），可以重複使用、驗證或刪除。</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>SSH 與終端機</h2>
+        <details class="faq-item">
+          <summary>如何在工作區中開啟終端機？<span class="pricing-tag">Pro</span></summary>
+          <div class="faq-answer">
+            <p>啟動工作區，打開它的「存取」標籤頁，點擊「打開終端機」。內建終端機會用 App 為這台 Mac 產生並保存在鑰匙圈中的金鑰透過 SSH 登入。用雲端映像或自動安裝建立的工作區已經信任這把金鑰。</p>
+            <p>如果是你自己安裝的系統，請在「存取」標籤頁輸入使用者名稱，用密碼登入一次，再點擊「安裝金鑰」，之後就不再需要密碼。你可以在「設定 › 存取」中拷貝、匯入或匯出金鑰。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>可以用自己的終端機或 VS Code，或從另一台電腦連線嗎？</summary>
+          <div class="faq-answer">
+            <p>可以，而且免費。「存取」標籤頁會顯示工作區的位址和可直接拷貝的 ssh 指令，以及供 VS Code Remote - SSH 延伸功能使用的 ~/.ssh/config 設定區塊。</p>
+            <p>工作區位於 Mac 內部的私有網路中，其他電腦需要經由你的 Mac 連線。在「系統設定 › 一般 › 共享」中開啟「遠端登入」，然後使用「存取」標籤頁中顯示的 <code>ssh -J</code> 指令。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>為什麼 macOS 詢問是否允許 Velo Workspaces 尋找區域網路上的裝置？</summary>
+          <div class="faq-answer">
+            <p>工作區位於 Mac 內部的一個小型虛擬網路中（位址類似 192.168.64.x），macOS 把它視為區域網路。SSH 檢查與終端機會連線到這個位址，所以 macOS 會詢問一次。App 從不瀏覽或掃描你的網路，只連線到它自己的工作區。</p>
+            <p>如果你選了「不允許」，「存取」標籤頁會顯示「無本機網路取用權限」。請在「系統設定 › 隱私權與安全性 › 本機網路」中重新開啟。</p>
+          </div>
+        </details>
+      </div>
 
       <div class="faq-group">
         <h2>共用資料夾</h2>
@@ -298,13 +387,13 @@ sudo systemctl restart systemd-binfmt</code></pre>
         <details class="faq-item">
           <summary>如何把一個工作區變成可重複使用的基礎映像檔？<span class="pricing-tag">Pro</span></summary>
           <div class="faq-answer">
-            <p>停止該工作區，然後在已停止工作區顯示的橫幅中選擇 <strong>儲存為基礎映像檔</strong> 。之後再次儲存同一個工作區會建立一個新的獨立基礎映像檔，而不是覆蓋先前的映像檔——你可以在偏好設定 → 基礎映像檔中管理並刪除不再需要的基礎映像檔。</p>
+            <p>停止該工作區，然後在已停止工作區顯示的橫幅中選擇 <strong>儲存為基礎映像檔</strong> 。之後再次儲存同一個工作區，會建立一個新的獨立基礎映像，舊的仍會保留。可以在「設定 › 映像 › 基礎映像」中管理與刪除基礎映像。</p>
           </div>
         </details>
         <details class="faq-item">
-          <summary>我的工作區與基礎映像檔儲存在哪裡？如何釋放空間？</summary>
+          <summary>工作區與映像存放在哪裡？如何釋放空間？</summary>
           <div class="faq-answer">
-            <p>工作區磁碟與基礎映像檔存放在你 Mac 上的 <code>~/Library/Application Support/VeloWorkspaces</code> 目錄下。從資料庫中刪除不再需要的工作區，並在偏好設定 → 基礎映像檔中刪除未使用的基礎映像檔，即可釋放空間。</p>
+            <p>工作區磁碟與基礎映像檔存放在你 Mac 上的 <code>~/Library/Application Support/VeloWorkspaces</code> 目錄下。要釋放空間，請從資料庫刪除不再需要的工作區，並在「設定 › 映像」中刪除不再使用的已下載映像或基礎映像。</p>
           </div>
         </details>
       </div>

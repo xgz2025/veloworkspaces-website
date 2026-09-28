@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Support &amp; FAQ — Velo Workspaces</title>
-<meta name="description" content="Erste Schritte mit Velo Workspaces, Nutzung von Einweg-Arbeitsbereichen, Aktivieren von Rosetta unter Fedora und Debian, Zugriff auf gemeinsame Ordner, Fehlerbehebung bei der Zwischenablage und mehr.">
+<title>Velo Workspaces Hilfe: Einrichtung und häufige Fragen</title>
+<meta name="description" content="Linux-VM aus Cloud-Image oder ISO erstellen, das SSH-Terminal öffnen, gemeinsame Ordner einbinden und Rosetta unter Debian und Fedora aktivieren.">
 <link rel="canonical" href="https://www.veloworkspaces.com/de/support/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
@@ -21,15 +21,51 @@
 <link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Support & FAQ — Velo Workspaces">
-<meta property="og:description" content="Erste Schritte, Einweg-Arbeitsbereiche, Rosetta unter Fedora/Debian, gemeinsame Ordner, Fehlerbehebung bei der Zwischenablage und mehr.">
+<meta property="og:title" content="Velo Workspaces Hilfe: Einrichtung und häufige Fragen">
+<meta property="og:description" content="Cloud-Images, automatische Installationen, das SSH-Terminal, gemeinsame Ordner, Rosetta unter Debian und Fedora und Hilfe bei der Zwischenablage.">
 <meta property="og:url" content="https://www.veloworkspaces.com/de/support/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Welche Linux-Systeme kann ich aus einem Cloud-Image erstellen?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ubuntu 26.04 und 24.04 LTS, Debian 13 und 12, Fedora 44 Cloud Base sowie Rocky Linux 10 und 9. Velo Workspaces lädt das offizielle Image des Herstellers, und cloud-init richtet beim ersten Start Ihr Konto und den SSH-Schlüssel dieses Macs ein, meist in etwa einer Minute."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Welche Installer kann Velo Workspaces automatisch ausführen?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ubuntu Server und Desktop, Fedora Server und Everything sowie Rocky Linux. Mit „Automatische Installation“ beantwortet die App die Fragen des Installers mit Ihrem Konto, SSH-Schlüssel, Sprache, Tastatur und Zeitzone. Der Debian-Installer, Fedora Workstation, Kali Linux, NixOS und Alpine Linux werden von Hand installiert."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wie öffne ich ein Terminal in einem Arbeitsbereich?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Öffnen Sie den Tab „Zugriff“ des Arbeitsbereichs und klicken Sie auf „Terminal öffnen“ (Pro). Das integrierte Terminal meldet sich per SSH mit einem Schlüssel aus Ihrem Schlüsselbund an. Der ssh-Befehl im Tab „Zugriff“ funktioniert kostenlos mit Ihrem eigenen Terminal oder VS Code."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Warum fragt macOS nach Zugriff auf das lokale Netzwerk für Velo Workspaces?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Arbeitsbereiche liegen in einem virtuellen Netzwerk in Ihrem Mac (192.168.64.x), das macOS zum lokalen Netzwerk zählt. Die SSH-Prüfung und das Terminal verbinden sich dorthin, deshalb fragt macOS einmal. Die App durchsucht Ihr Netzwerk nicht."
+      }
+    },
     {
       "@type": "Question",
       "name": "Wie greife ich von innerhalb eines Arbeitsbereichs auf einen gemeinsamen Ordner zu?",
@@ -139,20 +175,20 @@
         <ol class="steps" style="margin-top:20px;">
           <li>
             <div>
-              <h3>Einen Arbeitsbereich hinzufügen</h3>
-              <p>Wählen Sie in der Seitenleiste den gewünschten Arbeitsbereichstyp, klicken Sie dann oben rechts auf „+“ und wählen Sie eine Image-Quelle: ein offizielles Image herunterladen, eine lokale Betriebssystem-Image-Datei auswählen, oder von einer vorhandenen virtuellen Festplatte starten.</p>
+              <h3>Quelle des Systems wählen</h3>
+              <p>Wählen Sie in der Seitenleiste eine Bibliothek und klicken Sie oben rechts auf „+“. Wählen Sie „Cloud-Image“ für ein fertiges System, das in etwa einer Minute läuft, „Installer-Image“, um den Installer einer Distribution auszuführen, oder „Von einer vorhandenen virtuellen Festplatte booten“, um mit einem Basis-Image oder einer vorhandenen Festplatte zu starten.</p>
             </div>
           </li>
           <li>
             <div>
-              <h3>Profil auswählen</h3>
-              <p>Wählen Sie das Profil, das zu Ihrer Arbeit passt — Code &amp; Build, DevOps-Labor, KI-Sandbox und mehr — oder konfigurieren Sie CPU, Arbeitsspeicher und Speicherplatz selbst.</p>
+              <h3>Image auswählen</h3>
+              <p>Wählen Sie Distribution und Version. Images werden von den Servern des Herstellers in Ihre Image-Bibliothek geladen, mit der veröffentlichten Prüfsumme verglichen und beim nächsten Mal wiederverwendet. Sie haben die Datei schon? Klicken Sie auf „Datei auswählen…“. Bei den Installern von Ubuntu, Fedora Server und Rocky Linux lassen Sie „Automatische Installation“ eingeschaltet, dann läuft die Installation von selbst.</p>
             </div>
           </li>
           <li>
             <div>
-              <h3>Prüfen und starten</h3>
-              <p>Bestätigen Sie die Zusammenfassung und starten Sie dann die Installation (oder den Start, bei einem Klon eines Basis-Images). Offizielle Images werden beim ersten Gebrauch direkt von der eigenen Quelle des jeweiligen Projekts heruntergeladen.</p>
+              <h3>Konfigurieren, prüfen und erstellen</h3>
+              <p>Wählen Sie ein Profil (Code &amp; Build, DevOps Lab, AI Sandbox oder Office &amp; Study) oder legen Sie CPU, Arbeitsspeicher und Festplatte selbst fest, und geben Sie Benutzername und Passwort ein. Prüfen Sie die Übersicht und klicken Sie auf „Arbeitsbereich erstellen“. Die App legt Ihr Konto an und hinterlegt dort den SSH-Schlüssel dieses Macs.</p>
             </div>
           </li>
         </ol>
@@ -164,7 +200,7 @@
           <li>
             <div>
               <h3>Einen Einweg-Arbeitsbereich hinzufügen</h3>
-              <p>Wählen Sie in der Seitenleiste „Einweg-Arbeitsbereiche“, klicken Sie dann oben rechts auf „+“ und folgen Sie denselben Schritten wie unter „So erstellen Sie einen Arbeitsbereich“ — am besten wählen Sie „Von einer vorhandenen virtuellen Festplatte starten“, damit er sofort in einem bekannt guten Zustand startet.</p>
+              <p>Wählen Sie in der Seitenleiste „Einweg-Workspace“, klicken Sie oben rechts auf „+“ und folgen Sie den Schritten oben. Am schnellsten starten Sie mit „Von einer vorhandenen virtuellen Festplatte booten“ und einem gespeicherten Basis-Image: ein bewährtes System, in Sekunden bereit.</p>
             </div>
           </li>
           <li>
@@ -187,6 +223,59 @@
   <section class="section section-alt">
     <div class="container">
       <h2 style="margin-bottom:32px;">Häufig gestellte Fragen</h2>
+
+      <div class="faq-group">
+        <h2>Cloud-Images &amp; automatische Installation</h2>
+        <details class="faq-item">
+          <summary>Welche Linux-Systeme kann ich aus einem Cloud-Image erstellen?</summary>
+          <div class="faq-answer">
+            <p>Ubuntu 26.04 und 24.04 LTS, Debian 13 und 12, Fedora 44 Cloud Base sowie Rocky Linux 10 und 9. Die App lädt das offizielle Image des Herstellers, bereitet es für Apples Virtualization-Framework auf und übergibt cloud-init Ihren Benutzernamen, Ihr Passwort, den SSH-Schlüssel dieses Macs und einen Hostnamen. Beim ersten Start richtet sich das System selbst ein und wächst auf die gewählte Festplattengröße. Nach dem Download ist es meist in etwa einer Minute bereit zur Anmeldung.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Welche Installer laufen von selbst?</summary>
+          <div class="faq-answer">
+            <p>Ubuntu Server und Desktop, Fedora Server und Everything sowie Rocky Linux (minimal und DVD). Lassen Sie im Schritt „Image“ die Option „Automatische Installation“ eingeschaltet, dann beantwortet die App die Fragen des Installers: Ihr Konto und SSH-Schlüssel sowie Sprache, Tastatur und Zeitzone dieses Macs. Der Ubuntu-Installer fragt einmal nach, bevor er die virtuelle Festplatte löscht; klicken Sie dann im Banner auf „Installation bestätigen“. Nach der Installation startet der Arbeitsbereich in das neue System.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Welche Systeme installiere ich von Hand?</summary>
+          <div class="faq-answer">
+            <p>Der Debian-Installer, Fedora Workstation, Kali Linux, NixOS und Alpine Linux führen ihren eigenen Installer in der Anzeige des Arbeitsbereichs aus, genau wie auf einem PC. Für ein Debian ohne Handarbeit nehmen Sie das Debian-Cloud-Image. Auf einem Mac mit Apple Silicon können Sie außerdem macOS aus Apples Wiederherstellungs-Image installieren.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Kann ich eine bereits geladene ISO oder ein Cloud-Image verwenden?</summary>
+          <div class="faq-answer">
+            <p>Ja. Klicken Sie im Schritt „Image“ auf <strong>Datei auswählen…</strong> oder unter Einstellungen › Images auf „Importieren …“. Steht der Dateiname in der Prüfsummenliste des Herstellers, prüft die App die Datei vor der Verwendung gegen die offizielle Prüfsumme. Alles, was Sie laden oder importieren, bleibt unter Einstellungen › Images (auch „Images“ in der Seitenleiste), wo Sie es wiederverwenden, prüfen oder löschen können.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>SSH &amp; Terminal</h2>
+        <details class="faq-item">
+          <summary>Wie öffne ich ein Terminal in einem Arbeitsbereich?<span class="pricing-tag">Pro</span></summary>
+          <div class="faq-answer">
+            <p>Starten Sie den Arbeitsbereich, öffnen Sie den Tab „Zugriff“ und klicken Sie auf „Terminal öffnen“. Das integrierte Terminal meldet sich per SSH mit einem Schlüssel an, den die App für diesen Mac erzeugt und in Ihrem Schlüsselbund ablegt. Arbeitsbereiche aus einem Cloud-Image oder einer automatischen Installation vertrauen diesem Schlüssel bereits.</p>
+            <p>Bei einem selbst installierten System geben Sie im Tab „Zugriff“ den Benutzernamen ein, melden sich einmal mit dem Passwort an und klicken dann auf „Schlüssel installieren“. Danach brauchen Sie das Passwort nicht mehr. Unter Einstellungen › Zugriff können Sie den Schlüssel kopieren, importieren oder exportieren.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Kann ich mein eigenes Terminal oder VS Code nutzen oder mich von einem anderen Computer verbinden?</summary>
+          <div class="faq-answer">
+            <p>Ja, und das ist kostenlos. Der Tab „Zugriff“ zeigt die Adresse des Arbeitsbereichs mit einem kopierfertigen ssh-Befehl sowie den ~/.ssh/config-Block für die VS-Code-Erweiterung Remote - SSH.</p>
+            <p>Andere Computer erreichen einen Arbeitsbereich über Ihren Mac, denn Arbeitsbereiche liegen in einem privaten Netzwerk darin. Aktivieren Sie „Entfernte Anmeldung“ unter Systemeinstellungen › Allgemein › Freigaben und verwenden Sie dann den <code>ssh -J</code> -Befehl aus dem Tab „Zugriff“.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Warum fragt macOS, ob Velo Workspaces Geräte im lokalen Netzwerk finden darf?</summary>
+          <div class="faq-answer">
+            <p>Arbeitsbereiche liegen in einem kleinen virtuellen Netzwerk in Ihrem Mac (Adressen wie 192.168.64.x), und macOS zählt das zum lokalen Netzwerk. Die SSH-Prüfung und das Terminal verbinden sich mit dieser Adresse, deshalb fragt macOS einmal. Die App durchsucht Ihr Netzwerk nie; sie spricht nur mit ihren eigenen Arbeitsbereichen.</p>
+            <p>Haben Sie „Nicht erlauben“ gewählt, zeigt der Tab „Zugriff“ „Kein Zugriff auf lokales Netzwerk“. Schalten Sie den Zugriff unter Systemeinstellungen › Datenschutz &amp; Sicherheit › Lokales Netzwerk wieder ein.</p>
+          </div>
+        </details>
+      </div>
 
       <div class="faq-group">
         <h2>Gemeinsame Ordner</h2>
@@ -298,13 +387,13 @@ sudo systemctl restart systemd-binfmt</code></pre>
         <details class="faq-item">
           <summary>Wie mache ich aus einem Arbeitsbereich ein wiederverwendbares Basis-Image?<span class="pricing-tag">Pro</span></summary>
           <div class="faq-answer">
-            <p>Stoppen Sie den Arbeitsbereich und wählen Sie dann <strong>Als Basis-Image speichern</strong> aus dem Banner, das bei einem gestoppten Arbeitsbereich angezeigt wird. Speichern Sie denselben Arbeitsbereich später erneut, entsteht ein neues, unabhängiges Basis-Image, statt das vorherige zu überschreiben — verwalten und löschen Sie nicht mehr benötigte Basis-Images unter Einstellungen → Basis-Images.</p>
+            <p>Stoppen Sie den Arbeitsbereich und wählen Sie dann <strong>Als Basis-Image speichern</strong> aus dem Banner eines gestoppten Arbeitsbereichs. Speichern Sie denselben Arbeitsbereich später erneut, entsteht ein neues, eigenständiges Basis-Image; das alte bleibt erhalten. Basis-Images verwalten und löschen Sie unter Einstellungen › Images › Basis-Images.</p>
           </div>
         </details>
         <details class="faq-item">
-          <summary>Wo werden meine Arbeitsbereiche und Basis-Images gespeichert, und wie schaffe ich Speicherplatz frei?</summary>
+          <summary>Wo liegen meine Arbeitsbereiche und Images, und wie gebe ich Speicherplatz frei?</summary>
           <div class="faq-answer">
-            <p>Arbeitsbereich-Festplatten und Basis-Images liegen unter <code>~/Library/Application Support/VeloWorkspaces</code> auf Ihrem Mac. Löschen Sie nicht mehr benötigte Arbeitsbereiche aus der Bibliothek und ungenutzte Basis-Images unter Einstellungen → Basis-Images, um Speicherplatz freizugeben.</p>
+            <p>Arbeitsbereich-Festplatten und Basis-Images liegen unter <code>~/Library/Application Support/VeloWorkspaces</code> auf Ihrem Mac. Um Speicherplatz freizugeben, löschen Sie nicht mehr benötigte Arbeitsbereiche aus der Bibliothek und ungenutzte geladene Images oder Basis-Images unter Einstellungen › Images.</p>
           </div>
         </details>
       </div>

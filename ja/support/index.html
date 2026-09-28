@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>サポート & FAQ — Velo Workspaces</title>
-<meta name="description" content="Velo Workspaces の使い始め方、使い捨てワークスペースの使い方、Fedora と Debian での Rosetta の有効化、共有フォルダへのアクセス、クリップボードのトラブルシューティングなど。">
+<title>Velo Workspaces サポート：使い方とよくある質問</title>
+<meta name="description" content="クラウドイメージや ISO から Linux VM を作成する方法、SSH ターミナルの使い方、共有フォルダのマウント、Debian・Fedora での Rosetta の有効化、クリップボードの対処法。">
 <link rel="canonical" href="https://www.veloworkspaces.com/ja/support/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
@@ -21,15 +21,51 @@
 <link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="サポート & FAQ — Velo Workspaces">
-<meta property="og:description" content="使い始め方、使い捨てワークスペース、Fedora/Debian での Rosetta、共有フォルダ、クリップボードのトラブルシューティングなど。">
+<meta property="og:title" content="Velo Workspaces サポート：使い方とよくある質問">
+<meta property="og:description" content="クラウドイメージ、自動インストール、SSH ターミナル、共有フォルダ、Debian・Fedora の Rosetta、クリップボードの対処法。">
 <meta property="og:url" content="https://www.veloworkspaces.com/ja/support/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "クラウドイメージから作成できる Linux は？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ubuntu 26.04 / 24.04 LTS、Debian 13 / 12、Fedora 44 Cloud Base、Rocky Linux 10 / 9 です。Velo Workspaces が配布元の公式イメージをダウンロードし、初回起動時に cloud-init がアカウントとこの Mac の SSH 鍵を設定します。通常は約 1 分で使えます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Velo Workspaces が自動で実行できるインストーラは？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ubuntu Server / Desktop、Fedora Server / Everything、Rocky Linux です。自動インストールをオンにすると、アカウント、SSH 鍵、言語、キーボード、タイムゾーンをアプリがインストーラに答えます。Debian のインストーラ、Fedora Workstation、Kali Linux、NixOS、Alpine Linux は手動でインストールします。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "ワークスペースでターミナルを開くには？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ワークスペースの「アクセス」タブで「ターミナルを開く」（Pro）をクリックします。内蔵ターミナルはキーチェーンに保管された鍵で SSH ログインします。「アクセス」タブの ssh コマンドは、自分のターミナルや VS Code で無料で使えます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "macOS が Velo Workspaces にローカルネットワークへのアクセスを求めるのはなぜ？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ワークスペースは Mac 内部の仮想ネットワーク（192.168.64.x）にあり、macOS はこれをローカルネットワークとして扱います。SSH の確認とターミナルがそこへ接続するため、macOS が一度だけ確認します。アプリがネットワークをスキャンすることはありません。"
+      }
+    },
     {
       "@type": "Question",
       "name": "ワークスペース内から共有フォルダにアクセスするにはどうすればよいですか？",
@@ -139,20 +175,20 @@
         <ol class="steps" style="margin-top:20px;">
           <li>
             <div>
-              <h3>ワークスペースを追加</h3>
-              <p>サイドバーで希望するワークスペースの種類を選び、右上の「+」をクリックして、イメージのソースを選択します：公式イメージをダウンロード、ローカルの OS イメージファイルを選択、または既存の仮想ディスクから起動。</p>
+              <h3>システムの入手元を選ぶ</h3>
+              <p>サイドバーでライブラリを選び、右上の「+」をクリックします。約 1 分で使える完成済みのシステムなら「クラウドイメージ」、ディストリビューションのインストーラを実行するなら「インストーライメージ」、ベースイメージや手元のディスクから始めるなら「既存の仮想ディスクから起動する」を選びます。</p>
             </div>
           </li>
           <li>
             <div>
-              <h3>プロファイルを選ぶ</h3>
-              <p>自分の作業に合ったプロファイルを選びます——コード & ビルド、DevOps ラボ、AI サンドボックスなど——または CPU、メモリ、ストレージを自分で設定します。</p>
+              <h3>イメージを選ぶ</h3>
+              <p>ディストリビューションとバージョンを選びます。イメージは配布元のサーバからイメージライブラリにダウンロードされ、公開されているチェックサムで検証され、次回からは再利用されます。ファイルが手元にある場合は「ファイルを選択…」をクリックします。Ubuntu、Fedora Server、Rocky Linux のインストーラでは「自動インストール」をオンのままにすると、インストールが自動で進みます。</p>
             </div>
           </li>
           <li>
             <div>
-              <h3>確認して起動</h3>
-              <p>概要を確認し、インストールを開始します（ベースイメージの複製の場合は起動）。公式イメージは初めて使用する際、各プロジェクト自身のソースから直接ダウンロードされます。</p>
+              <h3>構成して確認し、作成する</h3>
+              <p>プロファイル（Code &amp; Build、DevOps Lab、AI Sandbox、Office &amp; Study）を選ぶか、CPU・メモリ・ディスクを自分で設定し、ユーザ名とパスワードを入力します。概要を確認して「ワークスペースを作成」をクリックします。アカウントの作成と、この Mac の SSH 鍵の登録はアプリが行います。</p>
             </div>
           </li>
         </ol>
@@ -164,7 +200,7 @@
           <li>
             <div>
               <h3>使い捨てワークスペースを追加</h3>
-              <p>サイドバーで「使い捨てワークスペース」を選び、右上の「+」をクリックして、「ワークスペースの作成方法」と同じ手順に従います——「既存の仮想ディスクから起動」を選ぶのが最適で、動作確認済みの状態からすぐに起動できます。</p>
+              <p>サイドバーで「使い捨てワークスペース」を選び、右上の「+」をクリックして上記の手順に従います。保存済みのベースイメージを「既存の仮想ディスクから起動する」で使うのが最速で、動作確認済みのシステムが数秒で立ち上がります。</p>
             </div>
           </li>
           <li>
@@ -187,6 +223,59 @@
   <section class="section section-alt">
     <div class="container">
       <h2 style="margin-bottom:32px;">よくある質問</h2>
+
+      <div class="faq-group">
+        <h2>クラウドイメージと自動インストール</h2>
+        <details class="faq-item">
+          <summary>クラウドイメージから作成できる Linux は？</summary>
+          <div class="faq-answer">
+            <p>Ubuntu 26.04 / 24.04 LTS、Debian 13 / 12、Fedora 44 Cloud Base、Rocky Linux 10 / 9 です。アプリは配布元の公式イメージをダウンロードし、Apple の Virtualization フレームワーク用に変換して、ユーザ名、パスワード、この Mac の SSH 鍵、ホスト名を cloud-init に渡します。初回起動時にシステムが自動で設定を行い、選んだディスクサイズまで拡張されます。ダウンロード後、たいてい約 1 分でログインできます。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>自動で進められるインストーラは？</summary>
+          <div class="faq-answer">
+            <p>Ubuntu Server / Desktop、Fedora Server / Everything、Rocky Linux（minimal / DVD）です。「イメージ」の手順で「自動インストール」をオンのままにすると、アカウントと SSH 鍵、この Mac の言語・キーボード・タイムゾーンをアプリがインストーラに答えます。Ubuntu のインストーラは仮想ディスクを消去する前に一度だけ確認を求めるので、バナーの「インストールを確認」をクリックしてください。インストールが終わると、ワークスペースは新しいシステムで再起動します。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>手動でインストールするシステムは？</summary>
+          <div class="faq-answer">
+            <p>Debian のインストーラ、Fedora Workstation、Kali Linux、NixOS、Alpine Linux は、PC と同じようにワークスペースの画面で各自のインストーラを実行します。Debian を手間なく使いたい場合は Debian のクラウドイメージを選んでください。Apple シリコン搭載の Mac では、Apple の復元イメージから macOS もインストールできます。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>ダウンロード済みの ISO やクラウドイメージは使えますか？</summary>
+          <div class="faq-answer">
+            <p>はい。「イメージ」の手順で <strong>ファイルを選択…</strong> をクリックするか、「設定」›「イメージ」の「読み込む…」を使います。ファイル名が配布元のチェックサム一覧にあれば、アプリは使う前に公式のチェックサムで検証します。ダウンロードや読み込みをしたイメージはすべて「設定」›「イメージ」（サイドバーの「イメージ」からも開けます）に残り、再利用・検証・削除ができます。</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>SSH とターミナル</h2>
+        <details class="faq-item">
+          <summary>ワークスペースでターミナルを開くには？<span class="pricing-tag">Pro</span></summary>
+          <div class="faq-answer">
+            <p>ワークスペースを起動し、「アクセス」タブで「ターミナルを開く」をクリックします。内蔵ターミナルは、アプリがこの Mac 用に作成してキーチェーンに保管している鍵で SSH ログインします。クラウドイメージや自動インストールで作成したワークスペースは、最初からこの鍵を受け入れます。</p>
+            <p>自分でインストールしたシステムでは、「アクセス」タブにユーザ名を入力し、一度パスワードでログインしてから「鍵をインストール」をクリックします。以後パスワードは不要です。鍵は「設定」›「アクセス」でコピー、読み込み、書き出しができます。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>自分のターミナルや VS Code、別のコンピュータから接続できますか？</summary>
+          <div class="faq-answer">
+            <p>はい、無料で使えます。「アクセス」タブには、ワークスペースのアドレスとコピーしてすぐ使える ssh コマンド、VS Code の Remote - SSH 拡張機能用の ~/.ssh/config ブロックが表示されます。</p>
+            <p>ワークスペースは Mac 内部のプライベートネットワークにあるため、ほかのコンピュータからは Mac を経由して接続します。「システム設定」›「一般」›「共有」で「リモートログイン」をオンにし、「アクセス」タブに表示される <code>ssh -J</code> コマンドを使ってください。</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>macOS が「ローカルネットワーク上のデバイスの検出」を Velo Workspaces に求めるのはなぜ？</summary>
+          <div class="faq-answer">
+            <p>ワークスペースは Mac 内部の小さな仮想ネットワーク（192.168.64.x などのアドレス）にあり、macOS はこれをローカルネットワークとして扱います。SSH の確認とターミナルはこのアドレスに接続するため、macOS が一度だけ確認します。アプリがネットワークを探索・スキャンすることはなく、自分のワークスペースにだけ接続します。</p>
+            <p>「許可しない」を選んだ場合、「アクセス」タブに「ローカルネットワークへのアクセスなし」と表示されます。「システム設定」›「プライバシーとセキュリティ」›「ローカルネットワーク」でオンに戻してください。</p>
+          </div>
+        </details>
+      </div>
 
       <div class="faq-group">
         <h2>共有フォルダ</h2>
@@ -298,13 +387,13 @@ sudo systemctl restart systemd-binfmt</code></pre>
         <details class="faq-item">
           <summary>ワークスペースを再利用可能なベースイメージにするにはどうすればよいですか？<span class="pricing-tag">Pro</span></summary>
           <div class="faq-answer">
-            <p>ワークスペースを停止し、停止したワークスペースに表示されるバナーから <strong>ベースイメージとして保存</strong> を選択します。同じワークスペースを後で再度保存すると、以前のものを上書きするのではなく、新しい独立したベースイメージが作成されます——不要になったベースイメージは環境設定 → ベースイメージから管理・削除できます。</p>
+            <p>ワークスペースを停止し、停止したワークスペースに表示されるバナーから <strong>ベースイメージとして保存</strong> を選択します。同じワークスペースを後でもう一度保存すると、以前のものは残したまま新しい独立したベースイメージが作成されます。ベースイメージの管理と削除は「設定」›「イメージ」›「ベースイメージ」で行えます。</p>
           </div>
         </details>
         <details class="faq-item">
-          <summary>ワークスペースとベースイメージはどこに保存されますか？また、どうすれば空き容量を確保できますか？</summary>
+          <summary>ワークスペースとイメージの保存場所は？空き容量を増やすには？</summary>
           <div class="faq-answer">
-            <p>ワークスペースのディスクとベースイメージは、Mac 上の <code>~/Library/Application Support/VeloWorkspaces</code> に保存されています。空き容量を確保するには、ライブラリから不要なワークスペースを削除し、環境設定 → ベースイメージから未使用のベースイメージを削除してください。</p>
+            <p>ワークスペースのディスクとベースイメージは、Mac 上の <code>~/Library/Application Support/VeloWorkspaces</code> に保存されています。空き容量を増やすには、不要なワークスペースをライブラリから削除し、使わなくなったダウンロード済みイメージやベースイメージを「設定」›「イメージ」から削除してください。</p>
           </div>
         </details>
       </div>

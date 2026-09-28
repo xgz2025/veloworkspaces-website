@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Suporte e FAQ — Velo Workspaces</title>
-<meta name="description" content="Primeiros passos com o Velo Workspaces, como usar workspaces descartáveis, ativar o Rosetta no Fedora e Debian, acesso a pastas compartilhadas, solução de problemas da área de transferência, e mais.">
+<title>Suporte do Velo Workspaces: primeiros passos e FAQ</title>
+<meta name="description" content="Crie uma VM Linux a partir de uma imagem de nuvem ou ISO, abra o terminal SSH, monte pastas compartilhadas e ative o Rosetta no Debian e no Fedora.">
 <link rel="canonical" href="https://www.veloworkspaces.com/pt-br/support/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
@@ -21,15 +21,51 @@
 <link rel="alternate" hreflang="x-default" href="https://www.veloworkspaces.com/support/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Suporte e FAQ — Velo Workspaces">
-<meta property="og:description" content="Primeiros passos, workspaces descartáveis, Rosetta no Fedora/Debian, pastas compartilhadas, solução de problemas da área de transferência, e mais.">
+<meta property="og:title" content="Suporte do Velo Workspaces: primeiros passos e FAQ">
+<meta property="og:description" content="Imagens de nuvem, instalações automáticas, o terminal SSH, pastas compartilhadas, Rosetta no Debian e no Fedora e a área de transferência.">
 <meta property="og:url" content="https://www.veloworkspaces.com/pt-br/support/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Quais sistemas Linux posso criar a partir de uma imagem de nuvem?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ubuntu 26.04 e 24.04 LTS, Debian 13 e 12, Fedora 44 Cloud Base e Rocky Linux 10 e 9. O Velo Workspaces baixa a imagem oficial do fabricante e o cloud-init configura sua conta e a chave SSH deste Mac na primeira inicialização, geralmente em cerca de um minuto."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Quais instaladores o Velo Workspaces pode rodar automaticamente?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ubuntu Server e Desktop, Fedora Server e Everything, e Rocky Linux. Com a instalação automática, o app responde ao instalador com sua conta, chave SSH, idioma, teclado e fuso horário. O instalador do Debian, Fedora Workstation, Kali Linux, NixOS e Alpine Linux são instalados manualmente."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Como abro um terminal em um workspace?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Abra a aba “Acesso” do workspace e clique em “Abrir Terminal” (Pro). O terminal integrado entra por SSH com uma chave guardada nas suas Chaves. O comando ssh da aba “Acesso” funciona de graça com seu próprio terminal ou com o VS Code."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Por que o macOS pede acesso à rede local para o Velo Workspaces?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Os workspaces ficam numa rede virtual dentro do seu Mac (192.168.64.x), que o macOS considera rede local. A verificação de SSH e o terminal se conectam ali, por isso o macOS pergunta uma vez. O app não vasculha sua rede."
+      }
+    },
     {
       "@type": "Question",
       "name": "Como acesso uma pasta compartilhada de dentro de um workspace?",
@@ -139,20 +175,20 @@
         <ol class="steps" style="margin-top:20px;">
           <li>
             <div>
-              <h3>Adicionar um workspace</h3>
-              <p>Na barra lateral, escolha o tipo de workspace que você quer, depois clique em “+” no canto superior direito e selecione uma fonte de imagem: baixe uma imagem oficial, escolha um arquivo de imagem de sistema operacional local, ou inicie a partir de um disco virtual existente.</p>
+              <h3>Escolha de onde vem o sistema</h3>
+              <p>Escolha uma biblioteca na barra lateral e clique em “+” no canto superior direito. Escolha “Imagem de nuvem” para um sistema pronto em cerca de um minuto, “Imagem de instalação” para rodar o instalador de uma distribuição, ou “Inicializar a partir de um disco virtual existente” para começar de uma imagem base ou de um disco que você já tem.</p>
             </div>
           </li>
           <li>
             <div>
-              <h3>Escolha um perfil</h3>
-              <p>Escolha o perfil que combina com seu trabalho — Código e Build, Lab DevOps, Sandbox de IA, e mais — ou configure CPU, memória e armazenamento você mesmo.</p>
+              <h3>Escolha a imagem</h3>
+              <p>Escolha distribuição e versão. As imagens são baixadas dos servidores do fabricante para a sua biblioteca de imagens, conferidas com o checksum publicado e reaproveitadas na próxima vez. Já tem o arquivo? Clique em “Escolher arquivo…”. Nos instaladores do Ubuntu, do Fedora Server e do Rocky Linux, deixe “Instalação automática” ligada e a instalação segue sozinha.</p>
             </div>
           </li>
           <li>
             <div>
-              <h3>Revise e inicie</h3>
-              <p>Confirme o resumo e inicie a instalação (ou o boot, no caso de um clone de imagem base). Imagens oficiais são baixadas diretamente da fonte oficial daquele projeto na primeira vez que você as usa.</p>
+              <h3>Configure, revise e crie</h3>
+              <p>Escolha um perfil (Code &amp; Build, DevOps Lab, AI Sandbox ou Office &amp; Study) ou defina você mesmo CPU, memória e disco, e informe nome de usuário e senha. Confira o resumo e clique em “Criar espaço de trabalho”. O app cria sua conta e adiciona a ela a chave SSH deste Mac.</p>
             </div>
           </li>
         </ol>
@@ -164,7 +200,7 @@
           <li>
             <div>
               <h3>Adicionar um workspace descartável</h3>
-              <p>Escolha “Workspaces descartáveis” na barra lateral, depois clique em “+” no canto superior direito e siga os mesmos passos de “Como criar um workspace” — o ideal é escolher “Iniciar a partir de um disco virtual existente” para que ele inicie instantaneamente a partir de um estado conhecido e funcional.</p>
+              <p>Escolha “Espaço de trabalho descartável” na barra lateral, clique em “+” no canto superior direito e siga os passos acima. O início mais rápido é “Inicializar a partir de um disco virtual existente” com uma imagem base salva: um sistema confiável, pronto em segundos.</p>
             </div>
           </li>
           <li>
@@ -187,6 +223,59 @@
   <section class="section section-alt">
     <div class="container">
       <h2 style="margin-bottom:32px;">Perguntas frequentes</h2>
+
+      <div class="faq-group">
+        <h2>Imagens de nuvem e instalações automáticas</h2>
+        <details class="faq-item">
+          <summary>Quais sistemas Linux posso criar a partir de uma imagem de nuvem?</summary>
+          <div class="faq-answer">
+            <p>Ubuntu 26.04 e 24.04 LTS, Debian 13 e 12, Fedora 44 Cloud Base e Rocky Linux 10 e 9. O app baixa a imagem oficial do fabricante, converte-a para o framework Virtualization da Apple e passa ao cloud-init seu nome de usuário, sua senha, a chave SSH deste Mac e um nome de host. Na primeira inicialização o sistema se configura sozinho e cresce até o tamanho de disco escolhido. Depois do download, costuma ficar pronto para login em cerca de um minuto.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Quais instaladores rodam sozinhos?</summary>
+          <div class="faq-answer">
+            <p>Ubuntu Server e Desktop, Fedora Server e Everything, e Rocky Linux (minimal e DVD). Deixe “Instalação automática” ligada na etapa Imagem e o app responde às perguntas do instalador por você: sua conta e chave SSH, além do idioma, teclado e fuso horário deste Mac. O instalador do Ubuntu pede uma confirmação antes de apagar o disco virtual; clique em “Confirmar instalação” no banner. Ao terminar, o workspace reinicia no sistema novo.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Quais sistemas eu instalo manualmente?</summary>
+          <div class="faq-answer">
+            <p>O instalador do Debian, Fedora Workstation, Kali Linux, NixOS e Alpine Linux rodam o próprio instalador na tela do workspace, como num PC. Para um Debian sem intervenção, use a imagem de nuvem do Debian. Em um Mac com Apple silicon você também pode instalar o macOS pela imagem de restauração da Apple.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Posso usar uma ISO ou imagem de nuvem que já baixei?</summary>
+          <div class="faq-answer">
+            <p>Sim. Clique em <strong>Escolher arquivo…</strong> na etapa Imagem, ou em “Importar…” em Ajustes › Imagens. Se o nome do arquivo estiver na lista de checksums do fabricante, o app confere o arquivo com o checksum oficial antes de usá-lo. Tudo o que você baixa ou importa fica em Ajustes › Imagens (também “Imagens” na barra lateral), onde dá para reutilizar, verificar ou excluir.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h2>SSH e terminal</h2>
+        <details class="faq-item">
+          <summary>Como abro um terminal em um workspace?<span class="pricing-tag">Pro</span></summary>
+          <div class="faq-answer">
+            <p>Inicie o workspace, abra a aba “Acesso” e clique em “Abrir Terminal”. O terminal integrado entra por SSH com uma chave que o app criou para este Mac e guarda nas suas Chaves. Workspaces criados de uma imagem de nuvem ou por instalação automática já aceitam essa chave.</p>
+            <p>Em um sistema que você mesmo instalou, digite o nome de usuário na aba “Acesso”, entre uma vez com a senha e clique em “Instalar Chave”; a senha não será mais pedida. Em Ajustes › Acesso você pode copiar, importar ou exportar a chave.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Posso usar meu próprio terminal ou o VS Code, ou conectar de outro computador?</summary>
+          <div class="faq-answer">
+            <p>Sim, e isso é gratuito. A aba “Acesso” mostra o endereço do workspace com um comando ssh pronto para copiar, e o bloco do ~/.ssh/config para a extensão Remote - SSH do VS Code.</p>
+            <p>Outros computadores chegam a um workspace pelo seu Mac, porque os workspaces ficam numa rede privada dentro dele. Ative “Sessão Remota” em Ajustes do Sistema › Geral › Compartilhamento e use o comando <code>ssh -J</code> mostrado na aba “Acesso”.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Por que o macOS pergunta se o Velo Workspaces pode encontrar dispositivos na rede local?</summary>
+          <div class="faq-answer">
+            <p>Os workspaces ficam numa pequena rede virtual dentro do seu Mac (endereços como 192.168.64.x), que o macOS considera rede local. A verificação de SSH e o terminal se conectam a esse endereço, por isso o macOS pergunta uma vez. O app nunca navega nem vasculha sua rede; ele só fala com os próprios workspaces.</p>
+            <p>Se você escolheu “Não Permitir”, a aba “Acesso” mostra “Sem acesso à rede local”. Ative de novo em Ajustes do Sistema › Privacidade e Segurança › Rede Local.</p>
+          </div>
+        </details>
+      </div>
 
       <div class="faq-group">
         <h2>Pastas compartilhadas</h2>
@@ -298,13 +387,13 @@ sudo systemctl restart systemd-binfmt</code></pre>
         <details class="faq-item">
           <summary>Como transformo um workspace em uma imagem base reutilizável?<span class="pricing-tag">Pro</span></summary>
           <div class="faq-answer">
-            <p>Pare o workspace e escolha <strong>Salvar como Imagem Base</strong> no banner mostrado em um workspace parado. Salvar o mesmo workspace novamente depois cria uma nova imagem base independente, em vez de sobrescrever a anterior — gerencie e exclua imagens base que você não precisa mais em Preferências → Imagens Base.</p>
+            <p>Pare o workspace e escolha <strong>Salvar como Imagem Base</strong> no banner de um workspace parado. Salvar o mesmo workspace de novo depois cria uma imagem base nova e independente, sem substituir a anterior. Gerencie e exclua imagens base em Ajustes › Imagens › Imagens base.</p>
           </div>
         </details>
         <details class="faq-item">
-          <summary>Onde meus workspaces e imagens base são armazenados, e como libero espaço?</summary>
+          <summary>Onde ficam meus workspaces e imagens, e como libero espaço?</summary>
           <div class="faq-answer">
-            <p>Discos de workspace e imagens base ficam em <code>~/Library/Application Support/VeloWorkspaces</code> no seu Mac. Exclua da biblioteca os workspaces que você não precisa mais, e imagens base não usadas em Preferências → Imagens Base, para liberar espaço.</p>
+            <p>Discos de workspace e imagens base ficam em <code>~/Library/Application Support/VeloWorkspaces</code> no seu Mac. Para liberar espaço, exclua da biblioteca os workspaces que você não usa mais e, em Ajustes › Imagens, as imagens baixadas ou imagens base que não usa.</p>
           </div>
         </details>
       </div>
