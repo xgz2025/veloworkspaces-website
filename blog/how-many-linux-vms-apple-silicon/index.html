@@ -4,23 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>How Many Linux VMs Can You Run on an Apple Silicon Mac?</title>
-<meta name="description" content="Three separate budgets that all have to hold at once: unified memory, CPU contention, and disk space — which costs far less per workspace than it looks like.">
+<meta name="description" content="How many Linux VMs an M-series Mac can run at once depends on memory, P-cores and disk. How to find your limit, and why clones cost little disk.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/how-many-linux-vms-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="How Many Linux VMs Can You Run on an Apple Silicon Mac?">
-<meta property="og:description" content="Three separate budgets that all have to hold at once: unified memory, CPU contention, and disk space — which costs far less per workspace than it looks like.">
+<meta property="og:description" content="How many Linux VMs an M-series Mac can run at once depends on memory, P-cores and disk. How to find your limit, and why clones cost little disk.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/how-many-linux-vms-apple-silicon/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/how-many-linux-vms-apple-silicon.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="How Many Linux VMs Can You Run on an Apple Silicon Mac?">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -30,10 +30,10 @@
       "@type": "BlogPosting",
       "headline": "How Many Linux VMs Can You Run on an Apple Silicon Mac?",
       "name": "How Many Linux VMs Can You Run on an Apple Silicon Mac?",
-      "description": "Three separate budgets that all have to hold at once: unified memory, CPU contention, and disk space — which costs far less per workspace than it looks like.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "description": "How many Linux VMs an M-series Mac can run at once depends on memory, P-cores and disk. How to find your limit, and why clones cost little disk.",
+      "image": "https://www.veloworkspaces.com/assets/og/how-many-linux-vms-apple-silicon.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -111,28 +111,28 @@
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>How Many Linux VMs Can You Run on an Apple Silicon Mac?</h1>
-        <p class="article-lede">There's no single ceiling, because three separate resources all have to hold at once, and they run out at different rates. Memory is usually the first one people hit — but it isn't always the real limit, and disk space in particular costs far less per workspace than it looks like it should.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <p class="article-lede">There's no single ceiling, because three resources all have to hold at once and they run out at different rates. Memory is usually the first you hit, but not always the real limit, and disk costs far less per workspace than it looks.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-      <h2>Budget one: memory, usually the binding constraint</h2>
-      <p>This is the most straightforward budget: total unified memory, minus what macOS and whatever else is running on the host needs, divided among however many workspaces are running concurrently. <a href="/blog/how-much-memory-linux-vm-mac/">The memory sizing post</a> covers picking a per-workspace figure; multiply that by concurrent workspace count and check it against real available memory, not total installed memory — the difference matters more the fewer gigabytes you're working with. The <a href="/blog/how-virtualization-framework-works/">memory balloon device</a> gives some slack if a workspace is idling rather than under active load, but it's not a substitute for the arithmetic holding up in the first place.</p>
+      <h2>Budget one: memory, usually the limit</h2>
+      <p>The simplest budget: total unified memory, minus what macOS and your other apps need, shared among the workspaces running at the same time. <a href="/blog/how-much-memory-linux-vm-mac/">The memory sizing post</a> covers choosing a per-workspace figure; multiply it by how many run at once and compare with the memory you really have free, not the total installed. The difference matters more the smaller your Mac. The memory balloon gives some slack when workspaces are idle, but the arithmetic still has to work.</p>
 
-      <h2>Budget two: CPU, softer but real under concurrent load</h2>
-      <p><a href="/blog/linux-vm-cpu-performance-apple-silicon/">The CPU performance post</a> covers why every vCPU behaves like a P-core-priority thread with no efficiency-core fallback. The consequence for running several VMs at once: two workspaces each doing genuinely parallel, CPU-heavy work compete for the same limited P-core pool, and total available P-cores — not total vCPUs assigned across all your workspaces — is the real ceiling. This budget is softer than memory in one specific way: an idle or lightly-loaded workspace costs almost nothing here, so several mostly-idle workspaces running alongside one actively-busy one is a realistic, comfortable pattern. Several workspaces all doing heavy parallel work at the same moment is the case that actually hits this ceiling.</p>
+      <h2>Budget two: CPU, softer but real under load</h2>
+      <p><a href="/blog/linux-vm-cpu-performance-apple-silicon/">The CPU post</a> explains why every vCPU runs like a P-core thread with no efficiency-core fallback. With several VMs running, two workspaces doing parallel, CPU-heavy work compete for the same P-cores, and the number of P-cores, not the total vCPUs you've assigned, is the real ceiling. It's softer than memory in one way: an idle workspace costs almost nothing here, so several mostly idle workspaces next to one busy one is a comfortable pattern. Several all doing heavy parallel work at once is what hits the limit.</p>
 
-      <h2>Budget three: disk space, and why it's cheaper than it looks</h2>
-      <p>This is the budget most likely to be overestimated, because it's easy to assume each workspace costs its full allocated disk size. It doesn't, in practice: cloning a workspace from a base image is an APFS copy-on-write operation — <a href="/blog/base-image-vs-snapshot-vs-clone/">covered in full here</a> — meaning a freshly cloned workspace shares nearly all of its disk blocks with the base image it came from, and only starts consuming meaningfully more space as its content actually diverges from that shared starting point. Ten workspaces cloned from the same base image, lightly used, cost nowhere near ten times that base image's size on disk — genuinely more like the base image's size plus each workspace's own incremental changes.</p>
-      <p>Where this budget does bite: workspaces that diverge heavily from their base image (a full toolchain install, a large dataset written to disk) each carry that divergence as real, separate disk usage, and sealed base images themselves — <a href="/blog/base-image-versioning/">covered here</a> — are each a full, standalone copy that accumulates real space of its own if you don't prune old generations.</p>
+      <h2>Budget three: disk, cheaper than it looks</h2>
+      <p>This is the budget people overestimate, assuming each workspace costs its full disk size. It doesn't. Cloning a workspace from a base image is an APFS copy-on-write operation (<a href="/blog/base-image-vs-snapshot-vs-clone/">covered here</a>), so a fresh clone shares nearly all its blocks with the base image and only uses more space as it diverges. Ten lightly used clones of the same base image cost roughly the base image plus each one's own changes, nowhere near ten times the size.</p>
+      <p>Where disk does bite: workspaces that diverge a lot (a full toolchain install, a big dataset) carry that as real, separate usage; each saved base image is a full standalone copy (<a href="/blog/base-image-versioning/">see pruning</a>); and since 1.2, the cloud images and installer ISOs you download stay in <strong>Settings › Images</strong> until you delete them. A workspace created from a cloud image gets its own converted disk rather than a clone, so it costs roughly what the guest actually writes.</p>
 
-      <h2>Putting the three together</h2>
-      <p>A practical way to reason about your own ceiling: work out how many workspaces your memory budget allows if they're all running at once, treat that as the hard number, then check whether your actual usage pattern is "several running, one or two actively busy" (comfortable on the CPU budget) or "several all doing heavy parallel work simultaneously" (the case where CPU contention becomes the real limit before memory does). Disk space is rarely the binding constraint unless workspaces are diverging heavily from their base images or old base image generations have accumulated unpruned.</p>
+      <h2>Putting it together</h2>
+      <p>Work out how many workspaces your memory allows if they all run at once, and treat that as the hard number. Then look at how you use them: "several running, one or two busy" is comfortable on CPU; "several all doing heavy parallel work at once" is where CPU contention becomes the limit before memory does. Disk is rarely the limit unless workspaces diverge heavily or old base images and downloads pile up.</p>
 
-      <p>Related reading: <a href="/blog/how-much-memory-linux-vm-mac/">how much memory to give a Linux VM</a>, <a href="/blog/linux-vm-cpu-performance-apple-silicon/">how vCPU core allocation actually works</a>, and <a href="/blog/base-image-vs-snapshot-vs-clone/">why cloning is cheap</a>, the mechanism behind this post's disk-space math. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/how-much-memory-linux-vm-mac/">how much memory to give a Linux VM</a>, <a href="/blog/linux-vm-cpu-performance-apple-silicon/">how vCPU allocation works</a>, and <a href="/blog/base-image-vs-snapshot-vs-clone/">why cloning is cheap</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How Apple Virtualization.framework Works</title>
-<meta name="description" content="The real device inventory behind a Virtualization.framework VM — boot loaders, storage, networking, graphics, shared folders, vsock, and a hibernate gotcha.">
+<title>How Apple&#x27;s Virtualization Framework Works, Device by Device</title>
+<meta name="description" content="A device-by-device tour of a real Virtualization.framework VM: EFI boot, disks and seed disks, NAT networking, graphics, VirtioFS, vsock, and saved state.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/how-virtualization-framework-works/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="How Apple Virtualization.framework Works">
-<meta property="og:description" content="The real device inventory behind a Virtualization.framework VM — boot loaders, storage, networking, graphics, shared folders, vsock, and a hibernate gotcha.">
+<meta property="og:title" content="How Apple&#x27;s Virtualization Framework Works, Device by Device">
+<meta property="og:description" content="A device-by-device tour of a real Virtualization.framework VM: EFI boot, disks and seed disks, NAT networking, graphics, VirtioFS, vsock, and saved state.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/how-virtualization-framework-works/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/how-virtualization-framework-works.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="How Apple Virtualization.framework Works">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "How Apple Virtualization.framework Works",
+      "headline": "How Apple's Virtualization Framework Works, Device by Device",
       "name": "How Apple Virtualization.framework Works",
-      "description": "The real device inventory behind a Virtualization.framework VM — boot loaders, storage, networking, graphics, shared folders, vsock, and a hibernate gotcha.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "description": "A device-by-device tour of a real Virtualization.framework VM: EFI boot, disks and seed disks, NAT networking, graphics, VirtioFS, vsock, and saved state.",
+      "image": "https://www.veloworkspaces.com/assets/og/how-virtualization-framework-works.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -111,8 +111,8 @@
       <div class="article-header">
         <span class="eyebrow">Architecture</span>
         <h1>How Apple Virtualization.framework Works</h1>
-        <p class="article-lede">Most Virtualization.framework write-ups stop at "here's a hello-world VM." This one goes device by device through what a real, shipping app's configuration code actually declares — storage, networking, graphics, shared folders, and the one identity object that silently breaks hibernate if you get it wrong. Read <a href="/blog/apple-silicon-vms-explained/">the fundamentals</a> first if "VM vs. emulation" is still unclear; this picks up from there.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <p class="article-lede">Most Virtualization.framework write-ups stop at a hello-world VM. This one goes device by device through what a shipping app's configuration declares, and the one identity object that silently breaks saved state if you get it wrong. Read <a href="/blog/apple-silicon-vms-explained/">the fundamentals</a> first if VMs versus emulation is still fuzzy.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
@@ -120,58 +120,58 @@
   <section class="section">
     <div class="container article-body">
       <h2>The shape of it</h2>
-      <p>A Virtualization.framework VM has one build order that everything else hangs off: declare a <code>VZVirtualMachineConfiguration</code> — CPU count, memory, a boot loader, and a list of devices — validate it, then hand it to a <code>VZVirtualMachine</code> to actually run. Nothing starts until that whole configuration object exists; there's no incremental "add a device while it's running" for anything declared this way. The rest of this post is what actually goes into that device list, using Velo Workspaces' own configuration code as the concrete example rather than a stub.</p>
+      <p>A Virtualization.framework VM is built in one order. You declare a <code>VZVirtualMachineConfiguration</code> (CPU count, memory, a boot loader and a list of devices), validate it, and hand it to a <code>VZVirtualMachine</code> to run. Nothing starts until the whole configuration exists, and you can't add a device declared this way while the VM is running. The rest of this post is what goes into that device list, using Velo Workspaces' own configuration code as the example.</p>
 
-      <h2>Boot loaders: two real options, and why one of them wins for normal guests</h2>
-      <p>Apple gives you two ways to boot a Linux guest: <code>VZLinuxBootLoader</code>, which boots a kernel and initrd file directly and skips a boot menu entirely, and <code>VZEFIBootLoader</code>, which boots the way real hardware does — through EFI firmware, with a persisted <code>VZEFIVariableStore</code> holding boot order and other NVRAM variables across reboots. Velo Workspaces uses the EFI path for every Linux guest, verified in its own configuration code: the variable store is created once per workspace and reloaded on every subsequent boot, exactly like a real machine's NVRAM. The practical reason to prefer EFI over direct kernel boot: it's what lets an official distro installer ISO boot and present a normal install experience — GRUB menu and all — instead of requiring you to already have a kernel and initrd extracted before the VM can start. What this choice actually costs and saves across a workspace's lifecycle — first boot vs. every boot after, and the one case where none of it applies — is covered in full in <a href="/blog/vm-startup-performance-apple-silicon/">the startup performance post</a>.</p>
+      <h2>Boot loaders: two options, and why EFI wins for normal guests</h2>
+      <p>Apple offers two ways to boot a Linux guest. <code>VZLinuxBootLoader</code> boots a kernel and initrd directly, with no boot menu. <code>VZEFIBootLoader</code> boots the way real hardware does, through EFI firmware, with a <code>VZEFIVariableStore</code> that keeps boot order and other NVRAM variables across reboots. Velo Workspaces uses EFI for every Linux guest: the variable store is created once per workspace and reloaded on every boot, like a real machine's NVRAM. That's what lets a distribution's own installer ISO or cloud image boot normally, GRUB and all, without you extracting a kernel first. <a href="/blog/vm-startup-performance-apple-silicon/">The startup performance post</a> covers what this costs over a workspace's lifetime.</p>
 
-      <h2>Storage isn't one device type — it's three roles</h2>
-      <p>A guest's disks aren't interchangeable in Virtualization.framework; the device type signals intent:</p>
+      <h2>Storage: three roles, not one device type</h2>
+      <p>A guest's disks aren't interchangeable; the device type says what each one is for:</p>
       <ul>
-        <li><strong><code>VZVirtioBlockDeviceConfiguration</code></strong> wraps a <code>VZDiskImageStorageDeviceAttachment</code> for the guest's main, read-write disk.</li>
-        <li><strong><code>VZUSBMassStorageDeviceConfiguration</code></strong>, also wrapping a disk-image attachment but read-only, is how an installer ISO or CD-ROM gets attached — as virtual USB media, not a second block device.</li>
+        <li><strong>The main disk</strong> is a <code>VZVirtioBlockDeviceConfiguration</code> wrapping a read-write <code>VZDiskImageStorageDeviceAttachment</code>. The framework only accepts raw images, so a cloud image downloaded as qcow2 is converted to a sparse raw disk when the workspace is created.</li>
+        <li><strong>Installer media</strong> is attached read-only as <code>VZUSBMassStorageDeviceConfiguration</code>, a virtual USB stick. There's no CD drive, which is why an ISO that can only boot from a CD needs a partition table added before the firmware will start it; Velo Workspaces writes one into its own copy of the ISO.</li>
+        <li><strong>The cloud-init seed</strong> is a second, small read-only virtio block device: a FAT volume labelled <code>CIDATA</code> carrying the <code>user-data</code> and <code>meta-data</code> that set up your account on first boot. Virtio rather than USB, because some cloud kernels leave out USB storage drivers and every one of them has virtio.</li>
       </ul>
-      <p>The attachment itself has two settings worth knowing about: <code>cachingMode</code> and <code>synchronizationMode</code>. Velo's own main-disk attachment uses <code>.cached</code> caching deliberately — the default (<code>.automatic</code>) resolves to effectively uncached in practice, which is fine for a long-lived server workload but costly for what this app spends most of its time on: an OS installer unpacking gigabytes of small files, rewriting the same metadata blocks over and over. Caching absorbs that. <code>synchronizationMode</code> is left at its default, <code>.full</code>, deliberately — that's what keeps the guest's own flushes durable, so an abrupt host power loss costs no more than it did without caching; only writes the guest hadn't yet asked to be durable are at risk. It's a concrete illustration of why these two settings aren't just performance knobs — they trade against a real durability guarantee, and the right default depends on the workload, not just "faster is better." This same VirtioBlock device is also the faster of two very different storage paths available to a guest — see <a href="/blog/linux-vm-disk-performance-apple-silicon/">the disk performance post</a> for how it compares to a virtio-fs shared folder.</p>
+      <p>The disk attachment has two settings worth knowing: <code>cachingMode</code> and <code>synchronizationMode</code>. Velo Workspaces sets the main disk to <code>.cached</code> on purpose. The default, <code>.automatic</code>, behaves as uncached in practice, which suits a long-running server but hurts what a VM app spends much of its time doing: an installer unpacking gigabytes of small files and rewriting the same metadata blocks. Caching absorbs that. <code>synchronizationMode</code> stays at <code>.full</code>, also on purpose, so the guest's own flushes stay durable and a sudden power loss costs no more than it would without caching. These are trade-offs against durability, not just speed knobs. <a href="/blog/linux-vm-disk-performance-apple-silicon/">The disk performance post</a> compares this block device with a VirtioFS shared folder.</p>
 
-      <h2>Networking: NAT by default, and a MAC address that isn't random</h2>
-      <p><code>VZVirtioNetworkDeviceConfiguration</code> paired with a <code>VZNATNetworkDeviceAttachment</code> gives a guest shared (NAT) networking out of the box — the guest gets its own address behind the host's, with no bridged visibility onto the host's LAN. Bridged networking is a separate, harder-won thing: it requires the <code>com.apple.vm.networking</code> entitlement, which is its own approval step with Apple, not just a configuration flag — a real constraint worth knowing about before assuming bridged mode is a five-minute addition.</p>
-      <p>One detail worth calling out because it solves a real problem: Velo derives each guest's MAC address deterministically from the workspace's own UUID rather than letting the framework randomize it. <code>VZNetworkDevice</code> doesn't expose its live MAC address back to the host app, so a randomized address would make it impossible to reliably find a specific guest's IP in the host's ARP table after a restart. A stable, derived MAC means the guest keeps the same DHCP lease across reboots, and the host can always find it. See <a href="/blog/linux-vm-networking-apple-silicon/">how Linux VM networking actually works</a> for the three different paths this NAT setup produces in practice, including why reaching a guest from another device on your LAN needs an explicit port forward.</p>
+      <h2>Networking: NAT, and a MAC address that isn't random</h2>
+      <p><code>VZVirtioNetworkDeviceConfiguration</code> with a <code>VZNATNetworkDeviceAttachment</code> gives the guest NAT networking: its own address behind the Mac's, with no presence on your LAN. Bridged networking is a different matter. It needs the <code>com.apple.vm.networking</code> entitlement, which is an approval from Apple, not a configuration flag.</p>
+      <p>Velo Workspaces derives each guest's MAC address from the workspace's UUID instead of letting the framework pick a random one. <code>VZNetworkDevice</code> doesn't report its live MAC address back to the app, so with a random address there'd be no reliable way to find a given guest's IP after a restart. A stable MAC means a stable DHCP lease. <a href="/blog/linux-vm-networking-apple-silicon/">How Linux VM networking works</a> covers the paths this produces, including reaching a guest from another computer.</p>
 
-      <h2>Graphics: three device types, and only one of them supports multiple monitors</h2>
-      <p>This is a deeper layer than the "no GPU passthrough for Linux" point covered in <a href="/blog/apple-silicon-vms-explained/">the fundamentals</a> — it's about what each guest OS gets for a <em>display</em>, not compute:</p>
+      <h2>Graphics: two device types, and only one does multiple monitors</h2>
+      <p>This goes a layer deeper than the "no GPU for Linux" point in <a href="/blog/apple-silicon-vms-explained/">the fundamentals</a>. It's about what each guest gets for a <em>display</em>:</p>
       <div class="article-table-wrap">
         <table>
-          <thead><tr><th>Guest</th><th>Device</th><th>What it actually gets</th></tr></thead>
+          <thead><tr><th>Guest</th><th>Device</th><th>What it gets</th></tr></thead>
           <tbody>
-            <tr><td>macOS</td><td><code>VZMacGraphicsDeviceConfiguration</code></td><td>Paravirtualized Metal pipeline, near-native GPU performance, up to 4 independent displays</td></tr>
-            <tr><td>Linux</td><td><code>VZVirtioGraphicsDeviceConfiguration</code></td><td>Virtio-GPU with Mesa/VirGL — hardware-accelerated 2D and basic 3D UI composition, one scanout no matter how many displays are declared</td></tr>
-            <tr><td>Windows</td><td><code>VZVirtioGraphicsDeviceConfiguration</code></td><td>Virtio Display-Only Driver baseline — 2D only, until the guest installs virtio-win drivers itself; Apple provides no DirectX translation layer</td></tr>
+            <tr><td>macOS</td><td><code>VZMacGraphicsDeviceConfiguration</code></td><td>A paravirtualized Metal pipeline with near-native GPU performance, up to four independent displays</td></tr>
+            <tr><td>Linux</td><td><code>VZVirtioGraphicsDeviceConfiguration</code></td><td>virtio-gpu: accelerated 2D and basic 3D composition for the desktop, and one scanout however many displays you declare</td></tr>
           </tbody>
         </table>
       </div>
-      <p>The multi-head detail is easy to miss until you hit it: Virtualization.framework only honors multiple declared displays for a macOS guest. Ask a Linux or Windows guest for four displays and you still get one scanout back — a real limitation on the framework's own device model, not a bug in any particular app built on it.</p>
+      <p>The multi-display detail is easy to miss until you hit it: the framework only honors multiple displays for macOS guests. Ask a Linux guest for four and you get one.</p>
 
       <h2>Shared folders: one tag per folder, except on macOS</h2>
-      <p><code>VZVirtioFileSystemDeviceConfiguration</code> is the device type for a shared folder, backed by VirtioFS — but Linux/Windows and macOS guests use it in genuinely different shapes. Linux and Windows guests get one device per shared folder, each with its own tag, mounted independently inside the guest (<code>mount -t virtiofs &lt;tag&gt; &lt;mountpoint&gt;</code>). A macOS guest instead gets a single device using Apple's reserved automount tag, with every shared folder packed into one <code>VZMultipleDirectoryShare</code> — registering a second, separately-tagged device alongside it throws a validation error. The practical payoff for macOS 13+ guests: folders show up automatically under <code>/Volumes/My Shared Files/</code> with no mount command needed at all, which is a real, documented behavior difference worth knowing before assuming the two guest types work the same way.</p>
-      <p>Rosetta for Linux rides the same device type: <code>VZLinuxRosettaDirectoryShare</code> is itself a kind of filesystem share, mounted with its own dedicated tag, gated on <code>VZLinuxRosettaDirectoryShare.availability == .installed</code> on the host before it's even offered.</p>
+      <p><code>VZVirtioFileSystemDeviceConfiguration</code> is the shared-folder device, backed by VirtioFS, and Linux and macOS guests use it differently. A Linux guest gets one device per shared folder, each with its own tag, mounted in the guest with <code>mount -t virtiofs &lt;tag&gt; &lt;mountpoint&gt;</code>. A macOS guest gets a single device with Apple's reserved automount tag and every folder packed into one <code>VZMultipleDirectoryShare</code>; adding a second, separately tagged device fails validation. The payoff on macOS 13 and later: folders appear under <code>/Volumes/My Shared Files/</code> with no mount command.</p>
+      <p>Rosetta for Linux uses the same device type. <code>VZLinuxRosettaDirectoryShare</code> is a filesystem share with its own tag, offered only when <code>VZLinuxRosettaDirectoryShare.availability</code> is <code>.installed</code> on the Mac.</p>
 
-      <h2>The rest of the device inventory</h2>
-      <p>Beyond storage, networking, graphics, and shared folders, a full guest configuration typically declares several more VIRTIO devices, each doing one narrow job:</p>
+      <h2>The rest of the device list</h2>
+      <p>A full configuration declares several more virtio devices, each with one narrow job:</p>
       <ul>
-        <li><strong>Vsock</strong> (<code>VZVirtioSocketDeviceConfiguration</code>) — a paravirtualized socket channel between host and guest, with no network stack in between. This is the device AI Bridge is built on; see <a href="/blog/ai-bridge-architecture/">the full architecture</a>.</li>
-        <li><strong>Entropy</strong> (<code>VZVirtioEntropyDeviceConfiguration</code>) — feeds host randomness into the guest's own entropy pool, so a freshly booted guest isn't generating cryptographic keys from a cold RNG.</li>
-        <li><strong>Memory balloon</strong> (<code>VZVirtioTraditionalMemoryBalloonDeviceConfiguration</code>) — lets the host reclaim memory a guest isn't using, without the guest OS ever seeing a resize.</li>
-        <li><strong>Serial console</strong> (<code>VZVirtioConsoleDeviceSerialPortConfiguration</code>) — typically backed by a host-side pseudo-terminal, giving a raw text console independent of the graphical display.</li>
-        <li><strong>Clipboard</strong> — a separate <code>VZVirtioConsoleDeviceConfiguration</code> carrying Apple's own SPICE agent port (<code>VZSpiceAgentPortAttachment</code>), the sanctioned way to sync the system pasteboard with a guest's clipboard without polling <code>NSPasteboard</code> from outside the framework.</li>
+        <li><strong>Vsock</strong> (<code>VZVirtioSocketDeviceConfiguration</code>): a socket channel between host and guest with no network stack in between. AI Bridge is built on it; see <a href="/blog/ai-bridge-architecture/">the architecture</a>.</li>
+        <li><strong>Entropy</strong> (<code>VZVirtioEntropyDeviceConfiguration</code>): feeds the Mac's randomness into the guest, so a freshly booted guest isn't making keys from a cold random number generator.</li>
+        <li><strong>Memory balloon</strong> (<code>VZVirtioTraditionalMemoryBalloonDeviceConfiguration</code>): lets the host reclaim memory the guest isn't using.</li>
+        <li><strong>Serial console</strong> (<code>VZVirtioConsoleDeviceSerialPortConfiguration</code>): a raw text console that works independently of the graphical display.</li>
+        <li><strong>Clipboard</strong>: another <code>VZVirtioConsoleDeviceConfiguration</code>, carrying Apple's SPICE agent port (<code>VZSpiceAgentPortAttachment</code>), the supported way to sync the Mac's pasteboard with a guest's clipboard.</li>
       </ul>
 
-      <h2>The gotcha that silently breaks hibernate</h2>
-      <p>This is worth its own section because it's the kind of bug that doesn't announce itself: <code>VZVirtualMachineConfiguration.platform</code> defaults to a fresh <code>VZGenericPlatformConfiguration()</code> if nothing sets it explicitly — and that default carries a brand-new, random <code>machineIdentifier</code> every single time the configuration object is built. Saved-state restore checks that identifier against the one the saved state came from, the same way it checks a macOS guest's hardware model. A builder that never assigns <code>.platform</code> gives every VM instance a different identity from the one before it, so every hibernate becomes unrestorable the moment it's saved — not intermittently, on every single attempt, because the mismatch is guaranteed rather than occasional. The fix is a read-then-create pattern: persist the generated identifier to disk on first creation, and read it back on every later build, exactly like the EFI variable store above.</p>
+      <h2>The gotcha that silently breaks saved state</h2>
+      <p>This one doesn't announce itself. If nothing sets <code>VZVirtualMachineConfiguration.platform</code>, it defaults to a fresh <code>VZGenericPlatformConfiguration()</code>, and that default carries a new, random <code>machineIdentifier</code> every time the configuration is built. Restoring saved state checks that identifier against the one the state was saved with, just as it checks a macOS guest's hardware model. So an app that never sets <code>.platform</code> gives every run a new identity, and every saved state becomes unrestorable the moment it's written. Not sometimes: every time. The fix is to save the generated identifier on first creation and read it back on every later build, the same as the EFI variable store.</p>
 
-      <h2>The VM lifecycle, and what's actually fast</h2>
-      <p><code>VZVirtualMachine(configuration:)</code> constructs the VM from the validated configuration; <code>start()</code> boots it. From there, <code>pause()</code> and <code>resume()</code> are in-memory operations — milliseconds, no disk I/O — which is why they're the right response to the host Mac itself sleeping or waking. Hibernating a workspace to free its resources entirely is a different, heavier operation: <code>saveMachineStateTo(url:)</code> writes the VM's full state to disk, and it refuses to run against a VM that's still running — so a hibernate has to pause first, then save, then eventually <code>restoreMachineStateFrom(url:)</code> to bring it back. Four operations that look similar from the outside (pause, resume, hibernate, restore) are really two different mechanisms with very different costs, and conflating them is an easy way to build a "hibernate" feature that's actually just a slow pause.</p>
+      <h2>The lifecycle, and what's fast</h2>
+      <p><code>VZVirtualMachine(configuration:)</code> builds the VM and <code>start()</code> boots it. <code>pause()</code> and <code>resume()</code> are in-memory and take milliseconds, which makes them the right response to the Mac itself sleeping and waking. Saving a workspace's state to free its memory entirely is heavier: <code>saveMachineStateTo(url:)</code> writes the whole VM state to disk and refuses to run on a running VM, so it's pause, save, and later <code>restoreMachineStateFrom(url:)</code>. Pause, resume, save and restore look alike from outside, but they're two mechanisms with very different costs.</p>
 
-      <p>Related reading: <a href="/blog/apple-silicon-vms-explained/">what a VM on Apple Silicon actually is</a>, <a href="/blog/arm-virtualization-performance/">what determines VM performance on ARM</a>, <a href="/blog/ai-bridge-architecture/">the architecture behind AI Bridge</a>, and <a href="/blog/macos-guests-on-apple-silicon/">what's different about a macOS guest specifically</a>. For how these devices actually perform rather than just how they're wired up, see the deep dives on <a href="/blog/linux-vm-cpu-performance-apple-silicon/">CPU</a>, <a href="/blog/linux-vm-disk-performance-apple-silicon/">disk</a>, and <a href="/blog/linux-vm-network-performance-apple-silicon/">network</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/apple-silicon-vms-explained/">what a VM on Apple Silicon is</a>, <a href="/blog/arm-virtualization-performance/">what determines VM performance on ARM</a>, <a href="/blog/ai-bridge-architecture/">the architecture behind AI Bridge</a>, and <a href="/blog/macos-guests-on-apple-silicon/">what's different about a macOS guest</a>. For how these devices perform, see the deep dives on <a href="/blog/linux-vm-cpu-performance-apple-silicon/">CPU</a>, <a href="/blog/linux-vm-disk-performance-apple-silicon/">disk</a> and <a href="/blog/linux-vm-network-performance-apple-silicon/">network</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

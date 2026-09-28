@@ -4,23 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Why ARM64 Linux VMs Feel Native on Apple Silicon</title>
-<meta name="description" content="Not a vibe — a specific, explainable claim about why a Linux VM on Apple Silicon doesn&#x27;t feel like the VMs a lot of developers remember.">
+<meta name="description" content="Why a Linux VM on an M-series Mac doesn&#x27;t feel like a VM: ARM&#x27;s built-in virtualization, cheap traps and interrupts, unified memory, and where it stops.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/why-arm-vms-feel-native/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="Why ARM64 Linux VMs Feel Native on Apple Silicon">
-<meta property="og:description" content="Not a vibe — a specific, explainable claim about why a Linux VM on Apple Silicon doesn&#x27;t feel like the VMs a lot of developers remember.">
+<meta property="og:description" content="Why a Linux VM on an M-series Mac doesn&#x27;t feel like a VM: ARM&#x27;s built-in virtualization, cheap traps and interrupts, unified memory, and where it stops.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/why-arm-vms-feel-native/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/why-arm-vms-feel-native.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Why ARM64 Linux VMs Feel Native on Apple Silicon">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -30,10 +30,10 @@
       "@type": "BlogPosting",
       "headline": "Why ARM64 Linux VMs Feel Native on Apple Silicon",
       "name": "Why ARM64 Linux VMs Feel Native on Apple Silicon",
-      "description": "Not a vibe — a specific, explainable claim about why a Linux VM on Apple Silicon doesn't feel like the VMs a lot of developers remember.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "description": "Why a Linux VM on an M-series Mac doesn't feel like a VM: ARM's built-in virtualization, cheap traps and interrupts, unified memory, and where it stops.",
+      "image": "https://www.veloworkspaces.com/assets/og/why-arm-vms-feel-native.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -111,31 +111,31 @@
       <div class="article-header">
         <span class="eyebrow">Fundamentals</span>
         <h1>Why ARM64 Linux VMs Feel Native on Apple Silicon</h1>
-        <p class="article-lede">A lot of developers carry an old, reasonable prior: VMs are a little slow, a little laggy, something you tolerate rather than forget about. A Linux VM on Apple Silicon mostly doesn't feel that way. This is the accessible version of why — the day-to-day effect, not <a href="/blog/arm-virtualization-performance/">the exception-level mechanics</a>, which live in their own deep dive if you want them.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <p class="article-lede">Many developers carry a reasonable old assumption: VMs are a bit slow, a bit laggy, something you tolerate. A Linux VM on Apple silicon mostly doesn't feel that way. This is the accessible version of why, the day-to-day effect rather than <a href="/blog/arm-virtualization-performance/">the exception-level mechanics</a>.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-      <h2>"Feels native" is a specific claim, not a vibe</h2>
-      <p>Pin it down concretely: a shell inside the guest doesn't have perceptible input lag. <code>git clone</code>, <code>npm install</code>, <code>apt upgrade</code> don't feel like they're paying a tax compared to running the same command on the host. Compiling a moderately sized project doesn't visibly drag. None of that is marketing language — it's the observable effect of the CPU trap, memory-translation, and interrupt-delivery costs staying cheap enough that a human can't feel them, which is a real engineering outcome, not an accident of expectation.</p>
+      <h2>"Feels native" is a specific claim</h2>
+      <p>Here's what it means in practice. A shell in the guest has no noticeable input lag. <code>git clone</code>, <code>npm install</code> and <code>apt upgrade</code> don't feel slower than on the host. Compiling a moderately sized project doesn't visibly drag. That's the observable effect of CPU traps, memory translation and interrupt delivery staying cheap enough that you can't feel them.</p>
 
-      <h2>The old prior wasn't wrong — it was about different hardware</h2>
-      <p>This is worth knowing because it explains where the "VMs feel slow" instinct actually comes from. x86 wasn't originally built to be virtualized at all: the architecture has around 17 instructions that are sensitive to privilege level but don't cleanly trap to a hypervisor, so a classic trap-and-emulate approach simply couldn't virtualize all of it. VMware's answer in 1998 was <a href="https://www.cse.iitb.ac.in/~mythili/virtcc/papers/vmware.pdf" target="_blank" rel="noopener">binary translation</a> — real engineering, but software papering over a gap in the silicon. Hardware support didn't arrive until years later: Intel's VT-x in 2005, AMD-V in 2006, both retrofitted onto an architecture that had already shipped for decades without virtualization in mind.</p>
-      <p>ARM's virtualization extensions didn't have that history to work around. EL2, the dedicated hardware exception level for the hypervisor, was part of the architecture's own design rather than a later patch — covered in full in <a href="/blog/arm-virtualization-performance/">the performance deep dive</a>. Apple Silicon inherits that clean design, not decades of x86-specific workarounds. That's the actual, explainable reason the "VMs are inherently a little slow" prior doesn't hold up here the way it might from older x86 experience.</p>
+      <h2>The old instinct came from different hardware</h2>
+      <p>The "VMs feel slow" instinct has a real origin. x86 wasn't designed to be virtualized: it has around 17 instructions that behave differently depending on privilege level but don't trap to a hypervisor, so classic trap-and-emulate couldn't virtualize all of it. VMware's 1998 answer was <a href="https://www.cse.iitb.ac.in/~mythili/virtcc/papers/vmware.pdf" target="_blank" rel="noopener">binary translation</a>, clever software covering a gap in the silicon. Hardware support came later, with Intel VT-x in 2005 and AMD-V in 2006, retrofitted onto an architecture that had shipped for decades without it.</p>
+      <p>ARM's virtualization extensions had no such history to work around. EL2, the dedicated exception level for the hypervisor, is part of the architecture's design rather than a later patch (<a href="/blog/arm-virtualization-performance/">the performance deep dive</a> covers it). Apple silicon inherits that clean design, which is why the old assumption doesn't hold here.</p>
 
-      <h2>What this buys you concretely</h2>
-      <p>Translated into day-to-day terms rather than mechanism: cheap CPU traps mean a shell prompt in the guest responds the way a native one does. Hardware-assisted interrupt delivery means network-heavy operations — <code>docker pull</code> inside the guest, a <code>git fetch</code> against a large repo — aren't paying a per-packet hypervisor tax. TLB-cached two-stage memory translation means a memory-heavy compile isn't quietly re-walking page tables on every access. None of these are separately tunable settings; they're properties of the platform every workspace gets by default.</p>
+      <h2>What that buys you</h2>
+      <p>In everyday terms: cheap CPU traps mean a shell prompt in the guest responds like a native one. Hardware-assisted interrupts mean network-heavy work, a <code>docker pull</code> or a <code>git fetch</code> against a big repository, doesn't pay a per-packet hypervisor toll. Two-stage memory translation cached in the TLB means a memory-heavy compile isn't quietly re-walking page tables. None of these are settings to tune; every workspace gets them.</p>
 
-      <h2>Unified memory makes VM sizing simpler, too</h2>
-      <p>Apple Silicon's unified memory architecture means there's no separate VRAM pool competing with system RAM the way there is on a PC with a discrete GPU. A guest's memory is just a slice of that same fast, unified pool — handed out at boot and reclaimable via the memory-balloon device covered in <a href="/blog/how-virtualization-framework-works/">the device inventory post</a> when the guest isn't using it. Sizing a VM's memory on a Mac is a more predictable exercise than it is on hardware where "how much is actually free" depends on what the GPU has claimed separately.</p>
+      <h2>Unified memory makes sizing simpler</h2>
+      <p>Apple silicon's unified memory means there's no separate video memory competing with system RAM, as there is on a PC with a discrete GPU. A guest's memory is a slice of the same pool, handed out at boot and reclaimable through the memory balloon device (see <a href="/blog/how-virtualization-framework-works/">the device inventory post</a>) when the guest isn't using it. <a href="/blog/how-much-memory-linux-vm-mac/">How much memory to give a Linux VM</a> covers the numbers.</p>
 
-      <h2>The honest exceptions</h2>
-      <p>"Feels native" is a scoped claim, not a blanket one, and it's worth being direct about where it stops. A Linux guest gets no GPU compute passthrough at all — a real limitation covered in <a href="/blog/apple-silicon-vms-explained/">the fundamentals post</a>, and exactly why AI Bridge keeps the model on the host GPU instead of trying to get compute into the guest. And none of this native feeling extends to a different CPU architecture: an x86_64 guest, or an emulated <code>--platform linux/amd64</code> container pull, is genuinely slower, for the categorical reasons covered in <a href="/blog/arm64-vs-x86-apple-silicon/">ARM64 vs. x86-64 on Apple Silicon</a>. Same-architecture Linux is where this claim lives; it was never a claim about everything.</p>
+      <h2>Where it stops</h2>
+      <p>"Feels native" has limits. A Linux guest gets no GPU compute at all, as <a href="/blog/apple-silicon-vms-explained/">the fundamentals post</a> explains, which is why AI Bridge keeps the model on the Mac's GPU instead. And none of this applies to a different CPU architecture: an x86-64 guest, or a container pulled with <code>--platform linux/amd64</code>, is emulated and much slower, for the reasons in <a href="/blog/arm64-vs-x86-apple-silicon/">ARM64 vs. x86-64 on Apple Silicon</a>. The claim is about same-architecture Linux, and only that.</p>
 
-      <p>Related reading: <a href="/blog/arm-virtualization-performance/">the full mechanics behind this</a>, <a href="/blog/apple-silicon-vms-explained/">what a VM on Apple Silicon actually is</a>, and the real benchmark numbers in <a href="/blog/vm-inference-benchmark/">the inference benchmark</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/arm-virtualization-performance/">the full mechanics</a>, <a href="/blog/linux-vm-cpu-performance-apple-silicon/">Linux VM CPU performance</a>, and the numbers in <a href="/blog/vm-inference-benchmark/">the inference benchmark</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

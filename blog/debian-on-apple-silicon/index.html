@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Running Debian on Apple Silicon: What&#x27;s Different from Ubuntu</title>
-<meta name="description" content="Same ISO-based official-image picker as Ubuntu, a different installer experience, and why the Ubuntu Netplan clone gotcha doesn&#x27;t apply the same way here.">
+<title>Debian on Apple Silicon: Run a Debian 13 VM on a Mac</title>
+<meta name="description" content="Debian 13 and 12 on an M-series Mac: the cloud image that sets itself up in a minute, the netinst installer, and how Debian differs from Ubuntu in a VM.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/debian-on-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Running Debian on Apple Silicon: What&#x27;s Different from Ubuntu">
-<meta property="og:description" content="Same ISO-based official-image picker as Ubuntu, a different installer experience, and why the Ubuntu Netplan clone gotcha doesn&#x27;t apply the same way here.">
+<meta property="og:title" content="Debian on Apple Silicon: Run a Debian 13 VM on a Mac">
+<meta property="og:description" content="Debian 13 and 12 on an M-series Mac: the cloud image that sets itself up in a minute, the netinst installer, and how Debian differs from Ubuntu in a VM.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/debian-on-apple-silicon/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/debian-on-apple-silicon.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Running Debian on Apple Silicon: What&#x27;s Different from Ubuntu">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-20">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "Running Debian on Apple Silicon: What's Different from Ubuntu",
+      "headline": "Debian on Apple Silicon: Run a Debian 13 VM on a Mac",
       "name": "Running Debian on Apple Silicon: What's Different from Ubuntu",
-      "description": "Same ISO-based official-image picker as Ubuntu, a different installer experience, and why the Ubuntu Netplan clone gotcha doesn't apply the same way here.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "description": "Debian 13 and 12 on an M-series Mac: the cloud image that sets itself up in a minute, the netinst installer, and how Debian differs from Ubuntu in a VM.",
+      "image": "https://www.veloworkspaces.com/assets/og/debian-on-apple-silicon.jpg",
       "datePublished": "2026-09-20",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -111,31 +111,36 @@
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>Running Debian on Apple Silicon: What's Different from Ubuntu</h1>
-        <p class="article-lede">Second in the OS-specific series. Same underlying facts as Ubuntu — native arm64, not emulation, and the same ISO-based official-image picker — but a different installer once you're actually running it, and networking defaults that sidestep the clone gotcha Ubuntu Server hits.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-22">September 22, 2026</time></p>
+        <p class="article-lede">Second in the series on specific Linux distributions. Debian runs natively on arm64 like Ubuntu, but its installer and networking defaults are different, and in Velo Workspaces the fast path is the official cloud image.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-      <h2>Same CPU story, different distro defaults</h2>
-      <p>Debian on an Apple Silicon Mac runs the same way <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu does</a>: natively on arm64, not emulated. Debian 13 "Trixie," the current stable release, ships arm64 as one of its full, officially supported architectures — alongside amd64, armhf, armel, ppc64el, riscv64, and s390x — not a secondary or best-effort build. One thing worth disambiguating up front: Debian 13 also added real driver support for Apple Silicon MacBook hardware specifically (trackpad/keyboard controllers, for projects like Asahi Linux that install Debian directly on the bare metal). That's a different thing entirely from what this post and Velo Workspaces are about — Debian running as a <em>guest</em> inside a VM on the Mac, where none of that bare-metal driver work is relevant, because the guest never touches the physical trackpad or keyboard controller at all.</p>
+      <h2>Same CPU story, different defaults</h2>
+      <p>Debian on an Apple silicon Mac runs the way <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu does</a>: natively on arm64. Debian 13 "Trixie", the current stable release, ships arm64 as a fully supported architecture alongside amd64, riscv64 and the rest, not as a best-effort port.</p>
+      <p>You may have read that Debian 13 added drivers for Apple silicon MacBook hardware. That work is for installing Debian directly on the Mac (the Asahi Linux route). A Debian <em>guest</em> in a VM never touches the Mac's trackpad or keyboard controller, so none of it applies here.</p>
 
-      <h2>Same picker mechanism as Ubuntu, a different installer once you're in it</h2>
-      <p>Like Ubuntu, "download an official image" fetches Debian's installer ISO directly from Debian's own source and boots it — not a cloud image, and no unattended provisioning behind the scenes. You go through Debian's own installer yourself, the same interactive flow you'd get booting that ISO anywhere else.</p>
-      <p>What's actually different from Ubuntu is the installer itself. Debian's ISO uses the traditional <strong>debian-installer</strong> (<code>d-i</code>) — the same text-based, menu-driven installer Debian has shipped for decades: locale, keyboard layout, mirror selection, partitioning, then <code>tasksel</code> for package sets. Ubuntu Server's installer, <strong>Subiquity</strong>, is Canonical's own newer, more streamlined take on the same job — fewer screens, more opinionated defaults, less to decide along the way. Neither is harder exactly, just a different number of explicit decisions the installer asks of you before you land at a shell.</p>
+      <h2>The quick way: Debian's official cloud image</h2>
+      <p>Choose <strong>Cloud image</strong> when you create a workspace and pick Debian 13 or Debian 12. Velo Workspaces downloads Debian's <code>generic</code> arm64 image from cloud.debian.org, checks it against Debian's SHA-512 checksums, and passes your username, password and this Mac's SSH key to cloud-init. On first boot Debian creates your account, grows its disk to the size you chose, and is ready in about a minute.</p>
+      <p>One detail if you're comparing notes with other tools: Velo Workspaces uses the <code>generic</code> image, not <code>genericcloud</code>. The genericcloud kernel leaves out the virtio GPU driver, so its display stops at "EFI stub" while the system carries on booting headless. The generic image gives you a working console as well as SSH.</p>
 
-      <h2>Networking: no Netplan, so the Ubuntu clone gotcha doesn't apply the same way</h2>
-      <p>The Ubuntu post covers a specific, documented gotcha: a workspace cloned from a saved Ubuntu Server base image can come up without an IP address, because Ubuntu Server's Netplan configuration binds to the base image's original MAC address rather than matching by interface name, and every cloned workspace gets a fresh MAC. That failure mode is a Netplan-specific interaction, not a general "cloning a Linux VM" problem — and Debian doesn't default to Netplan. Debian's traditional networking still runs through <strong>ifupdown</strong> and <code>/etc/network/interfaces</code>, which identifies interfaces by name (<code>eth0</code>, <code>ens3</code>), not by MAC address, so the specific mismatch that traps a cloned Ubuntu Server workspace isn't the same trap here. Worth being precise rather than overclaiming: this makes that <em>particular</em> bug unlikely by default on Debian, not a guarantee that a cloned VM's networking can never need attention for other reasons — it's one specific, well-understood interaction that doesn't carry over, not a blanket "Debian doesn't have networking gotchas."</p>
+      <h2>The installer, by hand</h2>
+      <p>If you'd rather run Debian's installer, choose <strong>Installer image</strong> and pick the Debian 13 netinst or DVD ISO. Debian's installer isn't automated in Velo Workspaces yet: its answer file (preseed) has to come from a boot argument or from inside the installer's own initrd, which needs a different approach from Ubuntu's and Fedora's. So you go through <strong>debian-installer</strong> yourself in the workspace's display: locale, keyboard, mirror, partitioning, then <code>tasksel</code> for package sets. Ubuntu's installer asks fewer questions, but neither is hard. For a hands-free Debian, use the cloud image.</p>
+
+      <h2>Networking: no Netplan, so Ubuntu's clone gotcha usually doesn't apply</h2>
+      <p>The Ubuntu post describes a workspace cloned from an Ubuntu Server base image coming up with no IP address, because Netplan matches the interface by the base image's old MAC address. That's a Netplan behavior, not a general cloning problem. A Debian system set up by debian-installer uses <strong>ifupdown</strong> and <code>/etc/network/interfaces</code>, which refer to interfaces by name (<code>enp0s1</code>), so a clone with a new MAC address keeps working.</p>
+      <p>Cloud images are configured by cloud-init instead. If you save one as a base image and a clone comes up without a network, look for a MAC address match in <code>/etc/netplan/</code> or <code>/etc/network/interfaces.d/</code>; the fix is the same as Ubuntu's.</p>
 
       <h2>Rosetta, briefly</h2>
-      <p>Debian uses the same <code>apt</code> and <code>update-binfmts</code> tooling as Ubuntu for registering Rosetta as a binary format handler, so the process is effectively identical between the two — mount the <code>rosetta</code> VirtioFS share, install <code>binfmt-support</code>, then register it with Apple's published magic bytes and mask. The exact commands are in the <a href="/support/">support FAQ</a>; the same real-world caveat from the Ubuntu piece applies here too — Rosetta translates a single dynamically-linked binary well, but it doesn't conjure up x86-64 packages that were never built for arm64 in the first place.</p>
+      <p>Debian registers Rosetta the same way Ubuntu does, with <code>apt</code> and <code>update-binfmts</code>: mount the <code>rosetta</code> VirtioFS share, install <code>binfmt-support</code>, and register it with Apple's magic bytes and mask. The <a href="/support/">support FAQ</a> has the exact commands. The caveat from the Ubuntu post applies here too: Rosetta translates a single binary well, but it can't create x86-64 packages that were never built for arm64.</p>
 
-      <h2>Debian or Ubuntu, for this kind of workspace</h2>
-      <p>Neither is a wrong choice for a disposable dev, QA, or DevOps workspace, and the differences are more about what you're optimizing for than any hard requirement. Debian's release cadence is more conservative — packages change less often, which is exactly what you want when the point of a base image is that it stays a known-good, unsurprising starting point for months. Ubuntu tends to have newer packages and broader out-of-the-box hardware/driver enablement work upstream, which matters more when you're following a guide or a CI config that specifically assumes Ubuntu's package versions. If you don't have a specific reason to need one, Debian's smaller default footprint and more conservative base make it a reasonable default for a workspace you're going to seal as a long-lived base image and reuse for months.</p>
+      <h2>Debian or Ubuntu?</h2>
+      <p>Both are good choices for a dev, QA or DevOps workspace; the difference is what you want to optimize for. Debian moves slowly on purpose. Packages change less often, which is what you want when a base image should stay predictable for months. Ubuntu usually has newer packages and is what most tutorials and CI configs assume. With no strong reason either way, Debian's small footprint and conservative base make it a sensible default for a long-lived base image.</p>
 
-      <p>Related reading: <a href="/blog/ubuntu-on-apple-silicon/">the Ubuntu piece this one is paired with</a>, <a href="/blog/fedora-on-apple-silicon/">Fedora on Apple Silicon</a> — SELinux enforcing by default is the one to know about before it surprises you — and <a href="/blog/arch-linux-on-apple-silicon/">Arch Linux on Apple Silicon</a>, where nothing is configured by default, including networking; the <a href="/blog/qa-devops-disposable-vm-workflow/">disposable VM workflow for QA and DevOps</a>, and <a href="/blog/arm-virtualization-performance/">why VMs on Apple Silicon perform the way they do</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu on Apple Silicon</a>, the post this one pairs with; <a href="/blog/fedora-on-apple-silicon/">Fedora on Apple Silicon</a>, where SELinux is the default to know about; <a href="/blog/kali-linux-on-apple-silicon/">Kali Linux</a>, which uses the same installer as Debian; and the <a href="/blog/qa-devops-disposable-vm-workflow/">disposable VM workflow for QA and DevOps</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

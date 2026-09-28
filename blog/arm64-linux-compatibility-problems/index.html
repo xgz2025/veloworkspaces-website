@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ARM64 Compatibility Problems: Why Does My Linux Software Not Run?</title>
-<meta name="description" content="Four different reasons arm64 Linux software fails, each with a genuinely different fix — a decision tree instead of one generic workaround.">
+<title>Linux Software Won&#x27;t Run on ARM64? How to Find the Fix</title>
+<meta name="description" content="A missing arm64 package, one x86 binary, an amd64-only image, or a real CPU dependency: how to tell which you have on an Apple Silicon Mac, and each fix.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/arm64-linux-compatibility-problems/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="ARM64 Compatibility Problems: Why Does My Linux Software Not Run?">
-<meta property="og:description" content="Four different reasons arm64 Linux software fails, each with a genuinely different fix — a decision tree instead of one generic workaround.">
+<meta property="og:title" content="Linux Software Won&#x27;t Run on ARM64? How to Find the Fix">
+<meta property="og:description" content="A missing arm64 package, one x86 binary, an amd64-only image, or a real CPU dependency: how to tell which you have on an Apple Silicon Mac, and each fix.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/arm64-linux-compatibility-problems/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/arm64-linux-compatibility-problems.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="ARM64 Compatibility Problems: Why Does My Linux Software Not Run?">
+<meta property="og:image:alt" content="ARM64 Compatibility Problems: Why Won&#x27;t My Linux Software Run?">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "ARM64 Compatibility Problems: Why Does My Linux Software Not Run?",
-      "name": "ARM64 Compatibility Problems: Why Does My Linux Software Not Run?",
-      "description": "Four different reasons arm64 Linux software fails, each with a genuinely different fix — a decision tree instead of one generic workaround.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "headline": "Linux Software Won't Run on ARM64? How to Find the Fix",
+      "name": "ARM64 Compatibility Problems: Why Won't My Linux Software Run?",
+      "description": "A missing arm64 package, one x86 binary, an amd64-only image, or a real CPU dependency: how to tell which you have on an Apple Silicon Mac, and each fix.",
+      "image": "https://www.veloworkspaces.com/assets/og/arm64-linux-compatibility-problems.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -72,7 +72,7 @@
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "ARM64 Compatibility Problems: Why Does My Linux Software Not Run?",
+          "name": "ARM64 Compatibility Problems: Why Won't My Linux Software Run?",
           "item": "https://www.veloworkspaces.com/blog/arm64-linux-compatibility-problems/"
         }
       ]
@@ -110,42 +110,44 @@
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Guide</span>
-        <h1>ARM64 Compatibility Problems: Why Does My Linux Software Not Run?</h1>
-        <p class="article-lede">"It doesn't work on arm64" is four different problems wearing one complaint, and this blog has a specific, working answer for three of them, covered in depth elsewhere. What's missing is the triage step — figuring out which one you actually have before reaching for a fix built for a different one.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <h1>ARM64 Compatibility Problems: Why Won't My Linux Software Run?</h1>
+        <p class="article-lede">"It doesn't work on arm64" is four different problems behind one complaint, and each has a different fix. What usually goes wrong is the triage: reaching for the fix for one problem when you have another.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-      <h2>Start here: what actually fails?</h2>
-      <p>Before anything else, get precise about the failure. "Command not found" or a package manager reporting nothing available is a different problem from a binary that exists but crashes or refuses to start, which is different again from a Docker pull failing to find a matching image. The error itself usually already tells you which of the four cases below you're in — the mistake is reaching for the same fix (usually "just emulate it") regardless of which one it is.</p>
+      <h2>Start with what fails</h2>
+      <p>Be precise about the failure first. "Command not found" or a package manager with nothing to install is a different problem from a binary that exists but won't start, which is different again from a <code>docker pull</code> that can't find a matching image. The error usually tells you which of the four cases below you're in. The mistake is reaching for the same fix, usually "just emulate it", whichever case it is.</p>
 
-      <h2>1. The package genuinely has no arm64 build</h2>
-      <p>Check first whether this is real before working around it: a distro's arm64 ports repository doesn't always mirror every package available for amd64, and pulling an amd64 <code>.deb</code> by hand for a package that's simply missing on arm64 gets you a plain 404, not a working install. <a href="/blog/ubuntu-on-apple-silicon/">The Ubuntu post's Rosetta section</a> covers this gap concretely, including exactly where it bites. If a native arm64 build genuinely doesn't exist, building from source is sometimes viable — but watch for hardcoded <code>x86_64</code> in a project's build scripts or autotools target triples, which look like a compatibility failure but are really just a build script someone never updated for a second architecture.</p>
+      <h2>1. The package has no arm64 build</h2>
+      <p>Check that it's really missing before working around it. A distribution's arm64 ports repository doesn't always carry every amd64 package, and pulling an amd64 <code>.deb</code> by hand for a package that doesn't exist on arm64 gets you a 404, not an install. <a href="/blog/ubuntu-on-apple-silicon/">The Ubuntu post</a> shows where that bites. If there's no native build, building from source often works; watch for hard-coded <code>x86_64</code> in build scripts or target triples, which look like a compatibility failure but are just a script nobody updated for a second architecture.</p>
 
       <h2>2. It's one binary, not a whole ecosystem</h2>
-      <p>A single, self-contained x86_64 executable — a CLI tool, a compiled binary someone handed you directly — is the case Rosetta for Linux is built for. <a href="/blog/rosetta-2-linux-vms-explained/">The full setup is covered here</a>: it translates that one binary, running natively inside an accelerated arm64 guest, and it's meaningfully faster than any of the emulation options below. It stops being the right tool the moment the binary drags in x86_64-only shared libraries or a whole dependency tree that also isn't built for arm64 — at that point you're back in case 1 or 3, not case 2.</p>
+      <p>A single, self-contained x86-64 executable, such as a CLI tool or a compiled binary someone handed you, is what Rosetta for Linux is for. <a href="/blog/rosetta-2-linux-vms-explained/">The setup is here</a>: it translates that one binary inside a native, accelerated arm64 guest, and it's much faster than any of the emulation options below. It stops being the right tool once the binary pulls in x86-64-only shared libraries or a dependency tree that also isn't built for arm64. Then you're back in case 1 or 3.</p>
 
       <h2>3. It's a container image</h2>
-      <p>An amd64-only Docker image is its own case with its own mechanism — QEMU emulation by default, sometimes faster if Rosetta for Linux is already set up in the same guest — <a href="/blog/running-x86-docker-images-arm64-mac/">covered in full here</a>. Worth distinguishing explicitly from case 2: a container failing to find a matching architecture in its manifest is a Docker/registry problem, not something <code>update-binfmts</code> alone fixes, even though the same kernel facility ends up involved either way.</p>
+      <p>An amd64-only Docker image has its own mechanism: QEMU emulation by default, and sometimes Rosetta if it's already set up in the same guest. <a href="/blog/running-x86-docker-images-arm64-mac/">That post covers it</a>. Keep it separate from case 2. A container that can't find your architecture in its manifest is a Docker and registry problem, which <code>update-binfmts</code> alone won't fix, even though the same kernel facility is involved in the end.</p>
 
-      <h2>4. It genuinely needs a different CPU architecture</h2>
-      <p>The rare, real case: software with architecture-specific assembly or SIMD intrinsics written assuming x86, an out-of-tree kernel module with no arm64 port, or a requirement to actually verify behavior on the CPU architecture your users run rather than a translated stand-in for it. None of the above helps here — that's <a href="/blog/can-you-run-x86-linux-on-apple-silicon/">full QEMU-based emulation of a genuinely different architecture</a>, accepting the real performance cost that comes with it, or an actual x86_64 machine somewhere in the loop.</p>
+      <h2>4. It really needs a different CPU architecture</h2>
+      <p>The rare case: software with hand-written x86 assembly or SIMD intrinsics, an out-of-tree kernel module with no arm64 port, or a requirement to verify behavior on the CPU your users run rather than a translated stand-in. None of the above helps. That's <a href="/blog/can-you-run-x86-linux-on-apple-silicon/">full QEMU emulation of the other architecture</a>, with the performance cost that comes with it, or a real x86-64 machine somewhere in the loop.</p>
 
       <h2>The triage, short version</h2>
-      <table>
-        <thead><tr><th>Symptom</th><th>Likely case</th><th>Fix</th></tr></thead>
-        <tbody>
-          <tr><td>Package manager: nothing found</td><td>1 — missing native build</td><td>Confirm it's really missing, then build from source or find an alternative</td></tr>
-          <tr><td>One binary won't execute</td><td>2 — single x86_64 binary</td><td><a href="/blog/rosetta-2-linux-vms-explained/">Rosetta for Linux</a></td></tr>
-          <tr><td><code>docker pull</code> can't find your architecture</td><td>3 — container image</td><td><a href="/blog/running-x86-docker-images-arm64-mac/">amd64 image emulation</a></td></tr>
-          <tr><td>Needs a real x86 CPU to behave correctly</td><td>4 — true architecture dependency</td><td><a href="/blog/can-you-run-x86-linux-on-apple-silicon/">Full QEMU emulation</a></td></tr>
-        </tbody>
-      </table>
+      <div class="article-table-wrap">
+        <table>
+          <thead><tr><th>Symptom</th><th>Likely case</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td>Package manager finds nothing</td><td>1: no native build</td><td>Confirm it's missing, then build from source or find an alternative</td></tr>
+            <tr><td>One binary won't execute</td><td>2: a single x86-64 binary</td><td><a href="/blog/rosetta-2-linux-vms-explained/">Rosetta for Linux</a></td></tr>
+            <tr><td><code>docker pull</code> can't find your architecture</td><td>3: a container image</td><td><a href="/blog/running-x86-docker-images-arm64-mac/">amd64 image emulation</a></td></tr>
+            <tr><td>Needs a real x86 CPU to behave correctly</td><td>4: a true architecture dependency</td><td><a href="/blog/can-you-run-x86-linux-on-apple-silicon/">Full QEMU emulation</a></td></tr>
+          </tbody>
+        </table>
+      </div>
 
-      <p>Related reading: <a href="/blog/rosetta-2-linux-vms-explained/">Rosetta 2 in Linux VMs</a>, <a href="/blog/running-x86-docker-images-arm64-mac/">running x86 Docker images on an Apple Silicon Mac</a>, <a href="/blog/can-you-run-x86-linux-on-apple-silicon/">can you install x86 Linux on an Apple Silicon Mac</a>, and <a href="/blog/arm64-vs-x86-apple-silicon/">ARM64 vs. x86-64 on Apple Silicon</a> for the broader picture this all sits inside. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/rosetta-2-linux-vms-explained/">Rosetta 2 in Linux VMs</a>, <a href="/blog/running-x86-docker-images-arm64-mac/">running x86 Docker images on an Apple Silicon Mac</a>, and <a href="/blog/arm64-vs-x86-apple-silicon/">ARM64 vs. x86-64 on Apple Silicon</a> for the broader picture. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

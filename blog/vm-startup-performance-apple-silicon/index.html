@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VM Startup Performance on Apple Silicon</title>
-<meta name="description" content="Velo trades boot speed for broad distro compatibility on purpose. VZEFIBootLoader vs. direct kernel boot, and why a hibernated workspace skips boot entirely.">
+<title>Why Some Mac VMs Boot Faster: Linux VM Startup Explained</title>
+<meta name="description" content="What decides how fast a Linux VM on a Mac is ready: EFI boot, a cloud image&#x27;s first boot versus an install, later boots, and restoring saved state.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/vm-startup-performance-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="VM Startup Performance on Apple Silicon">
-<meta property="og:description" content="Velo trades boot speed for broad distro compatibility on purpose. VZEFIBootLoader vs. direct kernel boot, and why a hibernated workspace skips boot entirely.">
+<meta property="og:title" content="Why Some Mac VMs Boot Faster: Linux VM Startup Explained">
+<meta property="og:description" content="What decides how fast a Linux VM on a Mac is ready: EFI boot, a cloud image&#x27;s first boot versus an install, later boots, and restoring saved state.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/vm-startup-performance-apple-silicon/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/vm-startup-performance-apple-silicon.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="VM Startup Performance on Apple Silicon: What Actually Determines Boot Time">
+<meta property="og:image:alt" content="VM Startup Performance on Apple Silicon: What Determines Boot Time">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "VM Startup Performance on Apple Silicon",
-      "name": "VM Startup Performance on Apple Silicon: What Actually Determines Boot Time",
-      "description": "Velo trades boot speed for broad distro compatibility on purpose. VZEFIBootLoader vs. direct kernel boot, and why a hibernated workspace skips boot entirely.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "headline": "Why Some Mac VMs Boot Faster: Linux VM Startup Explained",
+      "name": "VM Startup Performance on Apple Silicon: What Determines Boot Time",
+      "description": "What decides how fast a Linux VM on a Mac is ready: EFI boot, a cloud image's first boot versus an install, later boots, and restoring saved state.",
+      "image": "https://www.veloworkspaces.com/assets/og/vm-startup-performance-apple-silicon.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -72,7 +72,7 @@
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "VM Startup Performance on Apple Silicon: What Actually Determines Boot Time",
+          "name": "VM Startup Performance on Apple Silicon: What Determines Boot Time",
           "item": "https://www.veloworkspaces.com/blog/vm-startup-performance-apple-silicon/"
         }
       ]
@@ -110,33 +110,40 @@
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Deep dive</span>
-        <h1>VM Startup Performance on Apple Silicon: What Actually Determines Boot Time</h1>
-        <p class="article-lede">A workspace's boot loader choice, verified against Velo's own source, is a deliberate tradeoff — not the fastest theoretical path, on purpose. What that tradeoff actually is, what only happens once, and the one case where "startup" isn't really a boot at all.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <h1>VM Startup Performance on Apple Silicon: What Determines Boot Time</h1>
+        <p class="article-lede">Velo Workspaces' boot loader is a deliberate trade-off, not the fastest possible path. What that trade is, what only happens once, why a cloud image is ready so much sooner than an install, and the case where "startup" isn't a boot at all.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-      <h2>The boot loader choice, briefly — full mechanism covered elsewhere</h2>
-      <p>Velo boots every Linux workspace through <code>VZEFIBootLoader</code> rather than the faster direct-kernel-boot alternative, trading some raw boot speed for genuine compatibility with any distro's own GRUB or systemd-boot — <a href="/blog/how-virtualization-framework-works/">the device inventory post's boot loader section</a> covers the full mechanism, including why the EFI variable store is created once and reused rather than rebuilt on every boot. What that post doesn't get into, and what actually matters for "how long until this workspace is usable": how those pieces add up across a workspace's actual lifecycle, and the one case where none of it applies at all.</p>
-      <p>One direct consequence worth calling out here rather than just linking past: when an installer's bootloader writes no fallback boot entry and a fresh install comes up to an empty EFI shell — <a href="/blog/ubuntu-on-apple-silicon/">covered in the Ubuntu post</a> — that's EFI firmware correctly finding nothing to boot, not a startup failure specific to Velo. A direct kernel boot wouldn't have that failure mode, because there'd be no firmware boot-order logic to fail in the first place — one more facet of the same speed-for-compatibility trade.</p>
+      <h2>The boot loader, briefly</h2>
+      <p>Velo Workspaces boots every Linux workspace with <code>VZEFIBootLoader</code> rather than the faster direct kernel boot, giving up a little raw speed for compatibility with any distribution's own GRUB or systemd-boot. <a href="/blog/how-virtualization-framework-works/">The device inventory post</a> covers the mechanism, including why the EFI variable store is created once and reused. This post is about how that adds up over a workspace's life, from creation to the fifth ordinary restart.</p>
 
-      <h2>Where startup time actually goes, across a workspace's lifecycle</h2>
-      <p>Put the pieces together and a workspace's "startup cost" isn't one number, it's front-loaded: a workspace's <strong>very first boot</strong> pays for NVRAM creation and, if it's a fresh install, the installer's own heavy disk activity — cache-accelerated per <a href="/blog/linux-vm-disk-performance-apple-silicon/">the disk performance post</a>, but still real work. <strong>Every boot after that</strong> is cheaper by construction: NVRAM already exists and just loads, there's no installer in the loop, and EFI firmware is doing what it does on real hardware — finding an already-installed OS and handing off to its existing boot loader. The gap between "first boot of a fresh install" and "the fifth ordinary restart of the same workspace" is real and it isn't subtle.</p>
-
-      <h2>The case where "startup" isn't a boot at all</h2>
-      <p>Everything above describes an actual firmware-and-kernel boot sequence. Restoring a hibernated workspace is a categorically different operation: <a href="/blog/disposable-vm-vs-snapshot/">covered in depth here</a>, a save/restore cycle serializes the VM's live memory and device state to disk and reloads it directly, resuming execution from exactly where it left off — no firmware boot, no kernel init, no systemd unit ordering, none of it. It's not a fast boot; it's not a boot at all. Not every configuration supports it — Velo's own <code>SaveRestoreSupport.probe</code> check rules it out for configurations using device types that don't support save/restore, most commonly the graphics device and serial console — but where it's available, it's the actual fast path for "get back to a working workspace quickly," not a faster boot loader.</p>
-
-      <h2>What actually determines how fast a workspace comes up</h2>
+      <h2>First boot: cloud image or installer</h2>
+      <p>A workspace's first start costs the most, and how much depends on where it came from.</p>
       <ul>
-        <li><strong>First boot costs the most</strong> — NVRAM creation, and if it's a fresh install, the installer's own heavy disk activity, cache-accelerated but still real work.</li>
-        <li><strong>Every boot after that is cheaper</strong> — NVRAM already exists, no installer in the loop, just EFI firmware finding and booting an already-installed OS.</li>
-        <li><strong>Restore, where available, beats any boot</strong> — it isn't a fast boot, it's not booting at all, and it's the right tool when what you actually want is "back to exactly where I left off," not "started fresh."</li>
+        <li><strong>From a cloud image</strong>, most of the work happens before the first boot: the app converts the downloaded qcow2 image into a raw disk sized to your choice. The first boot then runs cloud-init, which creates your account, adds your SSH key, grows the filesystem and starts SSH. That usually takes under a minute.</li>
+        <li><strong>From an installer</strong>, the first boot <em>is</em> the install: the installer unpacks and writes a whole system, heavy disk work that <a href="/blog/linux-vm-disk-performance-apple-silicon/">disk caching</a> speeds up but can't remove. Automatic installs save you the clicking, not the writing.</li>
       </ul>
 
-      <p>Related reading: <a href="/blog/linux-vm-disk-performance-apple-silicon/">disk performance and the caching-mode tradeoff</a>, <a href="/blog/disposable-vm-vs-snapshot/">disposable VM vs. snapshot</a> for the restore path in full, and <a href="/blog/ubuntu-on-apple-silicon/">the Ubuntu post's EFI-shell gotcha</a>, a real consequence of the boot-loader choice covered here. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <h2>Every boot after that is cheaper</h2>
+      <p>From then on, the EFI variable store already exists and just loads, there's no installer or cloud-init setup in the way, and the firmware does what it does on real hardware: finds the installed system and hands over to its boot loader. The gap between the first boot of a fresh install and an ordinary restart of the same workspace is large, and very noticeable.</p>
+
+      <h2>When "startup" isn't a boot at all</h2>
+      <p>Restoring a saved (suspended) workspace is a different operation. Saving writes the VM's live memory and device state to disk; restoring reads it back and carries on exactly where it stopped, with no firmware, no kernel start-up and no services to launch. It isn't a faster boot; it isn't a boot. Not every configuration supports it: the app checks whether the workspace's devices can be saved and restored, and some, the graphics device and serial console most often, rule it out. Where it's available, it's the real fast path back to where you were.</p>
+
+      <h2>What decides how fast a workspace comes up</h2>
+      <ul>
+        <li><strong>The first boot costs the most:</strong> cloud-init setup for a cloud image (usually under a minute), or a whole install for an installer image.</li>
+        <li><strong>Later boots are cheaper:</strong> just firmware finding an installed system.</li>
+        <li><strong>A restore, where available, beats any boot</strong>, when you want to be back exactly where you left off rather than starting fresh.</li>
+        <li><strong>A clone of a base image skips setup entirely:</strong> it boots like an ordinary restart, which is why disposable workspaces start in seconds.</li>
+      </ul>
+
+      <p>Related reading: <a href="/blog/linux-vm-disk-performance-apple-silicon/">disk performance and caching</a>, <a href="/blog/how-virtualization-framework-works/">the device inventory post</a>, and <a href="/blog/why-arm-vms-feel-native/">why ARM VMs feel native</a> once they're running. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

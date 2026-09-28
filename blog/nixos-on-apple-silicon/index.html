@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Running NixOS on Apple Silicon</title>
-<meta name="description" content="The official aarch64 ISO is minimal-only. What that means in practice, and how a Nix configuration compares to a base image as a reproducibility primitive.">
+<title>NixOS on Apple Silicon: Install NixOS in a VM on a Mac</title>
+<meta name="description" content="Install NixOS 26.05 or 25.05 on an M-series Mac from the official aarch64 ISO, and how configuration.nix and base images fit together in a VM.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Running NixOS on Apple Silicon">
-<meta property="og:description" content="The official aarch64 ISO is minimal-only. What that means in practice, and how a Nix configuration compares to a base image as a reproducibility primitive.">
+<meta property="og:title" content="NixOS on Apple Silicon: Install NixOS in a VM on a Mac">
+<meta property="og:description" content="Install NixOS 26.05 or 25.05 on an M-series Mac from the official aarch64 ISO, and how configuration.nix and base images fit together in a VM.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/nixos-on-apple-silicon.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Running NixOS on Apple Silicon">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "Running NixOS on Apple Silicon",
+      "headline": "NixOS on Apple Silicon: Install NixOS in a VM on a Mac",
       "name": "Running NixOS on Apple Silicon",
-      "description": "The official aarch64 ISO is minimal-only. What that means in practice, and how a Nix configuration compares to a base image as a reproducibility primitive.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "description": "Install NixOS 26.05 or 25.05 on an M-series Mac from the official aarch64 ISO, and how configuration.nix and base images fit together in a VM.",
+      "image": "https://www.veloworkspaces.com/assets/og/nixos-on-apple-silicon.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -111,27 +111,30 @@
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>Running NixOS on Apple Silicon</h1>
-        <p class="article-lede">NixOS's whole pitch is reproducibility — a system described entirely in one declarative file. That makes it an interesting counterpoint to how this blog usually talks about reproducibility, which is base images and disk clones. Here's what's actually different about the arm64 download, and where the two approaches to "reproducible" actually diverge.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <p class="article-lede">NixOS's whole idea is reproducibility: a system described in one declarative file. That makes it an interesting contrast with how this blog usually talks about reproducibility, which is base images and disk clones.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-      <h2>The aarch64 ISO is minimal-only — a real, current gap</h2>
-      <p>Worth knowing before you go looking for the wrong thing: NixOS's <a href="https://nixos.org/download/" target="_blank" rel="noopener">official downloads</a> offer both a minimal and a graphical installer ISO for x86_64, but only the minimal (terminal-only) ISO for aarch64 — there's no official graphical installer for Apple Silicon's architecture as of this writing. That's not a bug in your download, it's the current state of NixOS's own release infrastructure. The <a href="https://github.com/nix-community/nixos-images" target="_blank" rel="noopener">nix-community project</a> publishes its own aarch64 installer images that fill part of that gap, unofficially. For a VM guest specifically, the minimal ISO is genuinely fine — you're installing over a text console either way for a headless or lightly-used workspace, and NixOS's actual configuration happens in a text file regardless of which installer put the base system there.</p>
+      <h2>Minimal or graphical, both for aarch64</h2>
+      <p>NixOS publishes a minimal (terminal-only) and a graphical installer ISO for aarch64 as well as x86_64. Velo Workspaces 1.2 has both, for NixOS 26.05 and 25.05, downloaded from nixos.org and checked against the published SHA-256. For a VM the minimal ISO is usually enough, because NixOS's configuration lives in a text file whichever installer put the base system down.</p>
+      <p>NixOS's aarch64 ISO is built to boot from a CD, and Apple's Virtualization framework has no CD drive, only USB-style disks. Velo Workspaces gives its own copy of the ISO a partition table the firmware can boot from, leaving the NixOS volume and its label untouched, so the installer starts normally.</p>
 
-      <h2>Not in the official-image picker — the local-file path</h2>
-      <p>Like Kali and Arch, NixOS isn't part of Velo Workspaces' curated official-image list. Download the minimal aarch64 ISO from nixos.org yourself and use "choose a local OS image file" when creating the workspace. The installer walks you through partitioning and generates an initial <code>configuration.nix</code> for you, or you can supply your own from the start if you already have one.</p>
+      <h2>Installing: by hand, the NixOS way</h2>
+      <p>The NixOS installer has no answer-file mechanism, so there's no automatic install. Create a workspace with <strong>Installer image</strong>, pick NixOS, and when it boots, partition the disk, run <code>nixos-generate-config</code>, edit <code>configuration.nix</code> and run <code>nixos-install</code>, following the <a href="https://nixos.org/manual/nixos/stable/#sec-installation" target="_blank" rel="noopener">NixOS manual</a>. If you already keep a <code>configuration.nix</code> in git, you can start from that.</p>
+      <p>For SSH, enable <code>services.openssh</code> and add this Mac's public key (copy it from <strong>Settings › Access</strong>) to <code>users.users.&lt;name&gt;.openssh.authorizedKeys.keys</code>. The <strong>Install Key</strong> button in the Access tab works too, but it writes to <code>~/.ssh/authorized_keys</code>, which your configuration doesn't know about. Putting the key in the file keeps it where NixOS expects everything to be.</p>
 
-      <h2>Two different answers to "how do I get the same environment back"</h2>
-      <p>This is the genuinely interesting comparison, not a gotcha: Velo Workspaces' own answer to reproducibility is <a href="/blog/base-image-versioning/">a sealed base image</a> — a disk-level snapshot you clone from, fast because it's copy-on-write, but opaque as a description of what's actually inside it (a display name is the only record you get, as that post covers in depth). NixOS's answer is the opposite shape: a <code>configuration.nix</code> file is a complete, human-readable, version-controllable description of the system — every package, every service, every setting — that <code>nixos-rebuild</code> can reproduce deterministically on any NixOS machine that reads it. One is fast and disk-based; the other is precise and text-based. They're not actually competing solutions to the same problem — a NixOS guest can use both at once, sealing a configured NixOS install as a Velo base image for fast day-to-day cloning, while the same box's <code>configuration.nix</code> stays the portable, readable record of what's in it, useful even outside Velo entirely.</p>
+      <h2>Two answers to "how do I get the same system back"</h2>
+      <p>Velo Workspaces' own answer to reproducibility is <a href="/blog/base-image-versioning/">a saved base image</a>: a disk-level copy you clone from. It's fast, because clones are copy-on-write, but it's opaque as a description of what's inside; its name is the only record you get. NixOS's answer has the opposite shape. <code>configuration.nix</code> is a complete, readable, version-controlled description of the system (every package, service and setting) that <code>nixos-rebuild</code> reproduces the same way on any NixOS machine.</p>
+      <p>One is fast and disk-based, the other precise and text-based, and a NixOS workspace can use both. Save a configured install as a base image for quick day-to-day clones, and keep its <code>configuration.nix</code> as the portable record of what's in it, useful even outside Velo Workspaces.</p>
 
-      <h2>What actually trips people up</h2>
-      <p>The declarative model is also the thing that surprises people coming from an imperative distro: installing a package with <code>nix-env</code> outside of <code>configuration.nix</code> works, but it's a mutation the file doesn't know about — the next time you rebuild from the file, that ad hoc install is gone, because the file is the only thing NixOS considers the actual source of truth. That's a deliberate design choice, not a bug, but it catches people who reach for the familiar "just install it" habit from Ubuntu or Debian and expect it to stick the way <code>apt install</code> does.</p>
+      <h2>What trips people up</h2>
+      <p>The declarative model is also what surprises people coming from other distributions. Installing a package with <code>nix-env</code> outside <code>configuration.nix</code> works, but the file doesn't know about it, and the next rebuild doesn't include it. The file is the only source of truth NixOS recognizes. That's a deliberate design choice, and it catches anyone who reaches for the familiar "just install it" habit and expects it to stick the way <code>apt install</code> does.</p>
 
-      <p>Related reading: <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>, <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment actually is</a>, and <a href="/blog/arch-linux-on-apple-silicon/">Arch Linux on Apple Silicon</a>, another distro on the local-file path. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>, <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment is</a>, and <a href="/blog/arch-linux-on-apple-silicon/">Arch Linux on Apple Silicon</a>, another distribution you install by hand. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

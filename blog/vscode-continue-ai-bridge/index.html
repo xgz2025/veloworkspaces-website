@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A Local AI Coding Assistant in VS Code with AI Bridge</title>
-<meta name="description" content="The GUI path: VS Code Remote-SSH into an isolated workspace, with Continue talking to a model on your Mac over the same AI Bridge every CLI agent uses.">
+<title>Local AI Coding Assistant in VS Code: Continue + Ollama</title>
+<meta name="description" content="Set up Continue in VS Code with a local Ollama or MLX model, running in an isolated Linux VM over Remote-SSH, so edits and commands never touch your Mac.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/vscode-continue-ai-bridge/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="A Local AI Coding Assistant in VS Code with AI Bridge">
-<meta property="og:description" content="The GUI path: VS Code Remote-SSH into an isolated workspace, with Continue talking to a model on your Mac over the same AI Bridge every CLI agent uses.">
+<meta property="og:title" content="Local AI Coding Assistant in VS Code: Continue + Ollama">
+<meta property="og:description" content="Set up Continue in VS Code with a local Ollama or MLX model, running in an isolated Linux VM over Remote-SSH, so edits and commands never touch your Mac.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/vscode-continue-ai-bridge/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/vscode-continue-ai-bridge.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="A Local AI Coding Assistant in VS Code: Continue, VS Code Remote, and AI Bridge">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-21">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "A Local AI Coding Assistant in VS Code with AI Bridge",
+      "headline": "Local AI Coding Assistant in VS Code: Continue + Ollama",
       "name": "A Local AI Coding Assistant in VS Code: Continue, VS Code Remote, and AI Bridge",
-      "description": "The GUI path: VS Code Remote-SSH into an isolated workspace, with Continue talking to a model on your Mac over the same AI Bridge every CLI agent uses.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "description": "Set up Continue in VS Code with a local Ollama or MLX model, running in an isolated Linux VM over Remote-SSH, so edits and commands never touch your Mac.",
+      "image": "https://www.veloworkspaces.com/assets/og/vscode-continue-ai-bridge.jpg",
       "datePublished": "2026-09-21",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -111,60 +111,61 @@
       <div class="article-header">
         <span class="eyebrow">Setup guide</span>
         <h1>A Local AI Coding Assistant in VS Code: Continue, VS Code Remote, and AI Bridge</h1>
-        <p class="article-lede">Every agent workflow this blog has covered so far — OpenCode, Aider, Goose, Open Interpreter — is a terminal tool. If what you actually want is inline autocomplete and chat-driven edits in an editor you already use, VS Code's own Remote-SSH gets you there, using the identical AI Bridge connection every CLI agent already relies on.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-22">September 22, 2026</time></p>
+        <p class="article-lede">Every agent workflow on this blog so far, OpenCode, Aider, Goose, Open Interpreter, is a terminal tool. If you want inline autocomplete and chat-driven edits in the editor you already use, VS Code's Remote-SSH gets you there over the same AI Bridge connection.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-      <h2>Why VS Code Remote is the right shape for this, not a new mechanism</h2>
-      <p>VS Code Remote-SSH doesn't just open a terminal on a remote machine — it installs and runs the actual VS Code server, and every extension you add, <em>inside</em> the machine you connect to. Install Continue from a Remote-SSH window and it runs inside the Linux guest, not on your Mac. Its requests to a local model endpoint resolve inside the guest exactly the way a CLI agent's do: through the same <code>socat</code> proxy forwarding traffic across the vsock channel to AI Bridge on the host. There's no separate "GUI-aware" bridge feature to turn on — it's the identical connection covered in the <a href="/blog/ai-bridge-architecture/">AI Bridge architecture post</a>, reached from a different client.</p>
+      <h2>Why VS Code Remote is the right shape for this</h2>
+      <p>VS Code Remote-SSH doesn't just open a remote terminal. It installs and runs the VS Code server, and every extension you add, <em>inside</em> the machine you connect to. Install Continue from a Remote-SSH window and it runs in the Linux guest, not on your Mac. Its requests to a local model then travel exactly like a CLI agent's: through the same <code>socat</code> proxy, across vsock, to AI Bridge on the Mac. There's no separate bridge for editors to switch on; it's the same connection described in the <a href="/blog/ai-bridge-architecture/">AI Bridge architecture post</a>, reached from a different client.</p>
 
-      <h2>What Velo Workspaces actually generates for you</h2>
-      <p>A running Linux workspace's <strong>Developer Tools</strong> tab has three sections: SSH Access, Console, and VS Code Remote. The VS Code Remote section is a ready-to-paste <code>~/.ssh/config</code> block, with a Copy button, built from the workspace's own name:</p>
+      <h2>What Velo Workspaces gives you</h2>
+      <p>A running Linux workspace's <strong>Access</strong> tab includes a <strong>VS Code Remote</strong> section: step-by-step instructions and a ready-to-paste <code>~/.ssh/config</code> block, named after the workspace, with a Copy button:</p>
       <pre><code># Add to ~/.ssh/config
-Host my-workspace-name
-    HostName &lt;workspace-ip&gt;
-    User &lt;username&gt;
-    Port 22</code></pre>
-      <p>Two things worth knowing about that snippet before you paste it. First, it only appears once the workspace is a <strong>Linux</strong> guest with <strong>SSH enabled</strong> — a setting chosen when the workspace is created (or in its profile), not something you flip live on a running one, the same as CPU, memory, or storage. Second, <code>&lt;username&gt;</code> is a deliberate placeholder, not a guessed "ubuntu" or "debian" login. Velo used to guess the distribution's conventional cloud-image account name, which was wrong for every workspace installed from an ISO — covered in this blog's own <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu</a> and <a href="/blog/debian-on-apple-silicon/">Debian</a> posts, the official-image picker downloads the distro's actual installer ISO and you go through its normal interactive install, inventing your own account along the way. There's no cloud-image convention to guess from, so the app tells you to fill in what you actually typed rather than silently getting it wrong.</p>
+      Host my-workspace-name
+          HostName &lt;workspace-ip&gt;
+          User &lt;username&gt;
+          Port 22</code></pre>
+      <p>For a workspace created from a cloud image or an automatic install, the app fills in the account you created, so there's nothing to edit. For a system you installed by hand, it leaves <code>&lt;username&gt;</code> for you to replace with the account you made during the install, rather than guessing a name like "ubuntu" that wouldn't exist.</p>
+      <p>One thing to set up once: VS Code connects with <strong>your own</strong> SSH key, not the key the app keeps in the Keychain for its built-in terminal. The easiest way is to paste your public key (for example the contents of <code>~/.ssh/id_ed25519.pub</code>) under <strong>SSH Public Keys</strong> when you create the workspace. Alternatively, turn on <strong>Allow SSH logins with the password</strong>, or export this Mac's key from <strong>Settings › Access</strong> and add it to the config block as an <code>IdentityFile</code>.</p>
 
-      <h2>Set up, step by step</h2>
+      <h2>Step by step</h2>
       <ol>
-        <li><strong>Create or pick a Linux workspace with SSH enabled.</strong> The <strong>Ubuntu Developer</strong> template ("Best for most developers") is built for exactly this — its own description is "For coding, shared projects, and VS Code Remote." Turn on <strong>AI Bridge</strong> too, in Resources if it isn't already (the AI Sandbox profile turns it on by default; Ubuntu Developer doesn't).</li>
-        <li><strong>Install a model server on your Mac</strong> — Ollama or MLX, whichever you prefer. The <a href="/blog/zero-tax-virtualization/">complete guide</a> has the install commands and a RAM-to-model-size table for picking what actually fits your Mac; no need to repeat it here.</li>
-        <li><strong>Start the workspace</strong>, open its <strong>Developer Tools</strong> tab, and copy the VS Code Remote config into <code>~/.ssh/config</code> on your Mac. Replace <code>&lt;username&gt;</code> with the account you created during the guest's own install.</li>
-        <li><strong>In VS Code on your Mac</strong>, install the <strong>Remote - SSH</strong> extension if you don't have it, then <code>Remote-SSH: Connect to Host</code> and pick the alias from the config you just added.</li>
-        <li><strong>Inside that remote window</strong> — this part matters — install the <strong>Continue</strong> extension. Installing it while connected puts it on the guest side of the connection, which is the whole point.</li>
-        <li><strong>Establish the guest's vsock forwarder</strong>, the same one-time step every CLI agent in the <a href="/blog/zero-tax-virtualization/">complete guide</a> uses: open the workspace's <strong>AI Bridge</strong> tab for the exact port-filled command, install <code>socat</code>, and either run the forwarder for the session or install it as a <code>systemd</code> service so it survives reboots.</li>
+        <li><strong>Create a Linux workspace with AI Bridge on.</strong> The quickest route is <strong>Cloud image</strong> › <strong>Ubuntu 26.04 LTS</strong> with the <strong>AI Sandbox</strong> profile, which turns AI Bridge on; on another profile, turn it on under Advanced Settings. Add your public key on the account step.</li>
+        <li><strong>Install a model server on your Mac</strong>, Ollama or MLX. <a href="/blog/zero-tax-virtualization/">The complete guide</a> has the commands and a table for choosing a model that fits your Mac's memory.</li>
+        <li><strong>Start the workspace</strong>, open its <strong>Access</strong> tab, and copy the VS Code Remote block into <code>~/.ssh/config</code> on your Mac.</li>
+        <li><strong>In VS Code on your Mac</strong>, install the <strong>Remote - SSH</strong> extension if you haven't, run <code>Remote-SSH: Connect to Host</code>, and pick the alias you just added.</li>
+        <li><strong>Inside that remote window</strong>, install the <strong>Continue</strong> extension. Installing it while connected puts it on the guest's side of the connection, which is the whole point.</li>
+        <li><strong>Start the guest's vsock forwarder</strong>, the same one-time step every CLI agent in <a href="/blog/zero-tax-virtualization/">the complete guide</a> uses: open the workspace's <strong>AI Bridge</strong> tab for the command with your port filled in, install <code>socat</code>, and either run the forwarder for the session or install it as a <code>systemd</code> service so it survives reboots.</li>
         <li>
-          <strong>Point Continue at the bridge.</strong> Inside the remote VS Code window's integrated terminal (so this lands on the guest, not your Mac), edit <code>~/.continue/config.yaml</code>:
+          <strong>Point Continue at the bridge.</strong> In the remote window's integrated terminal (so the file lands in the guest, not on your Mac), edit <code>~/.continue/config.yaml</code>:
           <pre><code>name: Local via AI Bridge
-version: 0.0.1
-schema: v1
-models:
-  - name: Local Model
-    provider: openai
-    model: &lt;model-name&gt;
-    apiBase: http://127.0.0.1:&lt;PORT&gt;/v1
-    apiKey: local
-    roles:
-      - chat
-      - edit
-      - autocomplete</code></pre>
-          <code>&lt;PORT&gt;</code> is <code>11434</code> for Ollama or <code>8080</code> for MLX, and <code>&lt;model-name&gt;</code> is whatever you pulled in step 2. Reload the window, and Continue's chat and inline-edit panels should list <strong>Local Model</strong>.
+      version: 0.0.1
+      schema: v1
+      models:
+        - name: Local Model
+          provider: openai
+          model: &lt;model-name&gt;
+          apiBase: http://127.0.0.1:&lt;PORT&gt;/v1
+          apiKey: local
+          roles:
+            - chat
+            - edit
+            - autocomplete</code></pre>
+          <code>&lt;PORT&gt;</code> is <code>11434</code> for Ollama or <code>8080</code> for MLX, and <code>&lt;model-name&gt;</code> is the model you pulled in step 2. Reload the window, and Continue's chat and inline-edit panels should list <strong>Local Model</strong>.
         </li>
       </ol>
 
-      <h2>What this actually buys you over pointing Continue at Ollama directly</h2>
-      <p>The obvious shortcut: if Ollama is already running on your Mac, why not just install Continue in a normal, non-remote VS Code window and point it at <code>127.0.0.1:11434</code> directly? Nothing stops you — but then Continue's edits land on your real Mac filesystem, and anything its agent mode executes runs there too. Routing through VS Code Remote moves the actual editing and code execution into the disposable guest instead, which is exactly the isolation argument this blog's <a href="/blog/ai-agent-security-risks/">AI agent security post</a> makes for CLI agents — a suggestion Continue proposes, or a command its agent mode runs, that goes wrong costs you nothing more than closing the workspace. The model inference itself still happens on the Mac's own GPU either way; only the editing and execution surface moves.</p>
+      <h2>Why not point Continue at Ollama directly?</h2>
+      <p>The obvious shortcut: if Ollama already runs on your Mac, install Continue in a normal VS Code window and point it at <code>127.0.0.1:11434</code>. Nothing stops you, but then Continue's edits land on your Mac's real files, and anything its agent mode runs, runs there too. Going through VS Code Remote moves editing and execution into the guest instead, which is the isolation argument <a href="/blog/ai-agent-security-risks/">the AI agent security post</a> makes for CLI agents: a bad suggestion or a command gone wrong costs you no more than closing the workspace. Inference still happens on the Mac's GPU either way. Only the editing and execution move.</p>
 
-      <h2>A gotcha worth knowing before it wastes a debugging session</h2>
-      <p>Switching AI Bridge's host provider — say, from Ollama to MLX — re-points the host-side listener immediately, but the guest's <code>socat</code> forwarder unit is a file that still names the <em>old</em> port, and nothing about a workspace restart touches it. This is the same gotcha the <a href="/blog/ai-researchers-agent-testing/">AI Researchers post</a> covers for CLI agents, and it applies identically here: if Continue suddenly can't reach the model after you switch providers, re-run the forwarder setup command from the AI Bridge tab again before assuming something else broke.</p>
+      <h2>A gotcha that can waste a debugging session</h2>
+      <p>Switching AI Bridge's Host Provider, say from Ollama to MLX, moves the Mac-side listener immediately, but the guest's <code>socat</code> service still names the <em>old</em> port, and restarting the workspace doesn't change it. <a href="/blog/ai-researchers-agent-testing/">The AI researchers post</a> covers the same gotcha for CLI agents. If Continue suddenly can't reach the model after a provider switch, run the forwarder command from the AI Bridge tab again before looking elsewhere.</p>
 
-      <p>Related reading: the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>, the <a href="/blog/zero-tax-virtualization/">complete guide</a> this setup extends with a GUI path, <a href="/blog/ai-agent-security-risks/">why isolating the edit-and-execute surface matters</a>, <a href="/blog/ai-bridge-data-privacy/">what actually leaves your Mac</a> when a model is reached this way (nothing, structurally), and <a href="/blog/linux-server-vs-desktop-vm-mac/">why a headless guest is enough</a> for a workflow that looks graphical but isn't running a GUI inside the VM at all. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>, <a href="/blog/zero-tax-virtualization/">the complete guide</a> this adds an editor path to, <a href="/blog/ai-bridge-data-privacy/">what leaves your Mac</a> when a model is reached this way, and <a href="/blog/linux-server-vs-desktop-vm-mac/">why a headless guest is enough</a> for a workflow that looks graphical. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

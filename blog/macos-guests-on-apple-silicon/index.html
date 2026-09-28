@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Running macOS Guests on Apple Silicon: What&#x27;s Different</title>
-<meta name="description" content="Real Metal-accelerated graphics, shared folders that auto-mount, a disk that isn&#x27;t self-contained, and why Rosetta and AI Bridge don&#x27;t come along for the ride.">
+<title>macOS VMs on Apple Silicon: How macOS Guests Differ</title>
+<meta name="description" content="Run macOS in a VM on an M-series Mac: GPU acceleration, shared folders with no mount command, the restore image, and the one file mistake that breaks it.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/macos-guests-on-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Running macOS Guests on Apple Silicon: What&#x27;s Different">
-<meta property="og:description" content="Real Metal-accelerated graphics, shared folders that auto-mount, a disk that isn&#x27;t self-contained, and why Rosetta and AI Bridge don&#x27;t come along for the ride.">
+<meta property="og:title" content="macOS VMs on Apple Silicon: How macOS Guests Differ">
+<meta property="og:description" content="Run macOS in a VM on an M-series Mac: GPU acceleration, shared folders with no mount command, the restore image, and the one file mistake that breaks it.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/macos-guests-on-apple-silicon/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/macos-guests-on-apple-silicon.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Running macOS Guests on Apple Silicon: What&#x27;s Actually Different from a Linux Workspace">
+<meta property="og:image:alt" content="Running macOS Guests on Apple Silicon: What&#x27;s Different from a Linux Workspace">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-21">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "Running macOS Guests on Apple Silicon: What's Different",
-      "name": "Running macOS Guests on Apple Silicon: What's Actually Different from a Linux Workspace",
-      "description": "Real Metal-accelerated graphics, shared folders that auto-mount, a disk that isn't self-contained, and why Rosetta and AI Bridge don't come along for the ride.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "headline": "macOS VMs on Apple Silicon: How macOS Guests Differ",
+      "name": "Running macOS Guests on Apple Silicon: What's Different from a Linux Workspace",
+      "description": "Run macOS in a VM on an M-series Mac: GPU acceleration, shared folders with no mount command, the restore image, and the one file mistake that breaks it.",
+      "image": "https://www.veloworkspaces.com/assets/og/macos-guests-on-apple-silicon.jpg",
       "datePublished": "2026-09-21",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -72,7 +72,7 @@
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "Running macOS Guests on Apple Silicon: What's Actually Different from a Linux Workspace",
+          "name": "Running macOS Guests on Apple Silicon: What's Different from a Linux Workspace",
           "item": "https://www.veloworkspaces.com/blog/macos-guests-on-apple-silicon/"
         }
       ]
@@ -110,37 +110,38 @@
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Guide</span>
-        <h1>Running macOS Guests on Apple Silicon: What's Actually Different from a Linux Workspace</h1>
-        <p class="article-lede">The other guest type this app supports, and a genuinely different one — not a sixth entry in the Linux distro series. Real GPU acceleration, shared folders that need no mount command, and one real gotcha worth knowing before it costs you a workspace.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-22">September 22, 2026</time></p>
+        <h1>Running macOS Guests on Apple Silicon: What's Different from a Linux Workspace</h1>
+        <p class="article-lede">The other guest type Velo Workspaces supports, and a very different one from Linux: real GPU acceleration, shared folders that need no mount command, and one gotcha worth knowing before it costs you a workspace.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-      <h2>Apple Silicon host required, no way around it</h2>
-      <p>A macOS guest needs an Apple Silicon Mac as the host — on Intel, Linux guests are still fully supported, but macOS guest creation isn't available at all. This isn't a Velo Workspaces limitation to work around; it's how Apple's Virtualization framework draws the line, and every macOS-guest code path in the app is conditionally compiled for arm64 only.</p>
+      <h2>An Apple silicon host, no way around it</h2>
+      <p>A macOS guest needs an Apple silicon Mac. On an Intel Mac, Linux guests work fine but macOS guests aren't available at all. That line is drawn by Apple's Virtualization framework, not by Velo Workspaces.</p>
 
-      <h2>"Download an official image" means exactly one thing here</h2>
-      <p>Every post in the Linux series so far has been about picking <em>which</em> official image — which distro, which release. macOS removes that choice entirely: the official path fetches the single latest supported macOS build for this specific Mac, full stop, using Apple's own restore-image API. There's no version picker, no browsing a catalog of older-but-still-supported releases the way you'd pick an Ubuntu LTS or a specific Fedora release.</p>
-      <p>If you specifically need something other than the current latest build, the local-file path is still there — the same drop zone that takes an ISO, DMG, or IMG also accepts an <code>.ipsw</code> file directly, so a restore image you've sourced yourself works the same way a hand-picked Arch Linux ARM image does in that series. The official picker just won't hand you a choice on its own.</p>
+      <h2>One image: the latest macOS for this Mac</h2>
+      <p>Linux means choosing a distribution and a release. macOS doesn't: choose <strong>Installer image</strong>, pick macOS, and Velo Workspaces asks Apple's restore-image service for the latest macOS this Mac supports. There's no list of older releases to browse. If you need a specific build, <strong>Choose File…</strong> accepts an <code>.ipsw</code> restore image you've downloaded yourself.</p>
+      <p>Restore images are large, typically 15 to 18 GB. Since 1.2 the download stays in <strong>Settings › Images</strong>, so a second macOS workspace installs from the copy you already have instead of fetching it again. The install itself is unattended: Apple's installer runs by itself, and you finish macOS's setup assistant in the workspace's window.</p>
 
-      <h2>The GPU story here is the opposite of every Linux post in this series</h2>
-      <p>This blog has covered, more than once, that Apple's Virtualization framework gives a Linux guest <code>virtio-gpu</code> — a paravirtualized 2D framebuffer with no path to the host's actual GPU — which is exactly why <a href="/blog/ai-bridge-architecture/">AI Bridge</a> exists as a workaround for AI inference specifically. A macOS guest doesn't hit that wall at all: Apple's platform gives it a dedicated Metal-backed graphics device, built specifically to provide near-native GPU performance to a macOS guest through the Metal API. Real GPU acceleration, not a 2D fallback — the constraint covered repeatedly for Linux guests, including in the <a href="/blog/velo-vs-parallels-vs-utm/">Parallels/UTM comparison</a>, simply doesn't apply to this guest type.</p>
-      <p>Input feels native for the same underlying reason: a macOS guest gets real trackpad and keyboard passthrough, including multi-touch gestures — two-finger scroll, pinch-to-zoom, Mission Control swipes — not just basic pointer and keystroke forwarding. Combined with the graphics story, a macOS guest is meant to feel like using another Mac, in a way a Linux guest's console never tries to.</p>
+      <h2>The GPU story is the opposite of Linux</h2>
+      <p>A Linux guest gets <code>virtio-gpu</code>, a paravirtualized display with no path to the Mac's GPU, which is why <a href="/blog/ai-bridge-architecture/">AI Bridge</a> exists for AI inference. A macOS guest doesn't hit that wall. Apple's platform gives it a Metal-backed graphics device built to deliver near-native GPU performance through the Metal API. The limitation that shapes every Linux post on this blog, including the <a href="/blog/velo-vs-parallels-vs-utm/">Parallels and UTM comparison</a>, doesn't apply here.</p>
+      <p>Input feels native for a related reason. A macOS guest gets real trackpad and keyboard passthrough with multi-touch gestures (two-finger scroll, pinch to zoom, Mission Control swipes), not just forwarded clicks and keystrokes. Together with the graphics, it feels like using another Mac, which a Linux console never tries to.</p>
 
-      <h2>Shared folders, with no mount command</h2>
-      <p>Every Linux post in this series has included a manual <code>mount -t virtiofs</code> step for shared folders. macOS guests skip it: Apple's platform mounts every shared folder automatically under <code>/Volumes/My Shared Files/&lt;name&gt;</code> the moment the guest boots, through a reserved automount mechanism rather than the per-folder tags a Linux or Windows guest still needs. One real caveat worth knowing: an older macOS guest that predates this mechanism simply won't recognize the automount tag and will mount nothing — the same silent "nothing happens until you notice" failure mode as an unsupported host elsewhere in this app, not an error message pointing at the actual cause.</p>
+      <h2>Shared folders, no mount command</h2>
+      <p>Linux workspaces need a <code>mount -t virtiofs</code> command for each shared folder. macOS guests don't: every shared folder appears under <code>/Volumes/My Shared Files/</code> as soon as the guest boots. The caveat is that this relies on macOS 13 or later inside the guest. An older macOS guest doesn't recognize the mechanism and silently mounts nothing.</p>
 
-      <h2>The gotcha: a macOS workspace's disk isn't self-contained</h2>
-      <p>This is the one worth knowing in advance, the same spirit as the Netplan/MAC-address gotcha in the Ubuntu post. A macOS guest's hardware model, machine identifier, and auxiliary boot storage are stored <em>beside</em> its disk image, not inside it — three separate files in a metadata folder that travels with the workspace. Copy or move just the <code>.img</code> disk file on its own — to back it up, share it, or move it by hand — and you get a workspace that can't start, because the platform data it needs to boot isn't there. If you're moving a macOS workspace around outside the app's own tooling, the disk alone was never the whole picture.</p>
+      <h2>The gotcha: the disk isn't the whole workspace</h2>
+      <p>A macOS guest's hardware model, machine identifier and auxiliary boot storage are kept <em>beside</em> its disk image, in a small metadata folder that belongs to the workspace. Copy or move only the disk file, to back it up or share it by hand, and you get a workspace that can't start, because the platform data it needs to boot isn't there. Move macOS workspaces with the app, or keep the whole bundle together.</p>
 
-      <h2>What doesn't come along for the ride</h2>
-      <p>Two honest scoping notes, both real gaps rather than oversights. <strong>Rosetta here isn't a Velo Workspaces feature at all.</strong> The VirtioFS share and the manual <code>binfmt</code> registration covered throughout the Ubuntu, Debian, and Fedora posts are specifically a Linux-guest mechanism, gated to Linux in the app itself. A macOS guest doesn't need any of that: it's a complete, ordinary macOS installation, so running an x86-64 Mac app just triggers Rosetta 2 the standard way, the same as it would on real Apple Silicon hardware — nothing Velo Workspaces has to wire up, because there's no host/guest boundary to bridge for it.</p>
-      <p><strong>AI Bridge is scoped to Linux guests too.</strong> If what you actually want is the host-GPU model-serving setup described in the <a href="/blog/ai-bridge-architecture/">AI Bridge architecture post</a>, that's a Linux workspace's feature specifically — a macOS guest doesn't need it for the same reason it doesn't need Rosetta's workaround: it already has real GPU access of its own.</p>
+      <h2>What stays on the Linux side</h2>
+      <p><strong>Rosetta needs no setup here.</strong> The VirtioFS share and <code>binfmt</code> registration described in the Ubuntu, Debian and Fedora posts are for Linux guests. A macOS guest is an ordinary macOS installation, so an x86-64 Mac app triggers Rosetta 2 the usual way, exactly as on a real Mac.</p>
+      <p><strong>AI Bridge is for Linux guests.</strong> A macOS guest doesn't need it, for the same reason: it already has GPU access of its own.</p>
+      <p><strong>The built-in SSH terminal is for Linux workspaces too.</strong> To reach a macOS guest over SSH, turn on Remote Login inside it and connect the way you would to any Mac.</p>
 
-      <p>Related reading: the Linux side of this — <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu</a>, <a href="/blog/debian-on-apple-silicon/">Debian</a>, <a href="/blog/fedora-on-apple-silicon/">Fedora</a>, and <a href="/blog/arch-linux-on-apple-silicon/">Arch Linux</a> on Apple Silicon; the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a> and why it exists specifically for Linux guests; <a href="/blog/velo-vs-parallels-vs-utm/">how the GPU story compares</a> to other VM apps on the same hardware; and, if you seal a macOS guest as a base image, <a href="/blog/base-image-versioning/">a naming convention worth using</a> since the app itself tracks no version history between generations. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: the Linux side of this, starting with <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu on Apple Silicon</a>; the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a> and why it's Linux-only; <a href="/blog/velo-vs-parallels-vs-utm/">how the GPU story compares</a> with other VM apps; and, if you save a macOS guest as a base image, <a href="/blog/base-image-versioning/">a naming convention worth using</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

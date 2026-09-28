@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ubuntu vs. Debian vs. Fedora vs. Arch on Apple Silicon</title>
-<meta name="description" content="Not another &#x27;best distro&#x27; opinion piece — which workload actually fits which distribution.">
+<title>Best Linux Distro for an Apple Silicon Mac VM in 2026</title>
+<meta name="description" content="Ubuntu, Debian, Fedora, Rocky Linux, Arch, Kali or NixOS on an M-series Mac? Which fits your work, and which ones set themselves up in about a minute.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/best-linux-distro-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Ubuntu vs. Debian vs. Fedora vs. Arch on Apple Silicon">
-<meta property="og:description" content="Not another &#x27;best distro&#x27; opinion piece — which workload actually fits which distribution.">
+<meta property="og:title" content="Best Linux Distro for an Apple Silicon Mac VM in 2026">
+<meta property="og:description" content="Ubuntu, Debian, Fedora, Rocky Linux, Arch, Kali or NixOS on an M-series Mac? Which fits your work, and which ones set themselves up in about a minute.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/best-linux-distro-apple-silicon/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/best-linux-distro-apple-silicon.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Ubuntu vs. Debian vs. Fedora vs. Arch on Apple Silicon">
+<meta property="og:image:alt" content="Ubuntu, Debian, Fedora, Rocky or Arch: Which Linux for Your Mac?">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "Ubuntu vs. Debian vs. Fedora vs. Arch on Apple Silicon",
-      "name": "Ubuntu vs. Debian vs. Fedora vs. Arch on Apple Silicon",
-      "description": "Not another 'best distro' opinion piece — which workload actually fits which distribution.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "headline": "Best Linux Distro for an Apple Silicon Mac VM in 2026",
+      "name": "Ubuntu, Debian, Fedora, Rocky or Arch: Which Linux for Your Mac?",
+      "description": "Ubuntu, Debian, Fedora, Rocky Linux, Arch, Kali or NixOS on an M-series Mac? Which fits your work, and which ones set themselves up in about a minute.",
+      "image": "https://www.veloworkspaces.com/assets/og/best-linux-distro-apple-silicon.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -72,7 +72,7 @@
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "Ubuntu vs. Debian vs. Fedora vs. Arch on Apple Silicon",
+          "name": "Ubuntu, Debian, Fedora, Rocky or Arch: Which Linux for Your Mac?",
           "item": "https://www.veloworkspaces.com/blog/best-linux-distro-apple-silicon/"
         }
       ]
@@ -110,40 +110,45 @@
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Guide</span>
-        <h1>Ubuntu vs. Debian vs. Fedora vs. Arch on Apple Silicon</h1>
-        <p class="article-lede">"Which distro is best" isn't a question with one answer — it's four questions wearing a trenchcoat. This blog already has a full deep dive on each of these four; this is the roundup that tells you which one actually fits your workload, and points you to the real detail on it.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <h1>Ubuntu, Debian, Fedora, Rocky or Arch: Which Linux for Your Mac?</h1>
+        <p class="article-lede">There's no single best distribution, just a best fit for what you're doing. This blog has a deep dive on each of these; this is the roundup that points you to the right one, and tells you how much setup each takes in Velo Workspaces 1.2.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-      <h2>Four distributions, four different jobs</h2>
+      <h2>Seven distributions, seven different jobs</h2>
       <div class="article-table-wrap">
         <table>
-          <thead><tr><th>Distro</th><th>Best for</th><th>Official picker?</th><th>Standout trait</th></tr></thead>
+          <thead><tr><th>Distro</th><th>Best for</th><th>In Velo Workspaces 1.2</th><th>Know before you start</th></tr></thead>
           <tbody>
-            <tr><td><a href="/blog/ubuntu-on-apple-silicon/">Ubuntu</a></td><td>Broad compatibility, the biggest package and tutorial ecosystem</td><td>Yes</td><td>The safest default when you don't have a specific reason to pick something else</td></tr>
-            <tr><td><a href="/blog/debian-on-apple-silicon/">Debian</a></td><td>Stability — packages change less often, on purpose</td><td>Yes</td><td>A calmer base for something you don't want to babysit</td></tr>
-            <tr><td><a href="/blog/fedora-on-apple-silicon/">Fedora</a></td><td>The newest kernel and package versions, testing against what's coming</td><td>Yes</td><td>SELinux enforcing by default, ahead of what most production Linux runs today</td></tr>
-            <tr><td><a href="/blog/arch-linux-on-apple-silicon/">Arch</a></td><td>Full control over exactly what's installed, nothing you didn't choose</td><td>No — local-file path</td><td>No official arm64 build at all; what runs here is Arch Linux ARM, a related but separate project</td></tr>
+            <tr><td><a href="/blog/ubuntu-on-apple-silicon/">Ubuntu</a> 26.04, 24.04</td><td>The biggest package and tutorial ecosystem</td><td>Cloud image; automatic install (Server and Desktop)</td><td>Cloned Ubuntu Server VMs can lose their network to a Netplan MAC match</td></tr>
+            <tr><td><a href="/blog/debian-on-apple-silicon/">Debian</a> 13, 12</td><td>Stability: packages change less often, on purpose</td><td>Cloud image; installer by hand</td><td>The installer isn't automated yet; the cloud image is the hands-free route</td></tr>
+            <tr><td><a href="/blog/fedora-on-apple-silicon/">Fedora</a> 44</td><td>The newest kernel and packages</td><td>Cloud image; automatic install (Server, Everything); Workstation by hand</td><td>SELinux is enforcing by default</td></tr>
+            <tr><td><a href="/blog/rocky-linux-on-apple-silicon/">Rocky Linux</a> 10, 9</td><td>Testing against RHEL before production</td><td>Cloud image; automatic install</td><td>Older packages by design, supported for about ten years</td></tr>
+            <tr><td><a href="/blog/kali-linux-on-apple-silicon/">Kali Linux</a></td><td>A security testing lab</td><td>Installer by hand</td><td>NAT networking: the guest doesn't sit on your LAN</td></tr>
+            <tr><td><a href="/blog/nixos-on-apple-silicon/">NixOS</a> 26.05, 25.05</td><td>A system described in one version-controlled file</td><td>Installer by hand</td><td>Anything installed outside <code>configuration.nix</code> disappears on rebuild</td></tr>
+            <tr><td><a href="/blog/arch-linux-on-apple-silicon/">Arch</a></td><td>Full control over exactly what's installed</td><td>Not in the catalog; bring a community ISO</td><td>No official arm64 build; what runs is Arch Linux ARM</td></tr>
           </tbody>
         </table>
       </div>
 
-      <h2>Pick by what you're actually doing</h2>
+      <h2>Pick by what you're doing</h2>
       <ul>
-        <li><strong>You're not sure yet, or you're following a tutorial written for "Linux" generically.</strong> Ubuntu. The largest install base means the highest odds someone's already solved whatever you're about to hit.</li>
-        <li><strong>You're setting up something long-lived that you don't want changing under you.</strong> Debian. Fewer package updates means fewer surprises months into a project.</li>
-        <li><strong>You want to test against what Linux distributions will look like in six months, or you specifically need a newer kernel feature.</strong> Fedora. It's the upstream, not the downstream — see <a href="/blog/rocky-linux-on-apple-silicon/">Rocky Linux</a> for the opposite instinct, testing against what's already stable in production instead.</li>
-        <li><strong>You want to understand exactly what's running and why, with nothing pre-decided for you.</strong> Arch. That control costs real setup time — nothing is configured by default, starting with networking, as <a href="/blog/arch-linux-on-apple-silicon/">the Arch post</a> covers in depth.</li>
+        <li><strong>You're not sure yet, or you're following a tutorial written for "Linux".</strong> Ubuntu. The largest user base gives you the best odds that someone has already solved whatever you're about to hit, and the cloud image is running in about a minute.</li>
+        <li><strong>You're building something long-lived that shouldn't change under you.</strong> Debian. Fewer package updates means fewer surprises months into a project.</li>
+        <li><strong>You want to test against what Linux will look like in six months, or you need a newer kernel feature.</strong> Fedora. It's upstream. For the opposite instinct, testing against what's already stable in production, pick Rocky Linux.</li>
+        <li><strong>Your servers run RHEL.</strong> Rocky Linux, which follows RHEL's releases package for package.</li>
+        <li><strong>You want to understand exactly what's running and why, with nothing decided for you.</strong> Arch. That control costs setup time: nothing is configured by default, starting with networking.</li>
       </ul>
+      <p>Alpine Linux 3.24 is in the catalog too, as a small installer for anyone who wants a minimal musl-based system and doesn't mind running <code>setup-alpine</code> by hand.</p>
 
-      <h2>Beyond these four</h2>
-      <p>This blog also covers three more distributions worth knowing about for narrower reasons: <a href="/blog/kali-linux-on-apple-silicon/">Kali Linux</a> for a security testing lab, <a href="/blog/nixos-on-apple-silicon/">NixOS</a> if declarative, version-controlled system configuration matters more to you than anything in the table above, and <a href="/blog/rocky-linux-on-apple-silicon/">Rocky Linux</a> if your production servers run the RHEL lineage specifically. None of the seven is wrong — they're answers to genuinely different questions, which is the actual point of this post.</p>
+      <h2>How much setup each one takes</h2>
+      <p>Velo Workspaces 1.2 changed this answer a lot. Ubuntu, Debian, Fedora and Rocky Linux come as official cloud images: you enter a username and password, and cloud-init creates the account and adds this Mac's SSH key on first boot, usually within a minute of the download finishing. Ubuntu, Fedora Server and Rocky Linux can also run their own installers automatically. Everything else installs by hand in the workspace's display, exactly as on a PC.</p>
 
-      <p>Related reading: <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment actually is</a> — useful regardless of which distro you pick — and <a href="/blog/apple-silicon-vms-explained/">what a VM on Apple Silicon actually is</a>, if you're starting from scratch. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment is</a>, useful whichever distro you pick; <a href="/blog/linux-server-vs-desktop-vm-mac/">Server or Desktop</a>; and <a href="/blog/apple-silicon-vms-explained/">what a VM on Apple Silicon is</a>, if you're starting from scratch. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

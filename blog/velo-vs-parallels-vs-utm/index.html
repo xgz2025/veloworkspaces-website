@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Velo Workspaces vs. Parallels Desktop vs. UTM</title>
-<meta name="description" content="An honest, sourced comparison — pricing, Linux GPU/AI acceleration, and disposable-workspace workflows on Apple Silicon.">
+<title>Velo Workspaces vs. Parallels vs. UTM for Linux VMs on Mac</title>
+<meta name="description" content="Parallels Desktop, UTM and Velo Workspaces compared for Linux VMs on an M-series Mac: pricing, GPU access, disposable VMs, and who each one suits.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/velo-vs-parallels-vs-utm/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Velo Workspaces vs. Parallels Desktop vs. UTM">
-<meta property="og:description" content="An honest, sourced comparison — pricing, Linux GPU/AI acceleration, and disposable-workspace workflows on Apple Silicon.">
+<meta property="og:title" content="Velo Workspaces vs. Parallels vs. UTM for Linux VMs on Mac">
+<meta property="og:description" content="Parallels Desktop, UTM and Velo Workspaces compared for Linux VMs on an M-series Mac: pricing, GPU access, disposable VMs, and who each one suits.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/velo-vs-parallels-vs-utm/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/velo-vs-parallels-vs-utm.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Velo Workspaces vs. Parallels Desktop vs. UTM: Disposable Linux VMs on Apple Silicon">
+<meta property="og:image:alt" content="Velo Workspaces vs. Parallels Desktop vs. UTM: Linux VMs on Apple Silicon">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-20">
-<meta property="article:modified_time" content="2026-09-23">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "Velo Workspaces vs. Parallels Desktop vs. UTM",
-      "name": "Velo Workspaces vs. Parallels Desktop vs. UTM: Disposable Linux VMs on Apple Silicon",
-      "description": "An honest, sourced comparison — pricing, Linux GPU/AI acceleration, and disposable-workspace workflows on Apple Silicon.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "headline": "Velo Workspaces vs. Parallels vs. UTM for Linux VMs on Mac",
+      "name": "Velo Workspaces vs. Parallels Desktop vs. UTM: Linux VMs on Apple Silicon",
+      "description": "Parallels Desktop, UTM and Velo Workspaces compared for Linux VMs on an M-series Mac: pricing, GPU access, disposable VMs, and who each one suits.",
+      "image": "https://www.veloworkspaces.com/assets/og/velo-vs-parallels-vs-utm.jpg",
       "datePublished": "2026-09-20",
-      "dateModified": "2026-09-23",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -72,7 +72,7 @@
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "Velo Workspaces vs. Parallels Desktop vs. UTM: Disposable Linux VMs on Apple Silicon",
+          "name": "Velo Workspaces vs. Parallels Desktop vs. UTM: Linux VMs on Apple Silicon",
           "item": "https://www.veloworkspaces.com/blog/velo-vs-parallels-vs-utm/"
         }
       ]
@@ -110,77 +110,78 @@
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Comparison</span>
-        <h1>Velo Workspaces vs. Parallels Desktop vs. UTM: Disposable Linux VMs on Apple Silicon</h1>
-        <p class="article-lede">Three genuinely different tools, not three competitors for the same job. Here's an honest, sourced comparison — pricing, what each one actually does with a Linux guest's GPU, and which one fits which workflow.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-23">September 23, 2026</time></p>
+        <h1>Velo Workspaces vs. Parallels Desktop vs. UTM: Linux VMs on Apple Silicon</h1>
+        <p class="article-lede">Three different tools, not three competitors for the same job. A sourced comparison: pricing, what each does about a Linux guest's GPU, how you get Linux running, and which fits which work.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-      <p><strong>Disclosure:</strong> I built Velo Workspaces, so treat this the way you'd treat any vendor-written comparison — I've tried to source every factual claim about Parallels and UTM rather than assert it, and I say plainly below where each of them does something Velo Workspaces doesn't. Software pricing and features change; this reflects what was publicly documented as of September 2026.</p>
+      <p><strong>Disclosure:</strong> I built Velo Workspaces, so read this as you'd read any vendor's comparison. I've tried to source every claim about Parallels and UTM, and I say plainly where each does something Velo Workspaces doesn't. Prices and features change; this reflects what was publicly documented in September 2026.</p>
 
       <h2>The short version</h2>
-      <p>These three tools aren't really competing for the same job:</p>
+      <p>These tools aren't really competing for the same job:</p>
       <ul>
-        <li><strong>Parallels Desktop</strong> is the tool to reach for if you need to run Windows applications on a Mac. It's the most polished, most commercially supported option, with real engineering investment behind it.</li>
-        <li><strong>UTM</strong> is the tool to reach for if you want maximum flexibility for free — the widest range of guest architectures, including emulating x86 on Apple Silicon, at no cost.</li>
-        <li><strong>Velo Workspaces</strong> is built around a narrower problem: sandboxing untrusted, AI-agent-generated code in a disposable Linux VM, while an inference model stays on the host's actual GPU the whole time — AI Bridge and disposable workspaces specifically, both part of Velo Workspaces Pro.</li>
+        <li><strong>Parallels Desktop</strong> is the tool for running Windows applications on a Mac. It's the most polished and most commercially supported option, with serious engineering behind it.</li>
+        <li><strong>UTM</strong> is the tool for maximum flexibility for free: the widest range of guest architectures, including x86 emulation on Apple silicon, at no cost.</li>
+        <li><strong>Velo Workspaces</strong> is built for Linux (and macOS) VMs you create quickly and throw away: official cloud images ready in about a minute, disposable workspaces, and AI Bridge for running AI agents in a VM while the model stays on the Mac's GPU.</li>
       </ul>
-      <p>If your use case is "I need Windows apps," this article won't talk you out of Parallels. If it's "I want to safely let an AI agent run shell commands without giving up local inference speed," keep reading.</p>
+      <p>If you need Windows apps, this won't talk you out of Parallels; Velo Workspaces doesn't run Windows. If you want clean Linux VMs on demand, or want to let an AI agent run commands without giving up local inference speed, read on.</p>
 
-      <h2>Pricing, as of September 2026</h2>
+      <h2>Pricing, September 2026</h2>
       <div class="article-table-wrap">
         <table>
           <thead><tr><th></th><th>Velo Workspaces</th><th>Parallels Desktop</th><th>UTM</th></tr></thead>
           <tbody>
             <tr>
               <td>Price</td>
-              <td>Free app. Pro (AI Bridge, disposable workspaces, and more): $3.99/mo, $24.99/yr, or $79.99 once for life.</td>
-              <td>Standard: $99.99/yr (one-time option also offered). Pro: $119.99/yr. Business: $149.99/yr.</td>
-              <td>Free (open source) — or $9.99 one-time on the Mac App Store for auto-updates, identical features</td>
+              <td>Free app, with unlimited workspaces, cloud images and automatic installs. Pro (SSH terminal, AI Bridge, disposable workspaces, restore points, base images, Rosetta): $3.99/month, $24.99/year, or $79.99 once.</td>
+              <td>Standard: $99.99/year (a one-time option is also offered). Pro: $119.99/year. Business: $149.99/year.</td>
+              <td>Free and open source, or $9.99 once on the Mac App Store for automatic updates, with identical features</td>
             </tr>
             <tr>
               <td>Model</td>
-              <td>Free download; Pro is optional and flat-rate — subscription or lifetime, never metered</td>
-              <td>Primarily subscription (Pro/Business); Standard has a one-time option</td>
-              <td>Free / open source</td>
+              <td>Free download; Pro is optional and flat-rate, subscription or lifetime, never metered</td>
+              <td>Mainly subscription (Pro, Business); Standard has a one-time option</td>
+              <td>Free, open source</td>
             </tr>
           </tbody>
         </table>
       </div>
-      <p style="font-size:0.85rem;">Parallels pricing per <a href="https://www.parallels.com/products/desktop/buy/" target="_blank" rel="noopener">parallels.com/products/desktop/buy</a>. UTM pricing per <a href="https://mac.getutm.app/" target="_blank" rel="noopener">mac.getutm.app</a> and the Mac App Store listing. Confirm current pricing directly before deciding — subscription pricing especially tends to shift.</p>
+      <p style="font-size:0.85rem;">Parallels pricing from <a href="https://www.parallels.com/products/desktop/buy/" target="_blank" rel="noopener">parallels.com/products/desktop/buy</a>; UTM pricing from <a href="https://mac.getutm.app/" target="_blank" rel="noopener">mac.getutm.app</a> and the Mac App Store. Check current prices before deciding; subscription prices especially tend to move.</p>
 
-      <h2>What each one does with a Linux guest's GPU</h2>
-      <p>This is the part worth reading carefully, because it's more nuanced than "one of these supports GPU and the others don't." All three are bound by the same underlying constraint on Apple Silicon: <strong>Apple's own Virtualization.framework does not expose the host GPU to a Linux guest</strong> — a Linux VM gets <code>virtio-gpu</code>, a paravirtualized 2D framebuffer, nothing more. That's confirmed directly by Apple's own container team in <a href="https://github.com/apple/container/discussions/62" target="_blank" rel="noopener">public GitHub discussions</a>. No app built on top of that framework can simply switch it on.</p>
-      <p style="font-size:0.9rem; color:var(--color-text-secondary);"><em>Update, September 2026: that constraint is currently true, not permanently true. The <a href="https://github.com/trycua/cua" target="_blank" rel="noopener">Cua</a> project has since published a user-space shim that spoofs the GPU-capability flags <code>llama.cpp</code> queries and gets real, benchmarked speedups (they report 11–16×) out of a Linux guest — a software workaround for one inference engine, not an Apple-sanctioned change to Virtualization.framework, but worth knowing about if you're evaluating this tradeoff yourself.</em></p>
+      <h2>Getting a Linux VM running</h2>
+      <p>All three will get you there. Parallels' installation assistant can download several popular distributions for you, and UTM has a gallery of ready-made VMs as well as accepting any ISO. Velo Workspaces 1.2 starts from each vendor's official cloud image (Ubuntu, Debian, Fedora, Rocky Linux), downloaded from the vendor's servers, checked against their published checksum, and set up with cloud-init: you enter a username and password, and the system is ready to sign in to about a minute after the download, with your SSH key already in place. Ubuntu, Fedora Server and Rocky Linux can also install from their own ISOs unattended.</p>
 
-      <p>Each tool works around that constraint differently:</p>
+      <h2>What each does about a Linux guest's GPU</h2>
+      <p>This is more nuanced than "one supports GPU and the others don't". All three face the same limit on Apple silicon: <strong>Apple's Virtualization framework doesn't give a Linux guest the Mac's GPU</strong>. A Linux VM gets <code>virtio-gpu</code>, a paravirtualized display, as Apple's own container team has confirmed in <a href="https://github.com/apple/container/discussions/62" target="_blank" rel="noopener">public discussions</a>. No app built on the framework can simply switch it on.</p>
+      <p style="font-size:0.9rem; color:var(--color-text-secondary);"><em>Update, September 2026: the limit is current, not necessarily permanent. The <a href="https://github.com/trycua/cua" target="_blank" rel="noopener">Cua</a> project has published a user-space shim that changes the GPU capability flags <code>llama.cpp</code> checks and reports 11–16× speedups in a Linux guest. It's a workaround for one inference engine, not an Apple-sanctioned change, but worth knowing about.</em></p>
+      <p>Each tool works around the limit differently.</p>
 
-      <h3>UTM: experimental 3D graphics via Virgl, not GPU-compute acceleration</h3>
-      <p>UTM's QEMU backend has experimental OpenGL acceleration through Virgl, with a renderer option that routes through Metal (ANGLE-Metal). This helps <em>graphics rendering</em> — a Linux desktop environment feeling smoother, OpenGL apps working at all — but it's flagged as experimental, and GPU acceleration is <a href="https://github.com/utmapp/UTM/discussions/5482" target="_blank" rel="noopener">disabled by default in recent releases</a> due to guest-side Mesa driver issues. It's not a path to GPU-compute acceleration for something like local LLM inference.</p>
-      <p>UTM's QEMU backend and Velo's Virtualization.framework backend are genuinely different engines under the hood, not just different UIs on the same thing — see <a href="/blog/virtualization-framework-vs-qemu/">the full engineering comparison</a> for where they actually diverge.</p>
+      <h3>UTM: experimental 3D graphics through Virgl, not GPU compute</h3>
+      <p>UTM's QEMU backend has experimental OpenGL acceleration through Virgl, with a renderer that goes through Metal (ANGLE-Metal). That helps <em>graphics</em>, a smoother Linux desktop and OpenGL apps that work at all, but it's marked experimental and <a href="https://github.com/utmapp/UTM/discussions/5482" target="_blank" rel="noopener">off by default in recent releases</a> because of guest-side Mesa driver issues. It isn't a route to GPU compute for local LLM inference. UTM's QEMU backend and the Virtualization framework are different engines, not two faces of one; <a href="/blog/virtualization-framework-vs-qemu/">the engineering comparison</a> covers where they differ.</p>
 
-      <h3>Parallels Desktop 27: real CPU-side AI acceleration, not GPU passthrough</h3>
-      <p>This is worth being precise about, because it's genuinely new (shipped end of August 2026) and genuinely useful — just not the same thing as GPU access. Parallels Desktop 27 exposes Arm's <strong>SME2 (Scalable Matrix Extension 2)</strong> instruction set to Windows and Linux VMs on M4-and-newer Macs. SME2 is a <em>CPU</em> feature for accelerated matrix math, and tools like Ollama (via its llama.cpp backend) can use it for real speedups — Parallels reports <a href="https://www.parallels.com/blogs/parallels-desktop-27/" target="_blank" rel="noopener">up to 1.75x faster neural network inference</a> compared to the previous release on supported hardware.</p>
-      <p>That's a legitimate improvement, and if you're already invested in Parallels for other reasons, it's a real reason to like it more. But the model in that setup is still running inside the guest, on the guest's virtual CPU — accelerated by a faster instruction path, not moved onto the actual GPU or Neural Engine. It requires an M4 or newer Mac, and it's specific to workloads that hit SME2-optimized code paths.</p>
+      <h3>Parallels Desktop 27: CPU-side AI acceleration, not GPU passthrough</h3>
+      <p>This one is new (shipped at the end of August 2026) and useful, but it isn't GPU access. Parallels Desktop 27 exposes Arm's <strong>SME2 (Scalable Matrix Extension 2)</strong> instructions to Windows and Linux VMs on M4-and-newer Macs. SME2 is a <em>CPU</em> feature for fast matrix maths, and tools like Ollama can use it through llama.cpp; Parallels reports <a href="https://www.parallels.com/blogs/parallels-desktop-27/" target="_blank" rel="noopener">up to 1.75× faster neural network inference</a> than its previous release on supported hardware.</p>
+      <p>That's a real improvement, and if you already use Parallels, a real reason to like it more. But the model still runs inside the guest on its virtual CPU, sped up by a faster instruction path rather than moved to the GPU or Neural Engine. It needs an M4 or newer and helps workloads that hit SME2-optimized code.</p>
 
-      <h3>Velo Workspaces: the model never leaves the host GPU</h3>
-      <p>AI Bridge takes a different approach entirely: instead of trying to get compute into the guest, it keeps the model server (Ollama or MLX) running natively on the host, on the Mac's actual Metal GPU, at full native speed — and connects the guest to it over a <a href="/blog/ai-bridge-architecture/">VirtIO-vsock channel</a>, a direct hypervisor-memory path rather than a virtual network hop. <a href="/blog/vm-sandboxing-cost/">Benchmarked</a>, that channel costs a single-digit percent under load, and nothing measurable at single-request scale. The tradeoff is architectural: your inference tooling talks to a local OpenAI-compatible endpoint rather than to a model living in the same VM as your other work — which is also the point, since it's what lets the model keep full, unthrottled GPU access no matter what generation of Apple Silicon you're on.</p>
+      <h3>Velo Workspaces: the model never leaves the Mac's GPU</h3>
+      <p>AI Bridge takes a different approach. Instead of getting compute into the guest, it keeps the model server (Ollama or MLX) on the Mac, on the real Metal GPU at full speed, and connects the guest to it over a <a href="/blog/ai-bridge-architecture/">virtio-vsock channel</a>, a direct hypervisor path rather than a virtual network hop. <a href="/blog/vm-sandboxing-cost/">Measured</a>, that channel costs single-digit percent under load and nothing measurable for single requests. The trade-off is architectural: your tools talk to a local OpenAI-compatible endpoint rather than a model inside the same VM, which is also the point, because it keeps full GPU access on any generation of Apple silicon.</p>
 
-      <h2>Disposable workspaces and golden images</h2>
-      <p>Both Parallels and UTM support the general VM operations you'd expect — snapshots, cloning a VM's disk — as manual features you reach for when you want them. Velo Workspaces treats disposability as the default shape of the workflow rather than an operation you remember to perform: a <strong>Disposable Workspace</strong> deletes itself automatically the moment you close it, and a <strong>base image</strong> is a one-click "seal this configured disk" action that new workspaces clone from in seconds. It's a narrower feature set aimed specifically at "run exactly one untrusted test, then have it gone" — QA and AI-agent sandboxing workflows where you don't want to remember to clean up.</p>
+      <h2>Disposable workspaces and base images</h2>
+      <p>Parallels and UTM both support the usual VM operations, snapshots and cloning, as features you reach for when you want them. Velo Workspaces makes disposability the default shape of the workflow: a <strong>disposable workspace</strong> deletes itself when you close it, and a <strong>base image</strong> is a one-step "save this configured disk" that new workspaces clone from in seconds. It's a narrower feature set aimed at "run one untrusted thing, then have it gone": QA, reproducing bugs, and sandboxing AI agents, where you don't want to remember to clean up.</p>
 
-      <h2>Which one should you actually use</h2>
+      <h2>Which to use</h2>
       <ul>
-        <li><strong>You need to run Windows applications on your Mac.</strong> Use Parallels Desktop. Nothing here competes with that.</li>
-        <li><strong>You want the widest range of guest architectures for free, including x86 emulation on Apple Silicon.</strong> Use UTM.</li>
-        <li><strong>You're already a Parallels user on an M4+ Mac and want faster local LLM inference inside the guest itself, in the same VM as your other tools.</strong> Parallels 27's SME2 support is a real option worth trying.</li>
-        <li><strong>You want to let an AI coding agent execute generated code without giving it access to your real filesystem, while keeping model inference at full native GPU speed and the VM itself disposable by default.</strong> That's specifically what Velo Workspaces is built for.</li>
+        <li><strong>You need Windows applications on your Mac.</strong> Parallels Desktop. Nothing here competes with that.</li>
+        <li><strong>You want the widest range of guest architectures for free, including x86 emulation.</strong> UTM.</li>
+        <li><strong>You use Parallels on an M4 or newer and want faster LLM inference inside the guest itself.</strong> Parallels 27's SME2 support is worth trying.</li>
+        <li><strong>You want clean Linux VMs from official images in a minute, disposable by default, or an AI agent sandboxed while inference stays on the GPU.</strong> That's what Velo Workspaces is built for.</li>
       </ul>
 
-      <p>Related reading: the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>, <a href="/blog/vm-sandboxing-cost/">what sandboxing an AI coding agent in a VM actually costs</a>, benchmarked, <a href="/blog/macos-guests-on-apple-silicon/">why a macOS guest doesn't hit the same GPU wall</a> a Linux one does, and <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">Docker Desktop and OrbStack compared</a> on a different axis entirely — container or VM. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/migrating-to-velo-workspaces/">moving an existing VM from UTM, Fusion or Parallels</a>, the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>, <a href="/blog/vm-sandboxing-cost/">what sandboxing an AI agent in a VM costs</a>, <a href="/blog/macos-guests-on-apple-silicon/">why a macOS guest doesn't hit the same GPU wall</a>, and <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">Docker Desktop and OrbStack</a> on a different axis, container or VM. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

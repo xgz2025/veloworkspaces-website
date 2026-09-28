@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rosetta 2 in Linux VMs: What It Actually Does</title>
-<meta name="description" content="Toggling Rosetta support on doesn&#x27;t set up translation by itself. Verified against the app&#x27;s own source: the three layers that actually have to work.">
+<title>Rosetta 2 in Linux VMs on Apple Silicon: How It Works</title>
+<meta name="description" content="How Rosetta runs x86-64 binaries inside an arm64 Linux VM on a Mac: the three layers that must all be set up, the binfmt registration, and its limits.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/rosetta-2-linux-vms-explained/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Rosetta 2 in Linux VMs: What It Actually Does">
-<meta property="og:description" content="Toggling Rosetta support on doesn&#x27;t set up translation by itself. Verified against the app&#x27;s own source: the three layers that actually have to work.">
+<meta property="og:title" content="Rosetta 2 in Linux VMs on Apple Silicon: How It Works">
+<meta property="og:description" content="How Rosetta runs x86-64 binaries inside an arm64 Linux VM on a Mac: the three layers that must all be set up, the binfmt registration, and its limits.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/rosetta-2-linux-vms-explained/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/rosetta-2-linux-vms-explained.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Rosetta 2 in Linux VMs: What It Actually Does">
+<meta property="og:image:alt" content="Rosetta 2 in Linux VMs: What It Does, and Why It Silently Fails">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "Rosetta 2 in Linux VMs: What It Actually Does",
-      "name": "Rosetta 2 in Linux VMs: What It Actually Does",
-      "description": "Toggling Rosetta support on doesn't set up translation by itself. Verified against the app's own source: the three layers that actually have to work.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "headline": "Rosetta 2 in Linux VMs on Apple Silicon: How It Works",
+      "name": "Rosetta 2 in Linux VMs: What It Does, and Why It Silently Fails",
+      "description": "How Rosetta runs x86-64 binaries inside an arm64 Linux VM on a Mac: the three layers that must all be set up, the binfmt registration, and its limits.",
+      "image": "https://www.veloworkspaces.com/assets/og/rosetta-2-linux-vms-explained.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -72,7 +72,7 @@
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "Rosetta 2 in Linux VMs: What It Actually Does",
+          "name": "Rosetta 2 in Linux VMs: What It Does, and Why It Silently Fails",
           "item": "https://www.veloworkspaces.com/blog/rosetta-2-linux-vms-explained/"
         }
       ]
@@ -110,9 +110,9 @@
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Deep dive</span>
-        <h1>Rosetta 2 in Linux VMs: What It Actually Does</h1>
-        <p class="article-lede"><a href="/blog/arm64-vs-x86-apple-silicon/">Rosetta for Linux is a different mechanism from Rosetta for macOS apps</a> — that post covers the distinction. This one is the mechanism itself: verified against Velo's own source, what a workspace's Rosetta toggle actually attaches, what it deliberately leaves for you to do inside the guest, and why getting one of three layers wrong looks like nothing happening at all rather than an error.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <h1>Rosetta 2 in Linux VMs: What It Does, and Why It Silently Fails</h1>
+        <p class="article-lede"><a href="/blog/arm64-vs-x86-apple-silicon/">Rosetta for Linux is a different mechanism from Rosetta for Mac apps</a>, and that post covers the distinction. This one is the mechanism itself: what a workspace's Rosetta switch attaches, what it leaves for you to do in the guest, and why a missing layer looks like nothing at all.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
@@ -120,35 +120,35 @@
   <section class="section">
     <div class="container article-body">
       <h2>Three layers, and all three have to work</h2>
-      <p>"Enable Rosetta" sounds like one switch. It's actually three independent things, each satisfied differently, each silently doing nothing if it isn't:</p>
+      <p>"Turn on Rosetta" sounds like one switch. It's three separate things, each set up differently, and each fails silently if it's missing:</p>
       <ol>
-        <li><strong>Rosetta itself has to be installed on the host</strong> — a one-time <code>softwareupdate --install-rosetta</code>, unrelated to Velo entirely.</li>
-        <li><strong>The workspace's Rosetta toggle has to be on</strong> — which attaches a resource to the VM. That's all it does.</li>
-        <li><strong>The guest has to be told to use it</strong> — a one-time setup command run inside the Linux VM itself, covered below.</li>
+        <li><strong>Rosetta has to be installed on the Mac.</strong> A one-time <code>softwareupdate --install-rosetta</code>, nothing to do with Velo Workspaces.</li>
+        <li><strong>The workspace's Rosetta switch has to be on</strong> (a Pro feature, in the Resources tab). It attaches a resource to the VM, and that's all it does.</li>
+        <li><strong>The guest has to be told to use it,</strong> with a one-time setup inside the Linux VM, covered below.</li>
       </ol>
-      <p>Skip any one of the three and x86_64 binaries just fail to run, the same way they would with no Rosetta involved at all — there's no distinct error pointing at which layer is missing.</p>
+      <p>Skip any of the three and x86-64 binaries simply fail to run, as if Rosetta weren't involved at all. Nothing tells you which layer is missing.</p>
 
-      <h2>What the toggle actually attaches</h2>
-      <p>Turning Rosetta on for a workspace calls straight into Apple's own <code>VZLinuxRosettaDirectoryShare</code> API and wires the result in as a VirtioFS device tagged <code>"rosetta"</code> — the same kind of device this blog's <a href="/blog/how-virtualization-framework-works/">device inventory post</a> covers for shared folders, just carrying Apple's translator binary instead of a folder you picked. That's the entire effect. No package gets installed in the guest, no configuration file gets written, nothing about the guest's boot process changes.</p>
-      <p>Here's the layer-one dependency made concrete: if Rosetta isn't installed on the host, the API this device is built from reports itself unavailable, and Velo's own device-construction code returns nothing — the workspace boots exactly as it would with the toggle off, no warning at VM-creation time. Velo's separate capability-check pass does know the difference and surfaces a plain note when Rosetta isn't installed — worth checking there first if a workspace with the toggle on behaves like it's off, rather than assuming the guest-side setup below was done wrong.</p>
+      <h2>What the switch attaches</h2>
+      <p>Turning Rosetta on calls Apple's <code>VZLinuxRosettaDirectoryShare</code> API and attaches the result as a VirtioFS device tagged <code>rosetta</code>, the same kind of device the <a href="/blog/how-virtualization-framework-works/">device inventory post</a> describes for shared folders, except that it carries Apple's translator instead of a folder you picked. That's the whole effect. No package is installed in the guest, no config file is written, and the guest's boot doesn't change.</p>
+      <p>This is where layer one bites. If Rosetta isn't installed on the Mac, Apple's API reports it unavailable, the device is never created, and the workspace boots exactly as if the switch were off, with no warning at start-up. Velo Workspaces' capability check does notice and shows a note when Rosetta isn't installed, so if a workspace with the switch on behaves as if it were off, look there before suspecting the guest-side setup.</p>
 
       <h2>Setting it up inside the guest</h2>
-      <p>The share being present doesn't make the guest kernel route x86_64 binaries through it — Linux has to be told to, via <code>binfmt_misc</code>, the same kernel facility that lets it dispatch a script by its shebang line or a Java jar by its class-file magic bytes. Three steps, run once per workspace (or once per base image, if you seal it afterward):</p>
+      <p>The share being there doesn't make the guest kernel send x86-64 binaries to it. Linux has to be told, through <code>binfmt_misc</code>, the same kernel facility that runs a script by its shebang line. On Ubuntu or Debian it takes three steps, once per workspace, or once per base image if you save one afterwards:</p>
       <ol>
-        <li>Mount the share Velo attached: <code>sudo mount -t virtiofs rosetta /media/rosetta</code> (after <code>mkdir -p</code> on the mount point).</li>
-        <li>Install the package that lets the kernel register a custom interpreter: <code>sudo apt-get install -y binfmt-support</code> on Ubuntu or Debian.</li>
-        <li>Register Rosetta as the handler for the x86_64 ELF magic bytes with <code>update-binfmts --install</code>, pointing it at the mounted translator.</li>
+        <li>Mount the share: <code>sudo mkdir -p /media/rosetta</code>, then <code>sudo mount -t virtiofs rosetta /media/rosetta</code>.</li>
+        <li>Install the package that registers custom interpreters: <code>sudo apt-get install -y binfmt-support</code>.</li>
+        <li>Register Rosetta as the handler for x86-64 ELF binaries with <code>update-binfmts --install</code>, pointing at the mounted translator.</li>
       </ol>
-      <p>One flag in that last step is worth understanding rather than copy-pasting blind: <code>--fix-binary yes</code>. It tells the kernel to open the interpreter's file descriptor once, at registration time, and hold onto it — rather than re-resolving the interpreter's path on every single exec. The practical effect is that the translation keeps working even from inside a mount namespace, chroot, or container that can't itself see <code>/media/rosetta</code>. That detail matters more than it looks: it's the same mechanism that determines whether <a href="/blog/running-x86-docker-images-arm64-mac/">an x86_64 Docker container</a> pulled inside this same guest gets fast translation or falls back to slow software emulation.</p>
+      <p>The <a href="/support/">support FAQ</a> has the full commands, and the Fedora and Rocky Linux equivalent, which uses <code>systemd-binfmt</code> instead. One flag in the last step is worth understanding rather than pasting blind: <code>--fix-binary yes</code>. It makes the kernel open the interpreter once, at registration, and keep it, instead of looking up its path on every exec. Translation then keeps working inside a mount namespace, chroot or container that can't see <code>/media/rosetta</code>. That decides whether <a href="/blog/running-x86-docker-images-arm64-mac/">an x86-64 Docker container</a> in the same guest gets fast translation or falls back to slow emulation.</p>
 
-      <h2>The gotcha in the other direction: when the app itself is translated</h2>
-      <p>There's a second, easy-to-miss way Rosetta can be involved that has nothing to do with the guest at all. Velo Workspaces ships as a universal binary — <code>arm64</code> and <code>x86_64</code> slices in one app — and macOS normally launches the native slice automatically. But it's possible to end up running the <code>x86_64</code> slice on an Apple Silicon Mac anyway (a Rosetta-forced launch, or occasionally a download or update that landed the wrong slice), and when that happens, the app itself is the thing under translation, checkable via <code>sysctl.proc_translated</code>.</p>
-      <p>Velo's own capability detection checks for exactly this, because the consequence isn't a performance hit you'd just shrug off — a whole set of Apple-Silicon-exclusive APIs stop being available to the app in that state, and Rosetta-for-Linux is one of them, alongside Windows 11 ARM guests and hibernate/restore. If Rosetta support looks unavailable on a Mac you're sure is Apple Silicon, this is worth ruling out before anything guest-side: check Activity Monitor's "Kind" column for the running app, or just reinstall from the App Store, which always serves the correct slice.</p>
+      <h2>The other direction: when the app itself is translated</h2>
+      <p>There's a second way Rosetta can get involved that has nothing to do with the guest. Velo Workspaces ships as a universal app with <code>arm64</code> and <code>x86_64</code> code, and macOS normally launches the native half. It's possible to end up running the Intel half on an Apple silicon Mac anyway, for example after forcing "Open using Rosetta" in Finder. Then the app itself is being translated, and a set of Apple silicon-only features stop being available to it, Rosetta for Linux and macOS guests among them.</p>
+      <p>If Rosetta looks unavailable on a Mac you know is Apple silicon, rule this out first: check the Kind column for Velo Workspaces in Activity Monitor, and make sure "Open using Rosetta" is off in the app's Get Info window.</p>
 
       <h2>What this doesn't fix</h2>
-      <p>None of the above turns a Linux guest into something that can run x86_64 <em>software with x86_64-only dependencies</em> — only individual, dynamically-linked binaries. <a href="/blog/ubuntu-on-apple-silicon/">The Ubuntu post's Rosetta section</a> covers that limit concretely, including where it actually breaks. And if what's actually needed is a full x86_64 operating system rather than a handful of translated binaries inside an arm64 one, that's a different tool entirely — see <a href="/blog/can-you-run-x86-linux-on-apple-silicon/">can you install x86 Linux on an Apple Silicon Mac</a> for what Rosetta does and doesn't substitute for there.</p>
+      <p>None of this lets a Linux guest run x86-64 <em>software with x86-64-only dependencies</em>, only individual, dynamically linked binaries. <a href="/blog/ubuntu-on-apple-silicon/">The Ubuntu post</a> shows where that limit bites. If what you need is a whole x86-64 operating system, that's a different tool; see <a href="/blog/can-you-run-x86-linux-on-apple-silicon/">can you install x86 Linux on an Apple Silicon Mac</a>.</p>
 
-      <p>Related reading: <a href="/blog/arm64-vs-x86-apple-silicon/">ARM64 vs. x86-64 on Apple Silicon</a> for how this fits alongside macOS-app Rosetta and multi-arch containers, <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu on Apple Silicon</a> for Rosetta's real-world limits, and <a href="/blog/how-virtualization-framework-works/">the device inventory post</a> for how VirtioFS devices work generally. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/arm64-vs-x86-apple-silicon/">ARM64 vs. x86-64 on Apple Silicon</a> for how this fits with Rosetta for Mac apps and multi-arch containers, <a href="/blog/arm64-linux-compatibility-problems/">why some Linux software won't run on arm64</a>, and <a href="/blog/how-virtualization-framework-works/">the device inventory post</a> for how VirtioFS devices work. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

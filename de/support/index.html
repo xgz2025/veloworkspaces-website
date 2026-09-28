@@ -7,7 +7,7 @@
 <meta name="description" content="Linux-VM aus Cloud-Image oder ISO erstellen, das SSH-Terminal öffnen, gemeinsame Ordner einbinden und Rosetta unter Debian und Fedora aktivieren.">
 <link rel="canonical" href="https://www.veloworkspaces.com/de/support/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/">
 <link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/">
 <link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/">
@@ -264,7 +264,7 @@
         <details class="faq-item">
           <summary>Kann ich mein eigenes Terminal oder VS Code nutzen oder mich von einem anderen Computer verbinden?</summary>
           <div class="faq-answer">
-            <p>Ja, und das ist kostenlos. Der Tab „Zugriff“ zeigt die Adresse des Arbeitsbereichs mit einem kopierfertigen ssh-Befehl sowie den ~/.ssh/config-Block für die VS-Code-Erweiterung Remote - SSH.</p>
+            <p>Ja, und das ist kostenlos. Der Tab „Zugriff“ zeigt die Adresse des Arbeitsbereichs mit einem kopierfertigen ssh-Befehl sowie den ~/.ssh/config-Block für die VS-Code-Erweiterung Remote - SSH. Diese nutzen Ihren eigenen SSH-Schlüssel, nicht den des integrierten Terminals aus dem Schlüsselbund. Fügen Sie Ihren öffentlichen Schlüssel beim Erstellen des Arbeitsbereichs unter „Öffentliche SSH-Schlüssel“ ein, oder aktivieren Sie „SSH-Anmeldung mit dem Passwort erlauben“.</p>
             <p>Andere Computer erreichen einen Arbeitsbereich über Ihren Mac, denn Arbeitsbereiche liegen in einem privaten Netzwerk darin. Aktivieren Sie „Entfernte Anmeldung“ unter Systemeinstellungen › Allgemein › Freigaben und verwenden Sie dann den <code>ssh -J</code> -Befehl aus dem Tab „Zugriff“.</p>
           </div>
         </details>

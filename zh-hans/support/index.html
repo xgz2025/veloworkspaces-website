@@ -7,7 +7,7 @@
 <meta name="description" content="如何用云镜像或 ISO 创建 Linux 虚拟机、打开 SSH 终端、挂载共享文件夹、在 Debian 和 Fedora 上启用 Rosetta，以及解决剪贴板问题。">
 <link rel="canonical" href="https://www.veloworkspaces.com/zh-hans/support/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/">
 <link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/">
 <link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/">
@@ -264,7 +264,7 @@
         <details class="faq-item">
           <summary>可以用自己的终端或 VS Code，或从另一台电脑连接吗？</summary>
           <div class="faq-answer">
-            <p>可以，而且免费。「访问」标签页会显示工作区的地址和可直接复制的 ssh 命令，以及供 VS Code Remote - SSH 扩展使用的 ~/.ssh/config 配置块。</p>
+            <p>可以，而且免费。「访问」标签页会显示工作区的地址和可直接复制的 ssh 命令，以及供 VS Code Remote - SSH 扩展使用的 ~/.ssh/config 配置块。它们使用的是你自己的 SSH 密钥，而不是内置终端保存在钥匙串中的那把。创建工作区时，请在「SSH 公钥」中粘贴你的公钥，或打开「允许使用密码进行 SSH 登录」。</p>
             <p>工作区位于 Mac 内部的私有网络中，其他电脑需要经由你的 Mac 连接。在「系统设置 › 通用 › 共享」中打开「远程登录」，然后使用「访问」标签页中显示的 <code>ssh -J</code> 命令。</p>
           </div>
         </details>

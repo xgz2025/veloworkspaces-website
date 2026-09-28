@@ -6,468 +6,475 @@
   <atom:link href="https://www.veloworkspaces.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
   <description>Guides to running Linux VMs on Apple silicon Macs: cloud images, automatic installs, local AI agents, Rosetta, benchmarks and honest comparisons.</description>
   <language>en</language>
-  <lastBuildDate>Wed, 23 Sep 2026 12:00:00 +0000</lastBuildDate>
+  <lastBuildDate>Mon, 28 Sep 2026 12:00:00 +0000</lastBuildDate>
   <item>
-    <title>Claude Code With a Local Model, Isolated in a VM on Apple Silicon</title>
+    <title>What&#x27;s New in Velo Workspaces 1.2: Linux VMs in a Minute</title>
+    <link>https://www.veloworkspaces.com/blog/whats-new-in-velo-workspaces-1-2/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/whats-new-in-velo-workspaces-1-2/</guid>
+    <pubDate>Mon, 28 Sep 2026 12:00:00 +0000</pubDate>
+    <description>Velo Workspaces 1.2 brings official Linux cloud images, hands-free Ubuntu, Fedora and Rocky installs, an Image Library and a built-in SSH terminal.</description>
+  </item>
+  <item>
+    <title>Claude Code with a Local Model (Ollama) in a Mac VM</title>
     <link>https://www.veloworkspaces.com/blog/claude-code-ai-bridge-setup/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/claude-code-ai-bridge-setup/</guid>
     <pubDate>Wed, 23 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Claude Code needs a different setup than OpenCode or Continue — ANTHROPIC_BASE_URL, not OPENAI_API_BASE. How to wire it to a local model through AI Bridge.</description>
+    <description>Run Claude Code against a local Ollama model from an isolated Linux VM on an M-series Mac: ANTHROPIC_BASE_URL, why MLX won&#x27;t work directly, and setup.</description>
   </item>
   <item>
-    <title>Does Velo Workspaces Run Windows on Apple Silicon?</title>
+    <title>Windows VMs on Apple Silicon: Why Velo Workspaces Can&#x27;t</title>
     <link>https://www.veloworkspaces.com/blog/windows-on-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/windows-on-apple-silicon/</guid>
     <pubDate>Wed, 23 Sep 2026 12:00:00 +0000</pubDate>
-    <description>No, not currently — Apple&#x27;s Virtualization.framework can&#x27;t reliably boot a Windows 11 guest. What Velo Workspaces runs instead, and where to go for Windows.</description>
+    <description>No: Velo Workspaces runs Linux and macOS guests, not Windows. Why Apple&#x27;s Virtualization framework can&#x27;t run the Windows installer, and what to use.</description>
   </item>
   <item>
-    <title>Migrating a Linux VM to Velo Workspaces From UTM, Fusion, or Parallels</title>
+    <title>Migrate a Linux VM from UTM, Fusion or Parallels on a Mac</title>
     <link>https://www.veloworkspaces.com/blog/migrating-to-velo-workspaces/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/migrating-to-velo-workspaces/</guid>
     <pubDate>Wed, 23 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Apple&#x27;s Virtualization.framework only attaches raw images. Converting a QCOW2, VMDK, or Parallels disk with qemu-img, and bringing the VM into Velo.</description>
+    <description>Move an existing Linux VM to Velo Workspaces: UTM&#x27;s QCOW2 disks import directly since 1.2; Fusion and Parallels disks convert with one qemu-img command.</description>
   </item>
   <item>
-    <title>The Modern Local Development Stack on Apple Silicon</title>
+    <title>The Local Development Stack on Apple Silicon: A 2026 Map</title>
     <link>https://www.veloworkspaces.com/blog/modern-local-development-stack-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/modern-local-development-stack-apple-silicon/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>A map through everything this blog covers, organized as one path: fundamentals, Linux and AI agents locally, disposable workflows, real numbers, comparisons.</description>
+    <description>A map of this blog: Linux VMs on an M-series Mac, local AI agents, disposable workflows, measured performance, and how it compares to Docker or cloud.</description>
   </item>
   <item>
-    <title>Apple Silicon Virtual Machines, Explained</title>
+    <title>Apple Silicon Virtual Machines, Explained Simply</title>
     <link>https://www.veloworkspaces.com/blog/apple-silicon-vms-explained/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/apple-silicon-vms-explained/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>What a VM actually is on an Apple Silicon Mac, how Virtualization.framework exposes Linux and macOS guests, and when a VM is actually the right tool.</description>
+    <description>What a VM is on an M-series Mac, how hardware virtualization differs from emulation, what Apple&#x27;s Virtualization framework gives Linux and macOS guests.</description>
   </item>
   <item>
-    <title>How Apple Virtualization.framework Works</title>
+    <title>How Apple&#x27;s Virtualization Framework Works, Device by Device</title>
     <link>https://www.veloworkspaces.com/blog/how-virtualization-framework-works/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/how-virtualization-framework-works/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>The real device inventory behind a Virtualization.framework VM — boot loaders, storage, networking, graphics, shared folders, vsock, and a hibernate gotcha.</description>
+    <description>A device-by-device tour of a real Virtualization.framework VM: EFI boot, disks and seed disks, NAT networking, graphics, VirtioFS, vsock, and saved state.</description>
   </item>
   <item>
-    <title>How Linux VM Networking Works on Apple Silicon</title>
+    <title>Linux VM Networking on a Mac: NAT, SSH and Port Forwards</title>
     <link>https://www.veloworkspaces.com/blog/linux-vm-networking-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/linux-vm-networking-apple-silicon/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Host to guest is direct, guest to the internet is transparent NAT, and an external LAN client needs an explicit port forward.</description>
+    <description>How a Linux VM on an M-series Mac reaches the internet, how the Mac reaches it, and how another computer on your LAN can connect: port forwards and ssh -J.</description>
   </item>
   <item>
-    <title>Virtualization.framework vs. QEMU on Apple Silicon</title>
+    <title>Virtualization.framework vs. QEMU on Apple Silicon Macs</title>
     <link>https://www.veloworkspaces.com/blog/virtualization-framework-vs-qemu/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/virtualization-framework-vs-qemu/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>An engineering comparison, not a verdict: architecture, hardware acceleration, device models, guest OS support, and where the real performance gap comes from.</description>
+    <description>Apple&#x27;s Virtualization framework and QEMU share the same acceleration on M-series Macs. Where they differ: emulation, devices, guests and entitlements.</description>
   </item>
   <item>
-    <title>VM vs. Container vs. Sandbox on macOS</title>
+    <title>VM vs. Container vs. Sandbox on macOS: What&#x27;s Different</title>
     <link>https://www.veloworkspaces.com/blog/vm-vs-container-vs-sandbox/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/vm-vs-container-vs-sandbox/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Three genuinely different isolation boundaries available on a Mac — what each one actually restricts, and when each is the right tool.</description>
+    <description>App Sandbox, containers and VMs on a Mac isolate at three different layers. What each one is, and what an escape from inside it can reach.</description>
   </item>
   <item>
-    <title>ARM64 vs. x86-64 on Apple Silicon: What Developers Need to Know</title>
+    <title>ARM64 vs. x86-64 on Apple Silicon: A Developer&#x27;s Guide</title>
     <link>https://www.veloworkspaces.com/blog/arm64-vs-x86-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/arm64-vs-x86-apple-silicon/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Native ARM64 binaries, Rosetta 2, universal binaries, package managers, multi-arch containers, and which CI runners are arm64-native now.</description>
+    <description>Rosetta for Mac apps vs. Rosetta in Linux VMs, Homebrew&#x27;s two prefixes, multi-arch Docker images, and arm64 CI runners: architecture on an M-series Mac.</description>
   </item>
   <item>
     <title>Why ARM64 Linux VMs Feel Native on Apple Silicon</title>
     <link>https://www.veloworkspaces.com/blog/why-arm-vms-feel-native/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/why-arm-vms-feel-native/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Not a vibe — a specific, explainable claim about why a Linux VM on Apple Silicon doesn&#x27;t feel like the VMs a lot of developers remember.</description>
+    <description>Why a Linux VM on an M-series Mac doesn&#x27;t feel like a VM: ARM&#x27;s built-in virtualization, cheap traps and interrupts, unified memory, and where it stops.</description>
   </item>
   <item>
-    <title>Ubuntu vs. Debian vs. Fedora vs. Arch on Apple Silicon</title>
+    <title>Best Linux Distro for an Apple Silicon Mac VM in 2026</title>
     <link>https://www.veloworkspaces.com/blog/best-linux-distro-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/best-linux-distro-apple-silicon/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Not another &#x27;best distro&#x27; opinion piece — which workload actually fits which distribution.</description>
+    <description>Ubuntu, Debian, Fedora, Rocky Linux, Arch, Kali or NixOS on an M-series Mac? Which fits your work, and which ones set themselves up in about a minute.</description>
   </item>
   <item>
-    <title>Running Kali Linux on Apple Silicon</title>
+    <title>Kali Linux on Apple Silicon: Set Up an arm64 Kali VM</title>
     <link>https://www.veloworkspaces.com/blog/kali-linux-on-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/kali-linux-on-apple-silicon/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Kali publishes a genuine generic arm64 installer ISO — but it&#x27;s not in Velo&#x27;s official-image picker. The local-file path and what&#x27;s different for Kali.</description>
+    <description>Install Kali Linux&#x27;s official arm64 build in a VM on an M-series Mac, what NAT networking means for a testing lab, and why disposable workspaces fit.</description>
   </item>
   <item>
-    <title>Running NixOS on Apple Silicon</title>
+    <title>NixOS on Apple Silicon: Install NixOS in a VM on a Mac</title>
     <link>https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>The official aarch64 ISO is minimal-only. What that means in practice, and how a Nix configuration compares to a base image as a reproducibility primitive.</description>
+    <description>Install NixOS 26.05 or 25.05 on an M-series Mac from the official aarch64 ISO, and how configuration.nix and base images fit together in a VM.</description>
   </item>
   <item>
-    <title>Running Rocky Linux on Apple Silicon</title>
+    <title>Rocky Linux on Apple Silicon: RHEL-Compatible VMs on a Mac</title>
     <link>https://www.veloworkspaces.com/blog/rocky-linux-on-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/rocky-linux-on-apple-silicon/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Rocky Linux is the RHEL-compatible downstream, not Fedora&#x27;s bleeding edge. Official aarch64 ISOs, the local-file path, and what actually differs from Fedora.</description>
+    <description>Run Rocky Linux 10 or 9 on an M-series Mac from the GenericCloud image or an automatic kickstart install, and test against RHEL before production.</description>
   </item>
   <item>
-    <title>Linux Server vs. Linux Desktop VMs on a Mac</title>
+    <title>Ubuntu Server or Desktop for a Linux VM on a Mac?</title>
     <link>https://www.veloworkspaces.com/blog/linux-server-vs-desktop-vm-mac/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/linux-server-vs-desktop-vm-mac/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>When headless plus SSH is actually enough, and when you need a real GUI session inside the guest.</description>
+    <description>When a headless Ubuntu Server VM plus SSH is all you need on a Mac, when you need a desktop session, and what a Linux desktop&#x27;s graphics can and can&#x27;t do.</description>
   </item>
   <item>
-    <title>Rosetta 2 in Linux VMs: What It Actually Does</title>
+    <title>Rosetta 2 in Linux VMs on Apple Silicon: How It Works</title>
     <link>https://www.veloworkspaces.com/blog/rosetta-2-linux-vms-explained/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/rosetta-2-linux-vms-explained/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Toggling Rosetta support on doesn&#x27;t set up translation by itself. Verified against the app&#x27;s own source: the three layers that actually have to work.</description>
+    <description>How Rosetta runs x86-64 binaries inside an arm64 Linux VM on a Mac: the three layers that must all be set up, the binfmt registration, and its limits.</description>
   </item>
   <item>
-    <title>Can You Install x86 Linux on an Apple Silicon Mac?</title>
+    <title>Can You Run x86 Linux on an Apple Silicon Mac?</title>
     <link>https://www.veloworkspaces.com/blog/can-you-run-x86-linux-on-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/can-you-run-x86-linux-on-apple-silicon/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Not as a full guest OS through Virtualization.framework — a categorical limit, not a missing feature. What actually can, and what solves your real problem.</description>
+    <description>Not as a full VM through Apple&#x27;s Virtualization framework. Why, what can emulate it (QEMU and UTM), and the faster fixes for what you&#x27;re really after.</description>
   </item>
   <item>
-    <title>Running x86 Docker Images on an Apple Silicon Mac</title>
+    <title>Run x86 (amd64) Docker Images on an Apple Silicon Mac</title>
     <link>https://www.veloworkspaces.com/blog/running-x86-docker-images-arm64-mac/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/running-x86-docker-images-arm64-mac/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>docker pull --platform linux/amd64 works but defaults to slow emulation. A Rosetta-enabled Velo VM may already route those containers through something faster.</description>
+    <description>What runs an amd64-only Docker image on an arm64 Mac, how slow QEMU emulation is, and how Rosetta in a Linux VM can speed it up. Plus the real fix.</description>
   </item>
   <item>
-    <title>ARM64 Compatibility Problems: Why Does My Linux Software Not Run?</title>
+    <title>Linux Software Won&#x27;t Run on ARM64? How to Find the Fix</title>
     <link>https://www.veloworkspaces.com/blog/arm64-linux-compatibility-problems/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/arm64-linux-compatibility-problems/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Four different reasons arm64 Linux software fails, each with a genuinely different fix — a decision tree instead of one generic workaround.</description>
+    <description>A missing arm64 package, one x86 binary, an amd64-only image, or a real CPU dependency: how to tell which you have on an Apple Silicon Mac, and each fix.</description>
   </item>
   <item>
-    <title>How to Run Local LLMs on Apple Silicon</title>
+    <title>How to Run Local LLMs on a Mac: Ollama, MLX, LM Studio</title>
     <link>https://www.veloworkspaces.com/blog/local-llms-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/local-llms-apple-silicon/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>MLX, Ollama, llama.cpp, and LM Studio — what each one actually is, model formats, and running a model directly on your Mac.</description>
+    <description>Run a local LLM on an M-series Mac: Ollama vs. MLX vs. LM Studio vs. llama.cpp, GGUF or MLX models, where to download them, and how much RAM you need.</description>
   </item>
   <item>
     <title>How Much RAM Do You Need for Local LLMs on a Mac?</title>
     <link>https://www.veloworkspaces.com/blog/llm-ram-requirements-mac/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/llm-ram-requirements-mac/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>The actual math behind a model&#x27;s memory footprint — weights, KV cache, and why a model that fits fine at first can run out of memory later.</description>
+    <description>Work out how much unified memory a local LLM needs on a Mac: weights by parameters and quantization, KV cache growth over a session, and macOS&#x27;s share.</description>
   </item>
   <item>
-    <title>LLM Quantization Explained for Mac Users</title>
+    <title>LLM Quantization Explained: Q4_K_M vs. Q5 vs. Q8 on a Mac</title>
     <link>https://www.veloworkspaces.com/blog/llm-quantization-explained-mac/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/llm-quantization-explained-mac/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>What quantization actually does to a model, why the k-quant variants aren&#x27;t interchangeable, and how to pick a level on purpose.</description>
+    <description>What quantization does to a local LLM, why Q4_K_M and Q4_0 differ at 4-bit, when Q5, Q6 or Q8 is worth it on a Mac, and what it does to memory.</description>
   </item>
   <item>
-    <title>Local LLM vs. Cloud LLM for Coding Agents</title>
+    <title>Local LLM vs. Cloud LLM for Coding Agents: How to Choose</title>
     <link>https://www.veloworkspaces.com/blog/local-vs-cloud-llm-coding-agents/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/local-vs-cloud-llm-coding-agents/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Cloud models win on raw capability and context; local models win on cost at volume, privacy, and offline reliability. A decision framework, not a verdict.</description>
+    <description>When a cloud model is worth it for an AI coding agent, when a local model on your Mac wins on cost, privacy or offline use, and why isolation matters.</description>
   </item>
   <item>
     <title>What Is a Disposable Development Environment?</title>
     <link>https://www.veloworkspaces.com/blog/what-is-a-disposable-development-environment/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/what-is-a-disposable-development-environment/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>A canonical definition: create, use, discard, recreate — and how that&#x27;s genuinely different from a snapshot, a container, or a cloud dev environment.</description>
+    <description>A disposable dev environment starts from a known-good image, does one task, then is thrown away. How it differs from snapshots, containers and cloud IDEs.</description>
   </item>
   <item>
     <title>Disposable VM vs. Snapshot: What&#x27;s the Difference?</title>
     <link>https://www.veloworkspaces.com/blog/disposable-vm-vs-snapshot/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/disposable-vm-vs-snapshot/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>A restore point copies a workspace&#x27;s disk and saved state so you can go back to it. A disposable workspace deletes the bundle outright.</description>
+    <description>A snapshot keeps a VM&#x27;s state so you can go back; a disposable VM throws it away so nothing carries over. What each does, and when to use which.</description>
   </item>
   <item>
-    <title>Base Image vs. Snapshot vs. Clone vs. Disposable Workspace</title>
+    <title>Base Image vs. Snapshot vs. Clone: VM Terms Explained</title>
     <link>https://www.veloworkspaces.com/blog/base-image-vs-snapshot-vs-clone/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/base-image-vs-snapshot-vs-clone/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Clone isn&#x27;t a fourth thing competing with the other three — it&#x27;s the mechanism underneath two of them.</description>
+    <description>Base image, snapshot, clone and disposable workspace, sorted out: what each one is, which question it answers, and how to combine them on a Mac.</description>
   </item>
   <item>
-    <title>One VM Per Git Branch: Isolated Development Workflows</title>
+    <title>One VM Per Git Branch: Isolated Development on a Mac</title>
     <link>https://www.veloworkspaces.com/blog/one-vm-per-git-branch/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/one-vm-per-git-branch/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Pairing git worktrees with one workspace per worktree fixes both halves of the branch-switching problem at once.</description>
+    <description>Pair git worktree with one Linux VM per branch on your Mac, so each branch gets its own dependencies and build cache and nothing stale leaks between them.</description>
   </item>
   <item>
-    <title>Clean-Room Bug Reproduction With Disposable VMs</title>
+    <title>Clean-Room Bug Reproduction with Disposable VMs on a Mac</title>
     <link>https://www.veloworkspaces.com/blog/clean-room-bug-reproduction/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/clean-room-bug-reproduction/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Your dev machine is the worst place to reproduce a bug report — a disposable workspace removes that variable entirely.</description>
+    <description>Your daily dev machine is a poor place to reproduce a user&#x27;s bug. Start from a clean VM, install only what the report says, and throw it away after.</description>
   </item>
   <item>
-    <title>Disposable VMs for Testing Untrusted Software</title>
+    <title>Test Untrusted Software Safely on a Mac with a Disposable VM</title>
     <link>https://www.veloworkspaces.com/blog/disposable-vms-untrusted-software/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/disposable-vms-untrusted-software/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>curl | bash, a GitHub repo&#x27;s install script, an unfamiliar build system — a disposable workspace is the boundary.</description>
+    <description>curl | bash, a repo&#x27;s install steps, build scripts and deep dependency trees all run with your permissions. How a disposable VM keeps your Mac out of it.</description>
   </item>
   <item>
-    <title>Disposable Workspaces for DevOps and CI Testing</title>
+    <title>Match Your CI Runner Locally: Disposable VMs for DevOps</title>
     <link>https://www.veloworkspaces.com/blog/disposable-workspaces-devops-ci/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/disposable-workspaces-devops-ci/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>A disposable workspace matching your actual pinned CI runner catches environment drift before you push, not after.</description>
+    <description>Reproduce your GitHub Actions runner&#x27;s Ubuntu version in a disposable VM on your Mac, and catch drift like ubuntu-latest moving to 26.04 before CI does.</description>
   </item>
   <item>
-    <title>How AI Coding Agents Use Your Computer</title>
+    <title>How AI Coding Agents Use Your Computer (and Why It Matters)</title>
     <link>https://www.veloworkspaces.com/blog/how-ai-coding-agents-use-your-computer/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/how-ai-coding-agents-use-your-computer/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Not what goes wrong — just the mechanism. Shell, filesystem, Git, package managers, network, and environment variables.</description>
+    <description>An AI coding agent runs as you: your shell, files, Git credentials, installers, network and environment. The mechanics, and where isolation must come from.</description>
   </item>
   <item>
-    <title>What Can an AI Coding Agent Actually Access on Your Mac?</title>
+    <title>What Can an AI Coding Agent Access on Your Mac?</title>
     <link>https://www.veloworkspaces.com/blog/what-can-ai-agents-access-on-your-mac/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/what-can-ai-agents-access-on-your-mac/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>A concrete inventory of what actually lives in a typical home directory, and a realistic scenario of an agent touching all of it with no malicious intent.</description>
+    <description>SSH keys, AWS credentials, GitHub tokens, .env files, shell history: what an AI coding agent can read on a typical developer Mac, no malice needed.</description>
   </item>
   <item>
-    <title>Can You Trust an AI Coding Agent With Your Git Repository?</title>
+    <title>Can You Trust an AI Coding Agent with Your Git Repository?</title>
     <link>https://www.veloworkspaces.com/blog/can-you-trust-ai-agents-with-git/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/can-you-trust-ai-agents-with-git/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>The real risk chain runs through dependency installs, Git hooks, and what ends up committed without anyone meaning it to.</description>
+    <description>The real Git risk with AI agents isn&#x27;t git commit. It&#x27;s hooks added by setup scripts, a Git safety property that&#x27;s easy to bypass, and leaked secrets.</description>
   </item>
   <item>
-    <title>How to Build a Safe Local AI Agent Environment</title>
+    <title>Safe Local AI Agent Setup on a Mac: A Checklist</title>
     <link>https://www.veloworkspaces.com/blog/safe-local-ai-agent-environment-checklist/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/safe-local-ai-agent-environment-checklist/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>A checklist, not another explainer. Eight concrete things to get right before you let an agent run generated code against your Mac.</description>
+    <description>A checklist for running AI coding agents safely on a Mac: a disposable VM, a known-good image, minimal credentials and folders, and a local model.</description>
   </item>
   <item>
-    <title>Linux VM CPU Performance on Apple Silicon</title>
+    <title>How Many vCPUs Should a Linux VM Get on Apple Silicon?</title>
     <link>https://www.veloworkspaces.com/blog/linux-vm-cpu-performance-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/linux-vm-cpu-performance-apple-silicon/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Every vCPU behaves like a P-core-priority thread on the host — there&#x27;s no way to put a virtual CPU on an efficiency core.</description>
+    <description>Every vCPU in a Mac VM runs like a P-core thread, never on an E-core. How macOS schedules virtual CPUs, why more isn&#x27;t always faster, and what to choose.</description>
   </item>
   <item>
-    <title>Linux VM Disk Performance on Apple Silicon: virtio-blk vs. virtio-fs</title>
+    <title>Linux VM Disk Speed on a Mac: virtio-blk vs. virtio-fs</title>
     <link>https://www.veloworkspaces.com/blog/linux-vm-disk-performance-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/linux-vm-disk-performance-apple-silicon/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>A workspace&#x27;s own disk is meaningfully faster than a shared folder for the same operation — and Velo&#x27;s own caching-mode choice explains why.</description>
+    <description>A Mac VM&#x27;s own disk (virtio-blk) is about 3x faster than a shared folder (virtio-fs) for heavy I/O. Where to put builds and databases, and why.</description>
   </item>
   <item>
-    <title>Linux VM Network Performance on Apple Silicon</title>
+    <title>Linux VM Network Performance on a Mac: NAT, vmnet and VPNs</title>
     <link>https://www.veloworkspaces.com/blog/linux-vm-network-performance-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/linux-vm-network-performance-apple-silicon/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Every workspace gets kernel-level NAT through vmnet, genuinely fast — plus a stable per-workspace MAC and a VPN routing-table gotcha worth knowing in advance.</description>
+    <description>Why NAT networking in a Mac VM isn&#x27;t the slow kind (it&#x27;s kernel-level vmnet), why the VM&#x27;s address stays stable, and how a host VPN can quietly break it.</description>
   </item>
   <item>
-    <title>How Much Memory Should You Give a Linux VM on a Mac?</title>
+    <title>How Much Memory Should a Linux VM Get on a Mac?</title>
     <link>https://www.veloworkspaces.com/blog/how-much-memory-linux-vm-mac/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/how-much-memory-linux-vm-mac/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Velo&#x27;s own workload-profile defaults, what the memory balloon device actually does, and why the framework&#x27;s allowed range isn&#x27;t a recommendation.</description>
+    <description>How much RAM to give a Linux VM on a Mac for dev, build and CI work: starting points by workload, what the memory balloon does, and sizing from swap.</description>
   </item>
   <item>
     <title>How Many Linux VMs Can You Run on an Apple Silicon Mac?</title>
     <link>https://www.veloworkspaces.com/blog/how-many-linux-vms-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/how-many-linux-vms-apple-silicon/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Three separate budgets that all have to hold at once: unified memory, CPU contention, and disk space — which costs far less per workspace than it looks like.</description>
+    <description>How many Linux VMs an M-series Mac can run at once depends on memory, P-cores and disk. How to find your limit, and why clones cost little disk.</description>
   </item>
   <item>
-    <title>VM Startup Performance on Apple Silicon</title>
+    <title>Why Some Mac VMs Boot Faster: Linux VM Startup Explained</title>
     <link>https://www.veloworkspaces.com/blog/vm-startup-performance-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/vm-startup-performance-apple-silicon/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Velo trades boot speed for broad distro compatibility on purpose. VZEFIBootLoader vs. direct kernel boot, and why a hibernated workspace skips boot entirely.</description>
+    <description>What decides how fast a Linux VM on a Mac is ready: EFI boot, a cloud image&#x27;s first boot versus an install, later boots, and restoring saved state.</description>
   </item>
   <item>
-    <title>Apple Containers vs. Linux VMs: What&#x27;s the Difference?</title>
+    <title>Apple Containers vs. Linux VMs on a Mac: What&#x27;s Different?</title>
     <link>https://www.veloworkspaces.com/blog/apple-containers-vs-linux-vms/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/apple-containers-vs-linux-vms/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Apple&#x27;s own container tool already runs every container in its own lightweight VM. What&#x27;s actually different is what each one is optimized for.</description>
+    <description>Apple&#x27;s container tool gives every container its own lightweight VM. How that differs from a full Linux VM workspace on a Mac, and when to use each one.</description>
   </item>
   <item>
-    <title>Apple Containers vs. Docker Desktop vs. OrbStack</title>
+    <title>Apple Containers vs. Docker Desktop vs. OrbStack (2026)</title>
     <link>https://www.veloworkspaces.com/blog/apple-containers-vs-docker-vs-orbstack/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/apple-containers-vs-docker-vs-orbstack/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>A one-VM-per-container tool that&#x27;s free and Apache-licensed, up against two mature, shared-VM tools with the ecosystem Apple&#x27;s doesn&#x27;t have yet.</description>
+    <description>Apple&#x27;s container tool, Docker Desktop and OrbStack compared on a Mac: isolation, speed, licensing, Compose and Kubernetes support, and which to pick.</description>
   </item>
   <item>
-    <title>Local vs. Cloud Development Environments: The Actual Tradeoffs</title>
+    <title>Local vs. Cloud Development Environments: Real Trade-offs</title>
     <link>https://www.veloworkspaces.com/blog/local-vs-cloud-development-environments/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/local-vs-cloud-development-environments/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Who controls the hardware, what happens offline, where your code actually sits, and how the cost model shapes the habits it rewards.</description>
+    <description>Local or cloud dev environment? GPU access, offline work, where your data lives, how metered billing shapes habits, and what cloud genuinely does better.</description>
   </item>
   <item>
-    <title>Running Arch Linux on Apple Silicon: What&#x27;s Different</title>
+    <title>Arch Linux on Apple Silicon: What Works in a Mac VM</title>
     <link>https://www.veloworkspaces.com/blog/arch-linux-on-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/arch-linux-on-apple-silicon/</guid>
     <pubDate>Mon, 21 Sep 2026 12:00:00 +0000</pubDate>
-    <description>What most people mean by &#x27;Arch Linux on Apple Silicon&#x27; is actually a separate project, plus why nothing is configured for you, starting with networking.</description>
+    <description>There&#x27;s no official arm64 Arch. What runs on Apple silicon is Arch Linux ARM, which ships a tarball, not an ISO. Here&#x27;s how to get Arch into a Mac VM.</description>
   </item>
   <item>
-    <title>Running macOS Guests on Apple Silicon: What&#x27;s Different</title>
+    <title>macOS VMs on Apple Silicon: How macOS Guests Differ</title>
     <link>https://www.veloworkspaces.com/blog/macos-guests-on-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/macos-guests-on-apple-silicon/</guid>
     <pubDate>Mon, 21 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Real Metal-accelerated graphics, shared folders that auto-mount, a disk that isn&#x27;t self-contained, and why Rosetta and AI Bridge don&#x27;t come along for the ride.</description>
+    <description>Run macOS in a VM on an M-series Mac: GPU acceleration, shared folders with no mount command, the restore image, and the one file mistake that breaks it.</description>
   </item>
   <item>
-    <title>A Local AI Coding Assistant in VS Code with AI Bridge</title>
+    <title>Local AI Coding Assistant in VS Code: Continue + Ollama</title>
     <link>https://www.veloworkspaces.com/blog/vscode-continue-ai-bridge/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/vscode-continue-ai-bridge/</guid>
     <pubDate>Mon, 21 Sep 2026 12:00:00 +0000</pubDate>
-    <description>The GUI path: VS Code Remote-SSH into an isolated workspace, with Continue talking to a model on your Mac over the same AI Bridge every CLI agent uses.</description>
+    <description>Set up Continue in VS Code with a local Ollama or MLX model, running in an isolated Linux VM over Remote-SSH, so edits and commands never touch your Mac.</description>
   </item>
   <item>
-    <title>Building and Testing AI Agents on Apple Silicon</title>
+    <title>Build and Test AI Agents Locally on a Mac, Safely</title>
     <link>https://www.veloworkspaces.com/blog/ai-researchers-agent-testing/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/ai-researchers-agent-testing/</guid>
     <pubDate>Mon, 21 Sep 2026 12:00:00 +0000</pubDate>
-    <description>AI Bridge supports four local model backends, not just Ollama and MLX, plus a real gotcha when switching backends mid-experiment.</description>
+    <description>Develop RAG pipelines and tool-calling agents on an M-series Mac: an isolated VM for untrusted code, four local model backends, and quick resets.</description>
   </item>
   <item>
-    <title>What Actually Leaves Your Mac When You Use AI Bridge</title>
+    <title>What Leaves Your Mac with AI Bridge (and What Doesn&#x27;t)</title>
     <link>https://www.veloworkspaces.com/blog/ai-bridge-data-privacy/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/ai-bridge-data-privacy/</guid>
     <pubDate>Mon, 21 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Why AI Bridge&#x27;s channel is structurally incapable of reaching anywhere but your Mac&#x27;s own loopback interface, verified against the app&#x27;s own source.</description>
+    <description>What Velo Workspaces&#x27; AI Bridge can reach, checked against the source: a loopback-only model server, a vsock path off the network, and no telemetry.</description>
   </item>
   <item>
-    <title>One Workspace Per Project: A Disposable Dev Habit</title>
+    <title>One VM Per Project: A Clean Dev Environment Habit on Mac</title>
     <link>https://www.veloworkspaces.com/blog/software-engineers-disposable-workspaces/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/software-engineers-disposable-workspaces/</guid>
     <pubDate>Mon, 21 Sep 2026 12:00:00 +0000</pubDate>
-    <description>A clean environment per project, a colleague&#x27;s exact setup reproduced exactly, and trying a new framework without touching your main Mac.</description>
+    <description>Keep each project&#x27;s toolchain in its own Linux VM on your Mac, with code in a shared folder: no global drift, identical team setups, throwaway trials.</description>
   </item>
   <item>
-    <title>Base Images as Versioned Infrastructure</title>
+    <title>Versioning VM Base Images: A Naming Convention That Works</title>
     <link>https://www.veloworkspaces.com/blog/base-image-versioning/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/base-image-versioning/</guid>
     <pubDate>Mon, 21 Sep 2026 12:00:00 +0000</pubDate>
-    <description>No version field, no parent chain, no rename after sealing. Why your naming convention is the only version control a base image gets.</description>
+    <description>Velo Workspaces base images have no version field, parent chain or rename. What the app records, and a naming and pruning habit that fills the gap.</description>
   </item>
   <item>
-    <title>Guest OS Performance Tuning on Apple Silicon</title>
+    <title>Linux VM Performance Tuning on Apple Silicon: 5 Settings</title>
     <link>https://www.veloworkspaces.com/blog/guest-os-performance-tuning/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/guest-os-performance-tuning/</guid>
     <pubDate>Mon, 21 Sep 2026 12:00:00 +0000</pubDate>
-    <description>I/O scheduler choice, TRIM and sparse disk images, zram vs. swap, journaling tradeoffs, and VirtioFS caching modes for a Linux guest on Apple Silicon.</description>
+    <description>Five settings inside a Linux VM on an M-series Mac: the none I/O scheduler, TRIM, zram, ext4 journaling and VirtioFS caching, with their trade-offs.</description>
   </item>
   <item>
-    <title>Velo Workspaces vs. Docker Desktop vs. OrbStack</title>
+    <title>Docker Desktop vs. OrbStack vs. a VM on Mac: Which to Use</title>
     <link>https://www.veloworkspaces.com/blog/velo-vs-docker-desktop-vs-orbstack/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/velo-vs-docker-desktop-vs-orbstack/</guid>
     <pubDate>Mon, 21 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Pricing, and the real question underneath it — containers share one kernel, a VM gets its own. Where each of these actually sits on that line.</description>
+    <description>Docker Desktop and OrbStack run containers on one shared kernel; Velo Workspaces gives each workspace its own VM. Pricing, isolation, and which to use.</description>
   </item>
   <item>
-    <title>Velo Workspaces vs. GitHub Codespaces vs. Ona</title>
+    <title>Velo Workspaces vs. GitHub Codespaces vs. Ona (Gitpod)</title>
     <link>https://www.veloworkspaces.com/blog/velo-vs-codespaces-vs-ona/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/velo-vs-codespaces-vs-ona/</guid>
     <pubDate>Mon, 21 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Cloud dev environments and Velo Workspaces share a pitch, but the honest split is local-and-free vs. cloud-and-metered, with no local GPU on the cloud side.</description>
+    <description>Local VMs on your Mac versus cloud dev environments: pricing, why Codespaces and Ona have no GPU option now, and when cloud is simply the better choice.</description>
   </item>
   <item>
-    <title>What Actually Goes Wrong When AI Coding Agents Run Unsandboxed</title>
-    <link>https://www.veloworkspaces.com/blog/ai-agent-security-risks/</link>
-    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/ai-agent-security-risks/</guid>
-    <pubDate>Sun, 20 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Real 2026 AI agent security incidents — Cursor, Copilot, Claude Code, Antigravity, Flowise — and which sandboxing level would have stopped each one.</description>
-  </item>
-  <item>
-    <title>Velo Workspaces vs. Parallels Desktop vs. UTM</title>
-    <link>https://www.veloworkspaces.com/blog/velo-vs-parallels-vs-utm/</link>
-    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/velo-vs-parallels-vs-utm/</guid>
-    <pubDate>Sun, 20 Sep 2026 12:00:00 +0000</pubDate>
-    <description>An honest, sourced comparison — pricing, Linux GPU/AI acceleration, and disposable-workspace workflows on Apple Silicon.</description>
-  </item>
-  <item>
-    <title>Running Ubuntu on Apple Silicon: What Trips People Up</title>
+    <title>Ubuntu on Apple Silicon: Run an Ubuntu VM on Your Mac</title>
     <link>https://www.veloworkspaces.com/blog/ubuntu-on-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/ubuntu-on-apple-silicon/</guid>
     <pubDate>Sun, 20 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Ubuntu on an Apple Silicon Mac runs natively on arm64, not emulated — which changes what breaks, and what to actually watch for.</description>
+    <description>Run Ubuntu 26.04 or 24.04 LTS on an M-series Mac in about a minute from the official cloud image, or install Server or Desktop hands-free.</description>
   </item>
   <item>
-    <title>Running Debian on Apple Silicon: What&#x27;s Different from Ubuntu</title>
+    <title>Debian on Apple Silicon: Run a Debian 13 VM on a Mac</title>
     <link>https://www.veloworkspaces.com/blog/debian-on-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/debian-on-apple-silicon/</guid>
     <pubDate>Sun, 20 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Same ISO-based official-image picker as Ubuntu, a different installer experience, and why the Ubuntu Netplan clone gotcha doesn&#x27;t apply the same way here.</description>
+    <description>Debian 13 and 12 on an M-series Mac: the cloud image that sets itself up in a minute, the netinst installer, and how Debian differs from Ubuntu in a VM.</description>
   </item>
   <item>
-    <title>Running Fedora on Apple Silicon: What&#x27;s Different</title>
+    <title>Fedora on Apple Silicon: Run a Fedora 44 VM on a Mac</title>
     <link>https://www.veloworkspaces.com/blog/fedora-on-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/fedora-on-apple-silicon/</guid>
     <pubDate>Sun, 20 Sep 2026 12:00:00 +0000</pubDate>
-    <description>SELinux enforcing by default, NetworkManager rather than ifupdown or Netplan, and a Rosetta mechanism that isn&#x27;t apt/update-binfmts at all.</description>
+    <description>Run Fedora 44 on an M-series Mac from the Cloud Base image or a hands-free Server install, and what&#x27;s different: SELinux, NetworkManager and Rosetta.</description>
   </item>
   <item>
-    <title>A Disposable VM Workflow for QA and DevOps</title>
+    <title>Disposable VMs for QA and DevOps on a Mac: A Clean Workflow</title>
     <link>https://www.veloworkspaces.com/blog/qa-devops-disposable-vm-workflow/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/qa-devops-disposable-vm-workflow/</guid>
     <pubDate>Sun, 20 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Flaky tests and deploy scripts that pass in staging but fail in production often trace back to the same root cause: state that should have been reset wasn&#x27;t.</description>
+    <description>Flaky tests and install scripts that break on fresh hosts share one cause: leftover state. A disposable VM workflow on Apple silicon that removes it.</description>
   </item>
   <item>
-    <title>What Actually Determines VM Performance on ARM</title>
+    <title>AI Coding Agent Security: 2026 Incidents and What Stops Them</title>
+    <link>https://www.veloworkspaces.com/blog/ai-agent-security-risks/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/ai-agent-security-risks/</guid>
+    <pubDate>Sun, 20 Sep 2026 12:00:00 +0000</pubDate>
+    <description>Documented 2026 incidents in Cursor, Claude Code, Copilot and more, and which isolation level contains each: allowlists, containers, gVisor or a VM.</description>
+  </item>
+  <item>
+    <title>ARM Virtualization Performance: Why VMs Are Fast on M-Series</title>
     <link>https://www.veloworkspaces.com/blog/arm-virtualization-performance/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/arm-virtualization-performance/</guid>
     <pubDate>Sun, 20 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Why ARM&#x27;s EL2 exception level, hardware interrupt virtualization, and two-stage memory translation make VMs on Apple Silicon feel different from x86.</description>
+    <description>CPU traps, two-stage memory translation, vGIC interrupts and virtio vs. passthrough I/O: why a Linux VM on an M-series Mac costs so little.</description>
   </item>
   <item>
-    <title>What Sandboxing an AI Coding Agent in a VM Actually Costs</title>
+    <title>Velo Workspaces vs. Parallels vs. UTM for Linux VMs on Mac</title>
+    <link>https://www.veloworkspaces.com/blog/velo-vs-parallels-vs-utm/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/velo-vs-parallels-vs-utm/</guid>
+    <pubDate>Sun, 20 Sep 2026 12:00:00 +0000</pubDate>
+    <description>Parallels Desktop, UTM and Velo Workspaces compared for Linux VMs on an M-series Mac: pricing, GPU access, disposable VMs, and who each one suits.</description>
+  </item>
+  <item>
+    <title>What Sandboxing an AI Agent in a VM Costs: MLX vs. Ollama</title>
     <link>https://www.veloworkspaces.com/blog/vm-sandboxing-cost/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/vm-sandboxing-cost/</guid>
     <pubDate>Thu, 17 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Two benchmarks, two inference engines, two different answers about what VM sandboxing costs under load — and a theory for why they disagree.</description>
+    <description>The same VM sandbox measured with MLX and Ollama on an M4 Mac: near zero for single requests, and two opposite answers under load. Both results, and why.</description>
   </item>
   <item>
-    <title>Zero-Tax Virtualization: Running AI Agents Safely in Velo Workspaces</title>
+    <title>Run AI Coding Agents in a Linux VM on Mac with Local LLMs</title>
     <link>https://www.veloworkspaces.com/blog/zero-tax-virtualization/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/zero-tax-virtualization/</guid>
     <pubDate>Wed, 16 Sep 2026 12:00:00 +0000</pubDate>
-    <description>A complete guide to running AI coding agents inside an isolated Linux VM on Apple Silicon, with MLX or Ollama served at near-native speed on the host GPU.</description>
+    <description>Run OpenCode, Aider or Goose in an isolated Linux VM on an M-series Mac, with Ollama or MLX serving the model on the Mac&#x27;s GPU at near-native speed.</description>
   </item>
   <item>
-    <title>Run an AI Agent in a Linux VM with Local LLMs on macOS</title>
+    <title>MLX + OpenCode in a Linux VM on Mac: Setup Guide</title>
     <link>https://www.veloworkspaces.com/blog/mlx-vm-setup-guide/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/mlx-vm-setup-guide/</guid>
     <pubDate>Sun, 13 Sep 2026 12:00:00 +0000</pubDate>
-    <description>A practical setup guide: MLX on the host, a disposable Linux VM for the OpenCode agent, and a vsock bridge that connects them at near-native speed.</description>
+    <description>Set up MLX on your Mac, an Ubuntu VM from the cloud image, and OpenCode inside it over AI Bridge: a fully local AI coding agent at near-native speed.</description>
   </item>
   <item>
-    <title>The Architecture Behind AI Bridge: Safe, Fast AI Agents in a VM</title>
+    <title>AI Bridge: Run AI Agents in a Linux VM at GPU Speed on Mac</title>
     <link>https://www.veloworkspaces.com/blog/ai-bridge-architecture/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/ai-bridge-architecture/</guid>
     <pubDate>Sun, 13 Sep 2026 12:00:00 +0000</pubDate>
-    <description>How AI Bridge splits an AI agent from its model over a vsock channel, so a Linux VM gets real isolation without losing native GPU inference speed.</description>
+    <description>Linux VMs on a Mac get no GPU. How AI Bridge keeps the model on the Mac&#x27;s GPU and the agent in a VM over vsock, with benchmarks: about 1% slower.</description>
   </item>
   <item>
-    <title>Sandboxing an AI Coding Agent Cost Me Near-Zero GPU Speed</title>
+    <title>Benchmark: AI Agent in a VM on Apple Silicon, ~1% Slower</title>
     <link>https://www.veloworkspaces.com/blog/vm-inference-benchmark/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/vm-inference-benchmark/</guid>
     <pubDate>Sun, 13 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Three benchmarks on Apple Silicon measuring what a Linux VM actually costs when the model stays on the host GPU via MLX.</description>
+    <description>MLX on an M4 Mac mini, measured on the host and from a Linux VM over AI Bridge: time to first token, throughput, 8 parallel clients, a real OpenCode loop.</description>
   </item>
 </channel>
 </rss>

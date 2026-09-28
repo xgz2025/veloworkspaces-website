@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Running Ubuntu on Apple Silicon: What Trips People Up</title>
-<meta name="description" content="Ubuntu on an Apple Silicon Mac runs natively on arm64, not emulated — which changes what breaks, and what to actually watch for.">
+<title>Ubuntu on Apple Silicon: Run an Ubuntu VM on Your Mac</title>
+<meta name="description" content="Run Ubuntu 26.04 or 24.04 LTS on an M-series Mac in about a minute from the official cloud image, or install Server or Desktop hands-free.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/ubuntu-on-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Running Ubuntu on Apple Silicon: What Trips People Up">
-<meta property="og:description" content="Ubuntu on an Apple Silicon Mac runs natively on arm64, not emulated — which changes what breaks, and what to actually watch for.">
+<meta property="og:title" content="Ubuntu on Apple Silicon: Run an Ubuntu VM on Your Mac">
+<meta property="og:description" content="Run Ubuntu 26.04 or 24.04 LTS on an M-series Mac in about a minute from the official cloud image, or install Server or Desktop hands-free.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/ubuntu-on-apple-silicon/">
 <meta property="og:image" content="https://www.veloworkspaces.com/assets/og/ubuntu-on-apple-silicon.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Running Ubuntu on Apple Silicon: What&#x27;s Different, and What Actually Trips People Up">
+<meta property="og:image:alt" content="Running Ubuntu on Apple Silicon: The Quick Way, and What Trips People Up">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-20">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "Running Ubuntu on Apple Silicon: What Trips People Up",
-      "name": "Running Ubuntu on Apple Silicon: What's Different, and What Actually Trips People Up",
-      "description": "Ubuntu on an Apple Silicon Mac runs natively on arm64, not emulated — which changes what breaks, and what to actually watch for.",
+      "headline": "Ubuntu on Apple Silicon: Run an Ubuntu VM on Your Mac",
+      "name": "Running Ubuntu on Apple Silicon: The Quick Way, and What Trips People Up",
+      "description": "Run Ubuntu 26.04 or 24.04 LTS on an M-series Mac in about a minute from the official cloud image, or install Server or Desktop hands-free.",
       "image": "https://www.veloworkspaces.com/assets/og/ubuntu-on-apple-silicon.jpg",
       "datePublished": "2026-09-20",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -72,7 +72,7 @@
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "Running Ubuntu on Apple Silicon: What's Different, and What Actually Trips People Up",
+          "name": "Running Ubuntu on Apple Silicon: The Quick Way, and What Trips People Up",
           "item": "https://www.veloworkspaces.com/blog/ubuntu-on-apple-silicon/"
         }
       ]
@@ -110,9 +110,9 @@
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Guide</span>
-        <h1>Running Ubuntu on Apple Silicon: What's Different, and What Actually Trips People Up</h1>
-        <p class="article-lede">First in a short series on running specific Linux distributions on Apple Silicon. Ubuntu on an M-series Mac runs natively on arm64, not emulated — which changes what actually breaks compared to Ubuntu on a PC, and it's worth knowing before you hit it mid-install rather than after.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-22">September 22, 2026</time></p>
+        <h1>Running Ubuntu on Apple Silicon: The Quick Way, and What Trips People Up</h1>
+        <p class="article-lede">Ubuntu on an M-series Mac runs natively on arm64, so what breaks is different from Ubuntu on a PC. Here's the quickest way to get it running, how to choose between the cloud image and the installer, and two things that catch people out.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
@@ -120,24 +120,28 @@
   <section class="section">
     <div class="container article-body">
       <h2>Native arm64, not an emulated PC</h2>
-      <p>Ubuntu on an Apple Silicon Mac isn't x86 Ubuntu running slowly under emulation — it's Ubuntu's own arm64 build, running on the CPU's native instruction set, the same way Ubuntu runs on an AWS Graviton server or a Raspberry Pi. Canonical's <a href="https://canonical.com/blog/canonical-releases-ubuntu-26-04-lts-resolute-raccoon" target="_blank" rel="noopener">26.04 LTS release</a> extended Livepatch's rebootless kernel patching to arm64 for the first time and shipped a generic arm64 desktop ISO aimed at exactly this kind of platform — VMs and Arm laptops — rather than treating arm64 as an afterthought. That's the upside: no emulation tax, and arm64 as a first-class target rather than a secondary build.</p>
-      <p>The downside is the flip side of the same fact: it's a genuinely different CPU architecture, not a compatibility mode. Anything precompiled for x86-64 — a binary-only tool, an old <code>.deb</code> with no arm64 build, a container image someone only ever published as <code>amd64</code> — won't run without help. That's the category of problem worth understanding before you hit it, not a defect specific to any one app.</p>
+      <p>Ubuntu on an Apple silicon Mac is Ubuntu's own arm64 build running on the CPU's native instruction set, the same build that runs on AWS Graviton servers and Raspberry Pis. Nothing is emulated. Canonical treats arm64 as a first-class target: the <a href="https://canonical.com/blog/canonical-releases-ubuntu-26-04-lts-resolute-raccoon" target="_blank" rel="noopener">26.04 LTS release</a> brought Livepatch to arm64 and ships a generic arm64 desktop ISO meant for exactly this kind of machine.</p>
+      <p>The catch comes with the same fact. arm64 is a different architecture, not a compatibility mode, so anything built only for x86-64 won't run without help: a binary-only tool, an old <code>.deb</code> with no arm64 build, a container image published only as <code>amd64</code>. More on that below.</p>
 
-      <h2>What "download an official image" actually does</h2>
-      <p>Worth being precise about this rather than assuming: it downloads the official Ubuntu <strong>installer ISO</strong> — the same artifact you'd get from ubuntu.com — directly from Ubuntu's own source, and boots it for you. It isn't fetching a cloud image or doing any unattended provisioning behind the scenes. Once it boots, you're in Ubuntu's normal installer (Subiquity for Server), the same interactive flow you'd walk through on real hardware or any other VM tool: partitioning, user account, package selection, all of it done by hand, the same as anywhere else.</p>
-      <p>What the picker actually saves you from is smaller and more mundane than "automates your setup" — it's not hunting down the current, correct ISO from an official mirror yourself, downloading it, and wiring up a VM with that boot media attached correctly before you can even start the install. Small chore, but one that's easy to get slightly wrong (a stale cached ISO, the wrong architecture) and otherwise repeats every time you want to start a clean install from scratch.</p>
+      <h2>The fastest way in: Ubuntu's cloud image</h2>
+      <p>Since Velo Workspaces 1.2, the quickest route to a working Ubuntu is Canonical's official cloud image. Create a workspace, choose <strong>Cloud image</strong>, pick Ubuntu 26.04 LTS or 24.04 LTS, and enter a username and password. The app downloads the image from cloud-images.ubuntu.com, checks it against Canonical's published checksum, and hands your account, this Mac's SSH key and a hostname to cloud-init on a small seed disk. First boot sets everything up, and the workspace is usually ready to sign in to about a minute after the download finishes.</p>
+      <p>There's no installer to click through, and the disk grows on first boot to whatever size you picked. With Pro, <strong>Open Terminal</strong> in the workspace's <strong>Access</strong> tab signs you in straight away, using the key the app keeps for this Mac. The Access tab also shows a plain <code>ssh</code> command for Terminal or any other client; that uses your own SSH key, so paste your public key under <strong>SSH Public Keys</strong> when you create the workspace. The cloud image is Ubuntu Server, with no desktop, which is what most development and CI-style work wants anyway.</p>
 
-      <h2>Server vs. Desktop, and the one networking gotcha worth knowing in advance</h2>
-      <p>Ubuntu Server (minimized) is the common choice for a disposable dev or CI-style workspace — small, headless, fast to boot — and it's the image used as the example throughout this blog's own benchmarks. There's one specific, documented gotcha worth knowing about ahead of time rather than debugging cold: a workspace <strong>cloned from a saved Ubuntu Server (minimized) base image</strong> can come up without an IP address. The cause is mundane once you know it — every workspace gets a new, unique MAC address, including clones, but Ubuntu Server's minimized install configures networking with Netplan on top of systemd-networkd, which by default binds the network config to the base image's <em>original</em> MAC address rather than matching by interface name. Once the clone's MAC differs, nothing matches, and DHCP never gets requested. It's a one-line Netplan fix once you know to look for it — the full steps are in the <a href="/support/">support FAQ</a> — but it's the kind of thing that looks like a mysterious clone-only bug if you don't know it's a known, specific interaction between Ubuntu's own networking defaults and cloning.</p>
+      <h2>When you want the installer: Server or Desktop, hands-free</h2>
+      <p>Choose <strong>Installer image</strong> instead if you want Ubuntu Desktop, or a system laid out by Ubuntu's own installer. Leave <strong>Automatic installation</strong> on and the app writes an autoinstall file for Subiquity with your account, your SSH key, and this Mac's language, keyboard and time zone. Subiquity always asks one question, whatever the config says: whether to go ahead and erase the disk. Click <strong>Confirm Installation</strong> in the banner and leave it alone. The workspace restarts into the installed system when it's done.</p>
+      <p>Turn automatic installation off and you get Ubuntu's normal interactive installer in the workspace's display, the same screens you'd see on a PC. Either way, the ISO comes from Ubuntu's own servers, is verified against its checksum, and stays in <strong>Settings › Images</strong>, so the next workspace doesn't download it again.</p>
 
-      <h2>Running x86-64 binaries anyway: Rosetta, and its real limits</h2>
-      <p>For the cases where you do need something that's only ever shipped for x86-64, Apple's Rosetta translation layer works inside a Linux guest too, not just for macOS apps — Velo Workspaces wires it in as a VirtioFS share plus a one-time <code>binfmt</code> registration; <a href="/blog/rosetta-2-linux-vms-explained/">Rosetta 2 in Linux VMs</a> has the full mechanism and the exact setup steps (Ubuntu and Debian share the same <code>update-binfmts</code> tooling, so the same steps apply directly). This is one specific piece of a bigger picture — see <a href="/blog/arm64-vs-x86-apple-silicon/">ARM64 vs. x86-64 on Apple Silicon</a> for how it fits alongside macOS-app Rosetta, Homebrew's split install paths, and multi-arch containers.</p>
-      <p>Be realistic about what this actually fixes, though: Rosetta translates a single dynamically-linked x86-64 binary reasonably well, but it doesn't manufacture x86-64 <em>packages</em> that don't exist for arm64, and Ubuntu's own arm64 ports repository doesn't mirror every amd64 package — pulling in amd64 sources by hand can hit a plain 404 for packages that were never built for that combination. A binary with x86-64-only compiled dependencies, or one that needs a full amd64 package tree behind it, is a much rockier case than "translate this one executable." Good for the specific tool you're stuck needing; not a general-purpose way to pretend the CPU architecture doesn't matter.</p>
+      <h2>A networking gotcha when you clone Ubuntu Server</h2>
+      <p>A workspace cloned from a saved Ubuntu Server (minimized) base image can come up without an IP address. Every workspace gets its own MAC address, clones included, and Ubuntu Server's minimized install writes a Netplan config that matches the network interface by the base image's original MAC instead of by name. The clone's MAC is different, nothing matches, and DHCP never runs. The fix is one line in <code>/etc/netplan/</code>, and the <a href="/support/">support FAQ</a> has the commands. It looks like a mysterious clone-only bug until you know it's an interaction between Ubuntu's defaults and cloning.</p>
+
+      <h2>Running x86-64 binaries: Rosetta, and its limits</h2>
+      <p>When you need something that only ships for x86-64, Apple's Rosetta works inside a Linux guest too. With Pro, turn Rosetta on in the workspace's Resources tab; Velo Workspaces shares it into the guest over VirtioFS, and a one-time <code>update-binfmts</code> registration hands x86-64 binaries to it. <a href="/blog/rosetta-2-linux-vms-explained/">Rosetta 2 in Linux VMs</a> explains the mechanism, and the <a href="/support/">support FAQ</a> has the commands (Ubuntu and Debian use the same ones). For how this fits alongside Rosetta for Mac apps, Homebrew's two prefixes and multi-arch containers, see <a href="/blog/arm64-vs-x86-apple-silicon/">ARM64 vs. x86-64 on Apple Silicon</a>.</p>
+      <p>Know what it doesn't fix. Rosetta translates a dynamically linked x86-64 executable well, but it can't produce x86-64 packages that don't exist for arm64, and Ubuntu's arm64 ports mirror doesn't carry amd64 packages, so adding amd64 sources by hand often ends in a 404. A tool with x86-64-only libraries behind it, or one that needs a whole amd64 package tree, is much harder than translating one binary. Rosetta is the answer for the one tool you're stuck with, not a way to make the architecture stop mattering.</p>
 
       <h2>Putting it together</h2>
-      <p>A practical pattern: download the official Ubuntu Server image once, install and configure whatever your base setup actually needs — packages, dotfiles, Rosetta if you need it — then seal it as a base image so every future workspace clones from that known-good state in seconds instead of repeating setup. That's the same <a href="/blog/qa-devops-disposable-vm-workflow/">disposable-workspace pattern</a> this blog has covered for QA and DevOps use specifically, and it's exactly the setup used in the <a href="/blog/mlx-vm-setup-guide/">MLX + AI agent setup guide</a> and the <a href="/blog/vm-inference-benchmark/">inference benchmarks</a> published here, both built on Ubuntu Server 26.04.</p>
+      <p>A pattern that works well: create Ubuntu Server from the cloud image, install what your base setup needs (packages, dotfiles, Rosetta if you use it), then save it as a base image. Every workspace after that is a clone of that known-good state, running in seconds. It's the same <a href="/blog/qa-devops-disposable-vm-workflow/">disposable-workspace pattern</a> covered for QA and DevOps, and the setup behind the <a href="/blog/mlx-vm-setup-guide/">MLX and AI agent guide</a> and the <a href="/blog/vm-inference-benchmark/">inference benchmarks</a> on this blog, both on Ubuntu Server 26.04.</p>
 
-      <p>Related reading: <a href="/blog/debian-on-apple-silicon/">Debian on Apple Silicon</a>, including why Debian's networking defaults sidestep the clone gotcha above; <a href="/blog/fedora-on-apple-silicon/">Fedora on Apple Silicon</a>, including a Rosetta mechanism that's genuinely different from the one above rather than just a different command; and <a href="/blog/arch-linux-on-apple-silicon/">Arch Linux on Apple Silicon</a>, the odd one out in this series — no official arm64 build at all; <a href="/blog/best-linux-distro-apple-silicon/">which of these four actually fits your workload</a>, if you're deciding rather than already committed; the <a href="/blog/qa-devops-disposable-vm-workflow/">disposable VM workflow for QA and DevOps</a>; and <a href="/blog/arm-virtualization-performance/">why VMs on Apple Silicon perform the way they do</a> architecturally. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/debian-on-apple-silicon/">Debian on Apple Silicon</a>, whose networking defaults avoid the clone gotcha above; <a href="/blog/fedora-on-apple-silicon/">Fedora on Apple Silicon</a>, which registers Rosetta a different way; <a href="/blog/linux-server-vs-desktop-vm-mac/">Server or Desktop</a>, if you're unsure which you need; and <a href="/blog/best-linux-distro-apple-silicon/">which distro fits your work</a>, if you haven't decided. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

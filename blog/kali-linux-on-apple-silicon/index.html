@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Running Kali Linux on Apple Silicon</title>
-<meta name="description" content="Kali publishes a genuine generic arm64 installer ISO — but it&#x27;s not in Velo&#x27;s official-image picker. The local-file path and what&#x27;s different for Kali.">
+<title>Kali Linux on Apple Silicon: Set Up an arm64 Kali VM</title>
+<meta name="description" content="Install Kali Linux&#x27;s official arm64 build in a VM on an M-series Mac, what NAT networking means for a testing lab, and why disposable workspaces fit.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/kali-linux-on-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Running Kali Linux on Apple Silicon">
-<meta property="og:description" content="Kali publishes a genuine generic arm64 installer ISO — but it&#x27;s not in Velo&#x27;s official-image picker. The local-file path and what&#x27;s different for Kali.">
+<meta property="og:title" content="Kali Linux on Apple Silicon: Set Up an arm64 Kali VM">
+<meta property="og:description" content="Install Kali Linux&#x27;s official arm64 build in a VM on an M-series Mac, what NAT networking means for a testing lab, and why disposable workspaces fit.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/kali-linux-on-apple-silicon/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/kali-linux-on-apple-silicon.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Running Kali Linux on Apple Silicon">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "Running Kali Linux on Apple Silicon",
+      "headline": "Kali Linux on Apple Silicon: Set Up an arm64 Kali VM",
       "name": "Running Kali Linux on Apple Silicon",
-      "description": "Kali publishes a genuine generic arm64 installer ISO — but it's not in Velo's official-image picker. The local-file path and what's different for Kali.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "description": "Install Kali Linux's official arm64 build in a VM on an M-series Mac, what NAT networking means for a testing lab, and why disposable workspaces fit.",
+      "image": "https://www.veloworkspaces.com/assets/og/kali-linux-on-apple-silicon.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -111,27 +111,28 @@
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>Running Kali Linux on Apple Silicon</h1>
-        <p class="article-lede">Kali is a genuine, official arm64 build — unlike Arch, this isn't a satellite community project. It's just not in Velo's curated official-image list, so the setup path looks more like Arch's than Ubuntu's. Here's what to grab, and the one networking detail worth knowing before you rely on this for testing.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <p class="article-lede">Kali Linux ships an official arm64 build, and Velo Workspaces 1.2 downloads it for you. Here's how the install goes, and the networking detail to understand before you rely on it for testing.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-      <h2>A real official arm64 build — with the same "which file" trap as Arch</h2>
-      <p>Kali Linux, maintained by Offensive Security, publishes real generic arm64 installer ISOs alongside its more numerous single-board-computer images — the file you actually want is a plain installer ISO like <code>kali-linux-installer-arm64.iso</code> from <a href="https://www.kali.org/get-kali/" target="_blank" rel="noopener">kali.org's official downloads page</a>, not one of the many Raspberry Pi, Odroid, or Orange Pi-specific images on the same page. Those SBC builds carry hardware-specific kernels and won't boot correctly in a generic VM, the same trap covered in <a href="/blog/arch-linux-on-apple-silicon/">the Arch Linux ARM post</a> for a different reason. The good news relative to Arch: Kali's generic installer boots and installs like any normal Linux ISO — no board-specific quirks once you've picked the right file.</p>
+      <h2>An official arm64 build, and the right file to use</h2>
+      <p>Kali Linux, maintained by OffSec, publishes generic arm64 installer ISOs next to a long list of images for specific single-board computers. For a VM you want the generic installer. The Raspberry Pi and other board images carry hardware-specific kernels and won't boot in a virtual machine.</p>
 
-      <h2>Not in the official-image picker — the local-file path</h2>
-      <p>Kali isn't part of Velo Workspaces' curated "download an official image" list the way Ubuntu, Debian, and Fedora are. Download the installer ISO from kali.org yourself, then use "choose a local OS image file" when creating the workspace instead of the one-click fetch. Everything after that — the installer itself, the resulting workspace — runs the same as any other Linux guest.</p>
+      <h2>In the catalog, installed by hand</h2>
+      <p>Velo Workspaces 1.2 has Kali in its catalog, so you don't have to find the right file yourself. Create a workspace, choose <strong>Installer image</strong> and pick Kali Linux; the app downloads the current arm64 installer from Kali's servers and checks it against Kali's published checksum. Kali's installer is debian-installer, and like Debian's it isn't automated yet, so you go through it yourself in the workspace's display: your user, partitioning, and which tool sets to install.</p>
+      <p>A Kali cloud image that sets itself up on first boot is on the <a href="/roadmap/">roadmap</a> for a 1.2.x update. Kali publishes it as a compressed archive rather than a disk image, so the app needs to unpack it first.</p>
 
-      <h2>The networking caveat that matters specifically here</h2>
-      <p>This is worth knowing before you build a testing workflow around it: Velo Workspaces' current networking is NAT-only — <a href="/blog/how-virtualization-framework-works/">bridged networking requires an entitlement</a> not yet part of the app. For most Linux guests that's invisible day to day. For Kali specifically, it matters more, because a meaningful share of what the toolkit is built for — scanning or testing other devices on your actual LAN — assumes the guest can see that network the way a bridged interface would, not from behind NAT. Confirm what a given tool actually needs before assuming it'll reach what you expect it to.</p>
+      <h2>NAT networking, and what it means for a lab</h2>
+      <p>Velo Workspaces uses NAT networking only; bridged networking needs an entitlement the app doesn't have, as <a href="/blog/how-virtualization-framework-works/">the Virtualization.framework post</a> explains. For most Linux guests you'd never notice. For Kali it matters more, because much of the toolkit is meant for scanning and testing other devices on your network. Behind NAT, the guest sits on the Mac's private virtual network, not your LAN. Tools that connect out to a target by address work; tools that expect to share a network segment with their targets, like ARP scans, won't see them. Check what a tool needs before you build a workflow on it.</p>
 
-      <h2>Where disposability earns its keep</h2>
-      <p>This is a case where <a href="/blog/what-is-a-disposable-development-environment/">the disposable-workspace pattern</a> fits especially well, for a reason specific to a testing toolkit: tool installs, scan results, and test artifacts from one engagement have no reason to persist into the next one, and a testing lab that's accumulated months of leftover state is exactly the kind of environment where "did I actually test against a clean baseline" becomes a real question. Seal a configured Kali install as a base image once, then clone a fresh disposable workspace per engagement — closing it when you're done costs nothing, and the next one starts from the identical known-good state every time. See <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a> for how that half of the mechanism works.</p>
+      <h2>Why disposable workspaces suit a testing lab</h2>
+      <p>Tools, scan results and artifacts from one engagement have no business carrying over into the next, and a lab that has piled up months of leftovers makes it hard to say you tested from a clean baseline. Install and configure Kali once, save it as a base image, and start each engagement from a fresh <a href="/blog/what-is-a-disposable-development-environment/">disposable workspace</a> cloned from it. Closing it deletes it, and the next one starts from exactly the same state. <a href="/blog/base-image-versioning/">Base images as versioned infrastructure</a> covers the base-image half of that.</p>
 
-      <p>Related reading: <a href="/blog/arch-linux-on-apple-silicon/">Arch Linux on Apple Silicon</a>, another local-file-path distro but for a different reason; <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu on Apple Silicon</a> for the official-picker path this one skips; and <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment actually is</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/debian-on-apple-silicon/">Debian on Apple Silicon</a>, which uses the same installer; <a href="/blog/disposable-vms-untrusted-software/">disposable VMs for testing untrusted software</a>; and <a href="/blog/linux-vm-networking-apple-silicon/">how Linux VM networking works on Apple Silicon</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

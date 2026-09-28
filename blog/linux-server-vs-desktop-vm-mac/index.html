@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Linux Server vs. Linux Desktop VMs on a Mac</title>
-<meta name="description" content="When headless plus SSH is actually enough, and when you need a real GUI session inside the guest.">
+<title>Ubuntu Server or Desktop for a Linux VM on a Mac?</title>
+<meta name="description" content="When a headless Ubuntu Server VM plus SSH is all you need on a Mac, when you need a desktop session, and what a Linux desktop&#x27;s graphics can and can&#x27;t do.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/linux-server-vs-desktop-vm-mac/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Linux Server vs. Linux Desktop VMs on a Mac">
-<meta property="og:description" content="When headless plus SSH is actually enough, and when you need a real GUI session inside the guest.">
+<meta property="og:title" content="Ubuntu Server or Desktop for a Linux VM on a Mac?">
+<meta property="og:description" content="When a headless Ubuntu Server VM plus SSH is all you need on a Mac, when you need a desktop session, and what a Linux desktop&#x27;s graphics can and can&#x27;t do.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/linux-server-vs-desktop-vm-mac/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/linux-server-vs-desktop-vm-mac.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Linux Server vs. Linux Desktop VMs on a Mac">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "Linux Server vs. Linux Desktop VMs on a Mac",
+      "headline": "Ubuntu Server or Desktop for a Linux VM on a Mac?",
       "name": "Linux Server vs. Linux Desktop VMs on a Mac",
-      "description": "When headless plus SSH is actually enough, and when you need a real GUI session inside the guest.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "description": "When a headless Ubuntu Server VM plus SSH is all you need on a Mac, when you need a desktop session, and what a Linux desktop's graphics can and can't do.",
+      "image": "https://www.veloworkspaces.com/assets/og/linux-server-vs-desktop-vm-mac.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -111,30 +111,30 @@
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>Linux Server vs. Linux Desktop VMs on a Mac</h1>
-        <p class="article-lede">Ubuntu is the one distro in Velo's official-image picker that offers both — the same project, the same release, two genuinely different starting points. Which one to pick isn't about which is "better," it's about whether anything you're doing actually needs a windowing session running inside the guest at all.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <p class="article-lede">Ubuntu offers both, same project, same release, two different starting points. Which one to pick isn't about which is better. It's about whether anything you do needs a desktop session running inside the guest.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-      <h2>The same distro, two different starting points</h2>
-      <p>Velo's official-image picker offers Ubuntu Server and Ubuntu Desktop side by side, same release, same install source, genuinely different from the moment they boot: Server drops you at a text console with nothing graphical running; Desktop boots into a full windowing session, taskbar and all. Every other distro's Server-shaped install (Debian's netinst, Fedora's minimal path, Rocky's Minimal ISO) follows the same underlying split even where the picker only offers one variant — this post uses Ubuntu specifically because it's the one place you can compare both starting points from the exact same official source.</p>
+      <h2>The same distro, two starting points</h2>
+      <p>Velo Workspaces offers Ubuntu 26.04 and 24.04 as both Server and Desktop installers, and both can install themselves. From the moment they boot they're different: Server gives you a text console with nothing graphical running; Desktop boots into a full GNOME session. The Ubuntu cloud image is Server-shaped too. Other distributions follow the same split (Fedora Server and Fedora Workstation, NixOS's minimal and graphical ISOs), but Ubuntu is the easiest place to compare the two from one source.</p>
 
-      <h2>Headless plus SSH is enough more often than it looks</h2>
-      <p>This surprises people coming from a "desktop first" mental model: a huge share of real development work never actually needs a GUI running inside the guest at all. <a href="/blog/vscode-continue-ai-bridge/">VS Code Remote-SSH into a headless Linux guest</a> gives you a full graphical editing experience — syntax highlighting, a debugger, extensions — while the guest itself never runs anything beyond an SSH daemon and a shell. The GUI you're looking at is running on the host, in your actual VS Code window; the guest is just where the code and the terminal live. The same is true for most CI/CD work, most server development, and most command-line-driven testing — see <a href="/blog/qa-devops-disposable-vm-workflow/">the QA/DevOps disposable VM workflow</a> for exactly that pattern in practice.</p>
+      <h2>Headless plus SSH covers more than you'd think</h2>
+      <p>People coming from a desktop-first habit are often surprised how much development work never needs a GUI inside the guest. <a href="/blog/vscode-continue-ai-bridge/">VS Code's Remote - SSH into a headless Linux guest</a> gives you the full editor, with syntax highlighting, a debugger and extensions, while the guest runs nothing but an SSH server and your tools. The window you're looking at runs on the Mac; the guest is just where the code and the shell live. The workspace's <strong>Access</strong> tab gives you the <code>~/.ssh/config</code> block for VS Code, a copyable <code>ssh</code> command for Terminal, and with Pro, a built-in terminal. Most CI work, server development and command-line testing looks the same; <a href="/blog/qa-devops-disposable-vm-workflow/">the QA and DevOps workflow</a> shows the pattern.</p>
 
-      <h2>When you actually need the desktop</h2>
-      <p>The real dividing line is narrower than it feels: you need an actual GUI session inside the guest specifically when the thing you're testing or building <em>is</em> the graphical experience — a desktop application, browser-based visual testing where the rendering itself matters, or anything that needs a real window manager and compositor to behave the way a user's session would. Editing code remotely doesn't need this; verifying how a GUI actually looks and behaves does.</p>
+      <h2>When you need the desktop</h2>
+      <p>The dividing line is narrower than it feels. You need a desktop session inside the guest when the thing you're testing or building <em>is</em> the graphical experience: a desktop application, visual browser testing where the rendering matters, anything that needs a real window manager and compositor to behave the way a user's session would. Editing code remotely doesn't need it. Checking how a GUI looks and behaves does.</p>
 
-      <h2>The graphics ceiling is the same either way</h2>
-      <p>Worth knowing before "Desktop" sounds like it buys you more than it does: a Linux guest's graphics are paravirtualized through <code>virtio-gpu</code> regardless of which image you picked — covered in <a href="/blog/how-virtualization-framework-works/">the device inventory post</a> — hardware-accelerated 2D and basic 3D composition, not the real Metal-accelerated pipeline a macOS guest gets. Choosing Desktop gets you a windowing session to work inside; it doesn't change the underlying display device or unlock GPU compute the Server image doesn't have.</p>
+      <h2>The graphics are the same either way</h2>
+      <p>Choosing Desktop doesn't buy better graphics. A Linux guest's display is paravirtualized through <code>virtio-gpu</code> whichever image you picked, as <a href="/blog/how-virtualization-framework-works/">the device inventory post</a> covers: fine for a desktop and basic composition, but not the Metal-accelerated pipeline a macOS guest gets, and no GPU compute. Desktop gives you a session to work in; it doesn't change the display device.</p>
 
       <h2>The practical default</h2>
-      <p>Start with Server unless you already know you need the GUI — it's the lighter starting point, and remote-editing tools cover the large majority of development work without ever needing a graphical session in the guest at all. Reach for Desktop specifically when the task requires seeing and interacting with a real windowed application inside the VM, not as a general-purpose default.</p>
+      <p>Start with Server, and with the cloud image if you want it running in a minute, unless you already know you need a GUI. It's lighter, and remote editing covers most development work. Reach for Desktop when the task means seeing and using a windowed application inside the VM.</p>
 
-      <p>Related reading: <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu on Apple Silicon</a>, <a href="/blog/vscode-continue-ai-bridge/">a fully headless GUI editing workflow over SSH</a>, and <a href="/blog/how-virtualization-framework-works/">the graphics device inventory</a> this post builds on. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu on Apple Silicon</a>, <a href="/blog/vscode-continue-ai-bridge/">an editing workflow that's entirely over SSH</a>, and <a href="/blog/how-virtualization-framework-works/">the graphics device inventory</a> this post builds on. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

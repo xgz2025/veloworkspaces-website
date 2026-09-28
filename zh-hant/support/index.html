@@ -7,7 +7,7 @@
 <meta name="description" content="如何用雲端映像或 ISO 建立 Linux 虛擬機器、開啟 SSH 終端機、掛載共享資料夾、在 Debian 與 Fedora 上啟用 Rosetta，以及排除剪貼簿問題。">
 <link rel="canonical" href="https://www.veloworkspaces.com/zh-hant/support/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/">
 <link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/">
 <link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/">
@@ -264,7 +264,7 @@
         <details class="faq-item">
           <summary>可以用自己的終端機或 VS Code，或從另一台電腦連線嗎？</summary>
           <div class="faq-answer">
-            <p>可以，而且免費。「存取」標籤頁會顯示工作區的位址和可直接拷貝的 ssh 指令，以及供 VS Code Remote - SSH 延伸功能使用的 ~/.ssh/config 設定區塊。</p>
+            <p>可以，而且免費。「存取」標籤頁會顯示工作區的位址和可直接拷貝的 ssh 指令，以及供 VS Code Remote - SSH 延伸功能使用的 ~/.ssh/config 設定區塊。它們使用的是你自己的 SSH 金鑰，而不是內建終端機保存在鑰匙圈中的那把。建立工作區時，請在「SSH 公開金鑰」中貼上你的公開金鑰，或開啟「允許使用密碼進行 SSH 登入」。</p>
             <p>工作區位於 Mac 內部的私有網路中，其他電腦需要經由你的 Mac 連線。在「系統設定 › 一般 › 共享」中開啟「遠端登入」，然後使用「存取」標籤頁中顯示的 <code>ssh -J</code> 指令。</p>
           </div>
         </details>

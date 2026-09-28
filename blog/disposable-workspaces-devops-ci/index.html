@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Disposable Workspaces for DevOps and CI Testing</title>
-<meta name="description" content="A disposable workspace matching your actual pinned CI runner catches environment drift before you push, not after.">
+<title>Match Your CI Runner Locally: Disposable VMs for DevOps</title>
+<meta name="description" content="Reproduce your GitHub Actions runner&#x27;s Ubuntu version in a disposable VM on your Mac, and catch drift like ubuntu-latest moving to 26.04 before CI does.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/disposable-workspaces-devops-ci/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Disposable Workspaces for DevOps and CI Testing">
-<meta property="og:description" content="A disposable workspace matching your actual pinned CI runner catches environment drift before you push, not after.">
+<meta property="og:title" content="Match Your CI Runner Locally: Disposable VMs for DevOps">
+<meta property="og:description" content="Reproduce your GitHub Actions runner&#x27;s Ubuntu version in a disposable VM on your Mac, and catch drift like ubuntu-latest moving to 26.04 before CI does.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/disposable-workspaces-devops-ci/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/disposable-workspaces-devops-ci.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Disposable Workspaces for DevOps and CI Testing">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "Disposable Workspaces for DevOps and CI Testing",
+      "headline": "Match Your CI Runner Locally: Disposable VMs for DevOps",
       "name": "Disposable Workspaces for DevOps and CI Testing",
-      "description": "A disposable workspace matching your actual pinned CI runner catches environment drift before you push, not after.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "description": "Reproduce your GitHub Actions runner's Ubuntu version in a disposable VM on your Mac, and catch drift like ubuntu-latest moving to 26.04 before CI does.",
+      "image": "https://www.veloworkspaces.com/assets/og/disposable-workspaces-devops-ci.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -111,30 +111,31 @@
       <div class="article-header">
         <span class="eyebrow">Workflow</span>
         <h1>Disposable Workspaces for DevOps and CI Testing</h1>
-        <p class="article-lede"><a href="/blog/qa-devops-disposable-vm-workflow/">The general disposable-VM case for QA and DevOps</a> is about state a test suite assumed was reset but wasn't. This is narrower: using a disposable workspace to actually match what your CI runner runs, so environment drift shows up on your Mac before it shows up as a failed pipeline.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <p class="article-lede"><a href="/blog/qa-devops-disposable-vm-workflow/">The general QA and DevOps case</a> is about state a test suite assumed was reset. This is narrower: using a disposable workspace to match what your CI runner runs, so environment drift shows up on your Mac before it shows up as a failed pipeline.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-      <h2>Your Mac isn't your CI runner, even when the distro name matches</h2>
-      <p>A macOS terminal isn't a Linux CI runner at all, obviously — but even a Linux VM on your Mac can drift from what CI actually runs, silently, without you changing anything. "It works locally" and "it works in CI" aren't the same claim unless the local environment actually matches the one CI uses, not just the same distro family in general.</p>
+      <h2>Your Mac isn't your CI runner</h2>
+      <p>A macOS terminal obviously isn't a Linux CI runner. But even a Linux VM on your Mac can drift from what CI runs without you changing anything. "It works locally" and "it works in CI" only mean the same thing if the local environment matches CI's, not just the same distribution family.</p>
 
-      <h2>A real, current example: the <code>ubuntu-latest</code> trap</h2>
-      <p>This is happening right now, not a hypothetical: GitHub Actions' <code>ubuntu-latest</code> runner label is <a href="https://github.blog/changelog/2026-09-17-ubuntu-26-generally-available-and-latest-migration/" target="_blank" rel="noopener">migrating from Ubuntu 24.04 to Ubuntu 26.04</a>, rolling out gradually between October 19 and November 19, 2026. A workflow pinned to <code>ubuntu-latest</code> will silently start running on a different OS version during that window, with different preinstalled tool versions and some removed packages — exactly the kind of change that breaks a pipeline with zero code changes on your end. Pinning to an explicit version (<code>ubuntu-24.04</code> instead of <code>ubuntu-latest</code>) avoids the surprise, but only if you actually know which version you're pinned to and test against that one specifically.</p>
+      <h2>A current example: the <code>ubuntu-latest</code> trap</h2>
+      <p>This is happening now: GitHub Actions' <code>ubuntu-latest</code> label is <a href="https://github.blog/changelog/2026-09-17-ubuntu-26-generally-available-and-latest-migration/" target="_blank" rel="noopener">moving from Ubuntu 24.04 to Ubuntu 26.04</a>, rolling out gradually between October 19 and November 19, 2026. A workflow on <code>ubuntu-latest</code> will start running on a different OS version during that window, with different preinstalled tools and some packages removed: exactly the kind of change that breaks a pipeline with no code change on your side. Pinning an explicit version (<code>ubuntu-24.04</code> rather than <code>ubuntu-latest</code>) avoids the surprise, but only if you know which version you're on and test against it.</p>
 
-      <h2>Matching a workspace to your actual pinned runner</h2>
-      <p>Velo's own official-image picker happens to offer both <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu 26.04 LTS and Ubuntu 24.04 LTS</a> Server images side by side — pick whichever one matches your CI YAML's actual pin, not whatever's newest. A disposable workspace built from the same version your pipeline runs on is the closest local reproduction of that runner's environment you can get on a Mac, and it costs nothing to throw away and recreate when you're done checking.</p>
+      <h2>Matching a workspace to your runner</h2>
+      <p>Velo Workspaces has official cloud images for both <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu 26.04 LTS and 24.04 LTS</a>. Pick the one your workflow file pins, not the newest, and it's ready about a minute after download. A disposable workspace on the same version is the closest local stand-in for that runner you can get on a Mac, and it costs nothing to throw away and make again.</p>
+      <p>One difference to keep in mind: on an Apple silicon Mac the workspace is arm64, while GitHub's standard Ubuntu runners are x64 (arm64 runners, such as <code>ubuntu-24.04-arm</code>, exist too). For most scripts that doesn't matter. For anything that downloads architecture-specific binaries, it does, and <a href="/blog/arm64-vs-x86-apple-silicon/">ARM64 vs. x86-64 on Apple Silicon</a> covers what to watch for.</p>
 
-      <h2>The practical loop</h2>
-      <p>Create a disposable workspace matching your pinned runner version, run the same install and test steps your CI job runs, iterate locally against real failures instead of push-wait-read-logs each time, then discard the workspace once you've confirmed the fix. This is materially faster than the CI feedback loop for catching environment-specific breakage — a missing system package, a tool version mismatch — before it costs you a real pipeline run.</p>
+      <h2>The loop</h2>
+      <p>Create a disposable workspace on your pinned runner version, run the same install and test steps your CI job runs, and iterate against real failures locally instead of push, wait, read logs. Throw the workspace away once the fix is confirmed. It's much faster than the CI loop for catching environment problems like a missing system package or a tool version mismatch before they cost you a pipeline run.</p>
 
       <h2>What this doesn't replace</h2>
-      <p>Worth being honest about the limit: this reproduces the OS and tool environment, not the whole CI system. Secrets, environment variables scoped to CI specifically, matrix builds across multiple versions at once, and whatever your actual pipeline orchestration does around the job itself aren't part of this loop. It catches "does this run on the OS my pipeline uses" cheaply and early — it doesn't replace actually running the pipeline before merging.</p>
+      <p>This reproduces the OS and tools, not the whole CI system. Secrets, CI-only environment variables, matrix builds across versions and whatever your pipeline does around the job aren't part of it. It answers "does this run on the OS my pipeline uses?" cheaply and early; it doesn't replace running the pipeline before you merge.</p>
 
-      <p>Related reading: <a href="/blog/qa-devops-disposable-vm-workflow/">the disposable VM workflow for QA and DevOps</a>, <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu on Apple Silicon</a>, and <a href="/blog/best-linux-distro-apple-silicon/">which distro fits which workload</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/qa-devops-disposable-vm-workflow/">the disposable VM workflow for QA and DevOps</a>, <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu on Apple Silicon</a>, and <a href="/blog/best-linux-distro-apple-silicon/">which distro fits which job</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

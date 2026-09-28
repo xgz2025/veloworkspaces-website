@@ -7,7 +7,7 @@
 <meta name="description" content="Ubuntu, Debian, Fedora and Rocky Linux VMs on your Mac in about a minute, from official cloud images. Disposable workspaces, SSH terminal, local AI. Free.">
 <link rel="canonical" href="https://www.veloworkspaces.com/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/">
 <link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/">
 <link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/">
@@ -191,7 +191,7 @@
       <div class="section-head center">
         <span class="eyebrow">Who it's for</span>
         <h2>Four jobs. Four profiles built for them.</h2>
-        <p>Every workspace starts from a profile sized for the work ahead, not a guess — CPU, memory, and storage set to match the job, or configure your own.</p>
+        <p>Every workspace starts from a profile sized for the work ahead, with CPU, memory and storage set to match the job. Or configure your own.</p>
       </div>
       <div class="grid grid-4">
         <div class="card persona-card" style="--accent: var(--color-accent-swe);">
@@ -199,7 +199,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="8 6 2 12 8 18"/><polyline points="16 6 22 12 16 18"/></svg>
           </div>
           <h3>Software Engineers</h3>
-          <p>Build and test against a clean toolchain without touching your main machine — or a colleague's exact setup, reproduced exactly.</p>
+          <p>Build and test against a clean toolchain without touching your main machine, or reproduce a colleague's exact setup.</p>
           <span class="persona-profile">Code &amp; Build profile</span>
         </div>
         <div class="card persona-card" style="--accent: var(--color-accent-qa);">
@@ -207,7 +207,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1" stroke-dasharray="2 2"/><path d="M14 3h7v7h-7z"/><path d="M14 14h7v7h-7z"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
           </div>
           <h3>QA Engineers</h3>
-          <p>Run every test from the exact same known-good image, then throw the VM away — no snapshot to remember, no leftover state to doubt.</p>
+          <p>Run every test from the same known-good image, then throw the VM away. No snapshot to remember, no leftover state to doubt.</p>
           <span class="persona-profile">Disposable Workspaces</span>
         </div>
         <div class="card persona-card" style="--accent: var(--color-accent-devops);">
@@ -243,8 +243,8 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3"/></svg>
           </div>
           <div>
-            <h3>AI Bridge — local model inference, no cloud in the loop<span class="pricing-tag">Pro</span></h3>
-            <p>Run inference on your Mac's own GPU and reach it from inside a workspace as a standard chat-completions endpoint — the same way you'd reach any local server. Build and test agents, tool-calling, and RAG pipelines against a model that never leaves the machine. No API keys, no usage costs, no data leaving your Mac.</p>
+            <h3>AI Bridge: local model inference, no cloud in the loop<span class="pricing-tag">Pro</span></h3>
+            <p>Run inference on your Mac's own GPU and reach it from inside a workspace as a standard chat-completions endpoint, just like any local server. Build and test agents, tool calling and RAG pipelines against a model that never leaves the machine. No API keys, no usage costs, no data leaving your Mac.</p>
             <ul class="feature-list" style="margin-top:16px;">
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Works with local model servers such as Ollama and MLX</li>
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Nothing is sent to Velo Workspaces or any third party</li>
@@ -338,11 +338,11 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1" stroke-dasharray="2 2"/><path d="M14 3h7v7h-7z"/><path d="M14 14h7v7h-7z"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
           </div>
           <div>
-            <h3>Disposable Workspaces — the way QA is supposed to work<span class="pricing-tag">Pro</span></h3>
-            <p>Spin up a clean VM for exactly one test run, and let it clean up after itself the moment you close it — no snapshot to remember to delete, no “wait, did I leave something installed from last time” doubt about whether a pass is real. Seal a fully configured workspace — OS, packages, dotfiles, everything — into a base image once, then clone new disposable workspaces from it in seconds using copy-on-write, so every test starts from the exact same known-good state.</p>
+            <h3>Disposable Workspaces: the way QA is supposed to work<span class="pricing-tag">Pro</span></h3>
+            <p>Start a clean VM for exactly one test run, and it cleans up after itself when you close it. No snapshot to remember to delete, and no doubt about whether something left over from last time made a pass look real. Save a fully configured workspace (OS, packages, dotfiles, everything) as a base image once, then clone disposable workspaces from it in seconds with copy-on-write, so every test starts from the same known-good state.</p>
             <ul class="feature-list" style="margin-top:16px;">
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> One click to save the current state as a reusable base image</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Instant cloning — no re-installing before every run</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Instant cloning, with no reinstall before every run</li>
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Manage saved base images from Preferences whenever you want to clean up</li>
             </ul>
 
@@ -366,7 +366,7 @@
       <div class="grid grid-3">
         <div class="card">
           <h3>Shared folders</h3>
-          <p>Share host folders straight into a workspace — mounted automatically for macOS guests, with a copy-paste command for Linux.</p>
+          <p>Share folders from your Mac straight into a workspace: mounted automatically for macOS guests, with a copy-and-paste command for Linux.</p>
         </div>
         <div class="card">
           <h3>SSH, VS Code and other computers</h3>
@@ -374,7 +374,7 @@
         </div>
         <div class="card">
           <h3>Serial console</h3>
-          <p>A built-in terminal for debugging a Linux guest that never brings up a display — no external SSH client required.</p>
+          <p>A console for debugging a Linux guest that never brings up a display or a network, with no SSH client needed.</p>
         </div>
         <div class="card">
           <h3>Clipboard sharing</h3>
@@ -396,7 +396,7 @@
     <div class="container">
       <div class="section-head center">
         <span class="eyebrow">Guest operating systems</span>
-        <h2>Run the Linux you actually need.</h2>
+        <h2>Run the Linux you need.</h2>
         <p>Official cloud images for Ubuntu, Debian, Fedora and Rocky Linux. Installers for those, plus Kali Linux, NixOS and Alpine. macOS guests on Apple silicon. Every image comes straight from the project's own servers.</p>
       </div>
       <div class="pill-row" style="justify-content:center;">
@@ -440,11 +440,11 @@
           <p class="pricing-note">Or $24.99/year, or $79.99 once for life.</p>
           <ul class="feature-list">
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Built-in SSH terminal, signed in with your Mac's key, with tabs and color schemes</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> AI Bridge — reach a model running on your Mac from inside a workspace</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Restore points — snapshot a workspace before you break it, and roll back</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Disposable workspaces — spin one up, and it deletes itself when you close it</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Base images — seal a configured disk and start new workspaces from it in seconds</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Rosetta — run x86-64 Linux binaries on Apple Silicon</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> AI Bridge: reach a model running on your Mac from inside a workspace</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Restore points: snapshot a workspace before you break it, then roll back</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Disposable workspaces that delete themselves when you close them</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Base images: save a configured disk and start new workspaces from it in seconds</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Rosetta: run x86-64 Linux binaries on Apple silicon</li>
           </ul>
           <a class="btn btn-store" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" style="display:inline-flex;">
             <svg class="btn-store-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -465,7 +465,7 @@
         </div>
         <div>
           <h2 style="margin-bottom:8px;">Private and local by default.</h2>
-          <p>No account, no cloud dependency for anything a workspace does. No usage data or crash reports are ever collected automatically. Everything — the guest OS, your files, your models — stays on your Mac. Read the full <a href="/privacy/">privacy policy</a>.</p>
+          <p>No account, and no cloud dependency for anything a workspace does. No usage data or crash reports are collected. Everything, the guest OS, your files and your models, stays on your Mac. Read the full <a href="/privacy/">privacy policy</a>.</p>
         </div>
       </div>
     </div>

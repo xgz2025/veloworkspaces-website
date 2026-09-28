@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VM vs. Container vs. Sandbox on macOS</title>
-<meta name="description" content="Three genuinely different isolation boundaries available on a Mac — what each one actually restricts, and when each is the right tool.">
+<title>VM vs. Container vs. Sandbox on macOS: What&#x27;s Different</title>
+<meta name="description" content="App Sandbox, containers and VMs on a Mac isolate at three different layers. What each one is, and what an escape from inside it can reach.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/vm-vs-container-vs-sandbox/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="VM vs. Container vs. Sandbox on macOS">
-<meta property="og:description" content="Three genuinely different isolation boundaries available on a Mac — what each one actually restricts, and when each is the right tool.">
+<meta property="og:title" content="VM vs. Container vs. Sandbox on macOS: What&#x27;s Different">
+<meta property="og:description" content="App Sandbox, containers and VMs on a Mac isolate at three different layers. What each one is, and what an escape from inside it can reach.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/vm-vs-container-vs-sandbox/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/vm-vs-container-vs-sandbox.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="VM vs. Container vs. Sandbox on macOS">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "VM vs. Container vs. Sandbox on macOS",
+      "headline": "VM vs. Container vs. Sandbox on macOS: What's Different",
       "name": "VM vs. Container vs. Sandbox on macOS",
-      "description": "Three genuinely different isolation boundaries available on a Mac — what each one actually restricts, and when each is the right tool.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "description": "App Sandbox, containers and VMs on a Mac isolate at three different layers. What each one is, and what an escape from inside it can reach.",
+      "image": "https://www.veloworkspaces.com/assets/og/vm-vs-container-vs-sandbox.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -111,8 +111,8 @@
       <div class="article-header">
         <span class="eyebrow">Fundamentals</span>
         <h1>VM vs. Container vs. Sandbox on macOS</h1>
-        <p class="article-lede">"Sandbox," "container," and "VM" get used almost interchangeably in casual conversation, but on a Mac they're three mechanically different things, enforced at three different layers, with three different answers to "what happens if the thing inside escapes." Here's what each one actually is, not just what it's marketed as.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <p class="article-lede">"Sandbox", "container" and "VM" get used almost interchangeably, but on a Mac they're three different mechanisms enforced at three different layers, with three different answers to "what happens if the thing inside escapes".</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
@@ -120,19 +120,19 @@
   <section class="section">
     <div class="container article-body">
       <h2>Three boundaries, three layers</h2>
-      <p>The useful way to tell these apart isn't "how strict is it" — it's <em>where the boundary actually lives</em>. App Sandbox restricts a process within the same kernel. A container isolates a process into its own namespace, still inside the same kernel. A VM runs an entirely separate kernel. Each step out is a step further from "same computer" and closer to "different computer that happens to be software" — and that's what actually determines what a compromise inside each one can reach.</p>
+      <p>The useful way to tell them apart isn't how strict each one is, but <em>where the boundary lives</em>. App Sandbox restricts a process inside the same kernel. A container puts a process in its own namespace, still in the same kernel. A VM runs a separate kernel. Each step outward is a step from "same computer" towards "a different computer that happens to be software", and that decides what a compromise inside each one can reach.</p>
 
-      <h2>App Sandbox: same kernel, same process, restricted by profile</h2>
-      <p>macOS's App Sandbox is deny-by-default: a sandboxed process starts with almost no capability to touch the system, and specific capabilities are restored one at a time through entitlements declared at code-signing time. The mechanism is checked early in process startup (macOS's <code>libsystem_secinit</code> looks for the <code>com.apple.security.app-sandbox</code> entitlement), and once present, the system applies a sandbox profile that defines exactly what the process is allowed to do. Anything outside that profile fails with <code>EPERM</code> rather than succeeding — the sandbox daemon, <code>sandboxd</code>, logs the violation rather than silently allowing it.</p>
-      <p>Velo Workspaces itself is a concrete example: its own entitlements file carries <code>com.apple.security.app-sandbox</code>, plus narrow, specific grants for exactly what it needs — user-selected file access for ISO import and shared folders, security-scoped bookmarks to persist that access across relaunches, microphone passthrough for guest audio, outbound network access for AI Bridge reachability checks. Notably absent: a USB-passthrough entitlement, intentionally left out of the app's own entitlements file until Apple approval for it is viable — the sandbox model means that's not just a feature the app chooses not to build, it's a capability the OS itself won't grant to a sandboxed process without an explicit, approved entitlement for it.</p>
-      <p>What this boundary doesn't do: it doesn't give you a different kernel, or even a different set of running processes on the system — it's the same machine, the same kernel, with one process's reach narrowed. A kernel-level compromise isn't something App Sandbox is built to stop at all.</p>
+      <h2>App Sandbox: same kernel, restricted by profile</h2>
+      <p>macOS's App Sandbox denies by default. A sandboxed process starts with almost no access to the system, and specific capabilities are granted back one at a time through entitlements set at code-signing time. The system checks for the <code>com.apple.security.app-sandbox</code> entitlement early in process start-up and applies a profile that defines what the process may do. Anything outside it fails with <code>EPERM</code>, and <code>sandboxd</code> logs the violation.</p>
+      <p>Velo Workspaces is itself an example. Its entitlements file carries <code>com.apple.security.app-sandbox</code> plus narrow grants for what it needs: access to files you pick (installer images, shared folders), security-scoped bookmarks to keep that access across launches, the microphone for guest audio input, and outbound network access to download images and reach AI Bridge servers. There's no USB passthrough entitlement, and in a sandboxed app that isn't a feature the app chose to skip; the OS won't grant the capability without an approved entitlement.</p>
+      <p>What this boundary doesn't do is give you a different kernel. It's the same machine and the same kernel, with one process's reach narrowed. App Sandbox isn't built to stop a kernel-level compromise.</p>
 
-      <h2>Containers: a separate namespace, the same kernel — and on a Mac, a hidden VM underneath</h2>
-      <p>A container uses Linux namespaces and cgroups to isolate a process's view of the filesystem, network, and process table from everything else, while every container on a machine still shares that machine's actual kernel. That's a real, useful boundary — but it's fundamentally softer than a hardware-enforced one, covered in more depth in <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">the Docker Desktop / OrbStack comparison</a>: a kernel vulnerability can affect every container sharing that kernel at once, and no amount of additional hardening — seccomp profiles, AppArmor policies — fully closes that gap, because the boundary is still enforced in software by a kernel the isolated process is also talking to directly.</p>
-      <p>On macOS specifically, there's an extra wrinkle worth being explicit about: macOS has no native container runtime of its own, because namespaces and cgroups are Linux kernel features. Every container tool on a Mac — Docker Desktop, OrbStack, Apple's own <code>container</code> tool — runs a lightweight Linux VM first, invisibly, and the containers live inside that VM's shared Linux kernel. "Just a container" on a Mac is never actually "just a container" the way it is on a Linux server; there's a VM underneath it whether or not the tool shows it to you.</p>
+      <h2>Containers: a separate namespace, the same kernel, and on a Mac, a hidden VM</h2>
+      <p>A container uses Linux namespaces and cgroups to give a process its own view of the filesystem, network and process table, while every container on the machine shares the same kernel. That's a useful boundary, but a softer one than hardware, as <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">the Docker Desktop and OrbStack comparison</a> covers: a kernel vulnerability can affect every container on that kernel at once, and hardening like seccomp and AppArmor doesn't fully close the gap, because the boundary is enforced in software by a kernel the contained process talks to directly.</p>
+      <p>macOS adds a twist. It has no native container runtime, because namespaces and cgroups are Linux kernel features. Docker Desktop and OrbStack run a lightweight Linux VM first and put the containers inside its shared kernel; Apple's own <code>container</code> tool goes further and gives each container its own small VM. Either way, a container on a Mac always has a VM underneath, whether the tool shows it or not.</p>
 
-      <h2>A full VM: a genuinely separate kernel</h2>
-      <p>A virtual machine boots and runs its own kernel entirely, with the hypervisor — not another piece of software inside the same kernel — enforcing the boundary at the hardware level, using the CPU's own virtualization extensions. Covered in depth in <a href="/blog/apple-silicon-vms-explained/">the VM fundamentals post</a> and <a href="/blog/arm-virtualization-performance/">what determines VM performance on ARM</a>: this is the boundary that holds even against a kernel-level compromise inside the guest, because the compromised kernel was never the one enforcing the boundary in the first place. A <strong>disposable VM</strong> adds one more property on top: the guest is thrown away and recreated fresh rather than reused, so even a successful compromise doesn't persist past the session it happened in.</p>
+      <h2>A full VM: a separate kernel</h2>
+      <p>A virtual machine runs its own kernel, and the boundary is enforced by the hypervisor using the CPU's virtualization extensions, not by software inside the same kernel. <a href="/blog/apple-silicon-vms-explained/">The VM fundamentals post</a> and <a href="/blog/arm-virtualization-performance/">the ARM performance deep dive</a> cover how. This boundary holds even against a kernel-level compromise inside the guest, because that kernel was never the one enforcing it. A <strong>disposable VM</strong> adds one more property: the guest is thrown away and recreated rather than reused, so even a successful compromise doesn't outlive the session.</p>
 
       <h2>Side by side</h2>
       <div class="article-table-wrap">
@@ -140,21 +140,21 @@
           <thead><tr><th></th><th>App Sandbox</th><th>Container</th><th>VM</th></tr></thead>
           <tbody>
             <tr><td>Kernel</td><td>Shared</td><td>Shared</td><td>Separate</td></tr>
-            <tr><td>Isolation boundary</td><td>Process, via entitlement profile</td><td>Namespace, via the kernel</td><td>Hardware, via the hypervisor</td></tr>
-            <tr><td>Enforced by</td><td>The OS, at the syscall level</td><td>The shared kernel itself</td><td>The CPU's virtualization extensions</td></tr>
-            <tr><td>Survives a kernel exploit inside it?</td><td>Not applicable — same kernel</td><td>No</td><td>Yes</td></tr>
-            <tr><td>Best for</td><td>Restricting what your own trusted app can do</td><td>Packaging and dependency isolation</td><td>Running something you don't fully trust</td></tr>
+            <tr><td>Boundary</td><td>A process, through its entitlement profile</td><td>A namespace, through the kernel</td><td>Hardware, through the hypervisor</td></tr>
+            <tr><td>Enforced by</td><td>The OS, at the system-call level</td><td>The shared kernel itself</td><td>The CPU's virtualization extensions</td></tr>
+            <tr><td>Survives a kernel exploit inside it?</td><td>Not applicable: same kernel</td><td>No</td><td>Yes</td></tr>
+            <tr><td>Best for</td><td>Limiting what your own trusted app can do</td><td>Packaging and dependency isolation</td><td>Running something you don't fully trust</td></tr>
           </tbody>
         </table>
       </div>
 
-      <h2>Where this matters most: code you didn't write yourself</h2>
-      <p>All three of these get harder to reason about the moment what's running inside isn't your own code — an AI coding agent executing generated commands is the sharpest version of that problem, and it deserves its own threat-model treatment rather than a table row here: see <a href="/blog/ai-agent-security-risks/">what actually goes wrong when an AI coding agent runs unsandboxed</a> for real 2026 incidents mapped against exactly which isolation level would have contained each one.</p>
+      <h2>Where it matters most: code you didn't write</h2>
+      <p>All three get harder to reason about once what runs inside isn't your own code. An AI coding agent executing generated commands is the sharpest version of that, and it gets its own treatment in <a href="/blog/ai-agent-security-risks/">what goes wrong when AI coding agents run unsandboxed</a>, which maps real 2026 incidents to the isolation level that would have contained each one.</p>
 
       <h2>Which one to reach for</h2>
-      <p>App Sandbox is the right tool for restricting what your <em>own</em> trusted code can do to the rest of the system — it's not designed to contain code you don't trust at all. A container is the right tool for dependency and environment isolation when you trust the code but want a clean, reproducible filesystem and process view. A VM — disposable, ideally — is the right tool the moment "what if this goes wrong" means something worse than a namespace escape: untrusted installers, unfamiliar scripts, or generated code you haven't reviewed.</p>
+      <p>App Sandbox is for limiting what your <em>own</em> trusted code can do to the rest of the system; it isn't designed to contain code you don't trust. A container is for dependency and environment isolation when you trust the code but want a clean, reproducible filesystem and process view. A VM, ideally a disposable one, is the tool once "what if this goes wrong" means something worse than a namespace escape: untrusted installers, unfamiliar scripts, or generated code you haven't reviewed.</p>
 
-      <p>Related reading: <a href="/blog/apple-silicon-vms-explained/">what a VM on Apple Silicon actually is</a>, <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">do you need a VM, or is a container enough?</a>, <a href="/blog/ai-agent-security-risks/">what actually goes wrong when an AI agent runs unsandboxed</a>, and — for a container tool that already blurs this line by giving every container its own VM — <a href="/blog/apple-containers-vs-linux-vms/">Apple Containers vs. Linux VMs</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/apple-silicon-vms-explained/">what a VM on Apple Silicon is</a>, <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">do you need a VM, or is a container enough?</a>, and <a href="/blog/apple-containers-vs-linux-vms/">Apple Containers vs. Linux VMs</a>, a container tool that blurs the line by giving every container its own VM. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

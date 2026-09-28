@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Running Rocky Linux on Apple Silicon</title>
-<meta name="description" content="Rocky Linux is the RHEL-compatible downstream, not Fedora&#x27;s bleeding edge. Official aarch64 ISOs, the local-file path, and what actually differs from Fedora.">
+<title>Rocky Linux on Apple Silicon: RHEL-Compatible VMs on a Mac</title>
+<meta name="description" content="Run Rocky Linux 10 or 9 on an M-series Mac from the GenericCloud image or an automatic kickstart install, and test against RHEL before production.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/rocky-linux-on-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Running Rocky Linux on Apple Silicon">
-<meta property="og:description" content="Rocky Linux is the RHEL-compatible downstream, not Fedora&#x27;s bleeding edge. Official aarch64 ISOs, the local-file path, and what actually differs from Fedora.">
+<meta property="og:title" content="Rocky Linux on Apple Silicon: RHEL-Compatible VMs on a Mac">
+<meta property="og:description" content="Run Rocky Linux 10 or 9 on an M-series Mac from the GenericCloud image or an automatic kickstart install, and test against RHEL before production.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/rocky-linux-on-apple-silicon/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/rocky-linux-on-apple-silicon.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Running Rocky Linux on Apple Silicon">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "Running Rocky Linux on Apple Silicon",
+      "headline": "Rocky Linux on Apple Silicon: RHEL-Compatible VMs on a Mac",
       "name": "Running Rocky Linux on Apple Silicon",
-      "description": "Rocky Linux is the RHEL-compatible downstream, not Fedora's bleeding edge. Official aarch64 ISOs, the local-file path, and what actually differs from Fedora.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "description": "Run Rocky Linux 10 or 9 on an M-series Mac from the GenericCloud image or an automatic kickstart install, and test against RHEL before production.",
+      "image": "https://www.veloworkspaces.com/assets/og/rocky-linux-on-apple-silicon.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -111,8 +111,8 @@
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>Running Rocky Linux on Apple Silicon</h1>
-        <p class="article-lede">If your production servers run RHEL, CentOS's old lineage, or Rocky itself, testing against Fedora isn't quite testing against the same thing — Fedora is upstream and bleeding-edge, Rocky is the stable, RHEL-compatible downstream. Here's what to download, and what actually carries over from the Fedora post already on this blog.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <p class="article-lede">If your production servers run RHEL or Rocky, testing against Fedora isn't quite testing against the same thing. Fedora is upstream and fast-moving; Rocky is the stable, RHEL-compatible downstream. Here's how to run it on an M-series Mac.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
@@ -120,18 +120,25 @@
   <section class="section">
     <div class="container article-body">
       <h2>Downstream of RHEL, not upstream like Fedora</h2>
-      <p>Rocky Linux exists specifically to be binary-compatible with Red Hat Enterprise Linux, built by the Rocky Linux community following RHEL's own releases — the relationship is the reverse of Fedora's. <a href="/blog/fedora-on-apple-silicon/">Fedora</a> is where new packages and kernel versions land first, feeding upstream into RHEL over time; Rocky tracks RHEL's release cadence directly, trading bleeding-edge packages for the same stability and long support windows RHEL itself offers. If the point of testing in a VM is to catch problems before they hit a production RHEL-family server, Rocky is the closer match — Fedora will show you problems Rocky won't have yet, and hide problems Rocky will actually hit.</p>
+      <p>Rocky Linux is built to be binary-compatible with Red Hat Enterprise Linux and follows RHEL's releases. That's the reverse of <a href="/blog/fedora-on-apple-silicon/">Fedora</a>, where new packages and kernels land first and flow into RHEL later. If you test in a VM to catch problems before they reach a RHEL-family server, Rocky is the closer match. Fedora will show you problems Rocky won't have yet, and hide ones it will.</p>
 
-      <h2>Official aarch64 ISOs, current and straightforward</h2>
-      <p>Rocky Linux 10.2 publishes real aarch64 installer images — a full DVD ISO (around 9GB, every package for offline installation) and a smaller Minimal ISO (around 2GB, just enough to run the installer and pull what you need over the network) — from <a href="https://rockylinux.org/download" target="_blank" rel="noopener">rockylinux.org</a>. For a VM workspace, the Minimal ISO is the practical choice, the same role Ubuntu Server's or Debian's netinst images play in their own posts on this blog.</p>
+      <h2>Rocky Linux 10 or 9, three ways</h2>
+      <p>Velo Workspaces 1.2 has Rocky Linux 10 and 9 in its catalog, downloaded from rockylinux.org and checked against Rocky's published checksums:</p>
+      <ul>
+        <li><strong>Cloud image.</strong> The GenericCloud <em>Base</em> image. cloud-init creates your account and adds this Mac's SSH key on first boot, and it's ready in about a minute. Velo Workspaces uses Base rather than the LVM variant because cloud-init can grow a plain partition to the disk size you chose, but not an LVM volume.</li>
+        <li><strong>Automatic install.</strong> The Minimal or DVD ISO with <strong>Automatic installation</strong> on. As with Fedora, Anaconda finds the kickstart file on a disk labelled <code>OEMDRV</code> and installs without asking anything.</li>
+        <li><strong>By hand.</strong> The same ISOs with automatic installation off give you Anaconda's normal screens.</li>
+      </ul>
+      <p>The Minimal ISO (about 2 GB) is plenty for a VM. The DVD carries every package for offline installs and is several times larger.</p>
 
-      <h2>Not in the official-image picker — the local-file path</h2>
-      <p>Rocky isn't part of Velo Workspaces' curated official-image list. Download the Minimal ISO yourself and use "choose a local OS image file" when creating the workspace — the installer (Anaconda, the same one RHEL and Fedora both use) walks you through the rest, and it'll look immediately familiar if you've installed Fedora in a workspace already.</p>
+      <h2>What carries over from Fedora, and what doesn't</h2>
+      <p>Rocky and Fedora share a lot: <code>dnf</code>, the Anaconda installer, NetworkManager, and SELinux enforcing by default, so everything in <a href="/blog/fedora-on-apple-silicon/">the Fedora post</a> about AVC denials applies unchanged. Neither ships <code>update-binfmts</code>, so Rosetta is registered the Fedora way, through <code>systemd-binfmt</code>; the <a href="/support/">support FAQ</a> has the steps.</p>
+      <p>What differs is the release model. Rocky's packages are older by design, chosen for RHEL compatibility rather than novelty, and each major release is supported for about ten years: Rocky Linux 9 until 2032, Rocky Linux 10 until 2035.</p>
 
-      <h2>What actually carries over from the Fedora post — and what doesn't</h2>
-      <p>Rocky and Fedora share real DNA: both use <code>dnf</code> as the package manager, and both ship SELinux enforcing by default rather than the permissive-or-off defaults some distros use — the enforcement mechanics covered in <a href="/blog/fedora-on-apple-silicon/">the Fedora post</a> apply here without modification. What doesn't carry over is the release model: Rocky's packages are older and more conservative by design, chosen for compatibility with RHEL rather than for having the newest available version, and Rocky's Rosetta setup for x86-64 binaries follows RHEL's own tooling conventions rather than Fedora's, so don't assume the exact steps transfer without checking.</p>
+      <h2>A good fit for disposable workspaces</h2>
+      <p>Save a configured Rocky workspace as a base image and each test run can start from a clone of it: the same packages your production servers run, and a clean state every time. <a href="/blog/qa-devops-disposable-vm-workflow/">The QA and DevOps workflow post</a> walks through the pattern.</p>
 
-      <p>Related reading: <a href="/blog/fedora-on-apple-silicon/">Fedora on Apple Silicon</a>, the closer relative worth reading alongside this one, <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu on Apple Silicon</a> for the official-picker path this one skips, and <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment actually is</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/fedora-on-apple-silicon/">Fedora on Apple Silicon</a>, the closer relative worth reading alongside this one; <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu on Apple Silicon</a>; and <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment is</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>
@@ -151,7 +158,7 @@
         <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
       </nav>
     </div>
-    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc.</p>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc. Rocky Linux is a trademark of the Rocky Enterprise Software Foundation.</p>
   </div>
 </footer>
 

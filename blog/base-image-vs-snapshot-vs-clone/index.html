@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Base Image vs. Snapshot vs. Clone vs. Disposable Workspace</title>
-<meta name="description" content="Clone isn&#x27;t a fourth thing competing with the other three — it&#x27;s the mechanism underneath two of them.">
+<title>Base Image vs. Snapshot vs. Clone: VM Terms Explained</title>
+<meta name="description" content="Base image, snapshot, clone and disposable workspace, sorted out: what each one is, which question it answers, and how to combine them on a Mac.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/base-image-vs-snapshot-vs-clone/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Base Image vs. Snapshot vs. Clone vs. Disposable Workspace">
-<meta property="og:description" content="Clone isn&#x27;t a fourth thing competing with the other three — it&#x27;s the mechanism underneath two of them.">
+<meta property="og:title" content="Base Image vs. Snapshot vs. Clone: VM Terms Explained">
+<meta property="og:description" content="Base image, snapshot, clone and disposable workspace, sorted out: what each one is, which question it answers, and how to combine them on a Mac.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/base-image-vs-snapshot-vs-clone/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/base-image-vs-snapshot-vs-clone.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Base Image vs. Snapshot vs. Clone vs. Disposable Workspace">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "Base Image vs. Snapshot vs. Clone vs. Disposable Workspace",
+      "headline": "Base Image vs. Snapshot vs. Clone: VM Terms Explained",
       "name": "Base Image vs. Snapshot vs. Clone vs. Disposable Workspace",
-      "description": "Clone isn't a fourth thing competing with the other three — it's the mechanism underneath two of them.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "description": "Base image, snapshot, clone and disposable workspace, sorted out: what each one is, which question it answers, and how to combine them on a Mac.",
+      "image": "https://www.veloworkspaces.com/assets/og/base-image-vs-snapshot-vs-clone.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -111,43 +111,43 @@
       <div class="article-header">
         <span class="eyebrow">Fundamentals</span>
         <h1>Base Image vs. Snapshot vs. Clone vs. Disposable Workspace</h1>
-        <p class="article-lede">Four terms this blog has used across several separate posts, put in one place. The short version: "clone" isn't a fourth option alongside the other three — it's the mechanism underneath two of them. The real distinction is between base image, snapshot, and disposable workspace, which answer three genuinely different questions.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <p class="article-lede">Four terms this blog uses across several posts, in one place. The short version: "clone" isn't a fourth option next to the others; it's the mechanism under two of them. The real choice is between base image, snapshot and disposable workspace, which answer three different questions.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-      <h2>Clone is the "how," not a "what"</h2>
-      <p>Cloning, mechanically, is an APFS copy-on-write operation — <code>clonefile()</code> under the hood, near-instant because it doesn't copy data until something diverges. Velo uses it for two different purposes: creating a new workspace's disk from a sealed base image, and copying a workspace's current disk and state into a restore point. Same underlying mechanism, two different jobs. Asking "should I clone or use a base image" is really asking two separate questions at once — see <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a> for the full mechanics.</p>
+      <h2>Clone is the "how", not a "what"</h2>
+      <p>Cloning is an APFS copy-on-write operation, <code>clonefile()</code> underneath, and it's nearly instant because no data is copied until something changes. Velo Workspaces uses it for two jobs: making a new workspace's disk from a saved base image, and copying a workspace's disk and state into a restore point. Same mechanism, two jobs, so "should I clone or use a base image?" is really two questions. <a href="/blog/base-image-versioning/">Base images as versioned infrastructure</a> has the mechanics.</p>
 
-      <h2>Base image: a sealed, reusable starting point</h2>
-      <p>A base image is a deliberately frozen, immutable template — configured once, then cloned from repeatedly to create new workspaces that all start identical. It doesn't track lineage between versions, doesn't change once sealed, and exists specifically to be the known-good thing everything else starts from. Covered in full in <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>.</p>
+      <h2>Base image: a saved starting point</h2>
+      <p>A base image is a frozen template: configured once, then cloned repeatedly so new workspaces all start identical. It doesn't track versions, doesn't change once saved, and exists to be the known-good thing everything else starts from. Saving base images is part of Pro; creating workspaces from ones you already have is free. In 1.2 they live in <strong>Settings › Images › Base Images</strong>.</p>
 
-      <h2>Snapshot (restore point): a way back to one workspace's past state</h2>
-      <p>A restore point copies an <em>existing</em> workspace's current disk (and saved VM state, if hibernated) so you can return to exactly that moment later. It's tied to one specific workspace's history, not a template for creating new ones — verified against the app's own source in <a href="/blog/disposable-vm-vs-snapshot/">disposable VM vs. snapshot</a>.</p>
+      <h2>Snapshot (restore point): a way back to one workspace's past</h2>
+      <p>A restore point copies an <em>existing</em> workspace's disk (and saved state, if it was suspended) so you can return to that moment. It belongs to one workspace's history; it isn't a template for new ones. <a href="/blog/disposable-vm-vs-snapshot/">Disposable VM vs. snapshot</a> covers what it copies.</p>
 
-      <h2>Disposable workspace: no state preserved at all, by design</h2>
-      <p>Closing one deletes the whole bundle — no clone, no snapshot, nothing kept. The next workspace clones fresh from a base image, not from the one that was just destroyed. This is the opposite instinct from both of the above: <a href="/blog/what-is-a-disposable-development-environment/">disposability</a> is built around discarding on purpose, not preserving.</p>
+      <h2>Disposable workspace: nothing kept, by design</h2>
+      <p>Closing one deletes it: no clone, no snapshot, nothing kept. The next one clones fresh from a base image, not from the one just deleted. It's the opposite instinct to both of the above; <a href="/blog/what-is-a-disposable-development-environment/">disposability</a> is about discarding on purpose.</p>
 
       <h2>Side by side</h2>
       <div class="article-table-wrap">
         <table>
           <thead><tr><th></th><th>Base image</th><th>Snapshot</th><th>Disposable workspace</th></tr></thead>
           <tbody>
-            <tr><td>What it is</td><td>A sealed template</td><td>A copy of one workspace's past state</td><td>A workspace with no state kept after use</td></tr>
-            <tr><td>Uses cloning?</td><td>Is cloned from</td><td>Created and restored via cloning</td><td>Not involved at all</td></tr>
-            <tr><td>Tied to one workspace?</td><td>No — a shared starting point for many</td><td>Yes — one specific workspace's history</td><td>N/A — nothing persists to be tied to</td></tr>
-            <tr><td>Answers</td><td>"What should every new workspace start from?"</td><td>"Can I get back to where this workspace was?"</td><td>"Can I guarantee nothing carries over?"</td></tr>
+            <tr><td>What it is</td><td>A saved template</td><td>A copy of one workspace's past state</td><td>A workspace that keeps nothing after use</td></tr>
+            <tr><td>Uses cloning?</td><td>Is cloned from</td><td>Created and restored by cloning</td><td>Not involved</td></tr>
+            <tr><td>Tied to one workspace?</td><td>No: a shared start for many</td><td>Yes: one workspace's history</td><td>Nothing persists to be tied to</td></tr>
+            <tr><td>Answers</td><td>"What should every new workspace start from?"</td><td>"Can I get back to where this workspace was?"</td><td>"Can I be sure nothing carries over?"</td></tr>
           </tbody>
         </table>
       </div>
 
-      <h2>Picking the right one</h2>
-      <p>Want every new workspace to start from the same known-good setup? Base image. Want to rewind one specific workspace you're actively working in? Snapshot. Want a guarantee that nothing from this run persists at all? Disposable workspace, with no snapshot in the picture. Building a workflow around <a href="/blog/one-vm-per-git-branch/">one workspace per Git branch</a> uses all three at once: a shared base image every branch clones from, snapshots as optional checkpoints inside a long-running branch, and disposal when the branch itself is done.</p>
+      <h2>Picking one</h2>
+      <p>Want every new workspace to start from the same setup? Base image. Want to rewind one workspace you're working in? Snapshot. Want a guarantee that nothing from this run survives? Disposable workspace, with no snapshot involved. <a href="/blog/one-vm-per-git-branch/">One workspace per Git branch</a> uses all three: a shared base image every branch clones from, snapshots as optional checkpoints in a long-running branch, and disposal when the branch is done.</p>
 
-      <p>Related reading: <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>, <a href="/blog/disposable-vm-vs-snapshot/">disposable VM vs. snapshot</a>, and <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment actually is</a>. Cloning being nearly free on disk is also exactly why running several workspaces at once costs a lot less storage than it looks like — see <a href="/blog/how-many-linux-vms-apple-silicon/">how many VMs you can realistically run at once</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>, <a href="/blog/disposable-vm-vs-snapshot/">disposable VM vs. snapshot</a>, and, because clones cost almost nothing on disk, <a href="/blog/how-many-linux-vms-apple-silicon/">how many VMs you can run at once</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

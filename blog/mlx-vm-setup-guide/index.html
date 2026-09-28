@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Run an AI Agent in a Linux VM with Local LLMs on macOS</title>
-<meta name="description" content="A practical setup guide: MLX on the host, a disposable Linux VM for the OpenCode agent, and a vsock bridge that connects them at near-native speed.">
+<title>MLX + OpenCode in a Linux VM on Mac: Setup Guide</title>
+<meta name="description" content="Set up MLX on your Mac, an Ubuntu VM from the cloud image, and OpenCode inside it over AI Bridge: a fully local AI coding agent at near-native speed.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/mlx-vm-setup-guide/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Run an AI Agent in a Linux VM with Local LLMs on macOS">
-<meta property="og:description" content="A practical setup guide: MLX on the host, a disposable Linux VM for the OpenCode agent, and a vsock bridge that connects them at near-native speed.">
+<meta property="og:title" content="MLX + OpenCode in a Linux VM on Mac: Setup Guide">
+<meta property="og:description" content="Set up MLX on your Mac, an Ubuntu VM from the cloud image, and OpenCode inside it over AI Bridge: a fully local AI coding agent at near-native speed.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/mlx-vm-setup-guide/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/mlx-vm-setup-guide.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Run an AI Agent Inside a Linux VM with Local LLMs on macOS at Near-Native Performance">
+<meta property="og:image:alt" content="Run an AI Agent Inside a Linux VM with Local LLMs on macOS at Near-Native Speed">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-13">
-<meta property="article:modified_time" content="2026-09-23">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "Run an AI Agent in a Linux VM with Local LLMs on macOS",
-      "name": "Run an AI Agent Inside a Linux VM with Local LLMs on macOS at Near-Native Performance",
-      "description": "A practical setup guide: MLX on the host, a disposable Linux VM for the OpenCode agent, and a vsock bridge that connects them at near-native speed.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "headline": "MLX + OpenCode in a Linux VM on Mac: Setup Guide",
+      "name": "Run an AI Agent Inside a Linux VM with Local LLMs on macOS at Near-Native Speed",
+      "description": "Set up MLX on your Mac, an Ubuntu VM from the cloud image, and OpenCode inside it over AI Bridge: a fully local AI coding agent at near-native speed.",
+      "image": "https://www.veloworkspaces.com/assets/og/mlx-vm-setup-guide.jpg",
       "datePublished": "2026-09-13",
-      "dateModified": "2026-09-23",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -72,7 +72,7 @@
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "Run an AI Agent Inside a Linux VM with Local LLMs on macOS at Near-Native Performance",
+          "name": "Run an AI Agent Inside a Linux VM with Local LLMs on macOS at Near-Native Speed",
           "item": "https://www.veloworkspaces.com/blog/mlx-vm-setup-guide/"
         }
       ]
@@ -110,145 +110,132 @@
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Setup guide</span>
-        <h1>Run an AI Agent Inside a Linux VM with Local LLMs on macOS at Near-Native Performance</h1>
-        <p class="article-lede">A practical setup guide: MLX on the host, a disposable Linux VM for the agent OpenCode, and a vsock bridge that connects them at near-native speed — a fully local deployment.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-13">September 13, 2026</time> · Updated <time datetime="2026-09-23">September 23, 2026</time></p>
+        <h1>Run an AI Agent Inside a Linux VM with Local LLMs on macOS at Near-Native Speed</h1>
+        <p class="article-lede">A practical setup guide: MLX on the Mac, an isolated Linux VM for the OpenCode agent, and a vsock bridge between them at near-native speed. Everything stays on your own machine.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-13">September 13, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-      <h2>Why run an AI agent in a VM on macOS</h2>
-      <p>If you've used an AI coding agent — Open Interpreter, a LangChain agent, Claude Code, anything that executes LLM-generated code via <code>subprocess</code>/<code>exec()</code> — you've implicitly accepted that it can do anything your user account can do. That's not a hypothetical risk: Docker's own engineering blog has documented real <a href="https://www.docker.com/blog/ai-coding-agent-horror-stories-security-risks/" target="_blank" rel="noopener">AI coding agent security incidents</a>, and indirect prompt injection makes it worse than "the agent might make a mistake," because a malicious instruction hidden in a file the agent reads can trigger commands with your full permissions, not just the ones you asked for.</p>
+      <h2>Why run an AI agent in a VM</h2>
+      <p>If you've used an AI coding agent, whether Open Interpreter, a LangChain agent, Claude Code or anything else that runs generated code, you've accepted that it can do anything your user account can. That's not hypothetical: Docker's engineering blog has documented <a href="https://www.docker.com/blog/ai-coding-agent-horror-stories-security-risks/" target="_blank" rel="noopener">real AI coding agent incidents</a>. Indirect prompt injection makes it worse than "the agent might make a mistake", because an instruction hidden in a file the agent reads can run commands with all your permissions.</p>
+      <p>The fix is a VM, which gives you a hardware-enforced boundary. <a href="/blog/ai-agent-security-risks/">What's gone wrong in practice</a> covers why permission prompts and command allowlists haven't been enough.</p>
 
-      <p>The obvious fix is to run the agent in a VM — it provides a true hardware-isolated boundary. See <a href="/blog/ai-agent-security-risks/">what's actually gone wrong in production</a> and why a permission prompt or command allowlist alone hasn't been enough to stop it.</p>
-
-      <h2>Choosing a VM app</h2>
-      <p>Apple's Virtualization.framework doesn't expose the host GPU to a Linux guest. Run your model inside the VM under that constraint and you're CPU-bound only, which for a 7B+ model is a real, felt slowdown, not a minor inconvenience. So the actual goal of this guide is narrower than "put the agent in a VM": keep the model on the host's GPU, keep only the agent's code execution inside the VM, and connect the two fast enough that the split doesn't cost you anything you'd notice. Velo Workspaces has a fast, purpose-built channel, AI Bridge, for exactly this split.</p>
-      <p style="font-size:0.9rem; color:var(--color-text-secondary);"><em>Update, September 2026: that constraint is currently true, not permanently true. The <a href="https://github.com/trycua/cua" target="_blank" rel="noopener">Cua</a> project has since published a software shim that spoofs GPU-capability flags and gets real, benchmarked speedups out of a Linux guest without any change from Apple — a workaround for one inference engine, not official passthrough, but worth knowing about.</em></p>
+      <h2>Keep the model out of the VM</h2>
+      <p>Apple's Virtualization framework doesn't give Linux guests the Mac's GPU. Run the model inside the VM and it's CPU-only, which for a 7B+ model is a slowdown you feel. So the goal is narrower than "put the agent in a VM": keep the model on the Mac's GPU, move only the agent's code execution into the VM, and connect them fast enough that the split costs nothing noticeable. Velo Workspaces' AI Bridge is a channel built for exactly that.</p>
+      <p style="font-size:0.9rem; color:var(--color-text-secondary);"><em>September 2026: that limit is current, not permanent. The <a href="https://github.com/trycua/cua" target="_blank" rel="noopener">Cua</a> project has published a software workaround that reports benchmarked speedups for one inference engine inside a Linux guest. It isn't official GPU passthrough, but it's worth watching.</em></p>
 
       <figure>
         <pre><code>┌───────────────────────────────────────────────────────────────────┐
-│                            macOS HOST                             │
-│                                                                   │
-│      Ollama / MLX Engine   ───►  Storage: ~/.ollama/models        │
-│      (Native Metal GPU)          (single 10GB–50GB copy)          │
-│              ▲                                                    │
-│              │  Velo Workspaces AI Bridge                         │
-│              │  proxies to localhost:&lt;port&gt;                       │
-│              ▼                                                    │
-│      ┌─────────────────────────────────────────────────────┐      │
-│      │                     LINUX VM                        │      │
-│      │  socat 127.0.0.1:&lt;port&gt;  ⇄  vsock CID 2             │      │
-│      │  Env: OPENAI_API_BASE=http://127.0.0.1:&lt;port&gt;/v1    │      │
-│      │  Dev apps / Docker containers / VS Code / Python    │      │
-│      └─────────────────────────────────────────────────────┘      │
-└───────────────────────────────────────────────────────────────────┘</code></pre>
-        <figcaption>The model stays on the host GPU; only the agent's code execution moves into the VM. AI Bridge is the vsock channel connecting them.</figcaption>
+      │                            macOS HOST                             │
+      │                                                                   │
+      │      Ollama / MLX Engine   ───►  Storage: ~/.ollama/models        │
+      │      (Native Metal GPU)          (single 10GB–50GB copy)          │
+      │              ▲                                                    │
+      │              │  Velo Workspaces AI Bridge                         │
+      │              │  proxies to localhost:&lt;port&gt;                       │
+      │              ▼                                                    │
+      │      ┌─────────────────────────────────────────────────────┐      │
+      │      │                     LINUX VM                        │      │
+      │      │  socat 127.0.0.1:&lt;port&gt;  ⇄  vsock CID 2             │      │
+      │      │  Env: OPENAI_API_BASE=http://127.0.0.1:&lt;port&gt;/v1    │      │
+      │      │  Dev apps / Docker containers / VS Code / Python    │      │
+      │      └─────────────────────────────────────────────────────┘      │
+      └───────────────────────────────────────────────────────────────────┘</code></pre>
+        <figcaption>The model stays on the Mac's GPU; only the agent's code execution moves into the VM. AI Bridge is the vsock channel between them.</figcaption>
       </figure>
 
       <h2>Setup</h2>
-      <p style="font-size:0.9rem; color:var(--color-text-secondary);"><em>Note: as of Ollama 0.19 (March 2026), Ollama itself runs on MLX under the hood on Macs with 32GB+ unified memory. This guide installs MLX directly regardless, since AI Bridge's Host Provider setting works the same way either way.</em></p>
-      <h3>Install an MLX server on the host</h3>
-      <p>To install <a href="https://github.com/ml-explore/mlx" target="_blank" rel="noopener">MLX</a> on macOS, you must first install a modern version of Python (3.10 or newer) using Homebrew. The Python version bundled with macOS developer tools is outdated.</p>
+      <p style="font-size:0.9rem; color:var(--color-text-secondary);"><em>Since Ollama 0.19 (March 2026), Ollama runs on MLX underneath on Macs with 32 GB or more. This guide installs MLX directly either way; AI Bridge's Host Provider setting works the same for both.</em></p>
 
-      <p>Install Homebrew (if you don't have it):</p>
+      <h3>1. Install an MLX server on the Mac</h3>
+      <p><a href="https://github.com/ml-explore/mlx" target="_blank" rel="noopener">MLX</a> needs Python 3.10 or newer; the Python that comes with Apple's developer tools is too old, so install one with Homebrew.</p>
+      <p>Install Homebrew if you don't have it:</p>
       <pre><code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code></pre>
-
-      <p>Install Python 3.12 and create a virtual environment.</p>
+      <p>Install Python 3.12 and create a virtual environment:</p>
       <pre><code>brew install python@3.12
-python3.12 -m venv ~/.venv</code></pre>
-
-      <p>Install MLX-LM via pip and run the local server inside the virtual environment.</p>
+      python3.12 -m venv ~/.venv</code></pre>
+      <p>Install MLX-LM and start the server inside the virtual environment:</p>
       <pre><code>source ~/.venv/bin/activate
-pip install --upgrade pip
-pip install mlx-lm
-mlx_lm.server --model mlx-community/Qwen2.5-Coder-7B-Instruct-4bit --port 8080</code></pre>
+      pip install --upgrade pip
+      pip install mlx-lm
+      mlx_lm.server --model mlx-community/Qwen2.5-Coder-7B-Instruct-4bit --port 8080</code></pre>
 
-      <h3>Create the VM</h3>
-      <p>Open the Velo Workspaces app, choose AI Workspace in the sidebar, click + in the upper right and pick an image source: download an official image, choose a local OS image file, or boot from an existing virtual disk. Let's pick Ubuntu Server 26.04 as an example, which boots faster and uses less RAM for the OS itself.</p>
-
-      <p>Then choose the AI Sandbox profile, click "Show Advanced Settings", configure CPU, memory and storage size, ensure AI Bridge is selected and Host Provider is <strong>MLX</strong>.</p>
+      <h3>2. Create the workspace</h3>
+      <p>In Velo Workspaces, choose <strong>AI Workspace</strong> in the sidebar and click <strong>+</strong> in the upper right. Choose <strong>Cloud image</strong> and <strong>Ubuntu 26.04 LTS</strong>: it's Ubuntu Server, light on memory, and ready about a minute after it downloads, with no installer to go through.</p>
+      <p>On the Configure step, choose the <strong>AI Sandbox</strong> profile, open <strong>Show Advanced Settings</strong>, set CPU, memory and disk, and make sure <strong>AI Bridge</strong> is on with <strong>Host Provider</strong> set to <strong>MLX</strong>. Enter a username and password, then click <strong>Create Workspace</strong>.</p>
 
       <figure>
         <img src="/assets/blog/ai_workspace_config.png" alt="Velo Workspaces New Workspace wizard, Configure step: AI Sandbox profile selected (8 CPU · 16 GB), CPU Cores/Memory/Storage set to 4/4/64, and AI Bridge enabled with Host Provider set to MLX.">
-        <figcaption>An example AI Sandbox configuration for an MLX-backed workspace: AI Bridge enabled, Host Provider set to MLX.</figcaption>
+        <figcaption>An AI Sandbox configuration for an MLX-backed workspace: AI Bridge on, Host Provider set to MLX.</figcaption>
       </figure>
 
-      <p>Click Continue to install the guest OS.</p>
-
-      <h3>Configure AI Bridge inside the VM</h3>
-      <p>After the guest OS finished the installation, open a terminal of the guest OS, or SSH into the guest OS, install <code>socat</code> and create a service to forward the traffic on <code>127.0.0.1:8080</code> into AI Bridge.</p>
+      <h3>3. Connect AI Bridge inside the VM</h3>
+      <p>When the workspace is ready, open its <strong>Access</strong> tab and click <strong>Open Terminal</strong> (Pro), or copy the <code>ssh</code> command into Terminal (it uses your own SSH key, so add your public key when you create the workspace). Then install <code>socat</code> and add a service that forwards <code>127.0.0.1:8080</code> into AI Bridge. (The workspace's <strong>AI Bridge</strong> tab shows these commands with a Copy button.)</p>
       <pre><code>sudo apt update
-sudo apt install -y socat
-sudo tee /etc/systemd/system/velo-ai-bridge.service >/dev/null &lt;&lt;'EOF'
-[Unit]
-Description=Velo Workspaces AI Bridge (127.0.0.1:8080 to the host over the high speed channel)
-After=network.target
+      sudo apt install -y socat
+      sudo tee /etc/systemd/system/velo-ai-bridge.service >/dev/null &lt;&lt;'EOF'
+      [Unit]
+      Description=Velo Workspaces AI Bridge (127.0.0.1:8080 to the host over the high speed channel)
+      After=network.target
 
-[Service]
-ExecStart=/usr/bin/socat TCP-LISTEN:8080,fork,reuseaddr,bind=127.0.0.1 VSOCK-CONNECT:2:8080
-Restart=always
-RestartSec=2
+      [Service]
+      ExecStart=/usr/bin/socat TCP-LISTEN:8080,fork,reuseaddr,bind=127.0.0.1 VSOCK-CONNECT:2:8080
+      Restart=always
+      RestartSec=2
 
-[Install]
-WantedBy=multi-user.target
-EOF
-sudo systemctl daemon-reload
-sudo systemctl enable velo-ai-bridge
-sudo systemctl restart velo-ai-bridge</code></pre>
+      [Install]
+      WantedBy=multi-user.target
+      EOF
+      sudo systemctl daemon-reload
+      sudo systemctl enable velo-ai-bridge
+      sudo systemctl restart velo-ai-bridge</code></pre>
 
-      <h3>Install OpenCode in the VM</h3>
-      <p>Install <code>curl</code> along with <code>git</code> and <code>build-essential</code> (which OpenCode often leverages when compiling or managing local repositories), then install the <a href="https://opencode.ai" target="_blank" rel="noopener">OpenCode</a> terminal agent using its official standalone shell script — the fastest universal way to get it running on Ubuntu:</p>
+      <h3>4. Install OpenCode in the VM</h3>
+      <p>Install <code>curl</code>, <code>git</code> and <code>build-essential</code> (which OpenCode uses when building and managing repositories), then install <a href="https://opencode.ai" target="_blank" rel="noopener">OpenCode</a> with its official install script:</p>
       <pre><code>sudo apt install -y curl git build-essential
-curl -fsSL https://opencode.ai/install | bash</code></pre>
-
-      <p>After the script finishes, update your current shell environment so your system recognizes the new <code>opencode</code> binary path:</p>
+      curl -fsSL https://opencode.ai/install | bash</code></pre>
+      <p>Reload your shell so it finds the new <code>opencode</code> command:</p>
       <pre><code>source ~/.bashrc</code></pre>
-
       <p>Create the configuration file:</p>
       <pre><code>mkdir -p ~/.config/opencode
-nano ~/.config/opencode/opencode.json</code></pre>
-
-      <p>Paste the configuration below into the file.</p>
+      nano ~/.config/opencode/opencode.json</code></pre>
+      <p>Paste in this configuration:</p>
       <pre><code>{
-  "$schema": "https://opencode.ai/config.json",
-  "provider": {
-    "mlx-local": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "MLX Local Server",
-      "options": {
-        "baseURL": "http://127.0.0.1:8080/v1"
-      },
-      "models": {
-        "mlx-community/Qwen2.5-Coder-7B-Instruct-4bit": {
-          "name": "Qwen 2.5 Coder 7B (4-bit)"
-        }
-      }
-    }
-  },
-  "model": "mlx-local/mlx-community/Qwen2.5-Coder-7B-Instruct-4bit"
-}</code></pre>
-
-      <p>Launch OpenCode:</p>
+        "$schema": "https://opencode.ai/config.json",
+        "provider": {
+          "mlx-local": {
+            "npm": "@ai-sdk/openai-compatible",
+            "name": "MLX Local Server",
+            "options": {
+              "baseURL": "http://127.0.0.1:8080/v1"
+            },
+            "models": {
+              "mlx-community/Qwen2.5-Coder-7B-Instruct-4bit": {
+                "name": "Qwen 2.5 Coder 7B (4-bit)"
+              }
+            }
+          }
+        },
+        "model": "mlx-local/mlx-community/Qwen2.5-Coder-7B-Instruct-4bit"
+      }</code></pre>
+      <p>Start OpenCode:</p>
       <pre><code>opencode</code></pre>
-
-      <p>Once inside the OpenCode terminal user interface (TUI), open the connection wizard by typing:</p>
+      <p>In OpenCode's terminal interface, open the connection wizard:</p>
       <pre><code>/connect</code></pre>
-
-      <p>Type <strong>MLX Local Server</strong> and select it, and when prompted for an API key, simply type <strong>mlx</strong>.</p>
-
-      <p>Now you have a fully local AI agent — both the underlying LLM and the agent entirely on your own hardware, for absolute privacy and zero API cost.</p>
+      <p>Select <strong>MLX Local Server</strong>, and when it asks for an API key, type <strong>mlx</strong>.</p>
+      <p>That's a fully local AI agent: the model and the agent both on your own hardware, private, with no API bill.</p>
 
       <figure>
         <img src="/assets/blog/opencode-mlx-screenshot.png" alt="OpenCode terminal UI inside the VM, connected to the MLX Local Server provider, generating and running a Python script for the 1000th Fibonacci number using Qwen 2.5 Coder 7B (4-bit).">
-        <figcaption>OpenCode running inside the VM, talking to Qwen 2.5 Coder 7B over AI Bridge's MLX Local Server connection.</figcaption>
+        <figcaption>OpenCode in the VM, talking to Qwen 2.5 Coder 7B over AI Bridge.</figcaption>
       </figure>
 
       <hr style="border:none; border-top:1px solid var(--color-border); margin:32px 0;">
 
-      <p>Curious what this setup actually costs in raw inference speed? See the full <a href="/blog/vm-inference-benchmark/">MLX benchmark write-up</a>, or read the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>. For more on the Ubuntu Server image used above specifically, see <a href="/blog/ubuntu-on-apple-silicon/">what's different about running it on Apple Silicon</a>. MLX is one of four backends AI Bridge actually supports — see the <a href="/blog/ai-researchers-agent-testing/">full provider list and a real gotcha</a> when switching between them. Or just <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>What does this cost in inference speed? See the <a href="/blog/vm-inference-benchmark/">MLX benchmark</a>, or read the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>. For the full version with Ollama and three more agents, see <a href="/blog/zero-tax-virtualization/">the complete guide</a>. AI Bridge supports four backends, and <a href="/blog/ai-researchers-agent-testing/">the AI researchers post</a> lists them, with a gotcha when switching between them. Or just <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

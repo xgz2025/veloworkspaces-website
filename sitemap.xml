@@ -519,403 +519,409 @@
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/</loc>
-    <lastmod>2026-09-23</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.veloworkspaces.com/blog/whats-new-in-velo-workspaces-1-2/</loc>
+    <lastmod>2026-09-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.veloworkspaces.com/blog/zero-tax-virtualization/</loc>
-    <lastmod>2026-09-23</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/modern-local-development-stack-apple-silicon/</loc>
-    <lastmod>2026-09-23</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/apple-silicon-vms-explained/</loc>
-    <lastmod>2026-09-23</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/how-virtualization-framework-works/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/linux-vm-networking-apple-silicon/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/virtualization-framework-vs-qemu/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/vm-vs-container-vs-sandbox/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/arm64-vs-x86-apple-silicon/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/why-arm-vms-feel-native/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/best-linux-distro-apple-silicon/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/ubuntu-on-apple-silicon/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/debian-on-apple-silicon/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/fedora-on-apple-silicon/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/arch-linux-on-apple-silicon/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/kali-linux-on-apple-silicon/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/rocky-linux-on-apple-silicon/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/linux-server-vs-desktop-vm-mac/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/macos-guests-on-apple-silicon/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/rosetta-2-linux-vms-explained/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/can-you-run-x86-linux-on-apple-silicon/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/running-x86-docker-images-arm64-mac/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/arm64-linux-compatibility-problems/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/local-llms-apple-silicon/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/llm-ram-requirements-mac/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/llm-quantization-explained-mac/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/mlx-vm-setup-guide/</loc>
-    <lastmod>2026-09-23</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/vscode-continue-ai-bridge/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/claude-code-ai-bridge-setup/</loc>
-    <lastmod>2026-09-23</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/ai-bridge-architecture/</loc>
-    <lastmod>2026-09-23</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/ai-researchers-agent-testing/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/ai-bridge-data-privacy/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/local-vs-cloud-llm-coding-agents/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/what-is-a-disposable-development-environment/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/disposable-vm-vs-snapshot/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/base-image-vs-snapshot-vs-clone/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/software-engineers-disposable-workspaces/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/one-vm-per-git-branch/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/qa-devops-disposable-vm-workflow/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/clean-room-bug-reproduction/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/disposable-vms-untrusted-software/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/disposable-workspaces-devops-ci/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/base-image-versioning/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/guest-os-performance-tuning/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/how-ai-coding-agents-use-your-computer/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/what-can-ai-agents-access-on-your-mac/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/can-you-trust-ai-agents-with-git/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/ai-agent-security-risks/</loc>
-    <lastmod>2026-09-23</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/safe-local-ai-agent-environment-checklist/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/vm-sandboxing-cost/</loc>
-    <lastmod>2026-09-23</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/vm-inference-benchmark/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/arm-virtualization-performance/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/linux-vm-cpu-performance-apple-silicon/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/linux-vm-disk-performance-apple-silicon/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/linux-vm-network-performance-apple-silicon/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/how-much-memory-linux-vm-mac/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/how-many-linux-vms-apple-silicon/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/vm-startup-performance-apple-silicon/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/velo-vs-parallels-vs-utm/</loc>
-    <lastmod>2026-09-23</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/velo-vs-docker-desktop-vs-orbstack/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/apple-containers-vs-linux-vms/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/apple-containers-vs-docker-vs-orbstack/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/velo-vs-codespaces-vs-ona/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/local-vs-cloud-development-environments/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/windows-on-apple-silicon/</loc>
-    <lastmod>2026-09-23</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/migrating-to-velo-workspaces/</loc>
-    <lastmod>2026-09-23</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

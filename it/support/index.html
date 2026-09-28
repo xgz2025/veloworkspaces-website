@@ -7,7 +7,7 @@
 <meta name="description" content="Crea una VM Linux da un’immagine cloud o da una ISO, apri il terminale SSH, monta le cartelle condivise e attiva Rosetta su Debian e Fedora.">
 <link rel="canonical" href="https://www.veloworkspaces.com/it/support/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/">
 <link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/">
 <link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/">
@@ -264,7 +264,7 @@
         <details class="faq-item">
           <summary>Posso usare il mio terminale o VS Code, o collegarmi da un altro computer?</summary>
           <div class="faq-answer">
-            <p>Sì, ed è gratis. La scheda “Accesso” mostra l’indirizzo del workspace con un comando ssh pronto da copiare, e il blocco ~/.ssh/config per l’estensione Remote - SSH di VS Code.</p>
+            <p>Sì, ed è gratis. La scheda “Accesso” mostra l’indirizzo del workspace con un comando ssh pronto da copiare, e il blocco ~/.ssh/config per l’estensione Remote - SSH di VS Code. Usano la tua chiave SSH, non quella che il terminale integrato conserva nel Portachiavi: incolla la tua chiave pubblica in “Chiavi pubbliche SSH” quando crei il workspace, oppure attiva “Consenti l’accesso SSH con la password”.</p>
             <p>Gli altri computer raggiungono un workspace passando dal tuo Mac, perché i workspace si trovano su una rete privata al suo interno. Attiva “Login remoto” in Impostazioni di Sistema › Generali › Condivisione, poi usa il comando <code>ssh -J</code> mostrato nella scheda “Accesso”.</p>
           </div>
         </details>

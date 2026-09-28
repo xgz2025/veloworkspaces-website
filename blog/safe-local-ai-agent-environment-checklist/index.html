@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How to Build a Safe Local AI Agent Environment</title>
-<meta name="description" content="A checklist, not another explainer. Eight concrete things to get right before you let an agent run generated code against your Mac.">
+<title>Safe Local AI Agent Setup on a Mac: A Checklist</title>
+<meta name="description" content="A checklist for running AI coding agents safely on a Mac: a disposable VM, a known-good image, minimal credentials and folders, and a local model.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/safe-local-ai-agent-environment-checklist/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="How to Build a Safe Local AI Agent Environment">
-<meta property="og:description" content="A checklist, not another explainer. Eight concrete things to get right before you let an agent run generated code against your Mac.">
+<meta property="og:title" content="Safe Local AI Agent Setup on a Mac: A Checklist">
+<meta property="og:description" content="A checklist for running AI coding agents safely on a Mac: a disposable VM, a known-good image, minimal credentials and folders, and a local model.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/safe-local-ai-agent-environment-checklist/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/safe-local-ai-agent-environment-checklist.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="How to Build a Safe Local AI Agent Environment">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "How to Build a Safe Local AI Agent Environment",
+      "headline": "Safe Local AI Agent Setup on a Mac: A Checklist",
       "name": "How to Build a Safe Local AI Agent Environment",
-      "description": "A checklist, not another explainer. Eight concrete things to get right before you let an agent run generated code against your Mac.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "description": "A checklist for running AI coding agents safely on a Mac: a disposable VM, a known-good image, minimal credentials and folders, and a local model.",
+      "image": "https://www.veloworkspaces.com/assets/og/safe-local-ai-agent-environment-checklist.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -111,8 +111,8 @@
       <div class="article-header">
         <span class="eyebrow">Checklist</span>
         <h1>How to Build a Safe Local AI Agent Environment</h1>
-        <p class="article-lede">Everything else on this blog about AI agent security explains <em>why</em>. This is deliberately the other format: a checklist, in the order to actually think about it, each item linking to the reasoning instead of repeating it.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <p class="article-lede">Everything else on this blog about AI agent security explains <em>why</em>. This is the other format: a checklist, in the order to think about it, each item linking to the reasoning rather than repeating it.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
@@ -121,34 +121,40 @@
     <div class="container article-body">
       <h2>Before you run anything</h2>
       <ul>
-        <li><strong>Know the mechanism isn't special.</strong> An agent's process gets the same OS-level permissions as the account that launched it — no separate, more restricted tier exists. See <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents use your computer</a>.</li>
-        <li><strong>Know what's actually reachable.</strong> SSH keys, cloud credentials, GitHub CLI tokens, shell history, project <code>.env</code> files — a concrete inventory, not a guess. See <a href="/blog/what-can-ai-agents-access-on-your-mac/">what can an AI coding agent actually access</a>.</li>
+        <li><strong>Know the mechanism isn't special.</strong> An agent's process gets the same permissions as the account that started it; there's no restricted tier. See <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents use your computer</a>.</li>
+        <li><strong>Know what's reachable.</strong> SSH keys, cloud credentials, GitHub CLI tokens, shell history, project <code>.env</code> files. See <a href="/blog/what-can-ai-agents-access-on-your-mac/">what an AI coding agent can access</a>.</li>
       </ul>
 
       <h2>Choosing the environment</h2>
       <ul>
-        <li><strong>Run it in a VM, not a container alone.</strong> A container shares the host kernel; a VM's boundary holds even against a kernel-level compromise inside the guest. See <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a> and <a href="/blog/ai-agent-security-risks/">the isolation-level evidence</a>.</li>
-        <li><strong>Make it disposable, not persistent.</strong> A successful compromise, an accidentally installed Git hook, a leftover credential in shell history — none of it should outlive the session that caused it. See <a href="/blog/what-is-a-disposable-development-environment/">what is a disposable development environment</a>.</li>
-        <li><strong>Start every session from a known-good base image, not a hand-configured one.</strong> A disposable environment only stays fast and consistent if recreating it is cheap. See <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>.</li>
+        <li><strong>Use a VM, not just a container.</strong> A container shares the host's kernel; a VM's boundary holds even against a kernel-level compromise in the guest. See <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a> and <a href="/blog/ai-agent-security-risks/">the incident evidence</a>.</li>
+        <li><strong>Make it disposable.</strong> A compromise, an accidentally installed Git hook, a credential left in shell history: none of it should outlive the session. See <a href="/blog/what-is-a-disposable-development-environment/">what is a disposable development environment</a>.</li>
+        <li><strong>Start every session from a known-good image.</strong> Disposability only sticks if recreating is cheap. A fresh cloud image of Ubuntu or Debian is ready in about a minute; a saved base image with your tools is ready in seconds. See <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>.</li>
+      </ul>
+
+      <h2>What goes into the workspace</h2>
+      <ul>
+        <li><strong>Share only the project folder,</strong> not your home folder. Anything shared into the guest is reachable from it.</li>
+        <li><strong>Don't copy your own SSH keys or cloud credentials in.</strong> Give the workspace narrowly scoped tokens for the task. The key Velo Workspaces uses for its built-in terminal lets you in; it doesn't let the guest out to anything else.</li>
       </ul>
 
       <h2>If the agent touches a real Git repository</h2>
       <ul>
-        <li><strong>Don't assume a fresh clone's hooks are inert.</strong> A repository using Husky, <code>pre-commit</code>, or Lefthook can install hooks as a normal part of its own setup instructions. See <a href="/blog/can-you-trust-ai-agents-with-git/">can you trust an AI coding agent with your Git repository</a>.</li>
+        <li><strong>Don't assume a fresh clone's hooks are inert.</strong> A repository using Husky, <code>pre-commit</code> or Lefthook can install hooks during its own setup. See <a href="/blog/can-you-trust-ai-agents-with-git/">can you trust an AI coding agent with your Git repository</a>.</li>
       </ul>
 
       <h2>Running a model alongside the agent</h2>
       <ul>
-        <li><strong>Keep the model on the host, the agent in the guest.</strong> Splitting them is what gets you real isolation without giving up GPU speed. See <a href="/blog/zero-tax-virtualization/">the complete AI agent guide</a> and <a href="/blog/ai-bridge-architecture/">the architecture behind it</a>.</li>
+        <li><strong>Keep the model on the Mac and the agent in the guest.</strong> Splitting them gives you isolation without giving up GPU speed. See <a href="/blog/zero-tax-virtualization/">the complete AI agent guide</a> and <a href="/blog/ai-bridge-architecture/">the architecture behind it</a>.</li>
       </ul>
 
-      <h2>The two that aren't about the environment at all</h2>
+      <h2>Two that aren't about the environment</h2>
       <ul>
-        <li><strong>Scope what data and long-lived credentials the session can reach, separately from execution isolation.</strong> A perfectly isolated VM doesn't help if the model itself can be talked into handing over something it was already allowed to see.</li>
-        <li><strong>Don't rely on prompt-injection defenses holding.</strong> Treat isolation as the thing that has to work even when a defense doesn't, not the second line behind it.</li>
+        <li><strong>Limit what data and long-lived credentials the session can reach,</strong> separately from execution isolation. A perfectly isolated VM doesn't help if the model can be talked into handing over something it was allowed to see.</li>
+        <li><strong>Don't count on prompt-injection defenses holding.</strong> Treat isolation as the thing that must work when a defense doesn't, not a second line behind it.</li>
       </ul>
 
-      <p>Related reading: <a href="/blog/ai-agent-security-risks/">what actually goes wrong when an agent runs unsandboxed</a>, <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents use your computer</a>, and <a href="/blog/zero-tax-virtualization/">running AI agents safely in an isolated VM</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/ai-agent-security-risks/">what goes wrong when an agent runs unsandboxed</a>, <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents use your computer</a>, and <a href="/blog/zero-tax-virtualization/">running AI agents safely in an isolated VM</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

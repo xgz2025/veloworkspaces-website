@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Linux VM CPU Performance on Apple Silicon</title>
-<meta name="description" content="Every vCPU behaves like a P-core-priority thread on the host — there&#x27;s no way to put a virtual CPU on an efficiency core.">
+<title>How Many vCPUs Should a Linux VM Get on Apple Silicon?</title>
+<meta name="description" content="Every vCPU in a Mac VM runs like a P-core thread, never on an E-core. How macOS schedules virtual CPUs, why more isn&#x27;t always faster, and what to choose.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/linux-vm-cpu-performance-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Linux VM CPU Performance on Apple Silicon">
-<meta property="og:description" content="Every vCPU behaves like a P-core-priority thread on the host — there&#x27;s no way to put a virtual CPU on an efficiency core.">
+<meta property="og:title" content="How Many vCPUs Should a Linux VM Get on Apple Silicon?">
+<meta property="og:description" content="Every vCPU in a Mac VM runs like a P-core thread, never on an E-core. How macOS schedules virtual CPUs, why more isn&#x27;t always faster, and what to choose.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/linux-vm-cpu-performance-apple-silicon/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/linux-vm-cpu-performance-apple-silicon.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Linux VM CPU Performance on Apple Silicon: How Core Allocation Actually Works">
+<meta property="og:image:alt" content="Linux VM CPU Performance on Apple Silicon: How Core Allocation Works">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "Linux VM CPU Performance on Apple Silicon",
-      "name": "Linux VM CPU Performance on Apple Silicon: How Core Allocation Actually Works",
-      "description": "Every vCPU behaves like a P-core-priority thread on the host — there's no way to put a virtual CPU on an efficiency core.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "headline": "How Many vCPUs Should a Linux VM Get on Apple Silicon?",
+      "name": "Linux VM CPU Performance on Apple Silicon: How Core Allocation Works",
+      "description": "Every vCPU in a Mac VM runs like a P-core thread, never on an E-core. How macOS schedules virtual CPUs, why more isn't always faster, and what to choose.",
+      "image": "https://www.veloworkspaces.com/assets/og/linux-vm-cpu-performance-apple-silicon.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -72,7 +72,7 @@
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "Linux VM CPU Performance on Apple Silicon: How Core Allocation Actually Works",
+          "name": "Linux VM CPU Performance on Apple Silicon: How Core Allocation Works",
           "item": "https://www.veloworkspaces.com/blog/linux-vm-cpu-performance-apple-silicon/"
         }
       ]
@@ -110,35 +110,35 @@
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Deep dive</span>
-        <h1>Linux VM CPU Performance on Apple Silicon: How Core Allocation Actually Works</h1>
-        <p class="article-lede"><a href="/blog/arm-virtualization-performance/">Why ARM VMs perform the way they do</a> covers the architectural reasons — EL2, two-stage memory translation, hardware-assisted interrupts. This is a narrower, more practical question that sits on top of that: when you set a workspace's vCPU count, what does macOS actually do with it, and does adding more always help?</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <h1>Linux VM CPU Performance on Apple Silicon: How Core Allocation Works</h1>
+        <p class="article-lede"><a href="/blog/arm-virtualization-performance/">Why ARM VMs perform the way they do</a> covers the architecture. This is the practical question on top: when you set a workspace's vCPU count, what does macOS do with it, and does adding more always help?</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-      <h2>There's no such thing as an efficiency-core vCPU</h2>
-      <p>Apple Silicon's performance and efficiency cores are central to how the chip manages power and throughput on the host — but a virtual CPU assigned to a Linux guest doesn't get a choice between them. Research into how macOS schedules virtualized cores (<a href="https://eclecticlight.co/2023/10/23/how-does-macos-manage-virtual-cores-on-apple-silicon/" target="_blank" rel="noopener">documented in detail by The Eclectic Light Company</a>) found that every vCPU under Virtualization.framework is treated as equivalent to a P-core: there's no mechanism to place a guest's virtual CPU on an E-core at all. On the host side, physical core assignment follows the same pattern real high-priority processes get — P-cores first, spreading across clusters, falling back to the two E-cores only once the P-cores are saturated.</p>
-      <p>The practical read: a vCPU isn't pinned to one physical core for its whole life. It behaves like a high-QoS thread that the host scheduler places across available P-cores as load shifts — which is exactly why VM CPU performance tracks host P-core availability so closely, and why background load on the host (another app doing real work) can visibly slow a VM down even though nothing about the VM's own configuration changed.</p>
+      <h2>There's no efficiency-core vCPU</h2>
+      <p>Apple silicon's performance and efficiency cores are central to how the chip balances power and speed on the host, but a vCPU in a Linux guest doesn't get a choice between them. <a href="https://eclecticlight.co/2023/10/23/how-does-macos-manage-virtual-cores-on-apple-silicon/" target="_blank" rel="noopener">The Eclectic Light Company's investigation</a> found that macOS treats every vCPU under the Virtualization framework like a P-core thread: there's no way for a guest's virtual CPU to land on an E-core. On the host, placement follows the pattern for high-priority work: P-cores first, spread across clusters, with E-cores only once P-cores are saturated.</p>
+      <p>So a vCPU isn't pinned to one physical core. It behaves like a high-priority thread that the scheduler moves across available P-cores as load changes. That's why VM CPU performance tracks P-core availability so closely, and why heavy work in another app on the Mac can visibly slow a VM even though nothing about the VM changed.</p>
 
-      <h2>What that means for choosing a vCPU count</h2>
-      <p>Requesting more vCPUs than the host has P-cores to give doesn't get you E-core capacity as a fallback the way host-native multithreaded work sometimes effectively does — it gets contention, vCPU threads competing with each other and with the host's own P-core work for the same limited pool. Velo clamps whatever you request into <code>VZVirtualMachineConfiguration.minimumAllowedCPUCount</code> and <code>.maximumAllowedCPUCount</code>, the framework's own bounds, but staying under the framework ceiling doesn't mean staying under the point of diminishing returns — that ceiling is a hard framework limit, not a performance recommendation.</p>
-      <p>Velo's own built-in workload profiles reflect this rather than defaulting everything to the framework maximum: <strong>Study & Office</strong> defaults to 2 vCPUs, <strong>Code & Build</strong> to 4, <strong>DevOps Lab</strong> to 6, and <strong>AI Sandbox</strong> — the one profile actually expected to run parallel, CPU-heavy work — to 8. None of those numbers are arbitrary round figures; they track what each workload realistically parallelizes, not "as many as the framework allows."</p>
+      <h2>Choosing a vCPU count</h2>
+      <p>Ask for more vCPUs than the Mac has P-cores to spare and you don't get E-core capacity as a fallback; you get contention, with vCPU threads competing with each other and with the host for the same pool. Velo Workspaces keeps your request within the framework's <code>minimumAllowedCPUCount</code> and <code>maximumAllowedCPUCount</code>, but that ceiling is a hard limit, not a recommendation. Staying under it doesn't mean staying under the point of diminishing returns.</p>
+      <p>The built-in profiles reflect this: <strong>Office &amp; Study</strong> starts at 2 vCPUs, <strong>Code &amp; Build</strong> at 4, <strong>DevOps Lab</strong> at 6, and <strong>AI Sandbox</strong>, the one expected to run parallel, CPU-heavy work, at 8. Those numbers track how much each kind of work realistically runs in parallel, not how many the framework allows.</p>
 
-      <h2>Single-threaded work doesn't care how many vCPUs you assigned</h2>
-      <p>This follows directly from the scheduling model above but is worth stating plainly, because it's the single most common way people misconfigure a workspace: a workload that's fundamentally single-threaded — a slow shell script, a compiler pass that isn't running in parallel, most quick interactive tasks — gets no benefit whatsoever from a higher vCPU count, because only one of those virtual CPUs is ever doing anything. More vCPUs help exactly to the extent that the guest workload is actually parallel: a multi-threaded build (<code>make -j</code>, parallel test runners), a service handling concurrent connections, or several separate processes genuinely running at once.</p>
-      <p>Before raising a workspace's vCPU count to fix a slow task, check whether the task is actually using more than one core inside the guest — <code>htop</code> or <code>nproc</code>-aware tooling makes this immediately visible. If it's pegging one core while three sit idle, more vCPUs won't fix it; the fix is making the work itself parallel, or accepting that it's a single-threaded ceiling.</p>
+      <h2>Single-threaded work doesn't care how many you assign</h2>
+      <p>This is the most common misconfiguration. A fundamentally single-threaded job (a slow shell script, a compiler pass that isn't parallel, most quick interactive tasks) gets nothing from more vCPUs, because only one of them is ever busy. More vCPUs help exactly as far as the work inside the guest is parallel: a multi-threaded build (<code>make -j</code>, parallel test runners), a service handling many connections, or several processes running at once.</p>
+      <p>Before raising the count to fix a slow task, check whether it uses more than one core inside the guest; <code>htop</code> makes it obvious. If one core is pegged while three sit idle, more vCPUs won't help. Make the work parallel, or accept the single-threaded ceiling.</p>
 
       <h2>Putting it together</h2>
       <ul>
-        <li><strong>Size vCPUs to actual parallelism</strong>, not to "more is safer" — a single-threaded task sees zero benefit above one core, whatever the VM's total vCPU count is.</li>
-        <li><strong>Watch host contention</strong>, not just the VM's own configuration — heavy work on the host competes with the guest for the same P-core pool, and a VM that felt fast yesterday can feel slower today with nothing about the VM itself having changed.</li>
-        <li><strong>Match vCPU count to the workload class</strong>, the way Velo's own profiles do — 2 for light interactive use, 4 for a typical build, 6–8 for something genuinely parallel like a DevOps pipeline or an AI workload.</li>
+        <li><strong>Size vCPUs to real parallelism</strong>, not to "more is safer".</li>
+        <li><strong>Watch the host, not just the VM.</strong> Heavy work on the Mac competes for the same P-cores, so a VM that felt fast yesterday can feel slower today with nothing changed inside it.</li>
+        <li><strong>Match the count to the kind of work</strong>, as the profiles do: 2 for light interactive use, 4 for a typical build, 6 to 8 for genuinely parallel work like a DevOps pipeline or an AI workload.</li>
       </ul>
 
-      <p>Related reading: <a href="/blog/arm-virtualization-performance/">why ARM VMs perform the way they do architecturally</a>, <a href="/blog/how-many-linux-vms-apple-silicon/">how many VMs you can realistically run at once</a>, and <a href="/blog/vm-startup-performance-apple-silicon/">what actually determines how fast a VM boots</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/arm-virtualization-performance/">why ARM VMs perform the way they do</a>, <a href="/blog/how-many-linux-vms-apple-silicon/">how many VMs you can run at once</a>, and <a href="/blog/vm-startup-performance-apple-silicon/">what decides how fast a VM boots</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

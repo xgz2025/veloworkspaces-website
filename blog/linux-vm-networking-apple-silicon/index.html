@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How Linux VM Networking Works on Apple Silicon</title>
-<meta name="description" content="Host to guest is direct, guest to the internet is transparent NAT, and an external LAN client needs an explicit port forward.">
+<title>Linux VM Networking on a Mac: NAT, SSH and Port Forwards</title>
+<meta name="description" content="How a Linux VM on an M-series Mac reaches the internet, how the Mac reaches it, and how another computer on your LAN can connect: port forwards and ssh -J.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/linux-vm-networking-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="How Linux VM Networking Works on Apple Silicon">
-<meta property="og:description" content="Host to guest is direct, guest to the internet is transparent NAT, and an external LAN client needs an explicit port forward.">
+<meta property="og:title" content="Linux VM Networking on a Mac: NAT, SSH and Port Forwards">
+<meta property="og:description" content="How a Linux VM on an M-series Mac reaches the internet, how the Mac reaches it, and how another computer on your LAN can connect: port forwards and ssh -J.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/linux-vm-networking-apple-silicon/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/linux-vm-networking-apple-silicon.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="How Linux VM Networking Works on Apple Silicon">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "How Linux VM Networking Works on Apple Silicon",
+      "headline": "Linux VM Networking on a Mac: NAT, SSH and Port Forwards",
       "name": "How Linux VM Networking Works on Apple Silicon",
-      "description": "Host to guest is direct, guest to the internet is transparent NAT, and an external LAN client needs an explicit port forward.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "description": "How a Linux VM on an M-series Mac reaches the internet, how the Mac reaches it, and how another computer on your LAN can connect: port forwards and ssh -J.",
+      "image": "https://www.veloworkspaces.com/assets/og/linux-vm-networking-apple-silicon.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -111,8 +111,8 @@
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>How Linux VM Networking Works on Apple Silicon</h1>
-        <p class="article-lede">"Can this VM reach the network" isn't one question — it's three, and each has a different answer. Host talking to guest, guest talking out to the internet, and something else on your LAN talking to the guest are three genuinely different paths, and only two of them work without you doing anything extra.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <p class="article-lede">"Can this VM reach the network?" is three questions with three answers. The Mac talking to the guest, the guest talking to the internet, and another computer on your LAN talking to the guest are different paths, and only two of them work without extra setup.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
@@ -120,24 +120,27 @@
   <section class="section">
     <div class="container article-body">
       <h2>The device underneath all three</h2>
-      <p>Every Linux guest gets a <code>VZVirtioNetworkDeviceConfiguration</code> paired with a <code>VZNATNetworkDeviceAttachment</code> — covered in <a href="/blog/how-virtualization-framework-works/">the device inventory post</a> — which puts the guest behind NAT on a private virtual subnet, with the Mac itself acting as the NAT gateway. Every network path below is a consequence of that one fact.</p>
+      <p>Every Linux guest gets a virtio network device attached through NAT (<code>VZNATNetworkDeviceAttachment</code>, covered in <a href="/blog/how-virtualization-framework-works/">the device inventory post</a>). That puts the guest on a private virtual subnet, usually 192.168.64.x, with the Mac as its gateway. Every path below follows from that.</p>
 
-      <h2>Path 1: host to guest — direct, no extra step</h2>
-      <p>Because the host <em>is</em> the NAT gateway, it can already see into the guest's private subnet. Your Mac's own browser or terminal reaches a service running in the guest by its VM IP address directly — <code>http://&lt;VM_IP&gt;:&lt;port&gt;</code> — with nothing to configure. This is the path used throughout <a href="/blog/zero-tax-virtualization/">the complete AI agent guide</a> for reaching a web UI running inside the VM from the host's own browser.</p>
+      <h2>Path 1: Mac to guest, direct</h2>
+      <p>Because the Mac <em>is</em> the gateway, it can already reach the guest's subnet. Your Mac's browser or terminal reaches a service in the guest at its address, <code>http://&lt;VM_IP&gt;:&lt;port&gt;</code>, with nothing to configure. A workspace's <strong>Access</strong> tab shows that address and a ready-to-copy <code>ssh</code> command. <a href="/blog/zero-tax-virtualization/">The complete AI agent guide</a> uses this path to open a web UI running in the VM.</p>
+      <p>macOS treats that virtual subnet as part of the local network, so the first time Velo Workspaces checks a workspace's SSH server or opens its terminal, macOS asks whether to allow Local Network access. The app only connects to its own workspaces; if you decline, the Access tab says so and links to the setting.</p>
 
-      <h2>Path 2: guest to the internet — transparent NAT</h2>
-      <p>Outbound traffic from the guest works the ordinary way any NAT'd device's does: the guest gets a private address via DHCP, and the host's NAT translation handles everything going out. Nothing about this needs configuring either — it's the same shape as a laptop behind a home router reaching the wider internet.</p>
+      <h2>Path 2: guest to the internet, through NAT</h2>
+      <p>Outbound traffic works as it does for any device behind a router. The guest gets a private address by DHCP and the Mac translates everything going out. Nothing to set up.</p>
 
-      <h2>Path 3: an external LAN device to the guest — this one needs a forward</h2>
-      <p>This is the real gotcha, and it's worth understanding precisely rather than treating as a mystery: another machine on your LAN — a phone, a second Mac, anything that isn't the host itself — can't route directly into the guest's private virtual subnet the way the host can, because that subnet doesn't exist anywhere on the physical LAN. The fix is an explicit forward on the host, not a guest-side setting. A real, working example already used on this blog: <code>caddy reverse-proxy --from :8081 --to &lt;VM_IP&gt;:4096</code> makes the host listen on port 8081 and forward to the guest's port 4096, so any LAN device can reach <code>http://&lt;HOST_IP&gt;:8081</code> and land on the guest's service. The external port doesn't have to match the internal one — a genuinely useful property when the guest's own port is already claimed by something else on the host.</p>
+      <h2>Path 3: another computer to the guest, which needs a hop</h2>
+      <p>Another machine on your LAN, a phone or a second Mac, can't route into the guest's subnet the way your Mac can, because that subnet exists only inside your Mac. You need a hop through the Mac, and there are two easy ones.</p>
+      <p><strong>For SSH, jump through the Mac.</strong> Turn on Remote Login in System Settings › General › Sharing, and the Access tab gives you an <code>ssh -J</code> command that signs in to the Mac and hops from there to the workspace. The workspace needs to accept that other computer's key (you can add public keys when you create it) or allow password logins.</p>
+      <p><strong>For a web service, forward a port.</strong> For example, <code>caddy reverse-proxy --from :8081 --to &lt;VM_IP&gt;:4096</code> makes the Mac listen on port 8081 and pass traffic to the guest's port 4096, so any device on the LAN can open <code>http://&lt;MAC_IP&gt;:8081</code>. The outside port doesn't have to match the inside one, which helps when the guest's port is already taken on the Mac.</p>
 
-      <h2>One more detail: the guest's address doesn't drift</h2>
-      <p>Velo derives each guest's MAC address deterministically from the workspace's own ID rather than randomizing it — covered in <a href="/blog/how-virtualization-framework-works/">the device inventory post</a> — which is what lets a guest keep the same DHCP lease, and therefore the same VM IP, across restarts. Without that, the address in a Path 1 or Path 3 command above would be a moving target every time the workspace restarted.</p>
+      <h2>The guest's address doesn't drift</h2>
+      <p>Velo Workspaces derives each workspace's MAC address from its ID instead of randomizing it, so a guest keeps the same DHCP lease, and the same IP address, across restarts. Without that, the addresses in the commands above would change every time the workspace started.</p>
 
-      <h2>Why Path 3 needs a forward at all: NAT-only, for now</h2>
-      <p>Bridged networking — where the guest would get its own address directly on your LAN, making Path 3 as direct as Path 1 — requires the <code>com.apple.vm.networking</code> entitlement, which isn't yet part of the app. <a href="/blog/kali-linux-on-apple-silicon/">The Kali Linux post</a> covers a concrete case where this actually matters: a testing toolkit built around seeing other devices on the LAN runs into exactly this NAT boundary, which a manual port forward doesn't fully substitute for.</p>
+      <h2>Why path 3 needs a hop: NAT only, for now</h2>
+      <p>Bridged networking, where the guest would get its own address on your LAN, needs the <code>com.apple.vm.networking</code> entitlement, which the app doesn't have. <a href="/blog/kali-linux-on-apple-silicon/">The Kali Linux post</a> covers a case where that matters: a testing toolkit that expects to see other devices on the LAN runs into the NAT boundary, and a port forward doesn't fully replace a bridge.</p>
 
-      <p>Related reading: <a href="/blog/how-virtualization-framework-works/">the Virtualization.framework device inventory</a>, <a href="/blog/zero-tax-virtualization/">the complete AI agent guide</a> this networking supports, and <a href="/blog/kali-linux-on-apple-silicon/">Kali Linux on Apple Silicon</a>, where the NAT boundary matters most concretely. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/how-virtualization-framework-works/">the Virtualization.framework device inventory</a>, <a href="/blog/linux-vm-network-performance-apple-silicon/">Linux VM network performance</a>, and <a href="/blog/kali-linux-on-apple-silicon/">Kali Linux on Apple Silicon</a>, where the NAT boundary matters most. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

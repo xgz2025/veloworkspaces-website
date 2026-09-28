@@ -7,7 +7,7 @@
 <meta name="description" content="クラウドイメージや ISO から Linux VM を作成する方法、SSH ターミナルの使い方、共有フォルダのマウント、Debian・Fedora での Rosetta の有効化、クリップボードの対処法。">
 <link rel="canonical" href="https://www.veloworkspaces.com/ja/support/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" hreflang="en" href="https://www.veloworkspaces.com/support/">
 <link rel="alternate" hreflang="zh-Hans" href="https://www.veloworkspaces.com/zh-hans/support/">
 <link rel="alternate" hreflang="zh-Hant" href="https://www.veloworkspaces.com/zh-hant/support/">
@@ -264,7 +264,7 @@
         <details class="faq-item">
           <summary>自分のターミナルや VS Code、別のコンピュータから接続できますか？</summary>
           <div class="faq-answer">
-            <p>はい、無料で使えます。「アクセス」タブには、ワークスペースのアドレスとコピーしてすぐ使える ssh コマンド、VS Code の Remote - SSH 拡張機能用の ~/.ssh/config ブロックが表示されます。</p>
+            <p>はい、無料で使えます。「アクセス」タブには、ワークスペースのアドレスとコピーしてすぐ使える ssh コマンド、VS Code の Remote - SSH 拡張機能用の ~/.ssh/config ブロックが表示されます。これらは内蔵ターミナルがキーチェーンに保管している鍵ではなく、あなた自身の SSH 鍵を使います。ワークスペース作成時に「SSH 公開鍵」へ公開鍵を貼り付けるか、「パスワードによる SSH ログインを許可」をオンにしてください。</p>
             <p>ワークスペースは Mac 内部のプライベートネットワークにあるため、ほかのコンピュータからは Mac を経由して接続します。「システム設定」›「一般」›「共有」で「リモートログイン」をオンにし、「アクセス」タブに表示される <code>ssh -J</code> コマンドを使ってください。</p>
           </div>
         </details>

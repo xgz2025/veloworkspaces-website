@@ -119,7 +119,7 @@ def head(*, title, description, url, og_type, image, image_alt, extra_meta="", l
 <meta name="description" content="{attr(description)}">
 <link rel="canonical" href="{url}">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="{SITE}/blog/feed.xml">
 <meta property="og:type" content="{og_type}">
 <meta property="og:site_name" content="Velo Workspaces">

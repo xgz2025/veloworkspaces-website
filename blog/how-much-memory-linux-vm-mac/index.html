@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How Much Memory Should You Give a Linux VM on a Mac?</title>
-<meta name="description" content="Velo&#x27;s own workload-profile defaults, what the memory balloon device actually does, and why the framework&#x27;s allowed range isn&#x27;t a recommendation.">
+<title>How Much Memory Should a Linux VM Get on a Mac?</title>
+<meta name="description" content="How much RAM to give a Linux VM on a Mac for dev, build and CI work: starting points by workload, what the memory balloon does, and sizing from swap.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/how-much-memory-linux-vm-mac/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="How Much Memory Should You Give a Linux VM on a Mac?">
-<meta property="og:description" content="Velo&#x27;s own workload-profile defaults, what the memory balloon device actually does, and why the framework&#x27;s allowed range isn&#x27;t a recommendation.">
+<meta property="og:title" content="How Much Memory Should a Linux VM Get on a Mac?">
+<meta property="og:description" content="How much RAM to give a Linux VM on a Mac for dev, build and CI work: starting points by workload, what the memory balloon does, and sizing from swap.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/how-much-memory-linux-vm-mac/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/how-much-memory-linux-vm-mac.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="How Much Memory Should You Give a Linux VM on a Mac?">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "How Much Memory Should You Give a Linux VM on a Mac?",
+      "headline": "How Much Memory Should a Linux VM Get on a Mac?",
       "name": "How Much Memory Should You Give a Linux VM on a Mac?",
-      "description": "Velo's own workload-profile defaults, what the memory balloon device actually does, and why the framework's allowed range isn't a recommendation.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "description": "How much RAM to give a Linux VM on a Mac for dev, build and CI work: starting points by workload, what the memory balloon does, and sizing from swap.",
+      "image": "https://www.veloworkspaces.com/assets/og/how-much-memory-linux-vm-mac.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -111,8 +111,8 @@
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>How Much Memory Should You Give a Linux VM on a Mac?</h1>
-        <p class="article-lede">Not an LLM question — <a href="/blog/llm-ram-requirements-mac/">that math is covered separately</a>, and it's genuinely different because a model's memory footprint is a known, calculable quantity. General dev, build, and CI workloads don't work that way; here's how to size for them anyway, and what actually happens to memory you assign but the guest isn't using.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <p class="article-lede">This isn't the LLM question; <a href="/blog/llm-ram-requirements-mac/">that's covered separately</a>, and it's different because a model's footprint can be calculated. Dev, build and CI workloads can't be, so here's how to size for them anyway, and what happens to memory the guest isn't using.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
@@ -120,24 +120,25 @@
   <section class="section">
     <div class="container article-body">
       <h2>The framework's allowed range isn't a recommendation</h2>
-      <p>Velo clamps whatever memory size you request into <code>VZVirtualMachineConfiguration.minimumAllowedMemorySize</code> and <code>.maximumAllowedMemorySize</code> — verified directly against the source. That range exists to keep a configuration valid, not to suggest what's actually a good idea; the framework will happily accept a memory size the host can't comfortably spare, and a workspace maxed out against that ceiling on a Mac that also needs RAM for everything else running competes with the host the same way an overcommitted process would.</p>
+      <p>Velo Workspaces keeps your memory request within the framework's <code>minimumAllowedMemorySize</code> and <code>maximumAllowedMemorySize</code>. That range keeps a configuration valid; it doesn't tell you what's sensible. The framework will accept more memory than your Mac can comfortably spare, and a workspace sized up to that ceiling on a Mac that also needs memory for everything else competes with it like any overcommitted process.</p>
 
-      <h2>What Velo's own defaults imply</h2>
-      <p>Velo's built-in workload profiles pair memory with vCPU count deliberately, and the pairing itself is informative: <strong>Study & Office</strong> defaults to 4GB, <strong>Code & Build</strong> to 8GB, <strong>DevOps Lab</strong> to 12GB, and <strong>AI Sandbox</strong> — the profile expected to also run a local model or an agent workload — to 16GB. None of these are guesses; they're calibrated to what each workload class realistically needs headroom for, and they're a reasonable starting point to adjust from rather than a fixed rule. A plain shell + editor session rarely needs more than the Study & Office tier; a real build with a dependency-heavy install step benefits from the Code & Build tier's extra headroom for compiler and linker memory use, which spikes well above steady-state usage during the build itself, not just at idle.</p>
+      <h2>What the built-in profiles suggest</h2>
+      <p>The built-in profiles pair memory with vCPUs, and the pairing is a useful guide: <strong>Office &amp; Study</strong> starts at 4 GB, <strong>Code &amp; Build</strong> at 8 GB, <strong>DevOps Lab</strong> at 12 GB, and <strong>AI Sandbox</strong> at 16 GB. They're starting points to adjust, not rules. A shell and an editor rarely need more than the Office &amp; Study tier. A real build with a dependency-heavy install benefits from Code &amp; Build's headroom, because compilers and linkers spike well above their steady-state use during the build itself.</p>
 
-      <h2>The memory balloon device: what "assigned" doesn't mean "locked away"</h2>
-      <p>Every Linux workspace gets a <code>VZVirtioTraditionalMemoryBalloonDeviceConfiguration</code> — a virtio balloon device, verified against Velo's source. The balloon exists specifically so that memory you've assigned to a VM isn't necessarily memory permanently unavailable to the host: it lets the hypervisor reclaim memory the guest currently isn't using, and give it back later if the guest needs it again, with the guest's own kernel cooperating through its virtio-balloon driver rather than the reclaim happening behind its back. This is standard Linux and standard Virtualization.framework behavior, not something Velo tunes with custom policy — the device is created with its defaults, and the framework and guest kernel handle the actual inflate/deflate behavior between them.</p>
-      <p>The practical implication is worth being precise about rather than overstating: the balloon device means a generously-sized workspace doesn't necessarily starve the host the way a naive, non-reclaimable allocation would if the guest is mostly idle — but it's not a substitute for reasonable sizing, and how aggressively memory actually gets reclaimed depends on framework and guest-kernel behavior neither this post nor Velo's own code controls in detail. Size for what the workload needs; don't treat the balloon device as a reason sizing doesn't matter.</p>
+      <h2>The balloon: assigned doesn't mean locked away</h2>
+      <p>Every Linux workspace gets a virtio memory balloon device (<code>VZVirtioTraditionalMemoryBalloonDeviceConfiguration</code>). It exists so that memory assigned to a VM isn't necessarily lost to the Mac for good: the hypervisor can reclaim memory the guest isn't using and hand it back when the guest needs it, with the guest kernel cooperating through its balloon driver. That's standard Linux and Virtualization framework behavior; Velo Workspaces creates the device with its defaults and doesn't add its own policy.</p>
+      <p>Don't overstate it, though. The balloon means a generously sized, mostly idle workspace doesn't starve the Mac the way a fixed allocation would, but how aggressively memory is reclaimed depends on the framework and the guest kernel. Size for the workload; the balloon isn't a reason sizing doesn't matter.</p>
 
-      <h2>A sizing approach that isn't guessing</h2>
+      <h2>A way to size that isn't guessing</h2>
       <ol>
-        <li><strong>Start from the closest workload profile</strong> above rather than an arbitrary number.</li>
-        <li><strong>Watch for swap activity inside the guest</strong> during the actual workload, not at idle — <code>free -h</code> or <code>vmstat</code> showing swap in use under real load is the clearest sign a workspace is undersized, more reliable than watching the number look "full."</li>
-        <li><strong>Size to the peak, not the average</strong> — a build's linker step or a test suite's worst moment matters more than its steady-state footprint, the same lesson <a href="/blog/llm-ram-requirements-mac/">the LLM RAM math post</a> makes for KV cache growth during a long session.</li>
-        <li><strong>Leave real headroom on the host</strong> — macOS itself, plus whatever else is running, needs its own share of unified memory; a workspace sized to consume everything technically available leaves nothing for that.</li>
+        <li><strong>Start from the nearest profile</strong> above rather than an arbitrary number.</li>
+        <li><strong>Watch swap inside the guest</strong> while the real work runs, not at idle. <code>free -h</code> or <code>vmstat</code> showing swap in use under load is the clearest sign a workspace is too small, far more reliable than memory that merely looks "full".</li>
+        <li><strong>Size for the peak, not the average.</strong> A build's link step or a test suite's worst moment matters more than its steady state, the same lesson <a href="/blog/llm-ram-requirements-mac/">the LLM RAM post</a> draws for a growing KV cache.</li>
+        <li><strong>Leave the Mac real headroom.</strong> macOS and your other apps need their share of unified memory too.</li>
       </ol>
+      <p>A cloud image makes experimenting cheap: create a workspace, run your real workload, and if it swaps, create another with more memory a minute later.</p>
 
-      <p>Related reading: <a href="/blog/llm-ram-requirements-mac/">how much RAM local LLMs actually need</a>, a genuinely different and more calculable question, <a href="/blog/linux-vm-cpu-performance-apple-silicon/">how vCPU core allocation works</a>, and <a href="/blog/how-many-linux-vms-apple-silicon/">how many workspaces you can realistically run at once</a>, which this post's sizing approach feeds directly into. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/llm-ram-requirements-mac/">how much RAM local LLMs need</a>, <a href="/blog/linux-vm-cpu-performance-apple-silicon/">how vCPU allocation works</a>, <a href="/blog/guest-os-performance-tuning/">zram for memory-tight guests</a>, and <a href="/blog/how-many-linux-vms-apple-silicon/">how many workspaces you can run at once</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

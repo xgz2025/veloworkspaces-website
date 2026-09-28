@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Clean-Room Bug Reproduction With Disposable VMs</title>
-<meta name="description" content="Your dev machine is the worst place to reproduce a bug report — a disposable workspace removes that variable entirely.">
+<title>Clean-Room Bug Reproduction with Disposable VMs on a Mac</title>
+<meta name="description" content="Your daily dev machine is a poor place to reproduce a user&#x27;s bug. Start from a clean VM, install only what the report says, and throw it away after.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/clean-room-bug-reproduction/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Clean-Room Bug Reproduction With Disposable VMs">
-<meta property="og:description" content="Your dev machine is the worst place to reproduce a bug report — a disposable workspace removes that variable entirely.">
+<meta property="og:title" content="Clean-Room Bug Reproduction with Disposable VMs on a Mac">
+<meta property="og:description" content="Your daily dev machine is a poor place to reproduce a user&#x27;s bug. Start from a clean VM, install only what the report says, and throw it away after.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/clean-room-bug-reproduction/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/clean-room-bug-reproduction.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Clean-Room Bug Reproduction With Disposable VMs">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "Clean-Room Bug Reproduction With Disposable VMs",
+      "headline": "Clean-Room Bug Reproduction with Disposable VMs on a Mac",
       "name": "Clean-Room Bug Reproduction With Disposable VMs",
-      "description": "Your dev machine is the worst place to reproduce a bug report — a disposable workspace removes that variable entirely.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "description": "Your daily dev machine is a poor place to reproduce a user's bug. Start from a clean VM, install only what the report says, and throw it away after.",
+      "image": "https://www.veloworkspaces.com/assets/og/clean-room-bug-reproduction.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -111,33 +111,33 @@
       <div class="article-header">
         <span class="eyebrow">Workflow</span>
         <h1>Clean-Room Bug Reproduction With Disposable VMs</h1>
-        <p class="article-lede">"Can't reproduce" is sometimes an honest finding and sometimes a confession about your own machine. Months of accumulated fixes, config tweaks, and half-remembered workarounds on your daily dev environment can mask — or alter — the exact bug a user is reporting. A disposable workspace removes that variable entirely, not by trying harder, but by not carrying any of it in the first place.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <p class="article-lede">"Can't reproduce" is sometimes an honest finding and sometimes a confession about your own machine. Months of fixes, tweaks and half-remembered workarounds on your daily environment can hide or change the bug a user reports. A disposable workspace takes that variable out.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-      <h2>Your dev machine is a bad reproduction environment, structurally</h2>
-      <p>This isn't about sloppiness — it's what any long-lived environment does over time. A library you upgraded six months ago and forgot about, a config file you patched once to work around a different issue, a system package version that's drifted from what most users actually have: none of it shows up as a decision you remember making, and any one of it can be the reason a bug that's real for users simply doesn't happen on your machine. "Works on my machine" is frequently true and irrelevant — the machine in question isn't representative of anything.</p>
+      <h2>Your dev machine is a poor place to reproduce bugs</h2>
+      <p>This isn't about sloppiness; it's what any long-lived environment does. A library you upgraded six months ago and forgot, a config file you patched to work around something else, a system package that has drifted from what most users have: none of it feels like a decision you made, and any of it can be why a bug that's real for users doesn't happen for you. "Works on my machine" is often true and irrelevant, because your machine doesn't represent anyone.</p>
 
       <h2>The workflow</h2>
       <ul>
-        <li><strong>Start from a base image</strong>, not your daily driver — ideally one that matches what the bug report actually implies about the affected system, not your own accumulated setup.</li>
-        <li><strong>Install only what the bug report specifies</strong> — the exact dependency versions, the exact steps, nothing extra carried over from habit.</li>
-        <li><strong>Attempt to reproduce</strong>, exactly as described. If it doesn't reproduce here either, that's real information — the bug likely depends on something the report didn't capture, not on something wrong with your usual machine.</li>
-        <li><strong>Debug from there</strong>, once it does reproduce, with confidence that what you're looking at is the actual bug and not an interaction with six months of your own machine's history.</li>
-        <li><strong>Discard the workspace</strong> when you're done, rather than keeping the patched-together reproduction environment around — the next bug deserves the same clean starting point, not this one's leftover state.</li>
+        <li><strong>Start from a clean system</strong>, not your daily driver. A fresh cloud image of the distribution and version the report mentions is ready in about a minute; a saved base image works if you keep one for the product.</li>
+        <li><strong>Install only what the report says</strong>: the exact dependency versions and steps, nothing carried over from habit.</li>
+        <li><strong>Try to reproduce it</strong>, exactly as described. If it doesn't reproduce here either, that's useful: the bug probably depends on something the report didn't capture, not on your machine.</li>
+        <li><strong>Debug from there</strong> once it does, knowing you're looking at the actual bug and not an interaction with your machine's history.</li>
+        <li><strong>Throw the workspace away</strong> when you're done. The next bug deserves the same clean start, not this one's leftovers.</li>
       </ul>
 
-      <h2>Why disposal matters here specifically</h2>
-      <p>The temptation is to keep a working reproduction environment around "in case you need it again" — but that's exactly how a second dev machine slowly accumulates the same problem the first one had. A debug flag left flipped, a temporary patch you forgot to revert, a log level turned up and never turned back down: all fine for the bug you were just chasing, all potential noise for the next one if the environment sticks around. Discard it, and the next reproduction starts from the same clean base image again, not from wherever this one ended up.</p>
+      <h2>Why throwing it away matters</h2>
+      <p>It's tempting to keep a working reproduction environment "in case", but that's how a second machine slowly gets the same problem as the first. A debug flag left on, a temporary patch never reverted, a log level turned up and never down: all fine for the bug you were chasing, all noise for the next one. Discard it, and the next reproduction starts from the same clean base again.</p>
 
-      <h2>How this differs from the QA/DevOps case</h2>
-      <p><a href="/blog/qa-devops-disposable-vm-workflow/">The QA/DevOps disposable VM workflow</a> covers a related but distinct problem: systemic test flakiness, root-caused to state a test suite assumed was reset but wasn't. This is narrower and more individual — one specific bug report, reproduced once, debugged once, discarded once. The underlying mechanism is the same disposability this whole blog keeps coming back to; the trigger for reaching for it is different.</p>
+      <h2>How this differs from the QA and DevOps case</h2>
+      <p><a href="/blog/qa-devops-disposable-vm-workflow/">The QA and DevOps workflow</a> deals with systemic test flakiness caused by state a suite assumed was reset. This is narrower and more personal: one bug report, reproduced once, debugged once, discarded once. Same disposability underneath; a different reason to reach for it.</p>
 
-      <p>Related reading: <a href="/blog/qa-devops-disposable-vm-workflow/">the disposable VM workflow for QA and DevOps</a>, <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>, and <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment actually is</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/qa-devops-disposable-vm-workflow/">the disposable VM workflow for QA and DevOps</a>, <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>, and <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment is</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

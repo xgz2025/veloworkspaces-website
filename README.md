@@ -1,6 +1,6 @@
 # veloworkspaces.com
 
-Marketing site, privacy policy, and support/FAQ page for [Velo Workspaces](https://www.veloworkspaces.com).
+Marketing site, blog, roadmap, privacy policy and support/FAQ for [Velo Workspaces](https://www.veloworkspaces.com).
 
 Plain static HTML + CSS. No framework, no build step, no JavaScript beyond one small script that fills in
 the App Store download link. This is deliberate — it keeps the site fast, dependency-free, and easy for
@@ -16,12 +16,14 @@ pages consistent; they never run at request time and are excluded from the deplo
 index.html          Home / marketing page                 (English, at /)
 privacy/index.html  Privacy policy                         → served at /privacy/
 support/index.html  Support & FAQ                           → served at /support/
+roadmap/index.html  Roadmap (English only, hand-written)    → served at /roadmap/
+blog/               Blog (English only): index.html, feed.xml (RSS), one folder per post
 404.html            Not-found page
 de/ fr/ it/ es/ pt-br/ ja/ ko/ zh-hans/ zh-hant/
                      Same three pages + 404, per locale     → served at /<locale>/, /<locale>/privacy/, etc.
 i18n/                Authoring scripts that generate every localized page — see "Localization" below
 robots.txt
-sitemap.xml          Generated — lists all 30 localized URLs with hreflang alternates
+sitemap.xml          Generated: every localized page with hreflang alternates, plus the roadmap and every blog post, all with <lastmod>
 _redirects          Cloudflare Workers assets: path-level redirects (none active — see below)
 _headers            Cloudflare Workers assets: security + cache headers
 wrangler.jsonc      Deploy config (Workers static assets, no worker code)
@@ -29,7 +31,9 @@ wrangler.jsonc      Deploy config (Workers static assets, no worker code)
 assets/style.css    All styling
 assets/app-store.js Fills in every [data-app-store-link] button's href from one place
 assets/icon.png     App icon — used as both the favicon and the header/footer brand mark
-assets/screenshots/ Four app screenshots shown in the home page hero (see below)
+assets/screenshots/ Four app screenshots shown in the home page hero (WebP served, PNG kept as source)
+assets/og/          1200×630 share images: default.jpg plus one per blog post (generated, see "Blog")
+assets/blog/        Images used inside blog posts
 ```
 
 ## Localization
@@ -62,6 +66,35 @@ native display name), add a matching entry to every dict in the three `content_*
 Each page's `<head>` carries `hreflang` alternate links to every locale variant plus `x-default` (pointing
 at English), and a `<details class="lang-switch">` menu in the header lets visitors jump between locales
 of the current page — no JavaScript required, consistent with the rest of the site.
+
+## Blog
+
+The blog is English only. Each post's **body** is hand-written HTML inside
+`<div class="container article-body">` in `blog/<slug>/index.html`. Everything around the body is
+generated from `i18n/blog_posts.py` by `i18n/render_blog.py`: the `<head>` (title, meta description,
+canonical, Open Graph and Twitter tags, `BlogPosting` + `BreadcrumbList` JSON-LD), the site header, the
+article header (eyebrow, h1, lede, byline with dates) and the footer. It also writes `blog/index.html`
+(grouped cards, `Blog` JSON-LD) and `blog/feed.xml` (RSS).
+
+`i18n/blog_posts.py` has one entry per post, in index order, grouped by `GROUPS`:
+
+| Field | Used for | Guideline |
+|---|---|---|
+| `title` | `<title>`, og:title, search results | Under 60 characters, lead with what people search for |
+| `description` | meta description, og:description, RSS | 120–155 characters |
+| `h1` | The heading on the page | Can be longer than `title` |
+| `card_title`, `card_summary` | The card on the blog index | |
+| `lede` | The paragraph under the h1 (HTML allowed) | |
+| `published`, `modified` | Byline, JSON-LD, sitemap `<lastmod>`, RSS | ISO dates; bump `modified` on real edits |
+| `trademarks` | Extra trademark line in the footer | |
+
+**To add a post:** copy an existing post's folder, replace the body, add its entry to `POSTS`, then run
+`python3 i18n/make_og_images.py <slug>` (its share image) and `python3 i18n/build.py`.
+`render_blog.py` refuses to run if a folder in `blog/` has no entry or an entry has no folder.
+
+**Share images** (`assets/og/`): `python3 i18n/make_og_images.py` renders `default.jpg` and one card per
+post from its eyebrow and `card_title`, using Node + Playwright (`npm i -g playwright`). Re-run it for a
+post whenever its `card_title` changes.
 
 ## Deploying on Cloudflare (Workers static assets)
 
@@ -108,63 +141,35 @@ Domain precedence):
 
 ## Updating the App Store link
 
-The app is still in App Store review, so `assets/app-store.js` currently points every download button at
-Apple's App Store homepage as a safe placeholder. Once the app is approved:
+`assets/app-store.js` holds the listing URL (`APP_STORE_URL`) that every download button uses. To change it:
 
 1. Open `assets/app-store.js`.
-2. Replace the `APP_STORE_URL` value with the real listing URL.
+2. Replace the `APP_STORE_URL` value.
 3. Commit and push — every button on every page updates from that one change.
 
 (Each button also has a static fallback `href` baked into the HTML for no-JS visitors and crawlers; you can
 leave those as-is, or update them to match once you're touching the file anyway.)
 
-## Adding the real app icon
+## App icon
 
-Every page currently references one file for both the browser-tab favicon and the small logo mark next to
-"Velo Workspaces" in the header and footer:
+`assets/icon.png` (512×512 PNG) is both the favicon and the brand mark in the header and footer. Replace
+the file to change it; nothing in the HTML needs to change.
 
-- **Path:** `assets/icon.png`
-- **Size:** **512×512px**, PNG, square. This matches the `icon_512x512@1x` (or `icon_256x256@2x`) export in
-  a standard Xcode `AppIcon.appiconset`, so you can very likely drop in an existing export from the app's own
-  asset catalog without resizing anything.
+## Home page screenshots
 
-Just replace the file at that path with the real icon — nothing in the HTML/CSS needs to change, since every
-page already points at `assets/icon.png` for both the `<link rel="icon">` favicon and the `<img class="mark">`
-brand mark (displayed at 28×28, so 512px gives plenty of headroom for Retina displays without looking soft).
+The hero shows four screenshots, one per persona: `assets/screenshots/{software-engineers,ai-researchers,
+devops-professionals,qa-engineers}`. The pages load the `.webp` files (960 px wide, about 60 KB each); the
+`.png` files are the full-size sources. The CSS crops each to 8:5 with `object-fit: cover`, anchored to the
+top, so capture at 1440×900 and convert with, for example:
 
-## Adding real screenshots to the home page
+```sh
+sips -Z 960 in.png --out tmp.png && cwebp -q 82 tmp.png -o assets/screenshots/qa-engineers.webp
+```
 
-The home page hero currently shows four solid, accent-tinted placeholder tiles (a 2×2 grid, one per persona)
-in place of real screenshots. Each tile is just an `<img>` waiting for a file — add these four, at these
-exact paths, and the placeholders are replaced automatically, no HTML changes needed:
+## Social preview images
 
-| Path                                            | Persona            | Suggested screen                          |
-|--------------------------------------------------|---------------------|--------------------------------------------|
-| `assets/screenshots/software-engineers.png`      | Software Engineers  | A workspace detail view, Code & Build profile |
-| `assets/screenshots/ai-researchers.png`          | AI Researchers      | The AI Bridge tab, connected to a local model |
-| `assets/screenshots/devops-professionals.png`    | DevOps Professionals| DevOps Lab workspace / serial console      |
-| `assets/screenshots/qa-engineers.png`            | QA Engineers        | A Disposable Workspace, or the base image library |
-
-**Size:** they don't need to be pixel-exact — the CSS crops each image to an 8:5 (16:10) tile with
-`object-fit: cover`, anchored to the top, so any reasonably close landscape screenshot works without editing.
-A screenshot captured at **1440×900** fits that tile exactly with zero cropping; **1440×846** (the other size
-these have been captured at) is close enough that `cover` only trims a sliver off the sides — not enough to
-plausibly cut into a sidebar or toolbar. Keep them as PNG (not JPEG) so UI text and window edges stay sharp.
-
-They're plenty sharp to use straight from a 1440-wide capture — no resizing required — but each one renders
-at roughly 380–450px wide on the actual page, so a 1440px-wide PNG is 3-4× larger than it needs to be
-(slower page load for no visible benefit). If you want to trim that: downscale to around **960×600** (same
-8:5 ratio, 2× the display size for Retina sharpness) with any image tool (`sips -Z 960 in.png --out out.png`
-on macOS, Preview's Export, etc.) before dropping them in.
-
-The suggested screen per persona is just that — a suggestion. Use whatever actually shows that persona's
-workflow best.
-
-## Adding a social preview image
-
-Each page's `<head>` has a commented-out `og:image` / `twitter:card` block. Once you have a 1200×630 image
-(e.g. `assets/og-image.png`), drop it in and uncomment those tags in `index.html`, `privacy/index.html`, and
-`support/index.html`.
+Every page has `og:image` and `twitter:card` tags. Home, support, privacy, the roadmap and the blog index use
+`assets/og/default.jpg`; each blog post uses `assets/og/<slug>.jpg`. See "Blog" for regenerating them.
 
 ## Local preview
 
@@ -180,5 +185,9 @@ Then open `http://localhost:8080`.
 ## Content ownership
 
 Site copy should stay in sync with the App Store listing description and the app's actual feature set —
-in particular the guest OS list, Rosetta instructions, and shared-folder/clipboard behavior in
-`support/index.html`, since those describe exact in-app mechanics rather than general marketing claims.
+in particular the guest OS list, the cloud image and automatic-install lists, Free vs. Pro, the SSH/Access
+tab behavior, Rosetta instructions and shared-folder/clipboard behavior in the support FAQ and the blog's
+OS guides, since those describe exact in-app mechanics rather than general marketing claims. UI names
+quoted in localized pages (Settings › Images, Access, Open Terminal…) come from the app's
+`Localizable.xcstrings`; keep them matching. Windows guests are not supported and must not be presented
+as available.

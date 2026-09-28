@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Disposable VMs for Testing Untrusted Software</title>
-<meta name="description" content="curl | bash, a GitHub repo&#x27;s install script, an unfamiliar build system — a disposable workspace is the boundary.">
+<title>Test Untrusted Software Safely on a Mac with a Disposable VM</title>
+<meta name="description" content="curl | bash, a repo&#x27;s install steps, build scripts and deep dependency trees all run with your permissions. How a disposable VM keeps your Mac out of it.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/disposable-vms-untrusted-software/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Disposable VMs for Testing Untrusted Software">
-<meta property="og:description" content="curl | bash, a GitHub repo&#x27;s install script, an unfamiliar build system — a disposable workspace is the boundary.">
+<meta property="og:title" content="Test Untrusted Software Safely on a Mac with a Disposable VM">
+<meta property="og:description" content="curl | bash, a repo&#x27;s install steps, build scripts and deep dependency trees all run with your permissions. How a disposable VM keeps your Mac out of it.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/disposable-vms-untrusted-software/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/disposable-vms-untrusted-software.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Disposable VMs for Testing Untrusted Software">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "Disposable VMs for Testing Untrusted Software",
+      "headline": "Test Untrusted Software Safely on a Mac with a Disposable VM",
       "name": "Disposable VMs for Testing Untrusted Software",
-      "description": "curl | bash, a GitHub repo's install script, an unfamiliar build system — a disposable workspace is the boundary.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "description": "curl | bash, a repo's install steps, build scripts and deep dependency trees all run with your permissions. How a disposable VM keeps your Mac out of it.",
+      "image": "https://www.veloworkspaces.com/assets/og/disposable-vms-untrusted-software.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -111,8 +111,8 @@
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>Disposable VMs for Testing Untrusted Software</h1>
-        <p class="article-lede">This blog has covered AI agents running untrusted code at length. This is the version without an agent involved at all — you, choosing to run an install script, a build, or a tool you found on GitHub, on your own Mac. The risk is the same shape; the boundary that actually helps is too.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <p class="article-lede">This blog has covered AI agents running untrusted code at length. This is the version with no agent at all: you, choosing to run an install script, a build or a tool you found on GitHub, on your own Mac. The risk has the same shape, and so does the boundary that helps.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
@@ -120,21 +120,21 @@
   <section class="section">
     <div class="container article-body">
       <h2><code>curl | bash</code>: convenient, and exactly as trusting as it looks</h2>
-      <p>Piping a remote script straight into a shell is a genuinely common install pattern, and it means trusting three things at once: the script's actual contents (which you almost never read first), the domain serving it (not compromised, not typosquatted), and the integrity of everything in between at the moment you ran it — the same URL can serve different content to a browser preview than to a piped <code>curl</code> request. None of that is unique to this pattern, but the "just run this one command" framing makes it easy to skip the moment of "wait, what does this actually do" that a downloaded, inspected file would prompt.</p>
+      <p>Piping a remote script into a shell is a common install pattern, and it means trusting three things at once: the script's contents (which you rarely read first), the domain serving it (not compromised, not a lookalike), and everything in between at that moment. The same URL can even serve different content to a browser than to a piped <code>curl</code>. None of that is unique to this pattern, but "just run this one command" makes it easy to skip the pause a downloaded, inspected file would give you.</p>
 
-      <h2>A GitHub repo's own setup steps run the same way</h2>
-      <p><code>npm install</code>, <code>pip install -e .</code>, and <code>make</code> aren't sandboxed by the tool running them — they execute whatever the project's install hooks, <code>setup.py</code>, or Makefile say to, the identical mechanism covered in <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents use your computer</a>, minus the agent. Cloning an unfamiliar repository and following its own README's setup instructions is running code you haven't reviewed, whether or not anything about the workflow involves AI at all.</p>
+      <h2>A repository's own setup steps run the same way</h2>
+      <p><code>npm install</code>, <code>pip install -e .</code> and <code>make</code> aren't sandboxed by the tools running them. They execute whatever the project's install hooks, <code>setup.py</code> or Makefile say, the same mechanism described in <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents use your computer</a>, minus the agent. Cloning an unfamiliar repository and following its README is running code you haven't reviewed, AI or not.</p>
 
-      <h2>"Building from source" isn't inherently safer</h2>
-      <p>There's a common instinct that compiling something yourself is more trustworthy than grabbing a prebuilt binary — sometimes true for supply-chain reasons, but it doesn't touch this specific risk at all. A build script can do anything a shell script can, because it typically is one, or invokes one. "I built it myself" tells you something about where the binary came from; it tells you nothing about whether the build process itself did something you wouldn't have wanted.</p>
+      <h2>Building from source isn't automatically safer</h2>
+      <p>There's an instinct that compiling something yourself is more trustworthy than a prebuilt binary. Sometimes that's true for supply-chain reasons, but it does nothing for this risk. A build script can do anything a shell script can, because it usually is one or calls one. "I built it myself" tells you where the binary came from, not whether the build did something you wouldn't want.</p>
 
-      <h2>Dependencies you didn't choose to audit</h2>
-      <p>Even a project whose own code you trust pulls in a dependency tree you almost certainly haven't reviewed — and any one of those transitive packages running its own install hooks is the same risk one level removed. This is the general shape of supply-chain risk, and it applies whether you're installing a tool for yourself or setting an agent loose to do the same thing.</p>
+      <h2>Dependencies you never chose to audit</h2>
+      <p>Even a project whose own code you trust pulls in a dependency tree you almost certainly haven't reviewed, and any package in it running install hooks is the same risk one step removed. That's the general shape of supply-chain risk, whether you install the tool yourself or an agent does.</p>
 
-      <h2>The boundary that actually helps, either way</h2>
-      <p>None of the above gets meaningfully safer by being more careful about which untrusted software you run — the fix is the same one this blog keeps arriving at for AI agents specifically: run it somewhere a bad outcome doesn't reach your actual account, covered in <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>. Try the install, the build, the new tool inside a disposable workspace; if it's fine, keep using it from wherever you'd normally install real tools; if it's not, close the workspace and nothing about your actual Mac was ever at risk.</p>
+      <h2>The boundary that helps either way</h2>
+      <p>Being more careful about which untrusted software you run only goes so far. The fix is the one this blog keeps arriving at for AI agents: run it where a bad outcome can't reach your account (see <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>). Try the install, the build or the new tool in a disposable workspace, or in a fresh cloud image of Ubuntu or Debian that's ready in a minute. If it's fine, install it properly wherever you normally would. If it isn't, close the workspace, and your Mac was never involved.</p>
 
-      <p>Related reading: <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents use your computer</a>, for the identical mechanism with an agent involved, <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>, and <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment actually is</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents use your computer</a> for the same mechanism with an agent, <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>, and <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment is</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>

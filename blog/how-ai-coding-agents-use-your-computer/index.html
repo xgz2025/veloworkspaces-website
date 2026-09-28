@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How AI Coding Agents Use Your Computer</title>
-<meta name="description" content="Not what goes wrong — just the mechanism. Shell, filesystem, Git, package managers, network, and environment variables.">
+<title>How AI Coding Agents Use Your Computer (and Why It Matters)</title>
+<meta name="description" content="An AI coding agent runs as you: your shell, files, Git credentials, installers, network and environment. The mechanics, and where isolation must come from.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/how-ai-coding-agents-use-your-computer/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
-<link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="How AI Coding Agents Use Your Computer">
-<meta property="og:description" content="Not what goes wrong — just the mechanism. Shell, filesystem, Git, package managers, network, and environment variables.">
+<meta property="og:title" content="How AI Coding Agents Use Your Computer (and Why It Matters)">
+<meta property="og:description" content="An AI coding agent runs as you: your shell, files, Git credentials, installers, network and environment. The mechanics, and where isolation must come from.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/how-ai-coding-agents-use-your-computer/">
-<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/how-ai-coding-agents-use-your-computer.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="How AI Coding Agents Use Your Computer">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-22">
+<meta property="article:modified_time" content="2026-09-28">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -28,12 +28,12 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "How AI Coding Agents Use Your Computer",
+      "headline": "How AI Coding Agents Use Your Computer (and Why It Matters)",
       "name": "How AI Coding Agents Use Your Computer",
-      "description": "Not what goes wrong — just the mechanism. Shell, filesystem, Git, package managers, network, and environment variables.",
-      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "description": "An AI coding agent runs as you: your shell, files, Git credentials, installers, network and environment. The mechanics, and where isolation must come from.",
+      "image": "https://www.veloworkspaces.com/assets/og/how-ai-coding-agents-use-your-computer.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-09-28",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -111,8 +111,8 @@
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>How AI Coding Agents Use Your Computer</h1>
-        <p class="article-lede">This isn't the incident-report version — <a href="/blog/ai-agent-security-risks/">that one's here</a>, with real 2026 cases and what stopped them. This is the calmer, mechanical question underneath it: what does an AI coding agent actually touch on your machine, and how? Understanding the mechanism is what makes the risk legible in the first place.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
+        <p class="article-lede">This isn't the incident report; <a href="/blog/ai-agent-security-risks/">that's here</a>, with 2026 cases and what stopped them. This is the calmer question underneath: what does an AI coding agent touch on your machine, and how? The mechanism is what makes the risk make sense.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
       </div>
     </div>
   </section>
@@ -120,30 +120,30 @@
   <section class="section">
     <div class="container article-body">
       <h2>The same account, the same permissions</h2>
-      <p>The single fact that explains everything below: an AI coding agent isn't a separate, more restricted kind of user. It's a normal process, launched by your normal user account, using the same system calls any other program on your machine uses — typically <code>subprocess</code> or <code>exec()</code> to run shell commands. There's no OS-level concept of "this process is an AI agent, treat it differently." It can do anything your user account can do, because as far as the operating system is concerned, that's exactly what's asking.</p>
+      <p>One fact explains everything below. An AI coding agent isn't a separate, restricted kind of user. It's an ordinary process started by your account, using the same system calls as any other program, usually <code>subprocess</code> or <code>exec()</code> to run commands. The operating system has no notion of "this process is an AI, treat it differently". It can do anything your account can, because as far as macOS is concerned, your account is what's asking.</p>
 
-      <h2>Shell: commands run exactly like you typed them</h2>
-      <p>When an agent "runs a command," it's invoking the same shell interpreter a human terminal session would, with the same working directory, the same <code>PATH</code>, the same ability to chain commands together. There's no intermediate layer inspecting each command for intent before it executes — the shell doesn't know or care whether a human or a model decided what string to run.</p>
+      <h2>Shell: commands run as if you typed them</h2>
+      <p>When an agent runs a command, it uses the same shell a terminal would, with the same working directory, the same <code>PATH</code> and the same ability to chain commands. Nothing sits in between checking intent. The shell doesn't know or care whether a person or a model chose the string.</p>
 
-      <h2>Filesystem: whatever the process can open</h2>
-      <p>File access follows ordinary filesystem permissions, nothing more restrictive. If your user account can read or write a path, so can a process your account launched — your home directory, your dotfiles, any project directory you've opened the agent inside of. Nothing about being "an AI agent" narrows that by default. For the concrete inventory of what that actually includes on a typical Mac, see <a href="/blog/what-can-ai-agents-access-on-your-mac/">what can an AI coding agent actually access</a>.</p>
+      <h2>Files: whatever the process can open</h2>
+      <p>File access follows ordinary permissions. If your account can read or write a path, so can a process it started: your home folder, your dotfiles, any project the agent was opened in. Being an agent doesn't narrow that. For the concrete list on a typical Mac, see <a href="/blog/what-can-ai-agents-access-on-your-mac/">what an AI coding agent can access</a>.</p>
 
-      <h2>Git: the agent's commits are Git's normal operations</h2>
-      <p>An agent that runs <code>git commit</code>, <code>git push</code>, or installs a hook is using Git exactly as designed — Git has no separate trust tier for who or what is invoking it. Anything Git itself is configured to trust on your behalf — a stored credential helper, an SSH key already loaded in your agent, a hook script that runs automatically — the agent can use too, the same way any other process on your account could.</p>
+      <h2>Git: the agent's commits are ordinary Git</h2>
+      <p>An agent running <code>git commit</code> or <code>git push</code>, or installing a hook, uses Git exactly as designed. Git has no separate trust level for who's calling it. Anything Git is set up to trust for you (a stored credential helper, an SSH key loaded in your agent, a hook that runs automatically) the agent can use too.</p>
 
-      <h2>Package managers: installers run arbitrary code by design</h2>
-      <p>A <code>pip install</code>, <code>npm install</code>, or <code>brew install</code> triggered by an agent isn't sandboxed by the package manager itself — <code>setup.py</code> scripts, npm's install-time hooks, and Homebrew formulae can all run arbitrary code as part of a normal install, which is exactly how they'd run if you'd typed the same command yourself. The package manager isn't evaluating "was this install command typed by a human," because it has no way to know — see <a href="/blog/disposable-vms-untrusted-software/">the version of this risk with no agent involved at all</a>, just you and an unfamiliar GitHub repo's own setup instructions.</p>
+      <h2>Package managers: installers run code by design</h2>
+      <p>A <code>pip install</code>, <code>npm install</code> or <code>brew install</code> started by an agent isn't sandboxed by the package manager. <code>setup.py</code> scripts, npm install hooks and Homebrew formulae can all run arbitrary code during a normal install, exactly as they would if you'd typed the command. <a href="/blog/disposable-vms-untrusted-software/">The same risk with no agent at all</a> is just you following an unfamiliar repository's setup steps.</p>
 
-      <h2>Network: outbound calls are just outbound calls</h2>
-      <p>Unless something outside the agent process itself restricts it — a firewall rule, a network namespace, a VM boundary — an agent's process can make the same outbound network requests your account's other processes can. There's nothing agent-specific about the request at the network layer; it looks like traffic from your Mac because, mechanically, that's what it is.</p>
+      <h2>Network: outbound calls are outbound calls</h2>
+      <p>Unless something outside the agent restricts it (a firewall rule, a network namespace, a VM boundary), the agent can make the same outbound requests as any process of yours. At the network layer it looks like traffic from your Mac, because that's what it is.</p>
 
-      <h2>Environment variables: readable the same way <code>printenv</code> reads them</h2>
-      <p>A process inherits the environment of the account that launched it. Whatever's exported into that environment — API keys, cloud credentials, tokens set for a different tool entirely — is visible to an agent process the same way it would be visible to any other process you started, because environment inheritance doesn't distinguish between them either.</p>
+      <h2>Environment variables: readable like <code>printenv</code></h2>
+      <p>A process inherits its parent's environment. Whatever is exported there, API keys, cloud credentials, tokens meant for another tool, is visible to an agent just as to any other process you started.</p>
 
-      <h2>None of this is a flaw in a particular agent</h2>
-      <p>Every point above is standard, decades-old operating system behavior, not a bug specific to any coding agent or vendor. Processes inherit the permissions of the account that launched them; that's how the process model has always worked, for a shell script, a build tool, or an AI agent alike. Which is exactly why meaningful isolation can't come from the agent behaving more carefully — it has to come from a boundary <em>outside</em> the agent's own process entirely: a container's namespace, or a VM's separate kernel, covered in <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>. For what actually goes wrong when that boundary is missing, and which level of isolation would have stopped each case, see <a href="/blog/ai-agent-security-risks/">the security deep dive</a>.</p>
+      <h2>None of this is a flaw in one agent</h2>
+      <p>Everything above is standard, decades-old operating system behavior, not a bug in any particular agent. Processes inherit the permissions of the account that started them, whether it's a shell script, a build tool or an AI agent. That's why real isolation can't come from the agent being more careful; it has to come from a boundary <em>outside</em> the agent's process, a container's namespace or a VM's separate kernel, covered in <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>. For what goes wrong without one, and which isolation level would have stopped each case, see <a href="/blog/ai-agent-security-risks/">the security deep dive</a>.</p>
 
-      <p>Related reading: <a href="/blog/ai-agent-security-risks/">what actually goes wrong when an AI agent runs unsandboxed</a>, <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>, and <a href="/blog/zero-tax-virtualization/">running AI agents safely in an isolated VM</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
+      <p>Related reading: <a href="/blog/what-can-ai-agents-access-on-your-mac/">what an agent can access on your Mac</a>, <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>, and <a href="/blog/zero-tax-virtualization/">running AI agents safely in an isolated VM</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
     </div>
   </section>
 </main>
