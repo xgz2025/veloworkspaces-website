@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Virtualization.framework vs. QEMU on Apple Silicon — Velo Workspaces</title>
+<title>Virtualization.framework vs. QEMU on Apple Silicon</title>
 <meta name="description" content="An engineering comparison, not a verdict: architecture, hardware acceleration, device models, guest OS support, and where the real performance gap comes from.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/virtualization-framework-vs-qemu/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="Virtualization.framework vs. QEMU on Apple Silicon">
-<meta property="og:description" content="An engineering comparison, not a verdict: architecture, hardware acceleration, device models, guest OS support, and where the real performance differences actually come from.">
+<meta property="og:description" content="An engineering comparison, not a verdict: architecture, hardware acceleration, device models, guest OS support, and where the real performance gap comes from.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/virtualization-framework-vs-qemu/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Virtualization.framework vs. QEMU on Apple Silicon">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Virtualization.framework vs. QEMU on Apple Silicon",
-  "description": "An engineering comparison, not a verdict: architecture, hardware acceleration, device models, guest OS support, and where the real performance gap comes from.",
-  "datePublished": "2026-09-22",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Virtualization.framework vs. QEMU on Apple Silicon",
+      "name": "Virtualization.framework vs. QEMU on Apple Silicon",
+      "description": "An engineering comparison, not a verdict: architecture, hardware acceleration, device models, guest OS support, and where the real performance gap comes from.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-22",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/virtualization-framework-vs-qemu/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Virtualization.framework vs. QEMU on Apple Silicon",
+          "item": "https://www.veloworkspaces.com/blog/virtualization-framework-vs-qemu/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/virtualization-framework-vs-qemu/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Deep dive</span>
         <h1>Virtualization.framework vs. QEMU on Apple Silicon</h1>
         <p class="article-lede">Not a verdict — an engineering comparison of two genuinely different tools that happen to overlap on "run a VM on an Apple Silicon Mac." One is a purpose-built API with a curated device set; the other is a general-purpose machine emulator old enough to predate Apple Silicon by over a decade, with a hardware-accelerated backend bolted on for this platform specifically. Where they actually differ matters more than which one is "better."</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>Two different starting points</h2>
       <p><a href="https://developer.apple.com/documentation/virtualization" target="_blank" rel="noopener">Virtualization.framework</a> was built from the start as a native macOS API for one job: run Linux or macOS as a guest, on Apple Silicon or Intel Macs, using the host CPU's virtualization extensions directly. <a href="https://www.qemu.org/" target="_blank" rel="noopener">QEMU</a> is a general-purpose machine emulator and virtualizer that predates Apple Silicon entirely — it emulates dozens of CPU architectures and hundreds of hardware configurations, and its Apple Silicon story is a hardware-accelerated backend added to that much older, much broader project. Neither fact makes one better; it explains almost every difference below.</p>
 
@@ -111,7 +148,6 @@
       <p>Virtualization.framework makes sense when the job is specifically "run Linux or macOS as a guest, natively integrated into a sandboxed Mac app, with Apple Silicon-accelerated performance" — which is the exact shape of what Velo Workspaces does. QEMU (often fronted by <a href="/blog/velo-vs-parallels-vs-utm/">UTM</a>, which can use either QEMU or Virtualization.framework as a backend) makes sense when the actual requirement is broader guest OS or architecture support than Virtualization.framework offers — genuine cross-architecture emulation, an OS outside the Linux/macOS pair, or wanting one tool that behaves the same on macOS, Linux, and Windows. Different requirements, not a strictly-better-or-worse ranking.</p>
 
       <p>Related reading: <a href="/blog/apple-silicon-vms-explained/">what a VM on Apple Silicon actually is</a>, <a href="/blog/how-virtualization-framework-works/">the Virtualization.framework device inventory</a>, <a href="/blog/arm-virtualization-performance/">what determines VM performance on ARM</a>, and the product-level <a href="/blog/velo-vs-parallels-vs-utm/">Velo Workspaces vs. Parallels vs. UTM comparison</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

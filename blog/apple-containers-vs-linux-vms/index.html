@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Apple Containers vs. Linux VMs: What's the Difference? — Velo Workspaces</title>
-<meta name="description" content="Apple's own container tool already runs every container in its own lightweight VM. What's actually different is what each one is optimized for.">
+<title>Apple Containers vs. Linux VMs: What&#x27;s the Difference?</title>
+<meta name="description" content="Apple&#x27;s own container tool already runs every container in its own lightweight VM. What&#x27;s actually different is what each one is optimized for.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/apple-containers-vs-linux-vms/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Apple Containers vs. Linux VMs: What's the Difference?">
-<meta property="og:description" content="Apple's own container tool already runs every container in its own lightweight VM. What's actually different is what each one is optimized for.">
+<meta property="og:title" content="Apple Containers vs. Linux VMs: What&#x27;s the Difference?">
+<meta property="og:description" content="Apple&#x27;s own container tool already runs every container in its own lightweight VM. What&#x27;s actually different is what each one is optimized for.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/apple-containers-vs-linux-vms/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Apple Containers vs. Linux VMs: What&#x27;s the Difference?">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Apple Containers vs. Linux VMs: What's the Difference?",
-  "description": "Apple's own container tool already runs every container in its own lightweight VM. What's actually different is what each one is optimized for.",
-  "datePublished": "2026-09-22",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Apple Containers vs. Linux VMs: What's the Difference?",
+      "name": "Apple Containers vs. Linux VMs: What's the Difference?",
+      "description": "Apple's own container tool already runs every container in its own lightweight VM. What's actually different is what each one is optimized for.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-22",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/apple-containers-vs-linux-vms/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Apple Containers vs. Linux VMs: What's the Difference?",
+          "item": "https://www.veloworkspaces.com/blog/apple-containers-vs-linux-vms/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/apple-containers-vs-linux-vms/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Fundamentals</span>
         <h1>Apple Containers vs. Linux VMs: What's the Difference?</h1>
         <p class="article-lede">The usual container-vs-VM framing — namespaces and cgroups sharing a kernel vs. a hypervisor boundary — doesn't quite apply here, because Apple's own <code>container</code> tool already gives every container its own lightweight VM. So what's actually different from a Velo-style Linux VM workspace? Not the isolation boundary. What each one is built to be used for.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>Apple's <code>container</code>, briefly: one micro-VM per container, not a shared one</h2>
       <p>Apple's own containerization tool, introduced at WWDC 2025 and shipping as a stable 1.0 in June 2026, breaks from how every other container tool on macOS works: rather than running all your containers inside one shared Linux VM the way Docker Desktop and OrbStack do — <a href="/blog/apple-containers-vs-docker-vs-orbstack/">covered in depth here</a> — Apple's <strong>Containerization framework</strong> gives each container its own dedicated, lightweight VM, built directly on Virtualization.framework. Each of those VMs boots a minimal, purpose-built kernel with a small Swift init process, tuned specifically for starting fast rather than for general-purpose use — reported boot times are sub-second. It's open source, Apache-licensed, written in Swift, Apple Silicon-only, and fully OCI-compatible: images from Docker Hub run unmodified, and anything you build with it pushes to any standard registry.</p>
       <p>That one-VM-per-container design is exactly why the usual "containers share a kernel, VMs don't" framing breaks down here — Apple's containers already have the isolation properties of separate VMs, at the hardware level, the same category this blog's <a href="/blog/ai-agent-security-risks/">security deep dive</a> puts a full VM in rather than the shared-kernel container tier.</p>
@@ -100,7 +137,6 @@
       <p>A realistic setup uses both, for different halves of the same workflow: Apple's <code>container</code> for running a packaged service or a CI step that's already an OCI image, and a Velo Linux VM workspace as the actual development environment — where you write the code, test it interactively, and build the container image in the first place before handing it off. One doesn't replace the other; they sit at different points in the same pipeline.</p>
 
       <p>Related reading: <a href="/blog/apple-containers-vs-docker-vs-orbstack/">Apple Containers vs. Docker Desktop vs. OrbStack</a> for how Apple's tool compares to the two shared-VM container tools, <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a> for the general isolation-model primer, and <a href="/blog/ai-agent-security-risks/">the security deep dive</a> for where each isolation level actually sits on real, measured risk. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

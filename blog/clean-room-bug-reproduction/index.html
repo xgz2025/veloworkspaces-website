@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Clean-Room Bug Reproduction With Disposable VMs — Velo Workspaces</title>
+<title>Clean-Room Bug Reproduction With Disposable VMs</title>
 <meta name="description" content="Your dev machine is the worst place to reproduce a bug report — a disposable workspace removes that variable entirely.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/clean-room-bug-reproduction/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="Clean-Room Bug Reproduction With Disposable VMs">
 <meta property="og:description" content="Your dev machine is the worst place to reproduce a bug report — a disposable workspace removes that variable entirely.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/clean-room-bug-reproduction/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Clean-Room Bug Reproduction With Disposable VMs">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Clean-Room Bug Reproduction With Disposable VMs",
-  "description": "Your dev machine is the worst place to reproduce a bug report — a disposable workspace removes that variable entirely.",
-  "datePublished": "2026-09-22",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Clean-Room Bug Reproduction With Disposable VMs",
+      "name": "Clean-Room Bug Reproduction With Disposable VMs",
+      "description": "Your dev machine is the worst place to reproduce a bug report — a disposable workspace removes that variable entirely.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-22",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/clean-room-bug-reproduction/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Clean-Room Bug Reproduction With Disposable VMs",
+          "item": "https://www.veloworkspaces.com/blog/clean-room-bug-reproduction/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/clean-room-bug-reproduction/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Workflow</span>
         <h1>Clean-Room Bug Reproduction With Disposable VMs</h1>
         <p class="article-lede">"Can't reproduce" is sometimes an honest finding and sometimes a confession about your own machine. Months of accumulated fixes, config tweaks, and half-remembered workarounds on your daily dev environment can mask — or alter — the exact bug a user is reporting. A disposable workspace removes that variable entirely, not by trying harder, but by not carrying any of it in the first place.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>Your dev machine is a bad reproduction environment, structurally</h2>
       <p>This isn't about sloppiness — it's what any long-lived environment does over time. A library you upgraded six months ago and forgot about, a config file you patched once to work around a different issue, a system package version that's drifted from what most users actually have: none of it shows up as a decision you remember making, and any one of it can be the reason a bug that's real for users simply doesn't happen on your machine. "Works on my machine" is frequently true and irrelevant — the machine in question isn't representative of anything.</p>
 
@@ -101,7 +138,6 @@
       <p><a href="/blog/qa-devops-disposable-vm-workflow/">The QA/DevOps disposable VM workflow</a> covers a related but distinct problem: systemic test flakiness, root-caused to state a test suite assumed was reset but wasn't. This is narrower and more individual — one specific bug report, reproduced once, debugged once, discarded once. The underlying mechanism is the same disposability this whole blog keeps coming back to; the trigger for reaching for it is different.</p>
 
       <p>Related reading: <a href="/blog/qa-devops-disposable-vm-workflow/">the disposable VM workflow for QA and DevOps</a>, <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>, and <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment actually is</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

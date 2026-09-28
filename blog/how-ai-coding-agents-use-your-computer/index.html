@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How AI Coding Agents Use Your Computer — Velo Workspaces</title>
+<title>How AI Coding Agents Use Your Computer</title>
 <meta name="description" content="Not what goes wrong — just the mechanism. Shell, filesystem, Git, package managers, network, and environment variables.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/how-ai-coding-agents-use-your-computer/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="How AI Coding Agents Use Your Computer">
 <meta property="og:description" content="Not what goes wrong — just the mechanism. Shell, filesystem, Git, package managers, network, and environment variables.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/how-ai-coding-agents-use-your-computer/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="How AI Coding Agents Use Your Computer">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "How AI Coding Agents Use Your Computer",
-  "description": "Not what goes wrong — just the mechanism. Shell, filesystem, Git, package managers, network, and environment variables.",
-  "datePublished": "2026-09-22",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "How AI Coding Agents Use Your Computer",
+      "name": "How AI Coding Agents Use Your Computer",
+      "description": "Not what goes wrong — just the mechanism. Shell, filesystem, Git, package managers, network, and environment variables.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-22",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/how-ai-coding-agents-use-your-computer/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "How AI Coding Agents Use Your Computer",
+          "item": "https://www.veloworkspaces.com/blog/how-ai-coding-agents-use-your-computer/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/how-ai-coding-agents-use-your-computer/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Guide</span>
         <h1>How AI Coding Agents Use Your Computer</h1>
         <p class="article-lede">This isn't the incident-report version — <a href="/blog/ai-agent-security-risks/">that one's here</a>, with real 2026 cases and what stopped them. This is the calmer, mechanical question underneath it: what does an AI coding agent actually touch on your machine, and how? Understanding the mechanism is what makes the risk legible in the first place.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>The same account, the same permissions</h2>
       <p>The single fact that explains everything below: an AI coding agent isn't a separate, more restricted kind of user. It's a normal process, launched by your normal user account, using the same system calls any other program on your machine uses — typically <code>subprocess</code> or <code>exec()</code> to run shell commands. There's no OS-level concept of "this process is an AI agent, treat it differently." It can do anything your user account can do, because as far as the operating system is concerned, that's exactly what's asking.</p>
 
@@ -107,7 +144,6 @@
       <p>Every point above is standard, decades-old operating system behavior, not a bug specific to any coding agent or vendor. Processes inherit the permissions of the account that launched them; that's how the process model has always worked, for a shell script, a build tool, or an AI agent alike. Which is exactly why meaningful isolation can't come from the agent behaving more carefully — it has to come from a boundary <em>outside</em> the agent's own process entirely: a container's namespace, or a VM's separate kernel, covered in <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>. For what actually goes wrong when that boundary is missing, and which level of isolation would have stopped each case, see <a href="/blog/ai-agent-security-risks/">the security deep dive</a>.</p>
 
       <p>Related reading: <a href="/blog/ai-agent-security-risks/">what actually goes wrong when an AI agent runs unsandboxed</a>, <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>, and <a href="/blog/zero-tax-virtualization/">running AI agents safely in an isolated VM</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

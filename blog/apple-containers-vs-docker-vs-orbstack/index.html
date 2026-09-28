@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Apple Containers vs. Docker Desktop vs. OrbStack — Velo Workspaces</title>
-<meta name="description" content="A one-VM-per-container tool that's free and Apache-licensed, up against two mature, shared-VM tools with the ecosystem Apple's doesn't have yet.">
+<title>Apple Containers vs. Docker Desktop vs. OrbStack</title>
+<meta name="description" content="A one-VM-per-container tool that&#x27;s free and Apache-licensed, up against two mature, shared-VM tools with the ecosystem Apple&#x27;s doesn&#x27;t have yet.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/apple-containers-vs-docker-vs-orbstack/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="Apple Containers vs. Docker Desktop vs. OrbStack">
-<meta property="og:description" content="A one-VM-per-container tool that's free and Apache-licensed, up against two mature, shared-VM tools with the ecosystem Apple's doesn't have yet.">
+<meta property="og:description" content="A one-VM-per-container tool that&#x27;s free and Apache-licensed, up against two mature, shared-VM tools with the ecosystem Apple&#x27;s doesn&#x27;t have yet.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/apple-containers-vs-docker-vs-orbstack/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Apple Containers vs. Docker Desktop vs. OrbStack">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Apple Containers vs. Docker Desktop vs. OrbStack",
-  "description": "A one-VM-per-container tool that's free and Apache-licensed, up against two mature, shared-VM tools with the ecosystem Apple's doesn't have yet.",
-  "datePublished": "2026-09-22",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Apple Containers vs. Docker Desktop vs. OrbStack",
+      "name": "Apple Containers vs. Docker Desktop vs. OrbStack",
+      "description": "A one-VM-per-container tool that's free and Apache-licensed, up against two mature, shared-VM tools with the ecosystem Apple's doesn't have yet.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-22",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/apple-containers-vs-docker-vs-orbstack/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Apple Containers vs. Docker Desktop vs. OrbStack",
+          "item": "https://www.veloworkspaces.com/blog/apple-containers-vs-docker-vs-orbstack/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/apple-containers-vs-docker-vs-orbstack/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Comparison</span>
         <h1>Apple Containers vs. Docker Desktop vs. OrbStack</h1>
         <p class="article-lede">Not a Velo Workspaces comparison — Apple's own <code>container</code> tool doesn't compete with what Velo does at all, covered separately in <a href="/blog/apple-containers-vs-linux-vms/">Apple Containers vs. Linux VMs</a>. This is squarely about the three real options for running containers on a Mac today, and what's genuinely different about the newest of the three.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>Three different answers to "how do I get a Linux kernel on this Mac"</h2>
       <p>All three tools solve the same underlying problem — macOS has no Linux kernel of its own, so running Linux containers means getting one from somewhere — but they solve it differently enough that "which is fastest" undersells the actual differences. <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">Docker Desktop and OrbStack</a> both run every container inside one shared Linux VM; Apple's own tool, reaching a stable 1.0 in June 2026 after its WWDC 2025 introduction, gives each container its own dedicated, lightweight VM instead, built directly on Virtualization.framework — the architecture covered in full in <a href="/blog/apple-containers-vs-linux-vms/">the companion post</a>.</p>
 
@@ -107,7 +144,6 @@
       </ul>
 
       <p>Related reading: <a href="/blog/apple-containers-vs-linux-vms/">Apple Containers vs. Linux VMs</a> for how Apple's tool relates to a full Velo workspace rather than to other container tools, <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">the full Docker Desktop and OrbStack comparison</a>, and <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a> for the general isolation primer. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

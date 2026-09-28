@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Linux Server vs. Linux Desktop VMs on a Mac — Velo Workspaces</title>
+<title>Linux Server vs. Linux Desktop VMs on a Mac</title>
 <meta name="description" content="When headless plus SSH is actually enough, and when you need a real GUI session inside the guest.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/linux-server-vs-desktop-vm-mac/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="Linux Server vs. Linux Desktop VMs on a Mac">
 <meta property="og:description" content="When headless plus SSH is actually enough, and when you need a real GUI session inside the guest.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/linux-server-vs-desktop-vm-mac/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Linux Server vs. Linux Desktop VMs on a Mac">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Linux Server vs. Linux Desktop VMs on a Mac",
-  "description": "When headless plus SSH is actually enough, and when you need a real GUI session inside the guest.",
-  "datePublished": "2026-09-22",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Linux Server vs. Linux Desktop VMs on a Mac",
+      "name": "Linux Server vs. Linux Desktop VMs on a Mac",
+      "description": "When headless plus SSH is actually enough, and when you need a real GUI session inside the guest.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-22",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/linux-server-vs-desktop-vm-mac/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Linux Server vs. Linux Desktop VMs on a Mac",
+          "item": "https://www.veloworkspaces.com/blog/linux-server-vs-desktop-vm-mac/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/linux-server-vs-desktop-vm-mac/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Guide</span>
         <h1>Linux Server vs. Linux Desktop VMs on a Mac</h1>
         <p class="article-lede">Ubuntu is the one distro in Velo's official-image picker that offers both — the same project, the same release, two genuinely different starting points. Which one to pick isn't about which is "better," it's about whether anything you're doing actually needs a windowing session running inside the guest at all.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>The same distro, two different starting points</h2>
       <p>Velo's official-image picker offers Ubuntu Server and Ubuntu Desktop side by side, same release, same install source, genuinely different from the moment they boot: Server drops you at a text console with nothing graphical running; Desktop boots into a full windowing session, taskbar and all. Every other distro's Server-shaped install (Debian's netinst, Fedora's minimal path, Rocky's Minimal ISO) follows the same underlying split even where the picker only offers one variant — this post uses Ubuntu specifically because it's the one place you can compare both starting points from the exact same official source.</p>
 
@@ -98,7 +135,6 @@
       <p>Start with Server unless you already know you need the GUI — it's the lighter starting point, and remote-editing tools cover the large majority of development work without ever needing a graphical session in the guest at all. Reach for Desktop specifically when the task requires seeing and interacting with a real windowed application inside the VM, not as a general-purpose default.</p>
 
       <p>Related reading: <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu on Apple Silicon</a>, <a href="/blog/vscode-continue-ai-bridge/">a fully headless GUI editing workflow over SSH</a>, and <a href="/blog/how-virtualization-framework-works/">the graphics device inventory</a> this post builds on. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

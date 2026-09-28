@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>What Actually Goes Wrong When AI Coding Agents Run Unsandboxed — Velo Workspaces</title>
+<title>What Actually Goes Wrong When AI Coding Agents Run Unsandboxed</title>
 <meta name="description" content="Real 2026 AI agent security incidents — Cursor, Copilot, Claude Code, Antigravity, Flowise — and which sandboxing level would have stopped each one.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/ai-agent-security-risks/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="What Actually Goes Wrong When AI Coding Agents Run Unsandboxed">
 <meta property="og:description" content="Real 2026 AI agent security incidents — Cursor, Copilot, Claude Code, Antigravity, Flowise — and which sandboxing level would have stopped each one.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/ai-agent-security-risks/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="What Actually Goes Wrong When AI Coding Agents Run Unsandboxed — and Which Isolation Level Stops It">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-20">
 <meta property="article:modified_time" content="2026-09-23">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "What Actually Goes Wrong When AI Coding Agents Run Unsandboxed",
-  "description": "Real 2026 AI agent security incidents — Cursor, Copilot, Claude Code, Antigravity, Flowise — and which sandboxing level would have stopped each one.",
-  "datePublished": "2026-09-20",
-  "dateModified": "2026-09-23",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "What Actually Goes Wrong When AI Coding Agents Run Unsandboxed",
+      "name": "What Actually Goes Wrong When AI Coding Agents Run Unsandboxed — and Which Isolation Level Stops It",
+      "description": "Real 2026 AI agent security incidents — Cursor, Copilot, Claude Code, Antigravity, Flowise — and which sandboxing level would have stopped each one.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-20",
+      "dateModified": "2026-09-23",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/ai-agent-security-risks/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "What Actually Goes Wrong When AI Coding Agents Run Unsandboxed — and Which Isolation Level Stops It",
+          "item": "https://www.veloworkspaces.com/blog/ai-agent-security-risks/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/ai-agent-security-risks/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Security</span>
         <h1>What Actually Goes Wrong When AI Coding Agents Run Unsandboxed — and Which Isolation Level Stops It</h1>
         <p class="article-lede">AI coding agents run real commands with real permissions now, and 2026 produced enough documented incidents to stop treating this as theoretical. Four cases, examined in depth and in increasing order of severity — plus three more from early 2026 showing the pattern hasn't slowed — and which level of sandboxing would have actually contained each one, not just slowed it down.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 20, 2026 · Updated September 23, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-23">September 23, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>The year this stopped being theoretical</h2>
       <p>According to OWASP's 2026 LLM security tracking, prompt injection attacks against production AI systems surged 340% year over year, making them the fastest-growing category of attack they track. Coding agents specifically drive most of that new attack surface: 28 of the 53 agentic projects OWASP tracks are coding agents, and the five fastest-growing tools — Claude Code, Gemini CLI, Codex, Cline, and Aider — are all in that category. A separate 2026 enterprise survey found 88% of organizations reported a confirmed or suspected AI agent security incident in the past year.</p>
 
@@ -172,7 +209,6 @@
       </ul>
 
       <p>Related reading: the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>, what VM isolation actually <a href="/blog/vm-sandboxing-cost/">costs in inference speed</a>, a <a href="/blog/zero-tax-virtualization/">complete setup guide</a> for running an agent this way, a closer look at <a href="/blog/ai-researchers-agent-testing/">building and testing agents specifically</a> against a local model, <a href="/blog/vscode-continue-ai-bridge/">the same isolation argument applied to an editor-based assistant</a> rather than a CLI agent, <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">why the isolation table above puts containers and VMs in different rows</a>, compared against Docker Desktop and OrbStack directly, and <a href="/blog/ai-bridge-data-privacy/">what actually leaves your Mac</a> when a model runs behind that isolation boundary. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

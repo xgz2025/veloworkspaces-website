@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Building and Testing AI Agents on Apple Silicon — Velo Workspaces</title>
+<title>Building and Testing AI Agents on Apple Silicon</title>
 <meta name="description" content="AI Bridge supports four local model backends, not just Ollama and MLX, plus a real gotcha when switching backends mid-experiment.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/ai-researchers-agent-testing/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="Building and Testing AI Agents on Apple Silicon">
 <meta property="og:description" content="AI Bridge supports four local model backends, not just Ollama and MLX, plus a real gotcha when switching backends mid-experiment.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/ai-researchers-agent-testing/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Building and Testing AI Agents on Apple Silicon: A Guide for AI Researchers">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-21">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Building and Testing AI Agents on Apple Silicon",
-  "description": "AI Bridge supports four local model backends, not just Ollama and MLX, plus a real gotcha when switching backends mid-experiment.",
-  "datePublished": "2026-09-21",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Building and Testing AI Agents on Apple Silicon",
+      "name": "Building and Testing AI Agents on Apple Silicon: A Guide for AI Researchers",
+      "description": "AI Bridge supports four local model backends, not just Ollama and MLX, plus a real gotcha when switching backends mid-experiment.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-21",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/ai-researchers-agent-testing/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Building and Testing AI Agents on Apple Silicon: A Guide for AI Researchers",
+          "item": "https://www.veloworkspaces.com/blog/ai-researchers-agent-testing/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/ai-researchers-agent-testing/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Guide</span>
         <h1>Building and Testing AI Agents on Apple Silicon: A Guide for AI Researchers</h1>
         <p class="article-lede">Building a RAG pipeline or a tool-calling agent means running code you don't fully trust yet, against a model you want at full local speed. AI Bridge and the AI Sandbox profile are built for exactly that split — and AI Bridge supports more backends than earlier posts on this blog have shown.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 21, 2026 · Updated September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>The actual problem this solves</h2>
       <p>Developing an agent — a RAG pipeline, a tool-calling loop, anything that lets an LLM decide what code to run next — means two things are true at once. The agent needs to execute generated code, which you don't want happening against your real filesystem and credentials while you're still finding its bugs; that's the exact risk profile covered in this blog's own <a href="/blog/ai-agent-security-risks/">security deep dive</a>. And it needs a model to actually call, ideally fast and local, so an iteration loop isn't paying cloud API latency and cost on every single test run. The <strong>AI Sandbox</strong> profile and <strong>AI Bridge</strong> are built around exactly that split: the agent's code runs isolated inside a disposable VM, while the model stays on the host, at full native GPU speed, reached over a vsock channel rather than an internet round trip.</p>
 
@@ -129,7 +166,6 @@
       <p>An agent you're actively developing is exactly the thing the <a href="/blog/ai-agent-security-risks/">security deep dive</a> is about: code whose behavior you don't fully trust yet, potentially executing shell commands or writing files based on what a model decides to do. A bad run — an agent that goes off-script, installs the wrong thing, corrupts its own working directory — costs nothing in a disposable AI Sandbox workspace. Close it, clone a fresh one from your sealed base image, and try again with the same starting state every time. That's the same <a href="/blog/qa-devops-disposable-vm-workflow/">disposable-workspace pattern</a> covered for QA and DevOps, applied to a research loop where "did that fail because of my prompt or because the environment drifted" is exactly the ambiguity worth eliminating.</p>
 
       <p>Related reading: the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>, the <a href="/blog/vm-inference-benchmark/">full inference benchmark</a> against MLX, the <a href="/blog/mlx-vm-setup-guide/">step-by-step MLX setup guide</a> this post's provider table extends, <a href="/blog/ai-bridge-data-privacy/">what actually leaves your Mac</a> when the Custom provider is pointed at a URL, and, for a GUI alternative to all four CLI agents above, <a href="/blog/vscode-continue-ai-bridge/">running Continue inside VS Code Remote against the same bridge</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

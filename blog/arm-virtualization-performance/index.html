@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>What Actually Determines VM Performance on ARM — Velo Workspaces</title>
-<meta name="description" content="Why ARM's EL2 exception level, hardware interrupt virtualization, and two-stage memory translation make VMs on Apple Silicon feel different from x86.">
+<title>What Actually Determines VM Performance on ARM</title>
+<meta name="description" content="Why ARM&#x27;s EL2 exception level, hardware interrupt virtualization, and two-stage memory translation make VMs on Apple Silicon feel different from x86.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/arm-virtualization-performance/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="What Actually Determines VM Performance on ARM">
-<meta property="og:description" content="Why ARM's EL2 exception level, hardware interrupt virtualization, and two-stage memory translation make VMs on Apple Silicon feel different from x86.">
+<meta property="og:description" content="Why ARM&#x27;s EL2 exception level, hardware interrupt virtualization, and two-stage memory translation make VMs on Apple Silicon feel different from x86.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/arm-virtualization-performance/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Paravirtualization vs. Hardware Passthrough: What Actually Determines VM Performance on ARM">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-20">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "What Actually Determines VM Performance on ARM",
-  "description": "Why ARM's EL2 exception level, hardware interrupt virtualization, and two-stage memory translation make VMs on Apple Silicon feel different from x86.",
-  "datePublished": "2026-09-20",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "What Actually Determines VM Performance on ARM",
+      "name": "Paravirtualization vs. Hardware Passthrough: What Actually Determines VM Performance on ARM",
+      "description": "Why ARM's EL2 exception level, hardware interrupt virtualization, and two-stage memory translation make VMs on Apple Silicon feel different from x86.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-20",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/arm-virtualization-performance/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Paravirtualization vs. Hardware Passthrough: What Actually Determines VM Performance on ARM",
+          "item": "https://www.veloworkspaces.com/blog/arm-virtualization-performance/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/arm-virtualization-performance/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Deep dive</span>
         <h1>Paravirtualization vs. Hardware Passthrough: What Actually Determines VM Performance on ARM</h1>
         <p class="article-lede">Our own benchmarks showed a Linux VM on Apple Silicon costing single-digit percent, sometimes nothing at all, compared to running the same workload on the host. That's not an accident of one good hypervisor — it's a direct consequence of how ARM's virtualization extensions work at the CPU level. Here's the actual mechanism, and what paravirtualization vs. hardware passthrough trades off once you get past the marketing terms.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 20, 2026 · Updated September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <p><em>New to what a VM on Apple Silicon actually is? <a href="/blog/apple-silicon-vms-explained/">Start with the fundamentals</a> — this post picks up from there.</em></p>
 
       <h2>Four things actually determine VM performance</h2>
@@ -143,7 +180,6 @@
       <p>This is the mechanism behind results we've published elsewhere on this blog rather than just asserted. At single-request scale, an <a href="/blog/vm-inference-benchmark/">MLX inference benchmark</a> through a VM on Apple Silicon came out statistically indistinguishable from running on the host directly — inside normal run-to-run noise. Under concurrent load, the gap was a real but small single-digit percentage. Given everything above, that's exactly what you'd expect: CPU traps are cheap (dedicated EL2, not a shared privilege ring), interrupt delivery doesn't need to trap to the hypervisor at all (vGIC), memory translation overhead is TLB-amortized, and the one I/O path that matters here — AI Bridge's vsock channel — is a lightweight paravirtualized ring buffer, not a heavyweight emulated device or a full virtualized network stack processing TCP/IP.</p>
 
       <p>Related reading: the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>, the <a href="/blog/vm-inference-benchmark/">full inference benchmark</a>, <a href="/blog/vm-sandboxing-cost/">what VM isolation costs</a> compared across two different inference engines, what's actually worth tuning inside the guest once it's running — <a href="/blog/guest-os-performance-tuning/">guest OS performance tuning on Apple Silicon</a> — <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">whether you need a VM at all</a>, compared against Docker Desktop and OrbStack, and <a href="/blog/why-arm-vms-feel-native/">what this mechanism actually buys you day to day</a>, without the exception-level detail. For how these architectural advantages actually translate into how many vCPUs are worth assigning, see <a href="/blog/linux-vm-cpu-performance-apple-silicon/">how core allocation works in practice</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

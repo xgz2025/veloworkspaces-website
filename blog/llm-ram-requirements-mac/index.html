@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How Much RAM Do You Need for Local LLMs on a Mac? — Velo Workspaces</title>
-<meta name="description" content="The actual math behind a model's memory footprint — weights, KV cache, and why a model that fits fine at first can run out of memory later.">
+<title>How Much RAM Do You Need for Local LLMs on a Mac?</title>
+<meta name="description" content="The actual math behind a model&#x27;s memory footprint — weights, KV cache, and why a model that fits fine at first can run out of memory later.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/llm-ram-requirements-mac/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="How Much RAM Do You Need for Local LLMs on a Mac?">
-<meta property="og:description" content="The actual math behind a model's memory footprint — weights, KV cache, and why a model that fits fine at first can run out of memory later.">
+<meta property="og:description" content="The actual math behind a model&#x27;s memory footprint — weights, KV cache, and why a model that fits fine at first can run out of memory later.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/llm-ram-requirements-mac/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="How Much RAM Do You Need for Local LLMs on a Mac?">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "How Much RAM Do You Need for Local LLMs on a Mac?",
-  "description": "The actual math behind a model's memory footprint — weights, KV cache, and why a model that fits fine at first can run out of memory later.",
-  "datePublished": "2026-09-22",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "How Much RAM Do You Need for Local LLMs on a Mac?",
+      "name": "How Much RAM Do You Need for Local LLMs on a Mac?",
+      "description": "The actual math behind a model's memory footprint — weights, KV cache, and why a model that fits fine at first can run out of memory later.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-22",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/llm-ram-requirements-mac/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "How Much RAM Do You Need for Local LLMs on a Mac?",
+          "item": "https://www.veloworkspaces.com/blog/llm-ram-requirements-mac/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/llm-ram-requirements-mac/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Guide</span>
         <h1>How Much RAM Do You Need for Local LLMs on a Mac?</h1>
         <p class="article-lede">This blog already has <a href="/blog/zero-tax-virtualization/">a tier-by-tier table</a> for the specific models it recommends. This is the math behind it — so you can work out the answer for any model, not just the ones already tabulated, and understand why a model that fit fine when you started a session can run out of room an hour later.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>Two numbers, not one</h2>
       <p>A model's memory footprint isn't a single static figure — it's two genuinely different things added together: the <strong>weights</strong>, which are fixed the moment you pick a model and a quantization level, and the <strong>KV cache</strong>, which grows as a conversation gets longer. Sizing for weights alone is the mistake that makes a model work fine in a quick test and then run out of memory in a real session.</p>
 
@@ -101,7 +138,6 @@
       <p>Memory pressure on a Mac doesn't usually announce itself as a hard crash — it shows up as swapping, and an inference engine that was fast a minute ago suddenly isn't, with no error message pointing at the actual cause. If a model that felt snappy at the start of a session gets progressively slower rather than staying consistent, check context length and KV cache growth before assuming something's wrong with the model or the engine itself.</p>
 
       <p>Related reading: <a href="/blog/zero-tax-virtualization/">the tier-by-tier model table this post explains the math behind</a>, <a href="/blog/local-llms-apple-silicon/">the broader landscape of local LLM tools</a>, and <a href="/blog/how-much-memory-linux-vm-mac/">how much memory to give a Linux VM</a> for non-LLM workloads, including the memory-balloon device that handles the VM side of memory allocation. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

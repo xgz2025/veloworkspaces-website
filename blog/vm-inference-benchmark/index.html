@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sandboxing an AI Coding Agent Cost Me Near-Zero GPU Speed — Velo Workspaces</title>
+<title>Sandboxing an AI Coding Agent Cost Me Near-Zero GPU Speed</title>
 <meta name="description" content="Three benchmarks on Apple Silicon measuring what a Linux VM actually costs when the model stays on the host GPU via MLX.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/vm-inference-benchmark/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="Sandboxing an AI Coding Agent Cost Me Near-Zero GPU Speed">
 <meta property="og:description" content="Three benchmarks on Apple Silicon measuring what a Linux VM actually costs when the model stays on the host GPU via MLX.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/vm-inference-benchmark/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="I Sandboxed My AI Coding Agent in a VM — It Cost Me Near-Zero GPU Speed">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-13">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Sandboxing an AI Coding Agent Cost Me Near-Zero GPU Speed",
-  "description": "Three benchmarks on Apple Silicon measuring what a Linux VM actually costs when the model stays on the host GPU via MLX.",
-  "datePublished": "2026-09-13",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Sandboxing an AI Coding Agent Cost Me Near-Zero GPU Speed",
+      "name": "I Sandboxed My AI Coding Agent in a VM — It Cost Me Near-Zero GPU Speed",
+      "description": "Three benchmarks on Apple Silicon measuring what a Linux VM actually costs when the model stays on the host GPU via MLX.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-13",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/vm-inference-benchmark/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "I Sandboxed My AI Coding Agent in a VM — It Cost Me Near-Zero GPU Speed",
+          "item": "https://www.veloworkspaces.com/blog/vm-inference-benchmark/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/vm-inference-benchmark/"
-  }
+  ]
 }
 </script>
 </head>
@@ -69,19 +107,18 @@
 <main id="main">
   <section class="section" style="padding-bottom:0;">
     <div class="container">
-      <a class="article-back-link" href="/#features">← Back to Velo Workspaces</a>
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Benchmark</span>
         <h1>I Sandboxed My AI Coding Agent in a VM — It Cost Me Near-Zero GPU Speed</h1>
         <p class="article-lede">Three benchmarks on Apple Silicon. Single-request speed, concurrent load, and a real agentic coding loop, to measure what a Linux VM actually costs you when the model itself stays on the host GPU.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 13, 2026 · Updated September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-13">September 13, 2026</time> · Updated <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>The question</h2>
       <p>Running an AI coding agent inside a VM is the obvious way to give it real isolation — its own filesystem, its own blast radius, nothing to clean up when you're done. On Apple Silicon that runs into a wall: Apple's <code>Virtualization.framework</code> doesn't pass the host GPU through to a Linux guest, so a model loaded inside the VM is CPU-bound only. <a href="/">Velo Workspaces</a>' answer is <strong>AI Bridge</strong> — a vsock-based channel that lets the VM reach a model server running on the host's own GPU, exposed inside the guest as a plain OpenAI-compatible endpoint.</p>
 
@@ -153,7 +190,6 @@
         <img src="/assets/blog/screenshot-agentic-loop-host.png" alt="Terminal output: opencode_perf_test.py running on the host, showing mean times of 8.40s, 4.50s, and 5.58s for the three tasks.">
         <img src="/assets/blog/screenshot-agentic-loop-vm.png" alt="Terminal output: opencode_perf_test.py running inside the VM over AI Bridge, showing mean times of 8.82s, 4.55s, and 5.70s for the three tasks.">
       </div>
-
     </div>
   </section>
 </main>

@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ARM64 Compatibility Problems: Why Does My Linux Software Not Run? — Velo Workspaces</title>
+<title>ARM64 Compatibility Problems: Why Does My Linux Software Not Run?</title>
 <meta name="description" content="Four different reasons arm64 Linux software fails, each with a genuinely different fix — a decision tree instead of one generic workaround.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/arm64-linux-compatibility-problems/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="ARM64 Compatibility Problems: Why Does My Linux Software Not Run?">
 <meta property="og:description" content="Four different reasons arm64 Linux software fails, each with a genuinely different fix — a decision tree instead of one generic workaround.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/arm64-linux-compatibility-problems/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ARM64 Compatibility Problems: Why Does My Linux Software Not Run?">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "ARM64 Compatibility Problems: Why Does My Linux Software Not Run?",
-  "description": "Four different reasons arm64 Linux software fails, each with a genuinely different fix — a decision tree instead of one generic workaround.",
-  "datePublished": "2026-09-22",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "ARM64 Compatibility Problems: Why Does My Linux Software Not Run?",
+      "name": "ARM64 Compatibility Problems: Why Does My Linux Software Not Run?",
+      "description": "Four different reasons arm64 Linux software fails, each with a genuinely different fix — a decision tree instead of one generic workaround.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-22",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/arm64-linux-compatibility-problems/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "ARM64 Compatibility Problems: Why Does My Linux Software Not Run?",
+          "item": "https://www.veloworkspaces.com/blog/arm64-linux-compatibility-problems/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/arm64-linux-compatibility-problems/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Guide</span>
         <h1>ARM64 Compatibility Problems: Why Does My Linux Software Not Run?</h1>
         <p class="article-lede">"It doesn't work on arm64" is four different problems wearing one complaint, and this blog has a specific, working answer for three of them, covered in depth elsewhere. What's missing is the triage step — figuring out which one you actually have before reaching for a fix built for a different one.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>Start here: what actually fails?</h2>
       <p>Before anything else, get precise about the failure. "Command not found" or a package manager reporting nothing available is a different problem from a binary that exists but crashes or refuses to start, which is different again from a Docker pull failing to find a matching image. The error itself usually already tells you which of the four cases below you're in — the mistake is reaching for the same fix (usually "just emulate it") regardless of which one it is.</p>
 
@@ -109,7 +146,6 @@
       </table>
 
       <p>Related reading: <a href="/blog/rosetta-2-linux-vms-explained/">Rosetta 2 in Linux VMs</a>, <a href="/blog/running-x86-docker-images-arm64-mac/">running x86 Docker images on an Apple Silicon Mac</a>, <a href="/blog/can-you-run-x86-linux-on-apple-silicon/">can you install x86 Linux on an Apple Silicon Mac</a>, and <a href="/blog/arm64-vs-x86-apple-silicon/">ARM64 vs. x86-64 on Apple Silicon</a> for the broader picture this all sits inside. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

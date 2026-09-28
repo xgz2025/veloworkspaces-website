@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Guest OS Performance Tuning on Apple Silicon — Velo Workspaces</title>
+<title>Guest OS Performance Tuning on Apple Silicon</title>
 <meta name="description" content="I/O scheduler choice, TRIM and sparse disk images, zram vs. swap, journaling tradeoffs, and VirtioFS caching modes for a Linux guest on Apple Silicon.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/guest-os-performance-tuning/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="Guest OS Performance Tuning on Apple Silicon">
-<meta property="og:description" content="I/O scheduler choice, TRIM and sparse disk images, zram vs. swap, filesystem journaling tradeoffs, and VirtioFS caching modes for a Linux guest on Apple Silicon.">
+<meta property="og:description" content="I/O scheduler choice, TRIM and sparse disk images, zram vs. swap, journaling tradeoffs, and VirtioFS caching modes for a Linux guest on Apple Silicon.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/guest-os-performance-tuning/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Guest OS Performance Tuning on Apple Silicon: What Actually Moves the Needle">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-21">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Guest OS Performance Tuning on Apple Silicon",
-  "description": "I/O scheduler choice, TRIM and sparse disk images, zram vs. swap, journaling tradeoffs, and VirtioFS caching modes for a Linux guest on Apple Silicon.",
-  "datePublished": "2026-09-21",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Guest OS Performance Tuning on Apple Silicon",
+      "name": "Guest OS Performance Tuning on Apple Silicon: What Actually Moves the Needle",
+      "description": "I/O scheduler choice, TRIM and sparse disk images, zram vs. swap, journaling tradeoffs, and VirtioFS caching modes for a Linux guest on Apple Silicon.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-21",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/guest-os-performance-tuning/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Guest OS Performance Tuning on Apple Silicon: What Actually Moves the Needle",
+          "item": "https://www.veloworkspaces.com/blog/guest-os-performance-tuning/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/guest-os-performance-tuning/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Performance</span>
         <h1>Guest OS Performance Tuning on Apple Silicon: What Actually Moves the Needle</h1>
         <p class="article-lede">Most VM tuning guides are written for bare-metal servers or KVM on Linux, and half their advice doesn't apply here, or applies for a different reason. Five settings worth knowing about inside a Linux guest on Apple Silicon, what each one actually buys you, and what it costs.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 21, 2026 · Updated September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>The frame that actually matters: disposable changes the math</h2>
       <p>A lot of published VM performance advice optimizes for crash consistency on a server you patch in place for years. A <a href="/blog/qa-devops-disposable-vm-workflow/">disposable workspace</a> that gets deleted the moment you close it has a different risk profile entirely — data loss on an ungraceful shutdown is a non-issue when the whole disk image is thrown away on the next run anyway. That changes which tradeoffs are actually worth making inside the guest, and it's the lens every recommendation below is filtered through: what's genuinely free, what's a real tradeoff worth taking specifically because the VM is disposable, and what's advice written for a context this isn't.</p>
 
@@ -115,7 +152,6 @@ echo 'vm.swappiness=150' | sudo tee /etc/sysctl.d/99-zram.conf</code></pre>
       <p>Several of the concerns above are already priced into how this app's workflow is meant to be used rather than something you have to reason through from scratch: workspaces are disposable by default, so the crash-consistency risk <code>data=writeback</code> trades away is one you're already accepting; base images clone via copy-on-write, so a smaller sealed image (helped by TRIM above) directly speeds up every future clone. The kernel-level settings themselves — scheduler, the fstrim timer, zram, fstab mount options, VirtioFS caching where it's exposed — are guest-OS-level knobs, set inside whichever distro you're running, whether that's <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu</a>, <a href="/blog/debian-on-apple-silicon/">Debian</a>, or <a href="/blog/fedora-on-apple-silicon/">Fedora</a>. Worth setting once in a base image rather than repeating per workspace, given how cheaply that base image then clones.</p>
 
       <p>Related reading: <a href="/blog/arm-virtualization-performance/">why VMs on Apple Silicon perform the way they do</a> at the architecture level, the <a href="/blog/qa-devops-disposable-vm-workflow/">disposable VM workflow</a> this tuning is meant to serve, and, once you've tuned a base image the way you want it, <a href="/blog/base-image-versioning/">a naming convention for keeping track of it</a> as you reseal new generations. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

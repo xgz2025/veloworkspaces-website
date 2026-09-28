@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Can You Trust an AI Coding Agent With Your Git Repository? — Velo Workspaces</title>
+<title>Can You Trust an AI Coding Agent With Your Git Repository?</title>
 <meta name="description" content="The real risk chain runs through dependency installs, Git hooks, and what ends up committed without anyone meaning it to.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/can-you-trust-ai-agents-with-git/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="Can You Trust an AI Coding Agent With Your Git Repository?">
 <meta property="og:description" content="The real risk chain runs through dependency installs, Git hooks, and what ends up committed without anyone meaning it to.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/can-you-trust-ai-agents-with-git/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Can You Trust an AI Coding Agent With Your Git Repository?">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Can You Trust an AI Coding Agent With Your Git Repository?",
-  "description": "The real risk chain runs through dependency installs, Git hooks, and what ends up committed without anyone meaning it to.",
-  "datePublished": "2026-09-22",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Can You Trust an AI Coding Agent With Your Git Repository?",
+      "name": "Can You Trust an AI Coding Agent With Your Git Repository?",
+      "description": "The real risk chain runs through dependency installs, Git hooks, and what ends up committed without anyone meaning it to.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-22",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/can-you-trust-ai-agents-with-git/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Can You Trust an AI Coding Agent With Your Git Repository?",
+          "item": "https://www.veloworkspaces.com/blog/can-you-trust-ai-agents-with-git/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/can-you-trust-ai-agents-with-git/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Security</span>
         <h1>Can You Trust an AI Coding Agent With Your Git Repository?</h1>
         <p class="article-lede">"It can run <code>git commit</code>" isn't the interesting risk — <a href="/blog/how-ai-coding-agents-use-your-computer/">that's just the mechanism</a>, the same as any other command. The real risk chain runs through what a fresh clone's dependency install can trigger, a safety property of Git hooks that's easy to accidentally bypass, and what ends up committed without anyone specifically deciding it should be.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>Commits and pushes: not the interesting part</h2>
       <p>An agent running <code>git add</code>, <code>git commit</code>, or <code>git push</code> is doing exactly what those commands always do — there's no special trust tier inside Git for who's typing. The access it needs to push — a credential helper, a loaded SSH key — is <a href="/blog/what-can-ai-agents-access-on-your-mac/">the same access already covered</a> for the account in general. That's real, but it's not specific to Git; it's the same filesystem-access story with a Git-shaped example.</p>
 
@@ -99,7 +136,6 @@
       <p>None of this is solved by asking the agent to be more careful — it's the same conclusion as everywhere else on this blog: the boundary has to sit outside the agent's own process. A disposable workspace that's discarded after the task, covered in <a href="/blog/what-is-a-disposable-development-environment/">what is a disposable development environment</a>, means a hook that got installed, or a credential that got read, doesn't outlive the session that caused it. Combined with the isolation levels in <a href="/blog/ai-agent-security-risks/">the security deep dive</a>, that's the actual answer — not a more disciplined agent, an environment where its mistakes don't compound.</p>
 
       <p>Related reading: <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents use your computer</a>, <a href="/blog/what-can-ai-agents-access-on-your-mac/">what an agent can actually access</a>, <a href="/blog/zero-tax-virtualization/">running AI agents safely in an isolated VM</a>, and <a href="/blog/safe-local-ai-agent-environment-checklist/">the full checklist</a> this post's mitigation is one item on. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

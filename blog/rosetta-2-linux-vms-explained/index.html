@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rosetta 2 in Linux VMs: What It Actually Does — Velo Workspaces</title>
-<meta name="description" content="Toggling Rosetta support on doesn't set up translation by itself. Verified against the app's own source: the three layers that actually have to work.">
+<title>Rosetta 2 in Linux VMs: What It Actually Does</title>
+<meta name="description" content="Toggling Rosetta support on doesn&#x27;t set up translation by itself. Verified against the app&#x27;s own source: the three layers that actually have to work.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/rosetta-2-linux-vms-explained/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="Rosetta 2 in Linux VMs: What It Actually Does">
-<meta property="og:description" content="Toggling Rosetta support on doesn't set up translation by itself. Verified against the app's own source: the three layers that actually have to work.">
+<meta property="og:description" content="Toggling Rosetta support on doesn&#x27;t set up translation by itself. Verified against the app&#x27;s own source: the three layers that actually have to work.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/rosetta-2-linux-vms-explained/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Rosetta 2 in Linux VMs: What It Actually Does">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Rosetta 2 in Linux VMs: What It Actually Does",
-  "description": "Toggling Rosetta support on doesn't set up translation by itself. Verified against the app's own source: the three layers that actually have to work.",
-  "datePublished": "2026-09-22",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Rosetta 2 in Linux VMs: What It Actually Does",
+      "name": "Rosetta 2 in Linux VMs: What It Actually Does",
+      "description": "Toggling Rosetta support on doesn't set up translation by itself. Verified against the app's own source: the three layers that actually have to work.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-22",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/rosetta-2-linux-vms-explained/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Rosetta 2 in Linux VMs: What It Actually Does",
+          "item": "https://www.veloworkspaces.com/blog/rosetta-2-linux-vms-explained/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/rosetta-2-linux-vms-explained/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Deep dive</span>
         <h1>Rosetta 2 in Linux VMs: What It Actually Does</h1>
         <p class="article-lede"><a href="/blog/arm64-vs-x86-apple-silicon/">Rosetta for Linux is a different mechanism from Rosetta for macOS apps</a> — that post covers the distinction. This one is the mechanism itself: verified against Velo's own source, what a workspace's Rosetta toggle actually attaches, what it deliberately leaves for you to do inside the guest, and why getting one of three layers wrong looks like nothing happening at all rather than an error.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>Three layers, and all three have to work</h2>
       <p>"Enable Rosetta" sounds like one switch. It's actually three independent things, each satisfied differently, each silently doing nothing if it isn't:</p>
       <ol>
@@ -112,7 +149,6 @@
       <p>None of the above turns a Linux guest into something that can run x86_64 <em>software with x86_64-only dependencies</em> — only individual, dynamically-linked binaries. <a href="/blog/ubuntu-on-apple-silicon/">The Ubuntu post's Rosetta section</a> covers that limit concretely, including where it actually breaks. And if what's actually needed is a full x86_64 operating system rather than a handful of translated binaries inside an arm64 one, that's a different tool entirely — see <a href="/blog/can-you-run-x86-linux-on-apple-silicon/">can you install x86 Linux on an Apple Silicon Mac</a> for what Rosetta does and doesn't substitute for there.</p>
 
       <p>Related reading: <a href="/blog/arm64-vs-x86-apple-silicon/">ARM64 vs. x86-64 on Apple Silicon</a> for how this fits alongside macOS-app Rosetta and multi-arch containers, <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu on Apple Silicon</a> for Rosetta's real-world limits, and <a href="/blog/how-virtualization-framework-works/">the device inventory post</a> for how VirtioFS devices work generally. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

@@ -23,6 +23,7 @@ SCRIPTS = [
     "render_privacy.py",
     "render_support.py",
     "render_404.py",
+    "render_blog.py",
     "gen_sitemap.py",
 ]
 

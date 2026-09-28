@@ -11,76 +11,23 @@ PAGES = [
     ("privacy/", "monthly", "0.3"),
 ]
 
-# English-only long-form pages with no translations yet — listed without
-# hreflang alternates rather than forced through the per-locale PAGES loop,
-# which would otherwise emit alternate links to /de/blog/... paths that
-# don't exist.
+# When the localized pages (home, support, privacy) last changed in substance.
+# Search engines use <lastmod> to decide what to recrawl, so move this only
+# when their content changes.
+LOCALIZED_LASTMOD = "2026-09-28"
+
+# English-only pages with no translations yet — listed without hreflang
+# alternates rather than forced through the per-locale PAGES loop, which would
+# otherwise emit alternate links to /de/blog/... paths that don't exist. Blog
+# posts come from blog_posts.py, with each post's dateModified as <lastmod>.
+from blog_posts import POSTS
+
+ROADMAP_LASTMOD = "2026-09-28"
 ENGLISH_ONLY_PAGES = [
-    ("roadmap/", "weekly", "0.6"),
-    ("blog/", "weekly", "0.7"),
-    ("blog/apple-silicon-vms-explained/", "monthly", "0.6"),
-    ("blog/how-virtualization-framework-works/", "monthly", "0.6"),
-    ("blog/virtualization-framework-vs-qemu/", "monthly", "0.6"),
-    ("blog/vm-vs-container-vs-sandbox/", "monthly", "0.6"),
-    ("blog/arm64-vs-x86-apple-silicon/", "monthly", "0.6"),
-    ("blog/why-arm-vms-feel-native/", "monthly", "0.6"),
-    ("blog/local-llms-apple-silicon/", "monthly", "0.6"),
-    ("blog/llm-ram-requirements-mac/", "monthly", "0.6"),
-    ("blog/what-is-a-disposable-development-environment/", "monthly", "0.6"),
-    ("blog/how-ai-coding-agents-use-your-computer/", "monthly", "0.6"),
-    ("blog/what-can-ai-agents-access-on-your-mac/", "monthly", "0.6"),
-    ("blog/can-you-trust-ai-agents-with-git/", "monthly", "0.6"),
-    ("blog/safe-local-ai-agent-environment-checklist/", "monthly", "0.6"),
-    ("blog/kali-linux-on-apple-silicon/", "monthly", "0.6"),
-    ("blog/nixos-on-apple-silicon/", "monthly", "0.6"),
-    ("blog/rocky-linux-on-apple-silicon/", "monthly", "0.6"),
-    ("blog/best-linux-distro-apple-silicon/", "monthly", "0.6"),
-    ("blog/linux-server-vs-desktop-vm-mac/", "monthly", "0.6"),
-    ("blog/linux-vm-networking-apple-silicon/", "monthly", "0.6"),
-    ("blog/disposable-vm-vs-snapshot/", "monthly", "0.6"),
-    ("blog/one-vm-per-git-branch/", "monthly", "0.6"),
-    ("blog/clean-room-bug-reproduction/", "monthly", "0.6"),
-    ("blog/disposable-vms-untrusted-software/", "monthly", "0.6"),
-    ("blog/disposable-workspaces-devops-ci/", "monthly", "0.6"),
-    ("blog/ai-bridge-data-privacy/", "monthly", "0.6"),
-    ("blog/velo-vs-codespaces-vs-ona/", "monthly", "0.6"),
-    ("blog/velo-vs-docker-desktop-vs-orbstack/", "monthly", "0.6"),
-    ("blog/ai-researchers-agent-testing/", "monthly", "0.6"),
-    ("blog/macos-guests-on-apple-silicon/", "monthly", "0.6"),
-    ("blog/arch-linux-on-apple-silicon/", "monthly", "0.6"),
-    ("blog/guest-os-performance-tuning/", "monthly", "0.6"),
-    ("blog/fedora-on-apple-silicon/", "monthly", "0.6"),
-    ("blog/debian-on-apple-silicon/", "monthly", "0.6"),
-    ("blog/ubuntu-on-apple-silicon/", "monthly", "0.6"),
-    ("blog/qa-devops-disposable-vm-workflow/", "monthly", "0.6"),
-    ("blog/arm-virtualization-performance/", "monthly", "0.6"),
-    ("blog/ai-agent-security-risks/", "monthly", "0.6"),
-    ("blog/velo-vs-parallels-vs-utm/", "monthly", "0.6"),
-    ("blog/ai-bridge-architecture/", "monthly", "0.6"),
-    ("blog/mlx-vm-setup-guide/", "monthly", "0.6"),
-    ("blog/vm-inference-benchmark/", "monthly", "0.6"),
-    ("blog/zero-tax-virtualization/", "monthly", "0.6"),
-    ("blog/vm-sandboxing-cost/", "monthly", "0.6"),
-    ("blog/base-image-versioning/", "monthly", "0.6"),
-    ("blog/vscode-continue-ai-bridge/", "monthly", "0.6"),
-    ("blog/software-engineers-disposable-workspaces/", "monthly", "0.6"),
-    ("blog/base-image-vs-snapshot-vs-clone/", "monthly", "0.6"),
-    ("blog/rosetta-2-linux-vms-explained/", "monthly", "0.6"),
-    ("blog/can-you-run-x86-linux-on-apple-silicon/", "monthly", "0.6"),
-    ("blog/running-x86-docker-images-arm64-mac/", "monthly", "0.6"),
-    ("blog/arm64-linux-compatibility-problems/", "monthly", "0.6"),
-    ("blog/llm-quantization-explained-mac/", "monthly", "0.6"),
-    ("blog/local-vs-cloud-llm-coding-agents/", "monthly", "0.6"),
-    ("blog/linux-vm-cpu-performance-apple-silicon/", "monthly", "0.6"),
-    ("blog/linux-vm-disk-performance-apple-silicon/", "monthly", "0.6"),
-    ("blog/linux-vm-network-performance-apple-silicon/", "monthly", "0.6"),
-    ("blog/how-much-memory-linux-vm-mac/", "monthly", "0.6"),
-    ("blog/how-many-linux-vms-apple-silicon/", "monthly", "0.6"),
-    ("blog/vm-startup-performance-apple-silicon/", "monthly", "0.6"),
-    ("blog/apple-containers-vs-linux-vms/", "monthly", "0.6"),
-    ("blog/apple-containers-vs-docker-vs-orbstack/", "monthly", "0.6"),
-    ("blog/local-vs-cloud-development-environments/", "monthly", "0.6"),
-    ("blog/modern-local-development-stack-apple-silicon/", "monthly", "0.7"),
+    ("roadmap/", "weekly", "0.6", ROADMAP_LASTMOD),
+    ("blog/", "weekly", "0.7", max(p["modified"] for p in POSTS)),
+] + [
+    (f"blog/{p['slug']}/", "monthly", "0.6", p["modified"]) for p in POSTS
 ]
 
 def alternates_block(path, indent="    "):
@@ -100,15 +47,17 @@ def build():
                 "  <url>\n"
                 f"    <loc>{loc}</loc>\n"
                 f"{alternates_block(path)}\n"
+                f"    <lastmod>{LOCALIZED_LASTMOD}</lastmod>\n"
                 f"    <changefreq>{freq}</changefreq>\n"
                 f"    <priority>{prio}</priority>\n"
                 "  </url>"
             )
-    for path, freq, prio in ENGLISH_ONLY_PAGES:
+    for path, freq, prio, lastmod in ENGLISH_ONLY_PAGES:
         loc = f"https://www.veloworkspaces.com/{path}"
         entries.append(
             "  <url>\n"
             f"    <loc>{loc}</loc>\n"
+            f"    <lastmod>{lastmod}</lastmod>\n"
             f"    <changefreq>{freq}</changefreq>\n"
             f"    <priority>{prio}</priority>\n"
             "  </url>"

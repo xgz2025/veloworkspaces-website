@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Running Arch Linux on Apple Silicon: What's Different — Velo Workspaces</title>
-<meta name="description" content="What most people mean by 'Arch Linux on Apple Silicon' is actually a separate project, plus why nothing is configured for you, starting with networking.">
+<title>Running Arch Linux on Apple Silicon: What&#x27;s Different</title>
+<meta name="description" content="What most people mean by &#x27;Arch Linux on Apple Silicon&#x27; is actually a separate project, plus why nothing is configured for you, starting with networking.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/arch-linux-on-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Running Arch Linux on Apple Silicon: What's Different">
-<meta property="og:description" content="What most people mean by 'Arch Linux on Apple Silicon' is actually a separate project, plus why nothing is configured for you by default, starting with networking.">
+<meta property="og:title" content="Running Arch Linux on Apple Silicon: What&#x27;s Different">
+<meta property="og:description" content="What most people mean by &#x27;Arch Linux on Apple Silicon&#x27; is actually a separate project, plus why nothing is configured for you, starting with networking.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/arch-linux-on-apple-silicon/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Running Arch Linux on Apple Silicon: What&#x27;s Different from Ubuntu, Debian, and Fedora">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-21">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Running Arch Linux on Apple Silicon: What's Different",
-  "description": "What most people mean by 'Arch Linux on Apple Silicon' is actually a separate project, plus why nothing is configured for you, starting with networking.",
-  "datePublished": "2026-09-21",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Running Arch Linux on Apple Silicon: What's Different",
+      "name": "Running Arch Linux on Apple Silicon: What's Different from Ubuntu, Debian, and Fedora",
+      "description": "What most people mean by 'Arch Linux on Apple Silicon' is actually a separate project, plus why nothing is configured for you, starting with networking.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-21",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/arch-linux-on-apple-silicon/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Running Arch Linux on Apple Silicon: What's Different from Ubuntu, Debian, and Fedora",
+          "item": "https://www.veloworkspaces.com/blog/arch-linux-on-apple-silicon/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/arch-linux-on-apple-silicon/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Guide</span>
         <h1>Running Arch Linux on Apple Silicon: What's Different from Ubuntu, Debian, and Fedora</h1>
         <p class="article-lede">Fourth in the OS-specific series, and the odd one out. The three before this all ship an official arm64 build from the same project that ships the x86 one. Arch doesn't — and that one fact changes almost everything else worth knowing here, starting with which image to actually download.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 21, 2026 · Updated September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>The fact that changes everything else in this post</h2>
       <p>Arch Linux's own official port targets x86_64 only — there is no official arm64 build of Arch Linux itself. What runs on aarch64, including on Apple Silicon, comes from <strong>Arch Linux ARM</strong>, a separate, community-run project at <a href="https://archlinuxarm.org/" target="_blank" rel="noopener">archlinuxarm.org</a> with its own maintainers and its own build infrastructure, closely affiliated with Arch but not the same project shipping the same official artifact the way Ubuntu, Debian, and Fedora's arm64 builds are. This isn't a knock on Arch Linux ARM's quality — it's a real, actively maintained project, and in July 2026 Collabora even used it as the base for an official Arch-derived arm64 port for Valve's Steam Frame headset. It's an accuracy point worth having going in: what most people mean by "Arch Linux on Apple Silicon" is Arch Linux ARM specifically, a related but distinct project from the one you'd be thinking of on x86.</p>
 
@@ -103,7 +140,6 @@
       <p>Reach for it when you specifically want the newest possible packages and kernel with no distro-imposed release cadence, and you're genuinely comfortable configuring a minimal base yourself — that's real time cost, not a one-time inconvenience, since a fresh install gives you close to nothing pre-set. Every setting in the <a href="/blog/guest-os-performance-tuning/">guest OS performance tuning post</a> — scheduler, TRIM, swap, filesystem mount options — is entirely on you here, with no distro defaults to start from either direction. If you want a distro's own official, tested arm64 build with a foundation or company actually standing behind that specific artifact, Ubuntu, Debian, or Fedora are the steadier choice, specifically because they're the primary project's own port rather than a satellite one.</p>
 
       <p>Related reading: <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu</a>, <a href="/blog/debian-on-apple-silicon/">Debian</a>, and <a href="/blog/fedora-on-apple-silicon/">Fedora</a> on Apple Silicon, the first three in this series; <a href="/blog/kali-linux-on-apple-silicon/">Kali Linux</a> and <a href="/blog/nixos-on-apple-silicon/">NixOS</a>, two more distros on this same local-file path, each for a different reason; the <a href="/blog/qa-devops-disposable-vm-workflow/">disposable VM workflow for QA and DevOps</a>; and <a href="/blog/guest-os-performance-tuning/">guest OS performance tuning</a> once you're up and running. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

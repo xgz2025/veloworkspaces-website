@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>What Can an AI Coding Agent Actually Access on Your Mac? — Velo Workspaces</title>
+<title>What Can an AI Coding Agent Actually Access on Your Mac?</title>
 <meta name="description" content="A concrete inventory of what actually lives in a typical home directory, and a realistic scenario of an agent touching all of it with no malicious intent.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/what-can-ai-agents-access-on-your-mac/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="What Can an AI Coding Agent Actually Access on Your Mac?">
-<meta property="og:description" content="A concrete inventory of what actually lives in a typical home directory, and a realistic scenario of an agent touching all of it without any malicious intent at all.">
+<meta property="og:description" content="A concrete inventory of what actually lives in a typical home directory, and a realistic scenario of an agent touching all of it with no malicious intent.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/what-can-ai-agents-access-on-your-mac/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="What Can an AI Coding Agent Actually Access on Your Mac?">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "What Can an AI Coding Agent Actually Access on Your Mac?",
-  "description": "A concrete inventory of what actually lives in a typical home directory, and a realistic scenario of an agent touching all of it with no malicious intent.",
-  "datePublished": "2026-09-22",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "What Can an AI Coding Agent Actually Access on Your Mac?",
+      "name": "What Can an AI Coding Agent Actually Access on Your Mac?",
+      "description": "A concrete inventory of what actually lives in a typical home directory, and a realistic scenario of an agent touching all of it with no malicious intent.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-22",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/what-can-ai-agents-access-on-your-mac/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "What Can an AI Coding Agent Actually Access on Your Mac?",
+          "item": "https://www.veloworkspaces.com/blog/what-can-ai-agents-access-on-your-mac/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/what-can-ai-agents-access-on-your-mac/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Security</span>
         <h1>What Can an AI Coding Agent Actually Access on Your Mac?</h1>
         <p class="article-lede"><a href="/blog/how-ai-coding-agents-use-your-computer/">The mechanism</a> is that an agent can read whatever your account can read. This is the concrete inventory: what actually lives in a typical home directory worth worrying about, and a realistic scenario where an agent touches all of it doing nothing malicious at all.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>The inventory, specifically</h2>
       <p>Not a hypothetical list — these are real, common paths that exist on most developer Macs, unremarkable to the tools that put them there:</p>
       <ul>
@@ -105,7 +142,6 @@
       <p>None of the above requires an agent that's been compromised, jailbroken, or is acting outside its instructions. It's what's reachable by design, the moment an agent runs with the same filesystem access as the account that launched it — which is the whole point of <a href="/blog/how-ai-coding-agents-use-your-computer/">the mechanism post</a> this one builds on. The fix isn't a smarter agent that knows not to look at these files; it's running the agent somewhere this list simply isn't reachable at all, covered in <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>.</p>
 
       <p>Related reading: <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents use your computer</a>, <a href="/blog/ai-agent-security-risks/">what actually goes wrong when an agent runs unsandboxed</a>, and <a href="/blog/zero-tax-virtualization/">running AI agents safely in an isolated VM</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

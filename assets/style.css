@@ -852,7 +852,8 @@ pre code { background: none; padding: 0; }
   border-color: var(--color-primary);
   text-decoration: none;
 }
-.blog-index-card h2 {
+.blog-index-card h2,
+.blog-index-card h3 {
   font-size: 1.15rem;
   margin: 8px 0 8px;
 }

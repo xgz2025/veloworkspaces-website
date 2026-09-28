@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Architecture Behind AI Bridge: Safe, Fast AI Agents in a VM — Velo Workspaces</title>
+<title>The Architecture Behind AI Bridge: Safe, Fast AI Agents in a VM</title>
 <meta name="description" content="How AI Bridge splits an AI agent from its model over a vsock channel, so a Linux VM gets real isolation without losing native GPU inference speed.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/ai-bridge-architecture/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="The Architecture Behind AI Bridge: Safe, Fast AI Agents in a VM">
-<meta property="og:description" content="How AI Bridge splits an AI agent from its model over a vsock channel, so a Linux VM on Apple Silicon gets real isolation without losing native GPU inference speed.">
+<meta property="og:description" content="How AI Bridge splits an AI agent from its model over a vsock channel, so a Linux VM gets real isolation without losing native GPU inference speed.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/ai-bridge-architecture/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="An Architecture to Run AI Agents Safely and Efficiently in a Linux VM on Apple Silicon">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-13">
 <meta property="article:modified_time" content="2026-09-23">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "The Architecture Behind AI Bridge: Safe, Fast AI Agents in a VM",
-  "description": "How AI Bridge splits an AI agent from its model over a vsock channel, so a Linux VM gets real isolation without losing native GPU inference speed.",
-  "datePublished": "2026-09-13",
-  "dateModified": "2026-09-23",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "The Architecture Behind AI Bridge: Safe, Fast AI Agents in a VM",
+      "name": "An Architecture to Run AI Agents Safely and Efficiently in a Linux VM on Apple Silicon",
+      "description": "How AI Bridge splits an AI agent from its model over a vsock channel, so a Linux VM gets real isolation without losing native GPU inference speed.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-13",
+      "dateModified": "2026-09-23",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/ai-bridge-architecture/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "An Architecture to Run AI Agents Safely and Efficiently in a Linux VM on Apple Silicon",
+          "item": "https://www.veloworkspaces.com/blog/ai-bridge-architecture/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/ai-bridge-architecture/"
-  }
+  ]
 }
 </script>
 </head>
@@ -69,19 +107,18 @@
 <main id="main">
   <section class="section" style="padding-bottom:0;">
     <div class="container">
-      <a class="article-back-link" href="/#features">← Back to Velo Workspaces</a>
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Architecture</span>
         <h1>An Architecture to Run AI Agents Safely and Efficiently in a Linux VM on Apple Silicon</h1>
         <p class="article-lede">How to let an AI agent run generated code safely in a VM without giving up GPU acceleration — the architecture behind AI Bridge, based on vsock, and the benchmark numbers behind it.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 13, 2026 · Updated September 23, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-13">September 13, 2026</time> · Updated <time datetime="2026-09-23">September 23, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>The problem</h2>
       <p>If you want to run an AI coding agent locally on your Mac today, you may choose one of the following two options.</p>
 
@@ -238,7 +275,6 @@
       <p>Scripts are at <a href="https://github.com/xgz2025/veloworkspace-tools" target="_blank" rel="noopener">github.com/xgz2025/veloworkspace-tools</a> if you want to reproduce this on your own hardware or model. This is exactly the architecture Velo Workspaces implements as <strong>AI Bridge</strong> — see it under <a href="/#features">Features</a>, or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download it</a> and try it yourself.</p>
 
       <p>I later re-ran the same three tests against MLX and got a different answer under load than the Ollama numbers above — see <a href="/blog/vm-sandboxing-cost/">what sandboxing actually costs, compared across both engines</a> for the discrepancy and my best theory for it. And if you're weighing this against other VM apps for Apple Silicon, see how it stacks up against <a href="/blog/velo-vs-parallels-vs-utm/">Parallels Desktop and UTM</a>, specifically on what each one does with a Linux guest's GPU. For the CPU-level reason these numbers come out this low in the first place, see <a href="/blog/arm-virtualization-performance/">what actually determines VM performance on ARM</a>. AI Bridge is specifically a Linux-guest workaround for a constraint that <a href="/blog/macos-guests-on-apple-silicon/">doesn't apply to a macOS guest</a> at all, which gets real Metal-accelerated graphics instead. And if you only know AI Bridge as "Ollama or MLX," it actually <a href="/blog/ai-researchers-agent-testing/">supports two more backends than that</a>. A cloud dev environment can't do any of this at all — see <a href="/blog/velo-vs-codespaces-vs-ona/">why GPU access is the one thing Codespaces and Ona structurally can't offer</a>. And for exactly what this vsock channel can and can't reach, verified against the source rather than asserted, see <a href="/blog/ai-bridge-data-privacy/">what actually leaves your Mac when you use it</a>. If you're still weighing whether a local model is the right call for your agent at all, rather than a cloud-backed one, see <a href="/blog/local-vs-cloud-llm-coding-agents/">local LLM vs. cloud LLM for coding agents</a>.</p>
-
     </div>
   </section>
 </main>

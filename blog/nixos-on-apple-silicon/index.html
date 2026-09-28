@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Running NixOS on Apple Silicon — Velo Workspaces</title>
+<title>Running NixOS on Apple Silicon</title>
 <meta name="description" content="The official aarch64 ISO is minimal-only. What that means in practice, and how a Nix configuration compares to a base image as a reproducibility primitive.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="Running NixOS on Apple Silicon">
 <meta property="og:description" content="The official aarch64 ISO is minimal-only. What that means in practice, and how a Nix configuration compares to a base image as a reproducibility primitive.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Running NixOS on Apple Silicon">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Running NixOS on Apple Silicon",
-  "description": "The official aarch64 ISO is minimal-only. What that means in practice, and how a Nix configuration compares to a base image as a reproducibility primitive.",
-  "datePublished": "2026-09-22",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Running NixOS on Apple Silicon",
+      "name": "Running NixOS on Apple Silicon",
+      "description": "The official aarch64 ISO is minimal-only. What that means in practice, and how a Nix configuration compares to a base image as a reproducibility primitive.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-22",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Running NixOS on Apple Silicon",
+          "item": "https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Guide</span>
         <h1>Running NixOS on Apple Silicon</h1>
         <p class="article-lede">NixOS's whole pitch is reproducibility — a system described entirely in one declarative file. That makes it an interesting counterpoint to how this blog usually talks about reproducibility, which is base images and disk clones. Here's what's actually different about the arm64 download, and where the two approaches to "reproducible" actually diverge.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>The aarch64 ISO is minimal-only — a real, current gap</h2>
       <p>Worth knowing before you go looking for the wrong thing: NixOS's <a href="https://nixos.org/download/" target="_blank" rel="noopener">official downloads</a> offer both a minimal and a graphical installer ISO for x86_64, but only the minimal (terminal-only) ISO for aarch64 — there's no official graphical installer for Apple Silicon's architecture as of this writing. That's not a bug in your download, it's the current state of NixOS's own release infrastructure. The <a href="https://github.com/nix-community/nixos-images" target="_blank" rel="noopener">nix-community project</a> publishes its own aarch64 installer images that fill part of that gap, unofficially. For a VM guest specifically, the minimal ISO is genuinely fine — you're installing over a text console either way for a headless or lightly-used workspace, and NixOS's actual configuration happens in a text file regardless of which installer put the base system there.</p>
 
@@ -95,7 +132,6 @@
       <p>The declarative model is also the thing that surprises people coming from an imperative distro: installing a package with <code>nix-env</code> outside of <code>configuration.nix</code> works, but it's a mutation the file doesn't know about — the next time you rebuild from the file, that ad hoc install is gone, because the file is the only thing NixOS considers the actual source of truth. That's a deliberate design choice, not a bug, but it catches people who reach for the familiar "just install it" habit from Ubuntu or Debian and expect it to stick the way <code>apt install</code> does.</p>
 
       <p>Related reading: <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>, <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment actually is</a>, and <a href="/blog/arch-linux-on-apple-silicon/">Arch Linux on Apple Silicon</a>, another distro on the local-file path. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

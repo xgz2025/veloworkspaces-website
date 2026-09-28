@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Running Debian on Apple Silicon: What's Different from Ubuntu — Velo Workspaces</title>
-<meta name="description" content="Same ISO-based official-image picker as Ubuntu, a different installer experience, and why the Ubuntu Netplan clone gotcha doesn't apply the same way here.">
+<title>Running Debian on Apple Silicon: What&#x27;s Different from Ubuntu</title>
+<meta name="description" content="Same ISO-based official-image picker as Ubuntu, a different installer experience, and why the Ubuntu Netplan clone gotcha doesn&#x27;t apply the same way here.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/debian-on-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Running Debian on Apple Silicon: What's Different from Ubuntu">
-<meta property="og:description" content="Same ISO-based official-image picker as Ubuntu, a different installer experience, and why the Ubuntu Netplan clone gotcha doesn't apply the same way here.">
+<meta property="og:title" content="Running Debian on Apple Silicon: What&#x27;s Different from Ubuntu">
+<meta property="og:description" content="Same ISO-based official-image picker as Ubuntu, a different installer experience, and why the Ubuntu Netplan clone gotcha doesn&#x27;t apply the same way here.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/debian-on-apple-silicon/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Running Debian on Apple Silicon: What&#x27;s Different from Ubuntu">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-20">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Running Debian on Apple Silicon: What's Different from Ubuntu",
-  "description": "Same ISO-based official-image picker as Ubuntu, a different installer experience, and why the Ubuntu Netplan clone gotcha doesn't apply the same way here.",
-  "datePublished": "2026-09-20",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Running Debian on Apple Silicon: What's Different from Ubuntu",
+      "name": "Running Debian on Apple Silicon: What's Different from Ubuntu",
+      "description": "Same ISO-based official-image picker as Ubuntu, a different installer experience, and why the Ubuntu Netplan clone gotcha doesn't apply the same way here.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-20",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/debian-on-apple-silicon/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Running Debian on Apple Silicon: What's Different from Ubuntu",
+          "item": "https://www.veloworkspaces.com/blog/debian-on-apple-silicon/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/debian-on-apple-silicon/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Guide</span>
         <h1>Running Debian on Apple Silicon: What's Different from Ubuntu</h1>
         <p class="article-lede">Second in the OS-specific series. Same underlying facts as Ubuntu — native arm64, not emulation, and the same ISO-based official-image picker — but a different installer once you're actually running it, and networking defaults that sidestep the clone gotcha Ubuntu Server hits.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 20, 2026 · Updated September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>Same CPU story, different distro defaults</h2>
       <p>Debian on an Apple Silicon Mac runs the same way <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu does</a>: natively on arm64, not emulated. Debian 13 "Trixie," the current stable release, ships arm64 as one of its full, officially supported architectures — alongside amd64, armhf, armel, ppc64el, riscv64, and s390x — not a secondary or best-effort build. One thing worth disambiguating up front: Debian 13 also added real driver support for Apple Silicon MacBook hardware specifically (trackpad/keyboard controllers, for projects like Asahi Linux that install Debian directly on the bare metal). That's a different thing entirely from what this post and Velo Workspaces are about — Debian running as a <em>guest</em> inside a VM on the Mac, where none of that bare-metal driver work is relevant, because the guest never touches the physical trackpad or keyboard controller at all.</p>
 
@@ -99,7 +136,6 @@
       <p>Neither is a wrong choice for a disposable dev, QA, or DevOps workspace, and the differences are more about what you're optimizing for than any hard requirement. Debian's release cadence is more conservative — packages change less often, which is exactly what you want when the point of a base image is that it stays a known-good, unsurprising starting point for months. Ubuntu tends to have newer packages and broader out-of-the-box hardware/driver enablement work upstream, which matters more when you're following a guide or a CI config that specifically assumes Ubuntu's package versions. If you don't have a specific reason to need one, Debian's smaller default footprint and more conservative base make it a reasonable default for a workspace you're going to seal as a long-lived base image and reuse for months.</p>
 
       <p>Related reading: <a href="/blog/ubuntu-on-apple-silicon/">the Ubuntu piece this one is paired with</a>, <a href="/blog/fedora-on-apple-silicon/">Fedora on Apple Silicon</a> — SELinux enforcing by default is the one to know about before it surprises you — and <a href="/blog/arch-linux-on-apple-silicon/">Arch Linux on Apple Silicon</a>, where nothing is configured by default, including networking; the <a href="/blog/qa-devops-disposable-vm-workflow/">disposable VM workflow for QA and DevOps</a>, and <a href="/blog/arm-virtualization-performance/">why VMs on Apple Silicon perform the way they do</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

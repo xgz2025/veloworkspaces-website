@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Base Image vs. Snapshot vs. Clone vs. Disposable Workspace — Velo Workspaces</title>
-<meta name="description" content="Clone isn't a fourth thing competing with the other three — it's the mechanism underneath two of them.">
+<title>Base Image vs. Snapshot vs. Clone vs. Disposable Workspace</title>
+<meta name="description" content="Clone isn&#x27;t a fourth thing competing with the other three — it&#x27;s the mechanism underneath two of them.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/base-image-vs-snapshot-vs-clone/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="Base Image vs. Snapshot vs. Clone vs. Disposable Workspace">
-<meta property="og:description" content="Clone isn't a fourth thing competing with the other three — it's the mechanism underneath two of them.">
+<meta property="og:description" content="Clone isn&#x27;t a fourth thing competing with the other three — it&#x27;s the mechanism underneath two of them.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/base-image-vs-snapshot-vs-clone/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Base Image vs. Snapshot vs. Clone vs. Disposable Workspace">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Base Image vs. Snapshot vs. Clone vs. Disposable Workspace",
-  "description": "Clone isn't a fourth thing competing with the other three — it's the mechanism underneath two of them.",
-  "datePublished": "2026-09-22",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Base Image vs. Snapshot vs. Clone vs. Disposable Workspace",
+      "name": "Base Image vs. Snapshot vs. Clone vs. Disposable Workspace",
+      "description": "Clone isn't a fourth thing competing with the other three — it's the mechanism underneath two of them.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-22",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/base-image-vs-snapshot-vs-clone/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Base Image vs. Snapshot vs. Clone vs. Disposable Workspace",
+          "item": "https://www.veloworkspaces.com/blog/base-image-vs-snapshot-vs-clone/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/base-image-vs-snapshot-vs-clone/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Fundamentals</span>
         <h1>Base Image vs. Snapshot vs. Clone vs. Disposable Workspace</h1>
         <p class="article-lede">Four terms this blog has used across several separate posts, put in one place. The short version: "clone" isn't a fourth option alongside the other three — it's the mechanism underneath two of them. The real distinction is between base image, snapshot, and disposable workspace, which answer three genuinely different questions.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>Clone is the "how," not a "what"</h2>
       <p>Cloning, mechanically, is an APFS copy-on-write operation — <code>clonefile()</code> under the hood, near-instant because it doesn't copy data until something diverges. Velo uses it for two different purposes: creating a new workspace's disk from a sealed base image, and copying a workspace's current disk and state into a restore point. Same underlying mechanism, two different jobs. Asking "should I clone or use a base image" is really asking two separate questions at once — see <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a> for the full mechanics.</p>
 
@@ -111,7 +148,6 @@
       <p>Want every new workspace to start from the same known-good setup? Base image. Want to rewind one specific workspace you're actively working in? Snapshot. Want a guarantee that nothing from this run persists at all? Disposable workspace, with no snapshot in the picture. Building a workflow around <a href="/blog/one-vm-per-git-branch/">one workspace per Git branch</a> uses all three at once: a shared base image every branch clones from, snapshots as optional checkpoints inside a long-running branch, and disposal when the branch itself is done.</p>
 
       <p>Related reading: <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>, <a href="/blog/disposable-vm-vs-snapshot/">disposable VM vs. snapshot</a>, and <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment actually is</a>. Cloning being nearly free on disk is also exactly why running several workspaces at once costs a lot less storage than it looks like — see <a href="/blog/how-many-linux-vms-apple-silicon/">how many VMs you can realistically run at once</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

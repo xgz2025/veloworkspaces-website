@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Running Fedora on Apple Silicon: What's Different — Velo Workspaces</title>
-<meta name="description" content="SELinux enforcing by default, NetworkManager rather than ifupdown or Netplan, and a Rosetta mechanism that isn't apt/update-binfmts at all.">
+<title>Running Fedora on Apple Silicon: What&#x27;s Different</title>
+<meta name="description" content="SELinux enforcing by default, NetworkManager rather than ifupdown or Netplan, and a Rosetta mechanism that isn&#x27;t apt/update-binfmts at all.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/fedora-on-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="Running Fedora on Apple Silicon: What's Different">
-<meta property="og:description" content="SELinux enforcing by default, NetworkManager rather than ifupdown or Netplan, and a Rosetta mechanism that isn't apt/update-binfmts at all.">
+<meta property="og:title" content="Running Fedora on Apple Silicon: What&#x27;s Different">
+<meta property="og:description" content="SELinux enforcing by default, NetworkManager rather than ifupdown or Netplan, and a Rosetta mechanism that isn&#x27;t apt/update-binfmts at all.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/fedora-on-apple-silicon/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Running Fedora on Apple Silicon: What&#x27;s Different from Ubuntu and Debian">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-20">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Running Fedora on Apple Silicon: What's Different",
-  "description": "SELinux enforcing by default, NetworkManager rather than ifupdown or Netplan, and a Rosetta mechanism that isn't apt/update-binfmts at all.",
-  "datePublished": "2026-09-20",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Running Fedora on Apple Silicon: What's Different",
+      "name": "Running Fedora on Apple Silicon: What's Different from Ubuntu and Debian",
+      "description": "SELinux enforcing by default, NetworkManager rather than ifupdown or Netplan, and a Rosetta mechanism that isn't apt/update-binfmts at all.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-20",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/fedora-on-apple-silicon/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Running Fedora on Apple Silicon: What's Different from Ubuntu and Debian",
+          "item": "https://www.veloworkspaces.com/blog/fedora-on-apple-silicon/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/fedora-on-apple-silicon/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Guide</span>
         <h1>Running Fedora on Apple Silicon: What's Different from Ubuntu and Debian</h1>
         <p class="article-lede">Third in the OS-specific series. Same native-arm64 story as Ubuntu and Debian, and the same ISO-based official-image picker, but Fedora's defaults diverge from both in ways that actually matter: SELinux enforcing out of the box, NetworkManager instead of ifupdown or Netplan, and a Rosetta mechanism that isn't the apt/update-binfmts approach at all.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 20, 2026 · Updated September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>Native arm64, and only arm64 now</h2>
       <p>Fedora on an Apple Silicon Mac runs the same way <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu</a> and <a href="/blog/debian-on-apple-silicon/">Debian</a> do — natively on arm64, no emulation. Fedora Linux 44, the current release as of this writing, ships for two architectures: x86_64 and aarch64. Fedora dropped 32-bit ARM (armhfp) support entirely some releases back, so on ARM specifically it's aarch64 or nothing — one fewer variable to get wrong when picking an image, at least.</p>
 
@@ -102,7 +139,6 @@
       <p>Fedora tracks upstream far more closely than Ubuntu or Debian — newer kernel, newer package versions, features landing here well before they reach either of the other two. The tradeoff is a support window measured in roughly a year per release rather than Ubuntu's multi-year LTS window or Debian's conservative stable cycle, which matters less for a disposable workspace you rebuild from a base image regularly than it would for a server you patch in place for years. Reach for Fedora specifically when you need to test against genuinely current upstream package versions or kernel features; reach for Debian when you want the base image itself to be the boring, unsurprising part of the workflow for months at a time; reach for Ubuntu when you're following tooling or CI configuration that specifically assumes it.</p>
 
       <p>Related reading: <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu on Apple Silicon</a> and <a href="/blog/debian-on-apple-silicon/">Debian on Apple Silicon</a>, the first two in this series, and <a href="/blog/arch-linux-on-apple-silicon/">Arch Linux on Apple Silicon</a>, next up — a distro with no official arm64 build at all; <a href="/blog/rocky-linux-on-apple-silicon/">Rocky Linux on Apple Silicon</a>, Fedora's stable RHEL-compatible downstream relative; the <a href="/blog/qa-devops-disposable-vm-workflow/">disposable VM workflow for QA and DevOps</a>; and <a href="/blog/arm-virtualization-performance/">why VMs on Apple Silicon perform the way they do</a> architecturally. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

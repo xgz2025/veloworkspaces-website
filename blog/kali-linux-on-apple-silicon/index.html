@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Running Kali Linux on Apple Silicon — Velo Workspaces</title>
-<meta name="description" content="Kali publishes a genuine generic arm64 installer ISO — but it's not in Velo's official-image picker. The local-file path and what's different for Kali.">
+<title>Running Kali Linux on Apple Silicon</title>
+<meta name="description" content="Kali publishes a genuine generic arm64 installer ISO — but it&#x27;s not in Velo&#x27;s official-image picker. The local-file path and what&#x27;s different for Kali.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/kali-linux-on-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="Running Kali Linux on Apple Silicon">
-<meta property="og:description" content="Kali publishes a genuine generic arm64 installer ISO — but it's not in Velo's official-image picker either. The local-file path and what's specifically different for Kali.">
+<meta property="og:description" content="Kali publishes a genuine generic arm64 installer ISO — but it&#x27;s not in Velo&#x27;s official-image picker. The local-file path and what&#x27;s different for Kali.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/kali-linux-on-apple-silicon/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Running Kali Linux on Apple Silicon">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Running Kali Linux on Apple Silicon",
-  "description": "Kali publishes a genuine generic arm64 installer ISO — but it's not in Velo's official-image picker. The local-file path and what's different for Kali.",
-  "datePublished": "2026-09-22",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Running Kali Linux on Apple Silicon",
+      "name": "Running Kali Linux on Apple Silicon",
+      "description": "Kali publishes a genuine generic arm64 installer ISO — but it's not in Velo's official-image picker. The local-file path and what's different for Kali.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-22",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/kali-linux-on-apple-silicon/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Running Kali Linux on Apple Silicon",
+          "item": "https://www.veloworkspaces.com/blog/kali-linux-on-apple-silicon/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/kali-linux-on-apple-silicon/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Guide</span>
         <h1>Running Kali Linux on Apple Silicon</h1>
         <p class="article-lede">Kali is a genuine, official arm64 build — unlike Arch, this isn't a satellite community project. It's just not in Velo's curated official-image list, so the setup path looks more like Arch's than Ubuntu's. Here's what to grab, and the one networking detail worth knowing before you rely on this for testing.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>A real official arm64 build — with the same "which file" trap as Arch</h2>
       <p>Kali Linux, maintained by Offensive Security, publishes real generic arm64 installer ISOs alongside its more numerous single-board-computer images — the file you actually want is a plain installer ISO like <code>kali-linux-installer-arm64.iso</code> from <a href="https://www.kali.org/get-kali/" target="_blank" rel="noopener">kali.org's official downloads page</a>, not one of the many Raspberry Pi, Odroid, or Orange Pi-specific images on the same page. Those SBC builds carry hardware-specific kernels and won't boot correctly in a generic VM, the same trap covered in <a href="/blog/arch-linux-on-apple-silicon/">the Arch Linux ARM post</a> for a different reason. The good news relative to Arch: Kali's generic installer boots and installs like any normal Linux ISO — no board-specific quirks once you've picked the right file.</p>
 
@@ -95,7 +132,6 @@
       <p>This is a case where <a href="/blog/what-is-a-disposable-development-environment/">the disposable-workspace pattern</a> fits especially well, for a reason specific to a testing toolkit: tool installs, scan results, and test artifacts from one engagement have no reason to persist into the next one, and a testing lab that's accumulated months of leftover state is exactly the kind of environment where "did I actually test against a clean baseline" becomes a real question. Seal a configured Kali install as a base image once, then clone a fresh disposable workspace per engagement — closing it when you're done costs nothing, and the next one starts from the identical known-good state every time. See <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a> for how that half of the mechanism works.</p>
 
       <p>Related reading: <a href="/blog/arch-linux-on-apple-silicon/">Arch Linux on Apple Silicon</a>, another local-file-path distro but for a different reason; <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu on Apple Silicon</a> for the official-picker path this one skips; and <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment actually is</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

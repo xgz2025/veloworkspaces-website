@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Linux VM Disk Performance on Apple Silicon: virtio-blk vs. virtio-fs — Velo Workspaces</title>
-<meta name="description" content="A workspace's own disk is meaningfully faster than a shared folder for the same operation — and Velo's own caching-mode choice explains why.">
+<title>Linux VM Disk Performance on Apple Silicon: virtio-blk vs. virtio-fs</title>
+<meta name="description" content="A workspace&#x27;s own disk is meaningfully faster than a shared folder for the same operation — and Velo&#x27;s own caching-mode choice explains why.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/linux-vm-disk-performance-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="Linux VM Disk Performance on Apple Silicon: virtio-blk vs. virtio-fs">
-<meta property="og:description" content="A workspace's own disk is meaningfully faster than a shared folder for the same operation — and Velo's own caching-mode choice explains why.">
+<meta property="og:description" content="A workspace&#x27;s own disk is meaningfully faster than a shared folder for the same operation — and Velo&#x27;s own caching-mode choice explains why.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/linux-vm-disk-performance-apple-silicon/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Linux VM Disk Performance on Apple Silicon: virtio-blk vs. virtio-fs">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Linux VM Disk Performance on Apple Silicon: virtio-blk vs. virtio-fs",
-  "description": "A workspace's own disk is meaningfully faster than a shared folder for the same operation — and Velo's own caching-mode choice explains why.",
-  "datePublished": "2026-09-22",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Linux VM Disk Performance on Apple Silicon: virtio-blk vs. virtio-fs",
+      "name": "Linux VM Disk Performance on Apple Silicon: virtio-blk vs. virtio-fs",
+      "description": "A workspace's own disk is meaningfully faster than a shared folder for the same operation — and Velo's own caching-mode choice explains why.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-22",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/linux-vm-disk-performance-apple-silicon/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Linux VM Disk Performance on Apple Silicon: virtio-blk vs. virtio-fs",
+          "item": "https://www.veloworkspaces.com/blog/linux-vm-disk-performance-apple-silicon/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/linux-vm-disk-performance-apple-silicon/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Deep dive</span>
         <h1>Linux VM Disk Performance on Apple Silicon: virtio-blk vs. virtio-fs</h1>
         <p class="article-lede">The single biggest disk-performance decision on any Virtualization.framework VM isn't a setting you tune — it's which device a given file actually lives behind. A workspace's own disk and a shared folder from the host use two genuinely different paravirtualized devices, and they are not close to interchangeable for I/O-heavy work.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>Two different devices, not one "disk" abstraction</h2>
       <p>A workspace's primary disk is attached as <strong>virtio-blk</strong> — a paravirtualized block device, the same kind this blog's <a href="/blog/how-virtualization-framework-works/">device inventory post</a> covers generally. A shared folder from the host, by contrast, is <strong>virtio-fs</strong> — a paravirtualized <em>filesystem</em> protocol, not a block device, designed to share a host directory tree into the guest rather than to back a disk image. They solve different problems and their performance characteristics reflect that: a public discussion among Apple's own container-tooling engineers and contributors on this exact question (<a href="https://github.com/apple/container/discussions/1516" target="_blank" rel="noopener">apple/container discussion #1516</a>) put native host performance at roughly 2–3× virtio-blk, and virtio-blk itself at roughly 3× virtio-fs, for the same disk-heavy workload — a large, real gap, not a rounding difference.</p>
       <p>The practical rule that falls out of this: if disk throughput matters for what you're doing — a build with a lot of file I/O, a database, extracting a large archive — do it on the workspace's own disk, not inside a shared folder. Keep shared folders for what they're actually good at: convenient access to files that live on the host, not as the working directory for I/O-heavy work.</p>
@@ -97,7 +134,6 @@
       </ul>
 
       <p>Related reading: <a href="/blog/how-virtualization-framework-works/">the device inventory post</a> for how virtio-blk fits alongside Velo's other paravirtualized devices, <a href="/blog/linux-vm-cpu-performance-apple-silicon/">how vCPU core allocation works</a>, and <a href="/blog/vm-startup-performance-apple-silicon/">what determines VM startup time</a>, where this same caching choice shows up again. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

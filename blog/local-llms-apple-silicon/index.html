@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How to Run Local LLMs on Apple Silicon — Velo Workspaces</title>
+<title>How to Run Local LLMs on Apple Silicon</title>
 <meta name="description" content="MLX, Ollama, llama.cpp, and LM Studio — what each one actually is, model formats, and running a model directly on your Mac.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/local-llms-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="How to Run Local LLMs on Apple Silicon">
 <meta property="og:description" content="MLX, Ollama, llama.cpp, and LM Studio — what each one actually is, model formats, and running a model directly on your Mac.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/local-llms-apple-silicon/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="How to Run Local LLMs on Apple Silicon">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "How to Run Local LLMs on Apple Silicon",
-  "description": "MLX, Ollama, llama.cpp, and LM Studio — what each one actually is, model formats, and running a model directly on your Mac.",
-  "datePublished": "2026-09-22",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "How to Run Local LLMs on Apple Silicon",
+      "name": "How to Run Local LLMs on Apple Silicon",
+      "description": "MLX, Ollama, llama.cpp, and LM Studio — what each one actually is, model formats, and running a model directly on your Mac.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-22",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/local-llms-apple-silicon/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "How to Run Local LLMs on Apple Silicon",
+          "item": "https://www.veloworkspaces.com/blog/local-llms-apple-silicon/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/local-llms-apple-silicon/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Guide</span>
         <h1>How to Run Local LLMs on Apple Silicon</h1>
         <p class="article-lede">This is about the model, on its own — what tool to install, what format to pull, and how to actually talk to it. Not wrapped in a VM, not wired up to a coding agent. If you want that part too, <a href="/blog/zero-tax-virtualization/">the complete AI agent guide</a> covers it in depth; this page is the more basic thing underneath it.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>Four names, four different things</h2>
       <p>These get used almost interchangeably in casual conversation, and they're not the same kind of tool:</p>
       <ul>
@@ -110,7 +147,6 @@
       <p>The model itself is inert — it's the code an agent generates and executes against that model that creates risk, and that's a different problem from "how do I run a model at all," worth its own guide rather than a section here. If what you're actually building is an AI coding agent, not just a chat window, see <a href="/blog/zero-tax-virtualization/">the complete AI agent guide</a> for the full VM-isolated setup, <a href="/blog/ai-bridge-architecture/">the AI Bridge architecture</a> for how the model stays on the host GPU while the agent runs isolated, and <a href="/blog/mlx-vm-setup-guide/">the MLX + OpenCode setup guide</a> for one concrete, complete walkthrough.</p>
 
       <p>Related reading: <a href="/blog/zero-tax-virtualization/">running AI agents safely in an isolated VM</a>, <a href="/blog/ai-bridge-architecture/">the AI Bridge architecture</a>, and <a href="/blog/vm-sandboxing-cost/">what isolation actually costs</a>, benchmarked across MLX and Ollama. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

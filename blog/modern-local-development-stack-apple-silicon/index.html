@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Modern Local Development Stack on Apple Silicon — Velo Workspaces</title>
+<title>The Modern Local Development Stack on Apple Silicon</title>
 <meta name="description" content="A map through everything this blog covers, organized as one path: fundamentals, Linux and AI agents locally, disposable workflows, real numbers, comparisons.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/modern-local-development-stack-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="The Modern Local Development Stack on Apple Silicon">
-<meta property="og:description" content="A map through everything this blog covers, organized as one path: fundamentals, Linux and AI agents locally, disposable workflows, real numbers, and how it compares.">
+<meta property="og:description" content="A map through everything this blog covers, organized as one path: fundamentals, Linux and AI agents locally, disposable workflows, real numbers, comparisons.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/modern-local-development-stack-apple-silicon/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Modern Local Development Stack on Apple Silicon">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
 <meta property="article:modified_time" content="2026-09-23">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "The Modern Local Development Stack on Apple Silicon",
-  "description": "A map through everything this blog covers, organized as one path: fundamentals, Linux and AI agents locally, disposable workflows, real numbers, comparisons.",
-  "datePublished": "2026-09-22",
-  "dateModified": "2026-09-23",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "The Modern Local Development Stack on Apple Silicon",
+      "name": "The Modern Local Development Stack on Apple Silicon",
+      "description": "A map through everything this blog covers, organized as one path: fundamentals, Linux and AI agents locally, disposable workflows, real numbers, comparisons.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-22",
+      "dateModified": "2026-09-23",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/modern-local-development-stack-apple-silicon/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "The Modern Local Development Stack on Apple Silicon",
+          "item": "https://www.veloworkspaces.com/blog/modern-local-development-stack-apple-silicon/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/modern-local-development-stack-apple-silicon/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Guide</span>
         <h1>The Modern Local Development Stack on Apple Silicon</h1>
         <p class="article-lede">This blog has grown into dozens of posts, each answering one specific question well. This one is different on purpose: a map through the whole stack — what a VM on Apple Silicon actually is, running Linux and AI agents locally, building a disposable-by-default workflow, what things actually cost, and how it compares to the alternatives — organized as one coherent path instead of a flat list.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026 · Updated September 23, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-23">September 23, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>Start with what's actually running under you</h2>
       <p>Everything else on this page builds on one mechanism: <a href="/blog/apple-silicon-vms-explained/">Apple Silicon Virtual Machines, Explained</a> covers what Virtualization.framework actually is, and <a href="/blog/how-virtualization-framework-works/">how it works</a> goes device by device — boot loaders, storage, networking, the platform-identity gotcha that silently breaks hibernate. If you're deciding between virtualization and the alternatives, <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a> and <a href="/blog/virtualization-framework-vs-qemu/">Virtualization.framework vs. QEMU</a> cover the actual isolation and emulation-reach tradeoffs, not marketing claims. And <a href="/blog/arm64-vs-x86-apple-silicon/">ARM64 vs. x86-64</a> plus <a href="/blog/why-arm-vms-feel-native/">why ARM VMs feel native</a> cover the architecture underneath all of it.</p>
 
@@ -112,7 +149,6 @@
       </ul>
 
       <p>This page will get denser as the blog grows — it's meant to be revisited, not read once. Or skip the reading and <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

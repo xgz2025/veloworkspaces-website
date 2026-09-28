@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Local LLM vs. Cloud LLM for Coding Agents — Velo Workspaces</title>
+<title>Local LLM vs. Cloud LLM for Coding Agents</title>
 <meta name="description" content="Cloud models win on raw capability and context; local models win on cost at volume, privacy, and offline reliability. A decision framework, not a verdict.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/local-vs-cloud-llm-coding-agents/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="Local LLM vs. Cloud LLM for Coding Agents">
 <meta property="og:description" content="Cloud models win on raw capability and context; local models win on cost at volume, privacy, and offline reliability. A decision framework, not a verdict.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/local-vs-cloud-llm-coding-agents/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Local LLM vs. Cloud LLM for Coding Agents">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Local LLM vs. Cloud LLM for Coding Agents",
-  "description": "Cloud models win on raw capability and context; local models win on cost at volume, privacy, and offline reliability. A decision framework, not a verdict.",
-  "datePublished": "2026-09-22",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Local LLM vs. Cloud LLM for Coding Agents",
+      "name": "Local LLM vs. Cloud LLM for Coding Agents",
+      "description": "Cloud models win on raw capability and context; local models win on cost at volume, privacy, and offline reliability. A decision framework, not a verdict.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-22",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/local-vs-cloud-llm-coding-agents/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Local LLM vs. Cloud LLM for Coding Agents",
+          "item": "https://www.veloworkspaces.com/blog/local-vs-cloud-llm-coding-agents/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/local-vs-cloud-llm-coding-agents/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Fundamentals</span>
         <h1>Local LLM vs. Cloud LLM for Coding Agents</h1>
         <p class="article-lede">Not a verdict, because there isn't a universal one — this blog runs both local models and cloud-backed agents in isolated VMs, and the right choice genuinely depends on the workload. What actually determines it, laid out plainly rather than argued toward a predetermined answer.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>Where cloud models still clearly win</h2>
       <p>Raw capability, first: the largest frontier cloud models remain meaningfully stronger than anything that fits in consumer unified memory, on the harder end of coding tasks — multi-file refactors, subtle bug diagnosis, reasoning through an unfamiliar codebase's architecture. That gap has narrowed considerably as local models and quantization have improved, but it hasn't closed, and pretending otherwise sets up a frustrating experience on genuinely hard problems. Context window is the second, related advantage: cloud models commonly offer context windows well beyond what's practical to hold in local unified memory at the same time as the model weights themselves — see <a href="/blog/llm-ram-requirements-mac/">the RAM math post</a> for exactly why KV cache, not weights, is what actually runs out first on a long local session.</p>
       <p>Zero local setup is the third: point an agent at a cloud API key and it works immediately, with no model download, no quantization decision, no hardware ceiling to think about — genuinely the lower-friction path if you're not already committed to a local workflow.</p>
@@ -105,7 +142,6 @@
       </ul>
 
       <p>Related reading: <a href="/blog/llm-ram-requirements-mac/">how much RAM local LLMs need</a>, <a href="/blog/llm-quantization-explained-mac/">LLM quantization explained</a>, <a href="/blog/ai-bridge-data-privacy/">what actually leaves your Mac with AI Bridge</a>, and <a href="/blog/vm-sandboxing-cost/">what sandboxing an agent actually costs</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

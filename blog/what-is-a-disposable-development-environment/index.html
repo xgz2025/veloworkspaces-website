@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>What Is a Disposable Development Environment? — Velo Workspaces</title>
-<meta name="description" content="A canonical definition: create, use, discard, recreate — and how that's genuinely different from a snapshot, a container, or a cloud dev environment.">
+<title>What Is a Disposable Development Environment?</title>
+<meta name="description" content="A canonical definition: create, use, discard, recreate — and how that&#x27;s genuinely different from a snapshot, a container, or a cloud dev environment.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/what-is-a-disposable-development-environment/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="What Is a Disposable Development Environment?">
-<meta property="og:description" content="A canonical definition: create, use, discard, recreate — and how that's genuinely different from a snapshot, a container, or a cloud dev environment.">
+<meta property="og:description" content="A canonical definition: create, use, discard, recreate — and how that&#x27;s genuinely different from a snapshot, a container, or a cloud dev environment.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/what-is-a-disposable-development-environment/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="What Is a Disposable Development Environment?">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "What Is a Disposable Development Environment?",
-  "description": "A canonical definition: create, use, discard, recreate — and how that's genuinely different from a snapshot, a container, or a cloud dev environment.",
-  "datePublished": "2026-09-22",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "What Is a Disposable Development Environment?",
+      "name": "What Is a Disposable Development Environment?",
+      "description": "A canonical definition: create, use, discard, recreate — and how that's genuinely different from a snapshot, a container, or a cloud dev environment.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-22",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/what-is-a-disposable-development-environment/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "What Is a Disposable Development Environment?",
+          "item": "https://www.veloworkspaces.com/blog/what-is-a-disposable-development-environment/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/what-is-a-disposable-development-environment/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Fundamentals</span>
         <h1>What Is a Disposable Development Environment?</h1>
         <p class="article-lede">This blog uses the term constantly and has mostly assumed you already know what it means. Here's the actual definition, and the three things people most often confuse it with — a snapshot, a container, and a cloud dev environment — none of which are the same guarantee, even though all three get called "disposable" in casual conversation.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>The pattern: create, use, discard, recreate</h2>
       <p>A disposable development environment is one where destruction is the default, not an exception you have to remember to trigger. You create it — usually from a known-good starting point, not from scratch every time — use it for exactly one task, and it's gone the moment that task ends, with nothing about the environment surviving to affect the next one. When you need the same setup again, you recreate it fresh from that same known-good starting point, rather than reusing the one you just finished with. The defining property isn't that the environment <em>can</em> be deleted — almost anything can be deleted. It's that deletion is the expected, routine end state, not a cleanup step someone has to remember.</p>
 
@@ -101,7 +138,6 @@
       <p>The payoff isn't abstract. It removes a specific, recurring doubt — "am I sure nothing's left over from last time" — by making the answer structurally yes rather than probably. A test failure that reproduces against a genuinely identical starting state is real; one that doesn't reproduce is far more likely a genuine race condition than leftover state from three runs ago, which is a meaningfully easier bug to triage. See this play out concretely in <a href="/blog/qa-devops-disposable-vm-workflow/">the QA/DevOps disposable VM workflow</a> and, for the daily-habit version of the same idea, <a href="/blog/software-engineers-disposable-workspaces/">one workspace per project</a>.</p>
 
       <p>Related reading: <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>, <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>, and <a href="/blog/apple-silicon-vms-explained/">what a VM on Apple Silicon actually is</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

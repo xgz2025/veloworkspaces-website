@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Velo Workspaces vs. GitHub Codespaces vs. Ona — Velo Workspaces</title>
+<title>Velo Workspaces vs. GitHub Codespaces vs. Ona</title>
 <meta name="description" content="Cloud dev environments and Velo Workspaces share a pitch, but the honest split is local-and-free vs. cloud-and-metered, with no local GPU on the cloud side.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/velo-vs-codespaces-vs-ona/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="Velo Workspaces vs. GitHub Codespaces vs. Ona">
-<meta property="og:description" content="Cloud dev environments and Velo Workspaces share a pitch, but the honest comparison is local-and-free vs. cloud-and-metered, with no local GPU story on the cloud side at all.">
+<meta property="og:description" content="Cloud dev environments and Velo Workspaces share a pitch, but the honest split is local-and-free vs. cloud-and-metered, with no local GPU on the cloud side.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/velo-vs-codespaces-vs-ona/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Velo Workspaces vs. GitHub Codespaces vs. Ona (Formerly Gitpod): Local and Free vs. Cloud and Metered">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-21">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Velo Workspaces vs. GitHub Codespaces vs. Ona",
-  "description": "Cloud dev environments and Velo Workspaces share a pitch, but the honest split is local-and-free vs. cloud-and-metered, with no local GPU on the cloud side.",
-  "datePublished": "2026-09-21",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Velo Workspaces vs. GitHub Codespaces vs. Ona",
+      "name": "Velo Workspaces vs. GitHub Codespaces vs. Ona (Formerly Gitpod): Local and Free vs. Cloud and Metered",
+      "description": "Cloud dev environments and Velo Workspaces share a pitch, but the honest split is local-and-free vs. cloud-and-metered, with no local GPU on the cloud side.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-21",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/velo-vs-codespaces-vs-ona/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Velo Workspaces vs. GitHub Codespaces vs. Ona (Formerly Gitpod): Local and Free vs. Cloud and Metered",
+          "item": "https://www.veloworkspaces.com/blog/velo-vs-codespaces-vs-ona/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/velo-vs-codespaces-vs-ona/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Comparison</span>
         <h1>Velo Workspaces vs. GitHub Codespaces vs. Ona (Formerly Gitpod): Local and Free vs. Cloud and Metered</h1>
         <p class="article-lede">"Disposable, isolated dev environment" is the shared pitch across all three of these. The honest comparison underneath it is local-and-free versus cloud-and-metered — and, as of a 2025 change worth knowing about, the cloud side of that has no local-GPU story at all anymore.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 21, 2026 · Updated September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <p><strong>Disclosure:</strong> I built Velo Workspaces, so treat this the way you'd treat any vendor-written comparison. Every factual claim about Codespaces and Ona is sourced below, and I say plainly where the cloud tools are simply the right answer. Pricing and product positioning change fast in this space — this reflects what was publicly documented as of September 2026.</p>
 
       <h2>The short version</h2>
@@ -134,7 +171,6 @@
       </ul>
 
       <p>Related reading: the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>, the <a href="/blog/qa-devops-disposable-vm-workflow/">disposable VM workflow for QA and DevOps</a>, how Velo Workspaces compares to <a href="/blog/velo-vs-parallels-vs-utm/">Parallels and UTM</a> and to <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">Docker Desktop and OrbStack</a> on other axes, and <a href="/blog/local-vs-cloud-development-environments/">the category-level local-vs-cloud tradeoffs</a> underneath this specific comparison. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

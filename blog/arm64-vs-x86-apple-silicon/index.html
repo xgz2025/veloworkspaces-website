@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ARM64 vs. x86-64 on Apple Silicon: What Developers Need to Know — Velo Workspaces</title>
+<title>ARM64 vs. x86-64 on Apple Silicon: What Developers Need to Know</title>
 <meta name="description" content="Native ARM64 binaries, Rosetta 2, universal binaries, package managers, multi-arch containers, and which CI runners are arm64-native now.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/arm64-vs-x86-apple-silicon/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="ARM64 vs. x86-64 on Apple Silicon: What Developers Need to Know">
 <meta property="og:description" content="Native ARM64 binaries, Rosetta 2, universal binaries, package managers, multi-arch containers, and which CI runners are arm64-native now.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/arm64-vs-x86-apple-silicon/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ARM64 vs. x86-64 on Apple Silicon: What Developers Need to Know">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
 <meta property="article:modified_time" content="2026-09-22">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "ARM64 vs. x86-64 on Apple Silicon: What Developers Need to Know",
-  "description": "Native ARM64 binaries, Rosetta 2, universal binaries, package managers, multi-arch containers, and which CI runners are arm64-native now.",
-  "datePublished": "2026-09-22",
-  "dateModified": "2026-09-22",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "ARM64 vs. x86-64 on Apple Silicon: What Developers Need to Know",
+      "name": "ARM64 vs. x86-64 on Apple Silicon: What Developers Need to Know",
+      "description": "Native ARM64 binaries, Rosetta 2, universal binaries, package managers, multi-arch containers, and which CI runners are arm64-native now.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-22",
+      "dateModified": "2026-09-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/arm64-vs-x86-apple-silicon/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "ARM64 vs. x86-64 on Apple Silicon: What Developers Need to Know",
+          "item": "https://www.veloworkspaces.com/blog/arm64-vs-x86-apple-silicon/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/arm64-vs-x86-apple-silicon/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,7 +112,7 @@
         <span class="eyebrow">Fundamentals</span>
         <h1>ARM64 vs. x86-64 on Apple Silicon: What Developers Need to Know</h1>
         <p class="article-lede">"Rosetta" means two different things depending on whether you're talking about a macOS app or a Linux guest. Homebrew installs to two different places depending on which chip generation you're on. And whether your CI actually tests what ships depends on whether the runner matches the architecture your users are actually running. None of this is exotic — it's just scattered, and worth having in one place.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 22, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time></p>
       </div>
     </div>
   </section>
@@ -101,7 +139,6 @@
       <p>Architecture mismatch bites in a small number of predictable places: a dependency that only ships x86_64 binaries, a container image built without a multi-arch manifest, a CI runner testing the wrong architecture, or a Linux guest missing an arm64 package your distro's ports repo never built. None of these are Apple Silicon being unusually difficult — they're the ordinary cost of a platform transition that's now several years in, mostly finished, with a shrinking set of specific gaps rather than a blanket compatibility problem.</p>
 
       <p>Related reading: <a href="/blog/apple-silicon-vms-explained/">what a VM on Apple Silicon actually is</a>, <a href="/blog/ubuntu-on-apple-silicon/">Rosetta for Linux in depth</a>, <a href="/blog/virtualization-framework-vs-qemu/">Virtualization.framework vs. QEMU</a>, and <a href="/blog/arch-linux-on-apple-silicon/">why Arch Linux has no official arm64 build at all</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>

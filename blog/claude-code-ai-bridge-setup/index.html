@@ -3,43 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Claude Code With a Local Model, Isolated in a VM on Apple Silicon — Velo Workspaces</title>
+<title>Claude Code With a Local Model, Isolated in a VM on Apple Silicon</title>
 <meta name="description" content="Claude Code needs a different setup than OpenCode or Continue — ANTHROPIC_BASE_URL, not OPENAI_API_BASE. How to wire it to a local model through AI Bridge.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/claude-code-ai-bridge-setup/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=5">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="Claude Code With a Local Model, Isolated in a VM on Apple Silicon">
 <meta property="og:description" content="Claude Code needs a different setup than OpenCode or Continue — ANTHROPIC_BASE_URL, not OPENAI_API_BASE. How to wire it to a local model through AI Bridge.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/claude-code-ai-bridge-setup/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Claude Code With a Local Model, Isolated in a VM on Apple Silicon">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-23">
 <meta property="article:modified_time" content="2026-09-23">
+<meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Claude Code With a Local Model, Isolated in a VM on Apple Silicon",
-  "description": "Claude Code needs a different setup than OpenCode or Continue — ANTHROPIC_BASE_URL, not OPENAI_API_BASE. How to wire it to a local model through AI Bridge.",
-  "datePublished": "2026-09-23",
-  "dateModified": "2026-09-23",
-  "author": {
-    "@type": "Person",
-    "name": "Gaoliang Luo",
-    "url": "https://www.veloworkspaces.com/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Velo Workspaces",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.veloworkspaces.com/assets/icon.png"
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Claude Code With a Local Model, Isolated in a VM on Apple Silicon",
+      "name": "Claude Code With a Local Model, Isolated in a VM on Apple Silicon",
+      "description": "Claude Code needs a different setup than OpenCode or Continue — ANTHROPIC_BASE_URL, not OPENAI_API_BASE. How to wire it to a local model through AI Bridge.",
+      "image": "https://www.veloworkspaces.com/assets/og/default.jpg",
+      "datePublished": "2026-09-23",
+      "dateModified": "2026-09-23",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/claude-code-ai-bridge-setup/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Claude Code With a Local Model, Isolated in a VM on Apple Silicon",
+          "item": "https://www.veloworkspaces.com/blog/claude-code-ai-bridge-setup/"
+        }
+      ]
     }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://www.veloworkspaces.com/blog/claude-code-ai-bridge-setup/"
-  }
+  ]
 }
 </script>
 </head>
@@ -74,14 +112,13 @@
         <span class="eyebrow">Setup guide</span>
         <h1>Claude Code With a Local Model, Isolated in a VM on Apple Silicon</h1>
         <p class="article-lede">The setup guides on this blog so far all point at OpenAI-compatible agents — OpenCode, Continue. Claude Code isn't one of those, and pointing it at a local model needs a different environment variable and a host provider that actually speaks the right protocol. Here's the real setup, not the OpenCode one with the names swapped.</p>
-        <p style="font-size:0.9rem; color:var(--color-text-secondary);">By Gaoliang Luo · Published September 23, 2026</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-23">September 23, 2026</time></p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container article-body">
-
       <h2>Why Claude Code isn't a drop-in swap for OpenCode</h2>
       <p>Every other local-model setup guide on this blog — <a href="/blog/mlx-vm-setup-guide/">OpenCode</a>, <a href="/blog/vscode-continue-ai-bridge/">Continue</a> — points the agent at an OpenAI-compatible endpoint by setting <code>OPENAI_API_BASE</code>. Claude Code doesn't work that way. It's Anthropic's own CLI, and it speaks the Anthropic Messages API specifically: the request body, the streaming format, and the tool-call shape are all Anthropic's, not OpenAI's. Pointing it at a local server means setting <code>ANTHROPIC_BASE_URL</code> instead — and whatever is listening on the other end has to accept requests in that exact shape, not just be "an OpenAI-compatible server" the way <code>mlx_lm.server</code> or a generic Ollama endpoint normally is.</p>
       <p>That one constraint decides the rest of this guide: which host provider you can actually use, and what you have to set differently from every other agent covered here.</p>
@@ -120,7 +157,6 @@ claude --model qwen2.5-coder:7b</code></pre>
       <p>The reason to run any coding agent inside a disposable VM rather than directly on your Mac doesn't change based on which agent it is: Claude Code executes shell commands and edits files with whatever permissions the process running it has, and <a href="/blog/ai-agent-security-risks/">real 2026 incidents</a> — including one against Claude Code's own project-load flow — show that "the agent behaves correctly" isn't a boundary you can rely on by itself. Running it inside a Disposable Workspace means a compromised or simply mistaken session doesn't outlive closing the VM, and AI Bridge means you don't give up the host GPU to get that isolation.</p>
 
       <p>Related reading: the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>, the same setup <a href="/blog/mlx-vm-setup-guide/">for OpenCode</a> and <a href="/blog/vscode-continue-ai-bridge/">for Continue in VS Code</a>, what running an agent this way <a href="/blog/vm-sandboxing-cost/">actually costs in inference speed</a>, and <a href="/blog/ai-agent-security-risks/">what actually goes wrong</a> when a coding agent runs unsandboxed. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>
-
     </div>
   </section>
 </main>
