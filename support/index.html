@@ -246,6 +246,12 @@
           </div>
         </details>
         <details class="faq-item">
+          <summary>Why does a workspace I installed by hand ask “Finished installing the workspace's OS?”</summary>
+          <div class="faq-answer">
+            <p>That's expected after any manual install, such as Kali Linux, NixOS, Alpine Linux or Debian's installer. Velo Workspaces knows when an automatic install has finished, but only you know when you've finished one by hand. While an OS is being installed, the workspace uses Large Text display scaling so the boot menu and installer are big enough to read. Once the installed system has booted, click Installation Complete: the installer is no longer attached, and the workspace's own display setting applies from the next start. Stop and start the workspace once to switch; a reboot inside the guest isn't enough.</p>
+          </div>
+        </details>
+        <details class="faq-item">
           <summary>Can I use an ISO or cloud image I've already downloaded?</summary>
           <div class="faq-answer">
             <p>Yes. Click <strong>Choose File…</strong> on the Image step, or Import… in Settings › Images. If the file's name is in the vendor's checksum list, the app checks it against the official checksum before using it. Everything you download or import stays in Settings › Images (also Images in the sidebar), where you can reuse, verify or delete it.</p>

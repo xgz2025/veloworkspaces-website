@@ -246,6 +246,12 @@
           </div>
         </details>
         <details class="faq-item">
+          <summary>Warum fragt ein von Hand installierter Arbeitsbereich „Installation des Gastbetriebssystems abgeschlossen?“</summary>
+          <div class="faq-answer">
+            <p>Das ist nach jeder manuellen Installation so vorgesehen, etwa bei Kali Linux, NixOS, Alpine Linux oder dem Debian-Installer. Velo Workspaces erkennt, wann eine automatische Installation fertig ist, aber nur Sie wissen, wann Sie eine Installation von Hand abgeschlossen haben. Während der Installation nutzt der Arbeitsbereich die Anzeigeskalierung „Großer Text“, damit Bootmenü und Installer gut lesbar sind. Sobald das installierte System gestartet ist, klicken Sie auf „Installation abgeschlossen“: Das Installationsmedium wird nicht mehr eingebunden, und ab dem nächsten Start gilt die eigene Anzeigeeinstellung des Arbeitsbereichs. Stoppen und starten Sie den Arbeitsbereich einmal, um umzuschalten; ein Neustart im Gast genügt nicht.</p>
+          </div>
+        </details>
+        <details class="faq-item">
           <summary>Kann ich eine bereits geladene ISO oder ein Cloud-Image verwenden?</summary>
           <div class="faq-answer">
             <p>Ja. Klicken Sie im Schritt „Image“ auf <strong>Datei auswählen…</strong> oder unter Einstellungen › Images auf „Importieren …“. Steht der Dateiname in der Prüfsummenliste des Herstellers, prüft die App die Datei vor der Verwendung gegen die offizielle Prüfsumme. Alles, was Sie laden oder importieren, bleibt unter Einstellungen › Images (auch „Images“ in der Seitenleiste), wo Sie es wiederverwenden, prüfen oder löschen können.</p>

@@ -246,6 +246,12 @@
           </div>
         </details>
         <details class="faq-item">
+          <summary>为什么手动安装的工作区会询问「客户机操作系统安装完成了吗？」</summary>
+          <div class="faq-answer">
+            <p>这是手动安装（例如 Kali Linux、NixOS、Alpine Linux 或 Debian 安装程序）之后的正常行为。自动安装何时完成，Velo Workspaces 能自己判断；手动安装何时完成，只有你知道。安装系统期间，工作区使用「大字体」显示缩放，让启动菜单和安装程序清晰可读。安装好的系统启动后，点击「安装已完成」：之后不再挂载安装介质，并从下次启动起使用工作区自己的显示设置。要切换，请将工作区停止后再启动一次；在客户机内部重启并不足够。</p>
+          </div>
+        </details>
+        <details class="faq-item">
           <summary>能用已经下载好的 ISO 或云镜像吗？</summary>
           <div class="faq-answer">
             <p>可以。在「镜像」步骤点击 <strong>选择文件…</strong> ，或在「设置 › 镜像」中点击「导入…」。如果文件名出现在发行方的校验和列表中，App 会在使用前用官方校验和验证它。下载或导入的镜像都会保留在「设置 › 镜像」中（侧边栏的「镜像」也能打开），可以复用、验证或删除。</p>

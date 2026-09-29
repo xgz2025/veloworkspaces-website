@@ -112,7 +112,7 @@
         <span class="eyebrow">Guide</span>
         <h1>Running Arch Linux on Apple Silicon: What's Different</h1>
         <p class="article-lede">Fourth in the series on specific distributions, and the odd one out. Ubuntu, Debian and Fedora each ship an official arm64 build from the same project as the x86 one. Arch doesn't, and that changes almost everything else here.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-29">September 29, 2026</time><span class="article-readtime">2 min read</span></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-29">September 29, 2026</time><span class="article-readtime">3 min read</span></p>
       </div>
       <details class="article-toc">
         <summary>In this article</summary>
@@ -152,6 +152,7 @@ EOF
 sudo systemctl enable --now systemd-networkd systemd-resolved</code></pre>
 
       <h2 id="after-the-install">After the install</h2>
+      <p>Once Arch boots from its own disk, click <strong>Installation Complete</strong> in the banner at the top of the workspace. After a manual install the app can't tell on its own that you're done, so until you click, it keeps attaching the installer and keeps the Large Text display scaling that makes the installer readable. Stop and start the workspace once afterwards to switch to its own display setting.</p>
       <p>Install and enable <code>openssh</code>, then type your username in the workspace's <strong>Access</strong> tab. Sign in to the built-in terminal (Pro) once with your password and click <strong>Install Key</strong>, and it stops asking for it. When the system is how you want it, save it as a base image so you never repeat the setup.</p>
 
       <h2 id="when-arch-makes-sense">When Arch makes sense</h2>

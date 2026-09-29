@@ -130,7 +130,8 @@
           <li><a href="#let-the-boot-menu-time-out"><span class="toc-step">5</span><span>Let the boot menu time out</span></a></li>
           <li><a href="#run-the-installer"><span class="toc-step">6</span><span>Run the installer</span></a></li>
           <li><a href="#restart-into-nixos"><span class="toc-step">7</span><span>Restart into NixOS</span></a></li>
-          <li><a href="#turn-on-ssh-the-nixos-way"><span class="toc-step">8</span><span>Turn on SSH, the NixOS way</span></a></li>
+          <li><a href="#tell-velo-workspaces-the-install-is-done"><span class="toc-step">8</span><span>Tell Velo Workspaces the install is done</span></a></li>
+          <li><a href="#turn-on-ssh-the-nixos-way"><span class="toc-step">9</span><span>Turn on SSH, the NixOS way</span></a></li>
           <li><a href="#where-to-go-next"><span>Where to go next</span></a></li>
         </ol>
       </details>
@@ -220,11 +221,21 @@
         <a class="shot-frame" href="/assets/blog/guides/nixos/all-done.webp"><img src="/assets/blog/guides/nixos/all-done.webp" width="959" height="622" alt="NixOS installer All done screen with Restart now and Done highlighted" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
         <figcaption><span>Tick Restart now, then Done.</span></figcaption>
       </figure>
-      <p>The workspace restarts into your new system. If the app still shows <em>Finished installing the workspace's OS?</em>, click <strong>Installation Complete</strong> so the installer isn't attached again.</p>
+      <p>The workspace restarts into your new system.</p>
       <figure class="shot shot-wide">
         <a class="shot-frame" href="/assets/blog/guides/nixos/desktop.webp"><img src="/assets/blog/guides/nixos/desktop.webp" width="959" height="622" alt="NixOS GNOME desktop overview after the first sign-in" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
         <figcaption><span>GNOME on NixOS, installed.</span></figcaption>
       </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="tell-velo-workspaces-the-install-is-done">Tell Velo Workspaces the install is done</h2>
+      <p>After a manual install the workspace shows <em>Finished installing the workspace's OS?</em> at the top until you answer it, because only you know when the installer has finished. Click <strong>Installation Complete</strong>.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/nixos/installation-complete.webp"><img src="/assets/blog/guides/nixos/installation-complete.webp" width="892" height="126" alt="NixOS workspace banner asking Finished installing the workspace&#x27;s OS, with Installation Complete highlighted" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Shown after every manual install until you click Installation Complete.</span></figcaption>
+      </figure>
+      <p>While an OS is being installed, the workspace uses Large Text display scaling, so the boot menu and installer are big enough to read. Once you click, Velo Workspaces stops attaching the installer and uses the workspace's own display setting from the next start. Stop and start the workspace once to switch; rebooting NixOS from inside isn't enough.</p>
       </section>
 
       <section class="guide-step">

@@ -352,7 +352,7 @@ POSTS = [
         "card_summary": "Native arm64 like Ubuntu, but a different installer and different networking defaults. The one-minute Debian cloud image, installing by hand, and why Ubuntu's clone gotcha usually doesn't apply.",
         "lede": "Second in the series on specific Linux distributions. Debian runs natively on arm64 like Ubuntu, but its installer and networking defaults are different, and in Velo Workspaces the fast path is the official cloud image.",
         "published": "2026-09-20",
-        "modified": "2026-09-28",
+        "modified": "2026-09-29",
         "trademarks": "Debian is a registered trademark of Software in the Public Interest, Inc."
     },
     {

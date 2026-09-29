@@ -442,18 +442,18 @@
     <description>Run Ubuntu 26.04 or 24.04 LTS on an M-series Mac in about a minute from the official cloud image, or install Server or Desktop hands-free.</description>
   </item>
   <item>
-    <title>Fedora on Apple Silicon: Run a Fedora 44 VM on a Mac</title>
-    <link>https://www.veloworkspaces.com/blog/fedora-on-apple-silicon/</link>
-    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/fedora-on-apple-silicon/</guid>
-    <pubDate>Sun, 20 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Run Fedora 44 on an M-series Mac from the Cloud Base image or a hands-free Server install, and what&#x27;s different: SELinux, NetworkManager and Rosetta.</description>
-  </item>
-  <item>
     <title>Debian on Apple Silicon: Run a Debian 13 VM on a Mac</title>
     <link>https://www.veloworkspaces.com/blog/debian-on-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/debian-on-apple-silicon/</guid>
     <pubDate>Sun, 20 Sep 2026 12:00:00 +0000</pubDate>
     <description>Debian 13 and 12 on an M-series Mac: the cloud image that sets itself up in a minute, the netinst installer, and how Debian differs from Ubuntu in a VM.</description>
+  </item>
+  <item>
+    <title>Fedora on Apple Silicon: Run a Fedora 44 VM on a Mac</title>
+    <link>https://www.veloworkspaces.com/blog/fedora-on-apple-silicon/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/fedora-on-apple-silicon/</guid>
+    <pubDate>Sun, 20 Sep 2026 12:00:00 +0000</pubDate>
+    <description>Run Fedora 44 on an M-series Mac from the Cloud Base image or a hands-free Server install, and what&#x27;s different: SELinux, NetworkManager and Rosetta.</description>
   </item>
   <item>
     <title>Disposable VMs for QA and DevOps on a Mac: A Clean Workflow</title>

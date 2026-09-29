@@ -246,6 +246,12 @@
           </div>
         </details>
         <details class="faq-item">
+          <summary>Por que um workspace instalado manualmente pergunta “Terminou de instalar o sistema convidado?”</summary>
+          <div class="faq-answer">
+            <p>Isso é esperado depois de qualquer instalação manual, como Kali Linux, NixOS, Alpine Linux ou o instalador do Debian. O Velo Workspaces sabe quando uma instalação automática termina, mas só você sabe quando terminou uma instalação manual. Durante a instalação, o workspace usa a escala “Texto grande” para que o menu de inicialização e o instalador fiquem legíveis. Quando o sistema instalado tiver iniciado, clique em “Instalação concluída”: o instalador deixa de ser conectado e, a partir da próxima inicialização, vale o ajuste de tela do próprio workspace. Pare e inicie o workspace uma vez para trocar; reiniciar dentro do convidado não é suficiente.</p>
+          </div>
+        </details>
+        <details class="faq-item">
           <summary>Posso usar uma ISO ou imagem de nuvem que já baixei?</summary>
           <div class="faq-answer">
             <p>Sim. Clique em <strong>Escolher arquivo…</strong> na etapa Imagem, ou em “Importar…” em Ajustes › Imagens. Se o nome do arquivo estiver na lista de checksums do fabricante, o app confere o arquivo com o checksum oficial antes de usá-lo. Tudo o que você baixa ou importa fica em Ajustes › Imagens (também “Imagens” na barra lateral), onde dá para reutilizar, verificar ou excluir.</p>

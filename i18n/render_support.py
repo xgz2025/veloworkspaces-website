@@ -179,6 +179,12 @@ def render(code, seg, label):
           </div>
         </details>
         <details class="faq-item">
+          <summary>{t['faq_manual_q']}</summary>
+          <div class="faq-answer">
+            <p>{t['faq_manual_a']}</p>
+          </div>
+        </details>
+        <details class="faq-item">
           <summary>{t['faq_cloud4_q']}</summary>
           <div class="faq-answer">
             <p>{t['faq_cloud4_a_pre']} <strong>{t['faq_cloud4_a_strong']}</strong> {t['faq_cloud4_a_post']}</p>

@@ -20,7 +20,7 @@
 <meta property="og:image:alt" content="Running Debian on Apple Silicon: What&#x27;s Different from Ubuntu">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-20">
-<meta property="article:modified_time" content="2026-09-28">
+<meta property="article:modified_time" content="2026-09-29">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -33,7 +33,7 @@
       "description": "Debian 13 and 12 on an M-series Mac: the cloud image that sets itself up in a minute, the netinst installer, and how Debian differs from Ubuntu in a VM.",
       "image": "https://www.veloworkspaces.com/assets/og/debian-on-apple-silicon.jpg",
       "datePublished": "2026-09-20",
-      "dateModified": "2026-09-28",
+      "dateModified": "2026-09-29",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -112,7 +112,7 @@
         <span class="eyebrow">Guide</span>
         <h1>Running Debian on Apple Silicon: What's Different from Ubuntu</h1>
         <p class="article-lede">Second in the series on specific Linux distributions. Debian runs natively on arm64 like Ubuntu, but its installer and networking defaults are different, and in Velo Workspaces the fast path is the official cloud image.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">3 min read</span></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-29">September 29, 2026</time><span class="article-readtime">3 min read</span></p>
       </div>
       <details class="article-toc">
         <summary>In this article</summary>
@@ -139,7 +139,7 @@
       <p>One detail if you're comparing notes with other tools: Velo Workspaces uses the <code>generic</code> image, not <code>genericcloud</code>. The genericcloud kernel leaves out the virtio GPU driver, so its display stops at "EFI stub" while the system carries on booting headless. The generic image gives you a working console as well as SSH.</p>
 
       <h2 id="the-installer-by-hand">The installer, by hand</h2>
-      <p>If you'd rather run Debian's installer, choose <strong>Installer image</strong> and pick the Debian 13 netinst or DVD ISO. Debian's installer isn't automated in Velo Workspaces yet: its answer file (preseed) has to come from a boot argument or from inside the installer's own initrd, which needs a different approach from Ubuntu's and Fedora's. So you go through <strong>debian-installer</strong> yourself in the workspace's display: locale, keyboard, mirror, partitioning, then <code>tasksel</code> for package sets. Ubuntu's installer asks fewer questions, but neither is hard. For a hands-free Debian, use the cloud image.</p>
+      <p>If you'd rather run Debian's installer, choose <strong>Installer image</strong> and pick the Debian 13 netinst or DVD ISO. Debian's installer isn't automated in Velo Workspaces yet: its answer file (preseed) has to come from a boot argument or from inside the installer's own initrd, which needs a different approach from Ubuntu's and Fedora's. So you go through <strong>debian-installer</strong> yourself in the workspace's display: locale, keyboard, mirror, partitioning, then <code>tasksel</code> for package sets. When the installed system has booted, click <strong>Installation Complete</strong> in the banner at the top of the workspace. After a manual install the app can't tell on its own that you're done, so until you click, it keeps attaching the installer and keeps the Large Text display scaling that makes the installer readable. Stop and start the workspace once afterwards to switch to its own display setting. Ubuntu's installer asks fewer questions, but neither is hard. For a hands-free Debian, use the cloud image.</p>
 
       <h2 id="networking-no-netplan-so-ubuntu-s-clone-gotcha-usually-doesn">Networking: no Netplan, so Ubuntu's clone gotcha usually doesn't apply</h2>
       <p>The Ubuntu post describes a workspace cloned from an Ubuntu Server base image coming up with no IP address, because Netplan matches the interface by the base image's old MAC address. That's a Netplan behavior, not a general cloning problem. A Debian system set up by debian-installer uses <strong>ifupdown</strong> and <code>/etc/network/interfaces</code>, which refer to interfaces by name (<code>enp0s1</code>), so a clone with a new MAC address keeps working.</p>
