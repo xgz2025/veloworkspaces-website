@@ -12,7 +12,7 @@
     <link>https://www.veloworkspaces.com/blog/create-ubuntu-vm-mac-cloud-image/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/create-ubuntu-vm-mac-cloud-image/</guid>
     <pubDate>Tue, 29 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Step by step, with screenshots and a video: download Ubuntu 26.04&#x27;s cloud image, set your account and SSH key, and sign in to a running VM on your Mac.</description>
+    <description>Step by step with screenshots and a video: Ubuntu 26.04&#x27;s cloud image at the disk size you type, with no qemu-img resize or growpart, and your SSH key set.</description>
   </item>
   <item>
     <title>Ubuntu Desktop VM on a Mac: Hands-Free Install, Step by Step</title>

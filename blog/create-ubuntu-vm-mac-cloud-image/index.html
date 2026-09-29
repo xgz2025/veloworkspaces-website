@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Create an Ubuntu VM on a Mac in 30 Seconds: Step by Step</title>
-<meta name="description" content="Step by step, with screenshots and a video: download Ubuntu 26.04&#x27;s cloud image, set your account and SSH key, and sign in to a running VM on your Mac.">
+<meta name="description" content="Step by step with screenshots and a video: Ubuntu 26.04&#x27;s cloud image at the disk size you type, with no qemu-img resize or growpart, and your SSH key set.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/create-ubuntu-vm-mac-cloud-image/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=6">
@@ -12,7 +12,7 @@
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
 <meta property="og:title" content="Create an Ubuntu VM on a Mac in 30 Seconds: Step by Step">
-<meta property="og:description" content="Step by step, with screenshots and a video: download Ubuntu 26.04&#x27;s cloud image, set your account and SSH key, and sign in to a running VM on your Mac.">
+<meta property="og:description" content="Step by step with screenshots and a video: Ubuntu 26.04&#x27;s cloud image at the disk size you type, with no qemu-img resize or growpart, and your SSH key set.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/create-ubuntu-vm-mac-cloud-image/">
 <meta property="og:image" content="https://www.veloworkspaces.com/assets/og/create-ubuntu-vm-mac-cloud-image.jpg">
 <meta property="og:image:width" content="1200">
@@ -30,7 +30,7 @@
       "@type": "BlogPosting",
       "headline": "Create an Ubuntu VM on a Mac in 30 Seconds: Step by Step",
       "name": "Create an Ubuntu VM on Your Mac in 30 Seconds",
-      "description": "Step by step, with screenshots and a video: download Ubuntu 26.04's cloud image, set your account and SSH key, and sign in to a running VM on your Mac.",
+      "description": "Step by step with screenshots and a video: Ubuntu 26.04's cloud image at the disk size you type, with no qemu-img resize or growpart, and your SSH key set.",
       "image": [
         "https://www.veloworkspaces.com/assets/og/create-ubuntu-vm-mac-cloud-image.jpg",
         "https://www.veloworkspaces.com/assets/blog/guides/ubuntu-cloud-image/terminal.webp"
@@ -124,8 +124,8 @@
       <div class="article-header">
         <span class="eyebrow">Step-by-step guide</span>
         <h1>Create an Ubuntu VM on Your Mac in 30 Seconds</h1>
-        <p class="article-lede">A cloud image is Ubuntu already installed on a disk. Velo Workspaces downloads it, adds your account and SSH key, and boots it. Once the image is on your Mac, going from the + button to a signed-in terminal takes about 30 seconds. Here is every screen, in order.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-29">September 29, 2026</time><span class="article-readtime">5 min read</span></p>
+        <p class="article-lede">A cloud image is Ubuntu already installed on a small disk. Velo Workspaces downloads it, grows it to the size you type, adds your account and SSH key, and boots it. Once the image is on your Mac, going from the + button to a signed-in terminal takes about 30 seconds. Here is every screen, in order.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-29">September 29, 2026</time><span class="article-readtime">7 min read</span></p>
       </div>
       <figure class="shot article-hero">
         <a class="shot-frame" href="/assets/blog/guides/ubuntu-cloud-image/terminal.webp"><img src="/assets/blog/guides/ubuntu-cloud-image/terminal.webp" width="907" height="629" alt="Velo Workspaces with an Ubuntu 26.04 workspace and its built-in terminal signed in over SSH" fetchpriority="high"><span class="shot-zoom">Click to enlarge</span></a>
@@ -153,7 +153,7 @@
         <div><dt>Time</dt><dd>About 30 seconds<span>once the image is downloaded</span></dd></div>
         <div><dt>Download</dt><dd>Under 1 GB<span>Ubuntu 26.04 LTS Server, QCOW2</span></dd></div>
         <div><dt>You get</dt><dd>Ubuntu Server<span>your account, key and hostname set</span></dd></div>
-        <div><dt>Needs</dt><dd>Velo Workspaces 1.2<span>free on the Mac App Store</span></dd></div>
+        <div><dt>Disk size</dt><dd>Just type it<span>grown for you, no qemu-img</span></dd></div>
       </dl>
 
       <figure class="shot shot-wide">
@@ -208,19 +208,42 @@
       <h2 id="configure-the-workspace">Configure the workspace</h2>
       <p>This screen is the whole setup. cloud-init applies all of it the first time the workspace starts.</p>
       <figure class="shot shot-wide">
-        <a class="shot-frame" href="/assets/blog/guides/ubuntu-cloud-image/configure.webp"><img src="/assets/blog/guides/ubuntu-cloud-image/configure.webp" width="796" height="656" alt="Configure step with workspace name, hardware profiles, disk size, account and SSH public keys" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-cloud-image/configure.webp"><img src="/assets/blog/guides/ubuntu-cloud-image/configure.webp" width="796" height="656" alt="Configure step with workspace name, hardware profiles, the Storage field highlighted, account and SSH public keys" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
         <figcaption><span>Name, hardware profile, disk size and the account cloud-init creates.</span></figcaption>
       </figure>
       <ul>
         <li><strong>Workspace Name</strong> is also the guest's hostname: “Ubuntu” becomes <code>ubuntu</code>.</li>
         <li><strong>Profile</strong> sets CPU and memory, for example Code &amp; Build (4 CPU, 8 GB) or AI Sandbox (8 CPU, 16 GB). <strong>Show Advanced Settings</strong> lets you set exact numbers, and turn on a shared folder, AI Bridge or Rosetta for Linux.</li>
-        <li><strong>Storage</strong> is the disk size Ubuntu sees. This image needs at least 8 GB. The disk grows to the size you set on first boot, but it only uses space on your Mac as it fills.</li>
+        <li><strong>Storage</strong> is the disk size Ubuntu gets: type the size you need, anything from 8 GB up. More on that just below, because it's the step that usually hurts.</li>
         <li><strong>Username</strong> and <strong>Password</strong> are for your account. The password is required even if you only sign in with keys, because <code>sudo</code> and the console ask for it.</li>
         <li><strong>SSH Public Keys</strong> already lists this Mac's key, which the built-in terminal signs in with. To use Terminal or VS Code with your own key too, click <strong>Add Other Public Keys…</strong> and paste your <code>~/.ssh/id_ed25519.pub</code>.</li>
         <li><strong>Allow SSH logins with the password</strong> is off, so SSH accepts keys only. Leave it that way unless you have a reason not to.</li>
       </ul>
       <div class="note note-tip">
         <p><strong>Copy your public key</strong> with <code>pbcopy &lt; ~/.ssh/id_ed25519.pub</code> in Terminal, then paste it into the box. No key yet? <code>ssh-keygen -t ed25519</code> makes one.</p>
+      </div>
+      <h3 id="disk-size">The disk size: type it, and you’re done</h3>
+      <p>Ubuntu publishes its cloud image with a disk of about 3.5 GB, barely more than the system on it. Boot it as it is and you're out of space after the first few packages. That's why “how do I resize a cloud image” is one of the most common questions about them, and the usual answer is a chore:</p>
+      <div class="compare">
+        <div class="compare-col compare-old">
+          <p class="compare-label">The usual way</p>
+          <pre><code># on the host, with the VM stopped
+qemu-img resize ubuntu.img 40G
+
+# then, inside the VM
+sudo growpart /dev/vda 1
+sudo resize2fs /dev/vda1</code></pre>
+          <p>Three tools, two places, and the right device and partition names to find first. If the partition table's backup header is left in the middle of the bigger disk, fix that before <code>growpart</code> will cooperate.</p>
+        </div>
+        <div class="compare-col compare-new">
+          <p class="compare-label">In Velo Workspaces</p>
+          <p class="compare-big">Type <strong>40</strong> in Storage.</p>
+          <p>That's all. The disk, its partition and its filesystem are all 40 GB when you first sign in. Nothing to run on your Mac, nothing to run in Ubuntu.</p>
+        </div>
+      </div>
+      <p>Here's what happens behind that one field. While Velo Workspaces converts the image, it grows the disk to the size you typed and moves the partition table's backup copy to the new end of the disk, before Ubuntu ever sees it. On the first boot, cloud-init grows the root partition and the filesystem to fill the disk. The disk is sparse, too: a 40 GB workspace uses only as much space on your Mac as Ubuntu has actually written.</p>
+      <div class="note note-tip">
+        <p><strong>Pick the size you'll need now.</strong> Creation is when all of this happens by itself. You can enlarge the disk later in the workspace's Resources tab while it's stopped, but then growing the partition inside Linux is up to you, with <code>growpart</code> and <code>resize2fs</code>, as the app reminds you. Since unused space costs nothing on your Mac, it's fine to be generous.</p>
       </div>
       </section>
 
@@ -231,16 +254,16 @@
         <a class="shot-frame" href="/assets/blog/guides/ubuntu-cloud-image/review.webp"><img src="/assets/blog/guides/ubuntu-cloud-image/review.webp" width="796" height="656" alt="Review and Launch step showing all checks passed, Setup Automatic cloud-init, and the Create Workspace button" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
         <figcaption><span>Everything in one place before anything is created.</span></figcaption>
       </figure>
-      <p>Velo Workspaces then turns the downloaded QCOW2 file into the raw disk Apple's Virtualization framework boots. It takes a few seconds, once per workspace, and the image in your library stays as it is.</p>
+      <p>Velo Workspaces then turns the downloaded QCOW2 file into the raw disk Apple's Virtualization framework boots, at the size you chose. It takes a few seconds, once per workspace, and the image in your library stays as it is.</p>
       <figure class="shot shot-wide">
         <a class="shot-frame" href="/assets/blog/guides/ubuntu-cloud-image/converting.webp"><img src="/assets/blog/guides/ubuntu-cloud-image/converting.webp" width="796" height="656" alt="Converting disk image progress at 43 percent" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
-        <figcaption><span>Converting disk image: a few seconds, once per workspace.</span></figcaption>
+        <figcaption><span>Converting disk image and growing it to your size: a few seconds, once per workspace.</span></figcaption>
       </figure>
       </section>
 
       <section class="guide-step">
       <h2 id="watch-it-boot">Watch it boot</h2>
-      <p>The workspace starts at once and its console opens. The kernel and systemd scroll past, then a login prompt appears. You don't need to sign in here: while it booted, cloud-init created your account, set the hostname and installed your keys.</p>
+      <p>The workspace starts at once and its console opens. The kernel and systemd scroll past, then a login prompt appears. You don't need to sign in here: while it booted, cloud-init grew the filesystem to fill the disk, created your account, set the hostname and installed your keys.</p>
       <div class="shot-pair shot-wide">
       <figure class="shot">
         <a class="shot-frame" href="/assets/blog/guides/ubuntu-cloud-image/booting.webp"><img src="/assets/blog/guides/ubuntu-cloud-image/booting.webp" width="725" height="360" alt="Ubuntu console showing systemd boot messages" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
@@ -262,9 +285,10 @@
       </figure>
       <p>Click <strong>Open Terminal</strong>. A terminal window opens, already signed in as your user with this Mac's key. It has tabs: <strong>+</strong> opens another session.</p>
       <figure class="shot shot-wide">
-        <a class="shot-frame" href="/assets/blog/guides/ubuntu-cloud-image/terminal.webp"><img src="/assets/blog/guides/ubuntu-cloud-image/terminal.webp" width="907" height="629" alt="Built-in terminal signed in to Ubuntu 26.04 as the account created in the wizard" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
-        <figcaption><span>Signed in over SSH as the account from step 4.</span></figcaption>
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-cloud-image/terminal.webp"><img src="/assets/blog/guides/ubuntu-cloud-image/terminal.webp" width="907" height="629" alt="Built-in terminal signed in to Ubuntu 26.04, showing usage of / as 10.6% of 18.25GB" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Signed in over SSH as the account from step 4. Note the size of <code>/</code>.</span></figcaption>
       </figure>
+      <p>Look at the system information Ubuntu prints when you sign in: <strong>Usage of /: 10.6% of 18.25GB</strong>. This workspace was given 20 GB in step 4, and the root filesystem already fills it, from an image that started at about 3.5 GB. No <code>qemu-img</code>, no <code>growpart</code>. Run <code>df -h /</code> any time to see the same thing.</p>
       <div class="note note-pro">
         <p><strong>Pro feature.</strong> The built-in terminal is part of Velo Workspaces Pro, which you can try free for a week. Without it, copy the <code>ssh</code> command from the Access tab into Terminal. That uses the keys in your <code>~/.ssh</code> folder, so the workspace has to trust one of them: <a href="/blog/ssh-vs-code-linux-vm-mac/">the SSH and VS Code guide</a> shows how.</p>
       </div>
@@ -281,6 +305,10 @@
       <h3>Terminal says Permission denied (publickey)</h3>
 
       <p>The <code>ssh</code> command in Terminal uses the keys in <code>~/.ssh</code>, not the one Velo Workspaces keeps in your Keychain. Add your own public key when you create the workspace, or use one key for everything as the <a href="/blog/ssh-vs-code-linux-vm-mac/">SSH and VS Code guide</a> describes.</p>
+
+      <h3>I need a bigger disk</h3>
+
+      <p>Enlarge it in the workspace's <strong>Resources</strong> tab while the workspace is stopped, then grow the partition and filesystem inside Ubuntu: <code>sudo growpart /dev/vda 1</code> and <code>sudo resize2fs /dev/vda1</code> on Ubuntu's default layout (check yours with <code>lsblk</code>). Next time, give it more <a href="#disk-size">when you create it</a>, where it all happens for you.</p>
 
       <h2 id="where-to-go-next">Where to go next</h2>
 
