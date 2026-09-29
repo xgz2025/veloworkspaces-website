@@ -105,21 +105,32 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Benchmark</span>
         <h1>What Sandboxing an AI Coding Agent in a VM Costs on Apple Silicon</h1>
         <p class="article-lede">I benchmarked the same sandboxing architecture against two inference engines and got two different answers about its cost under load. Both are real. Here's why they disagree, and why I'm showing both rather than the one that sounds better.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-17">September 17, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-17">September 17, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">5 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#the-problem"><span>The problem</span></a></li>
+          <li><a href="#the-fix-split-agent-from-model"><span>The fix: split agent from model</span></a></li>
+          <li><a href="#benchmark-1-mlx-single-request-near-zero"><span>Benchmark 1: MLX, single request, near zero</span></a></li>
+          <li><a href="#benchmark-2-ollama-same-questions-the-opposite-answer-under"><span>Benchmark 2: Ollama, same questions, the opposite answer under load</span></a></li>
+          <li><a href="#why-i-m-showing-both-rather-than-picking-one"><span>Why I&#x27;m showing both rather than picking one</span></a></li>
+          <li><a href="#caveats"><span>Caveats</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>The problem</h2>
+      <h2 id="the-problem">The problem</h2>
       <p>Most people running an AI coding agent locally give it a <code>subprocess</code> or <code>exec()</code> call with full access to their files, network and credentials. <a href="https://www.docker.com/blog/ai-coding-agent-horror-stories-security-risks/" target="_blank" rel="noopener">Docker's own engineering blog has documented real incidents</a> from exactly this. Indirect prompt injection makes it worse: a hostile instruction hidden in a file the agent reads can run commands with all your permissions.</p>
 
       <p>The right fix is to run the agent in a VM. On Apple silicon that hits a wall: <code>Virtualization.framework</code> doesn't give a Linux guest the Mac's GPU, as <a href="https://github.com/apple/container/discussions/62" target="_blank" rel="noopener">Apple's own container team has confirmed</a>. A Linux guest gets <code>virtio-gpu</code>, a paravirtualized 2D framebuffer with no path to the host's Metal GPU. Run a 7B model inside the VM and it's dramatically slower than on the Mac.</p>
@@ -127,32 +138,32 @@
 
       <p>So on Apple silicon, "safe" (in a VM) and "fast" (on the GPU) pull in opposite directions, unless you stop treating "run the agent" and "run the model" as one problem.</p>
 
-      <h2>The fix: split agent from model</h2>
+      <h2 id="the-fix-split-agent-from-model">The fix: split agent from model</h2>
       <p>The dangerous part (running generated code) and the expensive part (running the model) don't have to live in the same place. The model stays on the Mac, served by Ollama or MLX; the agent runs in the VM. A thin <code>socat</code> proxy in the guest forwards <code>127.0.0.1:&lt;port&gt;</code> over a <strong>virtio-vsock channel</strong>, a direct hypervisor channel rather than a virtual network card, to a small Swift listener on the Mac, which passes it to whichever engine is running. Inside the VM you set <code>OPENAI_API_BASE</code> to <code>http://127.0.0.1:&lt;port&gt;/v1</code>, and any OpenAI-compatible tool works with no code changes.</p>
 
       <p>That's the whole mechanism. The question is what it costs.</p>
 
       <p style="font-size:0.9rem; color:var(--color-text-secondary);"><em>These benchmarks treat MLX and Ollama as independent engines, which they were at the time. Since Ollama 0.19 (March 2026), Ollama runs on MLX on Macs with 32 GB or more, so this exact gap may not hold on that hardware today.</em></p>
 
-      <h2>Benchmark 1: MLX, single request, near zero</h2>
+      <h2 id="benchmark-1-mlx-single-request-near-zero">Benchmark 1: MLX, single request, near zero</h2>
       <p>Mac mini (Apple M4, 10 cores, 16GB RAM, macOS 26.6.2). Guest: Ubuntu Server 26.04 LTS, 4 vCPU, 4GB RAM. Model: <code>mlx-community/Qwen2.5-Coder-7B-Instruct-4bit</code> via <code>mlx_lm.server</code>. 5-run average, host vs. through the vsock bridge:</p>
-      <figure>
-        <img src="/assets/blog/mlx-chart1-single-request.png" alt="Bar chart comparing host vs VM single-request speed. Time to first token: 172.21 ms on host vs 174.27 ms via AI Bridge (+1%). Throughput: 24.09 tokens/sec on host vs 23.88 tokens/sec via AI Bridge (-1%).">
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/mlx-chart1-single-request.webp"><img src="/assets/blog/mlx-chart1-single-request.webp" width="1800" height="880" alt="Bar chart comparing host vs VM single-request speed. Time to first token: 172.21 ms on host vs 174.27 ms via AI Bridge (+1%). Throughput: 24.09 tokens/sec on host vs 23.88 tokens/sec via AI Bridge (-1%)." loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
       </figure>
       <p>That's within run-to-run noise. For single requests, the vsock hop costs nothing measurable.</p>
 
       <h3>Under load and in a real agent loop: small, real, consistent</h3>
-      <figure>
-        <img src="/assets/blog/mlx-chart2-concurrent-load.png" alt="Bar chart comparing host vs VM under 8-client concurrent load. Total wall time: 7.04 seconds on host vs 7.38 seconds via AI Bridge. Average per-client time: 6.24 seconds on host vs 6.39 seconds via AI Bridge.">
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/mlx-chart2-concurrent-load.webp"><img src="/assets/blog/mlx-chart2-concurrent-load.webp" width="1240" height="920" alt="Bar chart comparing host vs VM under 8-client concurrent load. Total wall time: 7.04 seconds on host vs 7.38 seconds via AI Bridge. Average per-client time: 6.24 seconds on host vs 6.39 seconds via AI Bridge." loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
       </figure>
-      <figure>
-        <img src="/assets/blog/mlx-chart3-agentic-loop.png" alt="Bar chart comparing host vs VM on three OpenCode agentic tasks. Math computation: 8.40s host vs 8.82s VM. System info: 4.50s host vs 4.55s VM. File I/O: 5.58s host vs 5.70s VM.">
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/mlx-chart3-agentic-loop.webp"><img src="/assets/blog/mlx-chart3-agentic-loop.webp" width="1500" height="960" alt="Bar chart comparing host vs VM on three OpenCode agentic tasks. Math computation: 8.40s host vs 8.82s VM. System info: 4.50s host vs 4.55s VM. File I/O: 5.58s host vs 5.70s VM." loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
       </figure>
       <p>With eight parallel clients, averaged over four runs, the VM trails by about 5% on total wall time. A real agent loop (OpenCode, five iterations per task) goes the same way: the VM trails by <strong>1–5%</strong> on all three tasks, with a standard deviation under 0.2 s on each. A small, repeatable gap.</p>
 
       <p>So: near zero for single requests, a small single-digit tax under concurrency. The boring, expected result.</p>
 
-      <h2>Benchmark 2: Ollama, same questions, the opposite answer under load</h2>
+      <h2 id="benchmark-2-ollama-same-questions-the-opposite-answer-under">Benchmark 2: Ollama, same questions, the opposite answer under load</h2>
       <p>A different session on the same Mac, with the model server swapped for Ollama (<code>qwen2.5-coder:7b</code>, Q4_K_M) and the same three tests. Single-request speed tells the same unremarkable story:</p>
       <div class="benchmark" style="margin-top:12px;">
         <p class="benchmark-label">Mac mini (Apple M4), qwen2.5-coder:7b (Q4_K_M)</p>
@@ -235,12 +246,12 @@
 
       <p>That's a theory that fits the data, not a proven mechanism.</p>
 
-      <h2>Why I'm showing both rather than picking one</h2>
+      <h2 id="why-i-m-showing-both-rather-than-picking-one">Why I'm showing both rather than picking one</h2>
       <p>With only the Ollama run, I'd be telling you sandboxing is free <em>and</em> faster, which sounds too good to be true and deserves that skepticism. With only the MLX run, I'd be telling you there's a small, unavoidable tax under load: clean, modest and easy to believe. Neither is dishonest, but reporting only one would hide how much the inference engine's own I/O model seems to matter, possibly more than the VM boundary does. That's the real finding, and I only found it by keeping the inconvenient first result when the second didn't match.</p>
 
       <p>One methodology mistake to admit: the first time I ran the Ollama numbers, I didn't fully stop all VMs and restart the model server between the host and VM runs. The agent-loop numbers came out wildly bimodal, with some iterations 10× slower than others. A leftover process competing for the scheduler was enough to produce dramatic numbers that meant nothing. Stopping and restarting everything before every run made the pattern disappear. Every number above comes from the careful re-run.</p>
 
-      <h2>Caveats</h2>
+      <h2 id="caveats">Caveats</h2>
       <p>These results are specific to this hardware (M4, 16 GB), this model (7B, 4-bit) and this workload. They won't necessarily hold for a 70B model, an 8 GB Mac or a different agent framework. If you want to check, or have a better explanation for the Ollama result than mine, <a href="https://github.com/xgz2025/veloworkspace-tools" target="_blank" rel="noopener">the scripts and raw output are here</a>: <code>ai_perf_test.py</code>, <code>ai_load_test.py</code> and <code>opencode_perf_test.py</code>, all three tests, both engines.</p>
 
       <hr style="border:none; border-top:1px solid var(--color-border); margin:32px 0;">
@@ -270,5 +281,6 @@
 </footer>
 
 <script src="/assets/app-store.js?v=3"></script>
+<script src="/assets/lightbox.js?v=1" defer></script>
 </body>
 </html>

@@ -105,25 +105,38 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Fundamentals</span>
         <h1>Apple Silicon Virtual Machines, Explained</h1>
         <p class="article-lede">Every other post on this blog assumes you know what a virtual machine is on an Apple silicon Mac, how it differs from emulation, and what Apple's Virtualization framework provides. This is the page that assumption points back to.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">4 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#what-a-virtual-machine-is"><span>What a virtual machine is</span></a></li>
+          <li><a href="#hardware-virtualization-not-emulation"><span>Hardware virtualization, not emulation</span></a></li>
+          <li><a href="#what-the-virtualization-framework-gives-you"><span>What the Virtualization framework gives you</span></a></li>
+          <li><a href="#linux-guests-and-macos-guests-aren-t-the-same-deal"><span>Linux guests and macOS guests aren&#x27;t the same deal</span></a></li>
+          <li><a href="#cpu-and-memory-assisted-by-hardware"><span>CPU and memory: assisted by hardware</span></a></li>
+          <li><a href="#where-the-gpu-story-differs-and-why-ai-bridge-exists"><span>Where the GPU story differs, and why AI Bridge exists</span></a></li>
+          <li><a href="#where-vm-overhead-comes-from"><span>Where VM overhead comes from</span></a></li>
+          <li><a href="#when-a-vm-is-the-right-tool"><span>When a VM is the right tool</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>What a virtual machine is</h2>
+      <h2 id="what-a-virtual-machine-is">What a virtual machine is</h2>
       <p>A virtual machine is a complete, isolated computer running as software inside another one. It isn't a sandboxed process, a chroot, or a container sharing the host's kernel. A VM boots its own kernel, manages its own memory, and doesn't know it isn't running on real hardware. The software that makes this possible, the <strong>hypervisor</strong>, sits between the guest operating system and the physical CPU. It steps in for the few privileged operations a guest can't be trusted to do directly, like touching physical memory it doesn't own or talking to real devices, and lets everything else run at full speed.</p>
       <p>That last part is the whole point, and it's what people most often get wrong.</p>
 
-      <h2>Hardware virtualization, not emulation</h2>
+      <h2 id="hardware-virtualization-not-emulation">Hardware virtualization, not emulation</h2>
       <p>These two get mixed up constantly, and the difference decides performance:</p>
       <ul>
         <li><strong>Emulation</strong> translates every instruction from one CPU architecture to another in software. An x86 emulator on ARM has to decode and re-implement x86 instructions as it goes. It can run anything, and it's slow, because every instruction pays for translation.</li>
@@ -131,10 +144,10 @@
       </ul>
       <p>A Linux VM on an Apple silicon Mac is the second kind: arm64 guest, arm64 host, arm64 silicon, and no instruction translation for the VM itself. Rosetta is a separate, narrower thing on top, for running <em>x86-64 binaries inside</em> an arm64 Linux guest. It's not what makes the VM work.</p>
 
-      <h2>What the Virtualization framework gives you</h2>
+      <h2 id="what-the-virtualization-framework-gives-you">What the Virtualization framework gives you</h2>
       <p>Apple's <a href="https://developer.apple.com/documentation/virtualization" target="_blank" rel="noopener">Virtualization framework</a> is the high-level API for creating and running VMs on a Mac, and the layer Velo Workspaces and most other Mac VM apps are built on. A <code>VZVirtualMachineConfiguration</code> declares what a VM gets: CPUs and memory, a boot loader, and a list of devices. Those devices follow the <strong>VIRTIO</strong> specification, a standard set of paravirtualized interfaces for network, storage, sockets, console, entropy and memory ballooning, so the guest talks to an efficient purpose-built interface instead of a pretend copy of some real piece of hardware. <a href="/blog/how-virtualization-framework-works/">How Virtualization.framework works</a> goes through the devices one by one, and <a href="/blog/arm-virtualization-performance/">the performance deep dive</a> explains why paravirtualization is fast and where it isn't the whole story.</p>
 
-      <h2>Linux guests and macOS guests aren't the same deal</h2>
+      <h2 id="linux-guests-and-macos-guests-aren-t-the-same-deal">Linux guests and macOS guests aren't the same deal</h2>
       <p>The framework supports two kinds of guests, with different rules:</p>
       <div class="article-table-wrap">
         <table>
@@ -149,17 +162,17 @@
       </div>
       <p>The last row surprises people. A macOS guest gets hardware-accelerated graphics through the framework's Mac-specific graphics device; a Linux guest doesn't. More on why below, and in <a href="/blog/macos-guests-on-apple-silicon/">what a macOS guest gets</a> that a Linux one doesn't.</p>
 
-      <h2>CPU and memory: assisted by hardware</h2>
+      <h2 id="cpu-and-memory-assisted-by-hardware">CPU and memory: assisted by hardware</h2>
       <p>Underneath, Apple's <a href="https://developer.apple.com/documentation/hypervisor" target="_blank" rel="noopener">Hypervisor framework</a> gives the Virtualization framework ARM's virtualization extensions: a dedicated CPU exception level for the hypervisor (EL2), and a second stage of memory translation, so the guest manages its own page tables while the host still controls which physical memory it can touch. None of that is simulated in software. <a href="/blog/arm-virtualization-performance/">The ARM virtualization deep dive</a> explains why it costs less than you'd expect, with numbers.</p>
 
-      <h2>Where the GPU story differs, and why AI Bridge exists</h2>
+      <h2 id="where-the-gpu-story-differs-and-why-ai-bridge-exists">Where the GPU story differs, and why AI Bridge exists</h2>
       <p>This is the one limitation to know up front. The framework gives a Linux guest <code>virtio-gpu</code>, a paravirtualized display with no path to the Mac's GPU, which Apple's own container team has confirmed in a <a href="https://github.com/apple/container/discussions/62" target="_blank" rel="noopener">public discussion</a>. It's a platform limit, not a bug: there's no standard yet for sharing a GPU between host and guest this way on Apple silicon. If you want GPU compute directly inside a Linux VM, you can't have it.</p>
       <p>That's why AI Bridge works the way it does. The model server stays on the Mac, on the real GPU, and the guest reaches it over a lightweight virtual socket instead. See the <a href="/blog/ai-bridge-architecture/">full architecture</a> and <a href="/blog/zero-tax-virtualization/">the complete guide to running AI agents this way</a>.</p>
 
-      <h2>Where VM overhead comes from</h2>
+      <h2 id="where-vm-overhead-comes-from">Where VM overhead comes from</h2>
       <p>Four places: CPU traps, memory translation, interrupt delivery, and device I/O. Apple silicon's virtualization extensions make the first three cheap by design, with a dedicated exception level, two-stage translation cached in the TLB, and hardware-assisted interrupts. The fourth, I/O, is where paravirtualization's trade-offs show up. That's measured, not asserted, in <a href="/blog/arm-virtualization-performance/">the performance deep dive</a> and <a href="/blog/vm-inference-benchmark/">the inference benchmark</a>.</p>
 
-      <h2>When a VM is the right tool</h2>
+      <h2 id="when-a-vm-is-the-right-tool">When a VM is the right tool</h2>
       <p>A VM makes sense when you need a separate kernel: a different operating system, a security boundary that a shared-kernel container can't give you, or a clean environment you can throw away and recreate exactly. It's the wrong tool when a container will do. If the workload only needs its dependencies isolated on the same Linux kernel, a container starts faster and uses less memory. <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">Do you need a VM, or is a container enough?</a> covers where Docker Desktop, OrbStack and a disposable VM each sit.</p>
 
       <p>Related reading: <a href="/blog/arm-virtualization-performance/">what determines VM performance on ARM</a>, <a href="/blog/ai-bridge-architecture/">the architecture behind AI Bridge</a>, and <a href="/blog/modern-local-development-stack-apple-silicon/">the modern local development stack on Apple Silicon</a>, a map of everything else on this blog. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

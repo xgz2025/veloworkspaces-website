@@ -105,34 +105,44 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Privacy</span>
         <h1>What Leaves Your Mac When You Use AI Bridge (and What Doesn't)</h1>
         <p class="article-lede">This blog has said "stays on your Mac" more than once. Here it is checked against the code instead of repeated as a slogan: what AI Bridge's channel can and can't reach, and why.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#the-model-server-stays-on-your-mac-s-loopback"><span>The model server stays on your Mac&#x27;s loopback</span></a></li>
+          <li><a href="#ai-bridge-can-t-reach-anywhere-else"><span>AI Bridge can&#x27;t reach anywhere else</span></a></li>
+          <li><a href="#nothing-collecting-on-the-other-end"><span>Nothing collecting on the other end</span></a></li>
+          <li><a href="#what-the-app-itself-connects-to"><span>What the app itself connects to</span></a></li>
+          <li><a href="#what-this-doesn-t-cover"><span>What this doesn&#x27;t cover</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>The model server stays on your Mac's loopback</h2>
+      <h2 id="the-model-server-stays-on-your-mac-s-loopback">The model server stays on your Mac's loopback</h2>
       <p>The ordinary part first. Ollama, MLX and llama-server all bind to <code>127.0.0.1</code> by default, the Mac's own loopback interface rather than a network address. That alone keeps the model server unreachable from other devices on your LAN, let alone the internet, unless someone deliberately reconfigures it. Velo Workspaces doesn't change that default; it's how these tools already work.</p>
 
-      <h2>AI Bridge can't reach anywhere else</h2>
+      <h2 id="ai-bridge-can-t-reach-anywhere-else">AI Bridge can't reach anywhere else</h2>
       <p>This isn't a setting or a promise; it's how the code is written. The vsock proxy that connects a guest to the model server has its destination host fixed to <code>127.0.0.1</code>. Even the <strong>Custom</strong> provider, which lets you point AI Bridge at any OpenAI-compatible server (see <a href="/blog/ai-researchers-agent-testing/">the AI researchers post</a>), only contributes a <em>port number</em>. Any host or scheme in the URL you type is ignored, and the proxy still connects to the Mac's own loopback on that port. There's no configuration field that could send this channel to a remote address, because the code that opens the connection never reads one.</p>
       <p>It goes one step further. The guest's regular network device, the one it uses for <code>apt</code> or <code>git</code>, can't reach the model server either: a request sent to the guest's network gateway arrives at the Mac's network stack, where the loopback-bound server isn't listening. AI Bridge traffic takes a completely separate path: <a href="/blog/ai-bridge-architecture/">vsock</a>, a hypervisor-only channel addressed by machine ID rather than IP address, handed to the Mac's loopback on the other side. At no point does it enter the IP network stack that could carry it to your LAN or the internet.</p>
 
-      <h2>Nothing collecting on the other end</h2>
+      <h2 id="nothing-collecting-on-the-other-end">Nothing collecting on the other end</h2>
       <p>A closed channel only matters if nothing is listening elsewhere, so it's worth confirming that too. There's no analytics SDK, crash reporter or telemetry collector anywhere in Velo Workspaces, and no backend server for it to report to. There isn't a "share diagnostics" switch either, because there's nothing to switch on. The Diagnostics export writes a file on your Mac when you ask it to, and it goes nowhere unless you send it yourself.</p>
 
-      <h2>What the app itself connects to</h2>
+      <h2 id="what-the-app-itself-connects-to">What the app itself connects to</h2>
       <p>For completeness: the app does make network connections of its own, all ones you start. When you download an image, it fetches the image and the vendor's checksum list from that vendor's own servers (Canonical, Debian, the Fedora Project, Rocky Linux, Kali, NixOS, Alpine, or Apple for macOS). Purchases go through Apple's StoreKit. The SSH check and built-in terminal connect only to your own workspaces, on the Mac's private virtual network. None of these carry your code, prompts or model traffic.</p>
 
-      <h2>What this doesn't cover</h2>
+      <h2 id="what-this-doesn-t-cover">What this doesn't cover</h2>
       <p>Everything above is about <strong>AI Bridge's own channel</strong>: the model server and the vsock path a guest uses to reach it. It says nothing about the guest's normal internet access, which is separate and still there. A workspace can still <code>apt install</code>, <code>git clone</code> or run anything else that talks to the internet over its regular network device, like any VM. AI Bridge doesn't grant that access or take it away. It's a narrower channel that does one thing: pass requests to a model server on your own Mac's loopback, and nowhere else.</p>
 
       <p>Related reading: the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>, <a href="/blog/ai-researchers-agent-testing/">building and testing agents</a> against a local model, the <a href="/blog/ai-agent-security-risks/">security deep dive</a> on what each isolation level protects against, and the <a href="/privacy/">privacy policy</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

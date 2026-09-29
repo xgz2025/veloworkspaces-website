@@ -201,7 +201,7 @@ def render(code, seg, label):
           <p>{t['new_term_p']}</p>
         </div>
       </div>
-      <p style="text-align:center; margin-top:28px;"><a href="/blog/whats-new-in-velo-workspaces-1-2/">{t['new_link']} →</a></p>
+      <p class="new-links"><a href="/blog/whats-new-in-velo-workspaces-1-2/">{t['new_link']} →</a><a href="/blog/#step-by-step-guides">{t['new_guides_link']} →</a></p>
     </div>
   </section>
 

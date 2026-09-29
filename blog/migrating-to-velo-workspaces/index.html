@@ -105,21 +105,33 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>Migrating a Linux VM to Velo Workspaces From UTM, Fusion, or Parallels</h1>
         <p class="article-lede">Apple's Virtualization framework, which Velo Workspaces is built on, attaches raw disk images only, and every other hypervisor uses its own format. Since 1.2, QCOW2 disks import directly. Here's the path for each source, and the mistakes that waste an hour if you don't know them.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-23">September 23, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-23">September 23, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">4 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#the-constraint-behind-this-guide"><span>The constraint behind this guide</span></a></li>
+          <li><a href="#scope-linux-guests"><span>Scope: Linux guests</span></a></li>
+          <li><a href="#from-utm-no-conversion-needed"><span>From UTM: no conversion needed</span></a></li>
+          <li><a href="#before-the-other-two-install-qemu-img"><span>Before the other two: install qemu-img</span></a></li>
+          <li><a href="#from-vmware-fusion"><span>From VMware Fusion</span></a></li>
+          <li><a href="#from-parallels-desktop"><span>From Parallels Desktop</span></a></li>
+          <li><a href="#importing-the-converted-image"><span>Importing the converted image</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>The constraint behind this guide</h2>
+      <h2 id="the-constraint-behind-this-guide">The constraint behind this guide</h2>
       <p><code>VZDiskImageStorageDeviceAttachment</code>, the API every Virtualization.framework app uses to attach a disk, reads <strong>raw</strong> disk images only: no QCOW2, VMDK, VHD or VHDX. When you create a workspace with <strong>Boot from an existing virtual disk</strong>, Velo Workspaces reads the file's header rather than trusting its extension, and handles each format accordingly:</p>
       <ul>
         <li><strong>Raw</strong> (<code>.img</code>, <code>.raw</code>): attached as it is.</li>
@@ -129,30 +141,30 @@
       <blockquote style="border-left:3px solid var(--color-border); padding-left:16px; margin:16px 0; color:var(--color-text-secondary);">"This is a [format] disk image, which Apple's Virtualization framework cannot read — it attaches raw images only. Convert it first with: <code>qemu-img convert -O raw source destination.img</code>"</blockquote>
       <p>This guide expands that per hypervisor, with where each one keeps its disk.</p>
 
-      <h2>Scope: Linux guests</h2>
+      <h2 id="scope-linux-guests">Scope: Linux guests</h2>
       <p>This covers <strong>Linux</strong> VMs. Velo Workspaces doesn't run Windows guests (<a href="/blog/windows-on-apple-silicon/">why, and what to use instead</a>). macOS guests aren't covered either, because UTM, VMware Fusion and Parallels each store a macOS guest's disk and platform data differently.</p>
       <p>Also check the architecture. On an Apple silicon Mac, Velo Workspaces runs arm64 guests; an x86-64 Linux VM from an Intel Mac, or one UTM was emulating, won't boot here however you convert it. On an Intel Mac it's the other way round.</p>
 
-      <h2>From UTM: no conversion needed</h2>
+      <h2 id="from-utm-no-conversion-needed">From UTM: no conversion needed</h2>
       <p>UTM stores a Linux VM's disk as QCOW2. In Finder, right-click the <code>.utm</code> file, choose <strong>Show Package Contents</strong>, and look in the <code>Data/</code> folder for a <code>.qcow2</code> file. (If UTM came from the Mac App Store, the bundle lives in UTM's sandboxed container; Show Package Contents finds it either way.) Shut the VM down in UTM first, then in Velo Workspaces create a workspace, choose <strong>Boot from an existing virtual disk</strong>, and drop in that <code>.qcow2</code>. The app converts it to a raw workspace disk and leaves the original untouched.</p>
       <p>The same works for QCOW2 disks from Lima, Multipass or plain QEMU.</p>
 
-      <h2>Before the other two: install qemu-img</h2>
+      <h2 id="before-the-other-two-install-qemu-img">Before the other two: install qemu-img</h2>
       <p>VMware and Parallels disks convert with <a href="https://www.qemu.org/" target="_blank" rel="noopener">QEMU</a>'s <code>qemu-img</code>, the reference tool for all these formats. Install it with Homebrew:</p>
       <pre><code>brew install qemu</code></pre>
       <p><code>qemu-img</code> comes with the <code>qemu</code> formula; check it with <code>qemu-img --version</code>.</p>
       <p style="font-size:0.9rem; color:var(--color-text-secondary);"><em>A raw image's apparent size is the guest's full configured disk size, even if the source only used a fraction of it. <code>qemu-img</code> writes it sparsely, so on APFS it only takes about as much space as the data, but tools that copy the file naively can inflate it. Keep some headroom, and move it with Finder or <code>cp</code> rather than tools that don't preserve sparseness.</em></p>
 
-      <h2>From VMware Fusion</h2>
+      <h2 id="from-vmware-fusion">From VMware Fusion</h2>
       <p>Right-click the <code>.vmwarevm</code> bundle, <strong>Show Package Contents</strong>, and find the <code>.vmdk</code>. Slow down here: VMware sometimes stores a disk as one <code>.vmdk</code>, and sometimes as a small text <em>descriptor</em> file (a few KB) plus data files named like <code>diskname-s001.vmdk</code>, <code>diskname-s002.vmdk</code> and so on. <strong>Always give <code>qemu-img</code> the descriptor</strong>, the small file, often just <code>diskname.vmdk</code>, never a numbered extent. The descriptor references every extent, and <code>qemu-img</code> follows them to produce one complete file; pointing it at an extent gives you a truncated, useless image.</p>
       <pre><code>qemu-img convert -f vmdk -O raw "/path/to/VMName.vmwarevm/Virtual Disk.vmdk" destination.img</code></pre>
 
-      <h2>From Parallels Desktop</h2>
+      <h2 id="from-parallels-desktop">From Parallels Desktop</h2>
       <p>Parallels nests one level deeper: a <code>.pvm</code> bundle contains a <code>.hdd</code> package, which contains the data file, named like <code>disk-0.hdd.0.{uuid}.hds</code>. Show Package Contents on the <code>.pvm</code>, then on the <code>.hdd</code> inside it, to find the <code>.hds</code> file.</p>
       <pre><code>qemu-img convert -f parallels "/path/to/VMName.pvm/disk.hdd/disk-0.hdd.0.{uuid}.hds" -O raw destination.img</code></pre>
       <p style="font-size:0.9rem; color:var(--color-text-secondary);"><em>QEMU's Parallels reader is less well tested than its QCOW2 or VMDK support; it's documented mostly for forensics and recovery rather than routine migration. If the conversion fails or the result won't boot, first convert the disk to Parallels' "plain" (uncompressed, fixed-size) format with Parallels' own <code>prl_disk_tool convert --hdd /path/to/disk.hdd --plain</code>, then run <code>qemu-img</code> on the result.</em></p>
 
-      <h2>Importing the converted image</h2>
+      <h2 id="importing-the-converted-image">Importing the converted image</h2>
       <p>With a <code>.img</code> file, create a workspace, choose <strong>Boot from an existing virtual disk</strong>, and select it. What comes across is the disk's contents: installed packages, files and configuration. What doesn't: hypervisor settings like shared folders, snapshots or custom devices, which live in each app's VM definition rather than on the disk. Set those up again in Velo Workspaces.</p>
       <p>What usually <em>doesn't</em> need fixing: Linux mounts filesystems by UUID rather than device path, so a guest built on QEMU's virtio devices generally boots on Apple's virtio devices without editing <code>/etc/fstab</code>. If it doesn't come up cleanly, check the console before assuming the conversion failed; it's more often a display or boot loader question than a filesystem one.</p>
       <p>Once it's running, type your account's username in the workspace's <strong>Access</strong> tab, sign in once with the password and click <strong>Install Key</strong>, and the built-in terminal (Pro) signs in without a password from then on.</p>

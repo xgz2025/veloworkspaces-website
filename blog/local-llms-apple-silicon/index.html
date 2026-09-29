@@ -105,21 +105,33 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>How to Run Local LLMs on Apple Silicon</h1>
         <p class="article-lede">This is about the model on its own: which tool to install, which format to pull, and how to talk to it. No VM, no coding agent. If you want those too, <a href="/blog/zero-tax-virtualization/">the complete AI agent guide</a> covers them; this is the layer underneath.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">3 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#four-names-four-different-things"><span>Four names, four different things</span></a></li>
+          <li><a href="#a-recent-change-to-know-about"><span>A recent change to know about</span></a></li>
+          <li><a href="#model-formats-gguf-or-mlx"><span>Model formats: GGUF or MLX</span></a></li>
+          <li><a href="#where-models-come-from"><span>Where models come from</span></a></li>
+          <li><a href="#how-much-memory-you-need"><span>How much memory you need</span></a></li>
+          <li><a href="#using-a-model-with-nothing-else-involved"><span>Using a model with nothing else involved</span></a></li>
+          <li><a href="#when-you-ll-want-isolation"><span>When you&#x27;ll want isolation</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Four names, four different things</h2>
+      <h2 id="four-names-four-different-things">Four names, four different things</h2>
       <p>These get used almost interchangeably, but they're different kinds of tool:</p>
       <ul>
         <li><strong>llama.cpp</strong> is the inference engine under much of this ecosystem: a C++ implementation that runs <strong>GGUF</strong> models on NVIDIA, AMD, Intel and plain CPUs as well as Apple silicon.</li>
@@ -128,22 +140,22 @@
         <li><strong>LM Studio</strong> is a desktop app that runs GGUF and MLX models side by side, and the easiest place to start if you don't yet know which format or engine you want.</li>
       </ul>
 
-      <h2>A recent change to know about</h2>
+      <h2 id="a-recent-change-to-know-about">A recent change to know about</h2>
       <p>Since <strong>Ollama 0.19</strong> (March 2026), Ollama uses Apple's MLX instead of its Metal-backed llama.cpp path on Macs with <strong>32 GB or more</strong> of unified memory, which is much faster on that hardware. 8 GB and 16 GB Macs keep the older path. So on a 32 GB+ Mac, "MLX or Ollama" is less of a choice than it was: for many models, Ollama is MLX underneath. Check your Ollama version and memory before assuming older comparisons describe your setup.</p>
 
-      <h2>Model formats: GGUF or MLX</h2>
+      <h2 id="model-formats-gguf-or-mlx">Model formats: GGUF or MLX</h2>
       <p>GGUF is llama.cpp's model format. It's broad, well supported and has the longest tail of conversions (older models, fine-tunes, merges), because its ecosystem is the largest. MLX-format models are built for Apple's framework, and on the same chip an MLX build is often noticeably faster than the equivalent GGUF. GGUF wins on breadth and portability; MLX wins on Apple silicon speed where a conversion exists. Quantization, the 4-bit and 8-bit trade-offs that decide how much memory a model needs, is its own topic: <a href="/blog/llm-quantization-explained-mac/">LLM quantization explained for Mac users</a>.</p>
 
-      <h2>Where models come from</h2>
+      <h2 id="where-models-come-from">Where models come from</h2>
       <p>MLX models are published on <a href="https://huggingface.co/models?library=mlx-lm" target="_blank" rel="noopener">Hugging Face</a>, mostly under <code>mlx-community</code>. Ollama pulls from its own <a href="https://ollama.com/library" target="_blank" rel="noopener">library</a>. Both move quickly, and a new release's MLX and GGUF conversions can arrive days or weeks apart, so treat any model tag you read (including here) as a snapshot and check the source before pulling.</p>
 
-      <h2>How much memory you need</h2>
+      <h2 id="how-much-memory-you-need">How much memory you need</h2>
       <p><a href="/blog/zero-tax-virtualization/">Section 3 of the complete AI agent guide</a> has a table from 16 GB to 128 GB+ Macs with MLX and Ollama tags for each. The short version: keep about 20 to 25% of unified memory for macOS and the display, and budget the rest for the model's weights and its KV cache. <a href="/blog/llm-ram-requirements-mac/">How much RAM local LLMs need</a> shows the arithmetic, so you can size a model that isn't in the table.</p>
 
-      <h2>Using a model with nothing else involved</h2>
+      <h2 id="using-a-model-with-nothing-else-involved">Using a model with nothing else involved</h2>
       <p>You don't need a VM or an agent for any of this. LM Studio opens a chat window as soon as a model finishes downloading. <code>ollama run &lt;model&gt;</code> drops you into a prompt in Terminal. Both also expose an OpenAI-compatible local API (<code>http://127.0.0.1:11434/v1</code> for Ollama, or whatever port you set for MLX or LM Studio's server) that any script, editor plugin or app speaking the OpenAI format can use.</p>
 
-      <h2>When you'll want isolation</h2>
+      <h2 id="when-you-ll-want-isolation">When you'll want isolation</h2>
       <p>The model itself is inert. The risk comes from the code an agent writes and runs using it, which is a different problem from running a model. If you're building an AI coding agent rather than a chat window, see <a href="/blog/zero-tax-virtualization/">the complete AI agent guide</a> for the VM-isolated setup, <a href="/blog/ai-bridge-architecture/">the AI Bridge architecture</a> for how the model stays on the Mac's GPU while the agent runs isolated, and <a href="/blog/mlx-vm-setup-guide/">the MLX and OpenCode guide</a> for a complete walkthrough.</p>
 
       <p>Related reading: <a href="/blog/zero-tax-virtualization/">running AI agents safely in an isolated VM</a>, <a href="/blog/ai-bridge-architecture/">the AI Bridge architecture</a>, and <a href="/blog/vm-sandboxing-cost/">what isolation costs</a>, measured with MLX and Ollama. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

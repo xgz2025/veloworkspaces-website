@@ -105,34 +105,44 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Security</span>
         <h1>Can You Trust an AI Coding Agent With Your Git Repository?</h1>
         <p class="article-lede">"It can run <code>git commit</code>" isn't the interesting risk; <a href="/blog/how-ai-coding-agents-use-your-computer/">that's just the mechanism</a>. The real chain runs through what a fresh clone's install can trigger, a Git safety property that's easy to bypass, and what ends up committed without anyone deciding it should.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#commits-and-pushes-aren-t-the-interesting-part"><span>Commits and pushes aren&#x27;t the interesting part</span></a></li>
+          <li><a href="#where-it-gets-interesting-hooks"><span>Where it gets interesting: hooks</span></a></li>
+          <li><a href="#the-chain-that-matters-install-scripts-feed-hooks"><span>The chain that matters: install scripts feed hooks</span></a></li>
+          <li><a href="#what-gets-committed-isn-t-always-what-you-d-commit"><span>What gets committed isn&#x27;t always what you&#x27;d commit</span></a></li>
+          <li><a href="#the-mitigation"><span>The mitigation</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Commits and pushes aren't the interesting part</h2>
+      <h2 id="commits-and-pushes-aren-t-the-interesting-part">Commits and pushes aren't the interesting part</h2>
       <p>An agent running <code>git add</code>, <code>git commit</code> or <code>git push</code> is doing what those commands always do; Git has no separate trust level for who's typing. The access it needs to push, a credential helper or a loaded SSH key, is <a href="/blog/what-can-ai-agents-access-on-your-mac/">the same access already covered</a> for your account in general. It's real, but it isn't specific to Git.</p>
 
-      <h2>Where it gets interesting: hooks</h2>
+      <h2 id="where-it-gets-interesting-hooks">Where it gets interesting: hooks</h2>
       <p>Git has a deliberate safety property many people don't know about: hooks live in <code>.git/hooks/</code>, which isn't part of the tracked tree, so a plain <code>git clone</code> never installs hook scripts from the repository you cloned. That property disappears when a project uses a hook manager (Husky, the <code>pre-commit</code> framework, Lefthook) that keeps hook scripts under version control and links or copies them into <code>.git/hooks/</code> during setup. From then on, a hook committed to the repository, by a pull request or by an agent, can run automatically on the next commit or checkout.</p>
       <p>There's a documented vulnerability class here too: a symlink pointing a checkout path at a submodule's hooks directory could make a submodule's post-checkout hook run unintentionally. Current Git has patched it, but it was real, not theoretical.</p>
 
-      <h2>The chain that matters: install scripts feed hooks</h2>
+      <h2 id="the-chain-that-matters-install-scripts-feed-hooks">The chain that matters: install scripts feed hooks</h2>
       <p><a href="/blog/how-ai-coding-agents-use-your-computer/">Installing dependencies already runs arbitrary code</a>. What's specific to Git is how directly that connects to hooks: in a project using Husky, <code>npm install</code> commonly runs a <code>postinstall</code> script that installs Git hooks, as a normal part of setup. An agent that clones a repository and follows its setup steps, exactly as asked, can end up with hooks that run on every later commit, without ever being told to install one.</p>
 
-      <h2>What gets committed isn't always what you'd commit</h2>
+      <h2 id="what-gets-committed-isn-t-always-what-you-d-commit">What gets committed isn't always what you'd commit</h2>
       <p>A developer has an instinct for what doesn't belong in a commit: a stray <code>.env</code>, a debug print with a token in it, a half-finished credential test. An agent doesn't, unless something gives it one; it stages and commits whatever the task seemed to need. <a href="/blog/what-can-ai-agents-access-on-your-mac/">The scenario where an agent reads a <code>.env</code> file while debugging</a> becomes a different problem once that file's contents land in a generated fix, a test fixture or a commit message.</p>
 
-      <h2>The mitigation</h2>
+      <h2 id="the-mitigation">The mitigation</h2>
       <p>Asking the agent to be careful doesn't solve this. As everywhere else on this blog, the boundary has to sit outside the agent's process. In a disposable workspace, thrown away after the task (see <a href="/blog/what-is-a-disposable-development-environment/">what is a disposable development environment</a>), a hook that got installed or a credential that got read doesn't outlive the session. Give the workspace only the credentials the task needs, such as a narrowly scoped token, rather than your own keys, and review what it pushes as you'd review anyone's pull request. Combined with the isolation levels in <a href="/blog/ai-agent-security-risks/">the security deep dive</a>, that's the answer: not a more disciplined agent, but an environment where its mistakes don't add up.</p>
 
       <p>Related reading: <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents use your computer</a>, <a href="/blog/what-can-ai-agents-access-on-your-mac/">what an agent can access</a>, <a href="/blog/zero-tax-virtualization/">running AI agents safely in an isolated VM</a>, and <a href="/blog/safe-local-ai-agent-environment-checklist/">the full checklist</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Install NixOS in a VM on an Apple Silicon Mac: Step by Step</title>
+<meta name="description" content="Step by step with screenshots: download the NixOS 26.05 graphical installer in Velo Workspaces, install GNOME with a few clicks, then turn on SSH.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/nixos-vm-mac-install-guide/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=6">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Install NixOS in a VM on an Apple Silicon Mac: Step by Step">
+<meta property="og:description" content="Step by step with screenshots: download the NixOS 26.05 graphical installer in Velo Workspaces, install GNOME with a few clicks, then turn on SSH.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/nixos-vm-mac-install-guide/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/nixos-vm-mac-install-guide.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Install NixOS in a VM on an Apple Silicon Mac">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="article:published_time" content="2026-09-29">
+<meta property="article:modified_time" content="2026-09-29">
+<meta property="article:author" content="Gaoliang Luo">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Install NixOS in a VM on an Apple Silicon Mac: Step by Step",
+      "name": "Install NixOS in a VM on an Apple Silicon Mac",
+      "description": "Step by step with screenshots: download the NixOS 26.05 graphical installer in Velo Workspaces, install GNOME with a few clicks, then turn on SSH.",
+      "image": [
+        "https://www.veloworkspaces.com/assets/og/nixos-vm-mac-install-guide.jpg",
+        "https://www.veloworkspaces.com/assets/blog/guides/nixos/installer.webp"
+      ],
+      "datePublished": "2026-09-29",
+      "dateModified": "2026-09-29",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/nixos-vm-mac-install-guide/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Install NixOS in a VM on an Apple Silicon Mac",
+          "item": "https://www.veloworkspaces.com/blog/nixos-vm-mac-install-guide/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section article-top">
+    <div class="container article-head">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Step-by-step guide</span>
+        <h1>Install NixOS in a VM on an Apple Silicon Mac</h1>
+        <p class="article-lede">NixOS ships a graphical installer for arm64, and it runs well in a Velo Workspaces VM. This guide goes from the download to a GNOME desktop, then turns on SSH the NixOS way, in configuration.nix.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-29">September 29, 2026</time><span class="article-readtime">3 min read</span></p>
+      </div>
+      <figure class="shot article-hero">
+        <a class="shot-frame" href="/assets/blog/guides/nixos/installer.webp"><img src="/assets/blog/guides/nixos/installer.webp" width="959" height="622" alt="The NixOS graphical installer welcome screen running in a Velo Workspaces VM" fetchpriority="high"><span class="shot-zoom">Click to enlarge</span></a>
+      </figure>
+      <details class="article-toc" open>
+        <summary>Steps in this guide</summary>
+        <ol>
+          <li><a href="#start-a-workspace-from-an-installer"><span class="toc-step">1</span><span>Start a workspace from an installer</span></a></li>
+          <li><a href="#download-the-graphical-installer"><span class="toc-step">2</span><span>Download the graphical installer</span></a></li>
+          <li><a href="#configure-the-workspace"><span class="toc-step">3</span><span>Configure the workspace</span></a></li>
+          <li><a href="#review-and-start-the-installer"><span class="toc-step">4</span><span>Review and start the installer</span></a></li>
+          <li><a href="#let-the-boot-menu-time-out"><span class="toc-step">5</span><span>Let the boot menu time out</span></a></li>
+          <li><a href="#run-the-installer"><span class="toc-step">6</span><span>Run the installer</span></a></li>
+          <li><a href="#restart-into-nixos"><span class="toc-step">7</span><span>Restart into NixOS</span></a></li>
+          <li><a href="#turn-on-ssh-the-nixos-way"><span class="toc-step">8</span><span>Turn on SSH, the NixOS way</span></a></li>
+          <li><a href="#where-to-go-next"><span>Where to go next</span></a></li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+  <section class="section article-main">
+    <div class="container article-body">
+      <dl class="guide-facts">
+        <div><dt>Download</dt><dd>About 4 GB<span>graphical ISO; minimal is 1.3 GB</span></dd></div>
+        <div><dt>Install</dt><dd>About 10 minutes<span>timed on an Apple silicon Mac mini</span></dd></div>
+        <div><dt>Setup</dt><dd>By hand<span>a point-and-click installer</span></dd></div>
+        <div><dt>You get</dt><dd>NixOS with GNOME<span>or Plasma, or no desktop</span></dd></div>
+      </dl>
+
+      <div class="guide-steps">
+
+      <section class="guide-step">
+      <h2 id="start-a-workspace-from-an-installer">Start a workspace from an installer</h2>
+      <p>Pick a kind of workspace in the sidebar and click <strong>+</strong> at the top right of the window. On the first step of the assistant, choose <strong>Installer image</strong>.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/select-image-installer.webp"><img src="/assets/blog/guides/select-image-installer.webp" width="796" height="656" alt="Select Image step with Installer image highlighted" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Installer image runs a distribution's own installer, downloaded for you.</span></figcaption>
+      </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="download-the-graphical-installer">Download the graphical installer</h2>
+      <p>Choose <strong>NixOS</strong> and release 26.05. The <strong>Minimal</strong> ISO boots to a console, where you partition the disk and run <code>nixos-install</code> yourself. The <strong>Graphical</strong> one has a point-and-click installer, and it's what this guide uses.</p>
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/nixos/choose-installer.webp"><img src="/assets/blog/guides/nixos/choose-installer.webp" width="644" height="600" alt="Choose an Installer step with NixOS 26.05 Minimal and Graphical ISOs and the Graphical Download button highlighted" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>NixOS 26.05 and 25.05, Minimal or Graphical, from releases.nixos.org.</span></figcaption>
+      </figure>
+      <div class="shot-pair shot-wide">
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/nixos/downloading.webp"><img src="/assets/blog/guides/nixos/downloading.webp" width="644" height="600" alt="NixOS graphical ISO downloading, 1.13 GB of 3.92 GB" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>The download carries on if you close the window.</span></figcaption>
+      </figure>
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/nixos/downloaded.webp"><img src="/assets/blog/guides/nixos/downloaded.webp" width="644" height="600" alt="NixOS graphical ISO downloaded and verified" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Verified and selected. Click Continue.</span></figcaption>
+      </figure>
+      </div>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="configure-the-workspace">Configure the workspace</h2>
+      <p>Office &amp; Study (2 CPU, 4 GB) runs the GNOME installer fine. Choose Code &amp; Build instead if you'll build much with Nix, because rebuilds like more cores and memory. Storage is 64 GB unless you change it; the Nix store grows with every generation, so don't go much lower. There's no account to enter here: the installer creates it.</p>
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/nixos/configure.webp"><img src="/assets/blog/guides/nixos/configure.webp" width="644" height="600" alt="Configure step for NixOS with the Office and Study profile and advanced settings" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>A name, a profile, and CPU, memory and disk under advanced settings.</span></figcaption>
+      </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="review-and-start-the-installer">Review and start the installer</h2>
+      <p>Setup reads <strong>Manual installation</strong>. Click <strong>Start Installation</strong>.</p>
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/nixos/review.webp"><img src="/assets/blog/guides/nixos/review.webp" width="644" height="600" alt="Review and Launch step for NixOS 26.05 Graphical with Start Installation highlighted" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>NixOS 26.05 Graphical, verified, installed by hand.</span></figcaption>
+      </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="let-the-boot-menu-time-out">Let the boot menu time out</h2>
+      <p>The installer's boot menu starts <strong>Installer GNOME (Linux LTS)</strong> on its own after a few seconds. The Plasma entries give you a KDE live session instead; the installer is the same.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/nixos/boot-menu.webp"><img src="/assets/blog/guides/nixos/boot-menu.webp" width="960" height="622" alt="NixOS installer boot menu with the GNOME installer selected and a countdown" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>The first entry starts by itself when the countdown ends.</span></figcaption>
+      </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="run-the-installer">Run the installer</h2>
+      <p>The NixOS installer opens by itself in the live session. Work down the list on its left: location, keyboard, your user account and password, a desktop (GNOME, Plasma or none), whether to allow unfree software, partitions and a summary. For partitions, <strong>Erase disk</strong> is the right choice: the only disk is the workspace's virtual one.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/nixos/installer.webp"><img src="/assets/blog/guides/nixos/installer.webp" width="959" height="622" alt="NixOS installer welcome screen with its steps listed on the left" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>The NixOS installer's welcome screen.</span></figcaption>
+      </figure>
+      <p>Click <strong>Install</strong> and wait. It fetches some packages from the NixOS cache as well as copying from the ISO, so the workspace needs its internet connection.</p>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="restart-into-nixos">Restart into NixOS</h2>
+      <p>At <strong>All done</strong>, tick <strong>Restart now</strong> and click <strong>Done</strong>.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/nixos/all-done.webp"><img src="/assets/blog/guides/nixos/all-done.webp" width="959" height="622" alt="NixOS installer All done screen with Restart now and Done highlighted" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Tick Restart now, then Done.</span></figcaption>
+      </figure>
+      <p>The workspace restarts into your new system. If the app still shows <em>Finished installing the workspace's OS?</em>, click <strong>Installation Complete</strong> so the installer isn't attached again.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/nixos/desktop.webp"><img src="/assets/blog/guides/nixos/desktop.webp" width="959" height="622" alt="NixOS GNOME desktop overview after the first sign-in" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>GNOME on NixOS, installed.</span></figcaption>
+      </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="turn-on-ssh-the-nixos-way">Turn on SSH, the NixOS way</h2>
+      <p>On NixOS you don't install an SSH server, you declare one. Open a terminal in the workspace and edit the system configuration:</p>
+      <pre><code>sudo nano /etc/nixos/configuration.nix</code></pre>
+      <p>Add these lines inside the outer braces, with your username and a public key. Use the key from <strong>Preferences › Access › Copy Public Key</strong> for the built-in terminal, and your Mac's <code>~/.ssh/id_ed25519.pub</code> for Terminal and VS Code; you can list both.</p>
+      <pre><code>services.openssh.enable = true;
+users.users.you.openssh.authorizedKeys.keys = [
+  &quot;ssh-ed25519 AAAA... Velo Workspaces&quot;
+  &quot;ssh-ed25519 AAAA... you@your-mac&quot;
+];</code></pre>
+      <p>Then apply it:</p>
+      <pre><code>sudo nixos-rebuild switch</code></pre>
+      <p>In the Access tab, type your username under <strong>User</strong> and click <strong>Check Now</strong>. Once it says <strong>SSH ready</strong>, <strong>Open Terminal</strong> signs you in.</p>
+      <div class="note note-pro">
+        <p><strong>Pro feature.</strong> The built-in terminal is part of Velo Workspaces Pro, which you can try free for a week. Without it, copy the <code>ssh</code> command from the Access tab into Terminal. That uses the keys in your <code>~/.ssh</code> folder, so the workspace has to trust one of them: <a href="/blog/ssh-vs-code-linux-vm-mac/">the SSH and VS Code guide</a> shows how.</p>
+      </div>
+      </section>
+
+      </div>
+
+      <h2 id="where-to-go-next">Where to go next</h2>
+
+      <div class="guide-next">
+        <a href="/blog/nixos-on-apple-silicon/"><span>Background</span>NixOS on Apple silicon: what's different in a VM</a>
+        <a href="/blog/ssh-vs-code-linux-vm-mac/"><span>Next guide</span>One SSH key for the terminal, Terminal and VS Code</a>
+        <a href="/blog/kali-linux-vm-mac-install-guide/"><span>Step by step</span>Install Kali Linux, then turn on SSH</a>
+        <a href="/blog/base-image-vs-snapshot-vs-clone/"><span>Workflow</span>Base image vs. snapshot vs. clone, explained</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc. NixOS is a trademark of the NixOS Foundation.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+<script src="/assets/lightbox.js?v=1" defer></script>
+</body>
+</html>

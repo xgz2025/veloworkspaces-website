@@ -105,37 +105,48 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Fundamentals</span>
         <h1>What Is a Disposable Development Environment?</h1>
         <p class="article-lede">This blog uses the term constantly and has mostly assumed you know what it means. Here's the definition, and the three things it's most often confused with: a snapshot, a container, and a cloud dev environment.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#the-pattern-create-use-discard-recreate"><span>The pattern: create, use, discard, recreate</span></a></li>
+          <li><a href="#not-a-snapshot"><span>Not a snapshot</span></a></li>
+          <li><a href="#not-a-container"><span>Not a container</span></a></li>
+          <li><a href="#not-a-cloud-dev-environment"><span>Not a cloud dev environment</span></a></li>
+          <li><a href="#the-reusable-half-a-known-good-starting-point"><span>The reusable half: a known-good starting point</span></a></li>
+          <li><a href="#why-the-guarantee-matters"><span>Why the guarantee matters</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>The pattern: create, use, discard, recreate</h2>
+      <h2 id="the-pattern-create-use-discard-recreate">The pattern: create, use, discard, recreate</h2>
       <p>A disposable development environment is one where throwing it away is the default, not something you have to remember to do. You create it, usually from a known-good starting point rather than from scratch, use it for one task, and it's gone when the task ends, with nothing surviving to affect the next one. When you need the same setup again, you create a fresh one from the same starting point instead of reusing the last. The defining property isn't that it <em>can</em> be deleted (almost anything can). It's that deletion is the normal ending, not a cleanup step.</p>
 
-      <h2>Not a snapshot</h2>
+      <h2 id="not-a-snapshot">Not a snapshot</h2>
       <p>A snapshot exists to get you <em>back</em> to a state; it's about keeping. A disposable environment exists to get you <em>away</em> from a state; it's about discarding on purpose, so the next run can't inherit anything from the last. <a href="/blog/disposable-vm-vs-snapshot/">Disposable VM vs. snapshot</a> shows what a Velo Workspaces restore point copies on disk, for the concrete version.</p>
 
-      <h2>Not a container</h2>
+      <h2 id="not-a-container">Not a container</h2>
       <p>Disposability and the isolation underneath it are separate properties. A container can be disposable (many CI pipelines treat them that way) or long-lived (one that's run in production for months). A VM can be either too. "Disposable" describes the lifecycle, what happens when you're done, not the isolation boundary, which is a different question covered in <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>.</p>
 
-      <h2>Not a cloud dev environment</h2>
+      <h2 id="not-a-cloud-dev-environment">Not a cloud dev environment</h2>
       <p>Cloud dev environments often use disposable-sounding words like "ephemeral", but by default they usually persist until you stop or delete them, and cost money the whole time they sit idle. That's disposable if you remember, which is a much weaker guarantee than disposable by default. <a href="/blog/velo-vs-codespaces-vs-ona/">The Codespaces and Ona comparison</a> has the full picture, including the missing local GPU.</p>
 
-      <h2>The reusable half: a known-good starting point</h2>
+      <h2 id="the-reusable-half-a-known-good-starting-point">The reusable half: a known-good starting point</h2>
       <p>"Just recreate it" only works if recreating is fast and cheap. Otherwise disposability is a nice idea nobody follows under deadline, and the habit of reusing a slowly cluttering environment creeps back. That's what a base image is for: a saved, known-good starting point that a fresh environment clones from in seconds. In Velo Workspaces, disposable workspaces and saving base images are part of Pro; <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a> covers how they work.</p>
       <p>Since 1.2 there's a second fast starting point: an official cloud image. A fresh Ubuntu, Debian, Fedora or Rocky Linux workspace is ready about a minute after the download, and the image stays in your library, so the next one starts even sooner.</p>
 
-      <h2>Why the guarantee matters</h2>
+      <h2 id="why-the-guarantee-matters">Why the guarantee matters</h2>
       <p>It removes a recurring doubt, "am I sure nothing's left over from last time?", by making the answer yes by construction rather than probably. A test failure that reproduces from an identical starting state is real. One that doesn't is more likely a race condition than leftovers from three runs ago, which is a much easier bug to chase. See it in practice in <a href="/blog/qa-devops-disposable-vm-workflow/">the QA and DevOps workflow</a> and, as a daily habit, in <a href="/blog/software-engineers-disposable-workspaces/">one workspace per project</a>.</p>
 
       <p>Related reading: <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>, <a href="/blog/base-image-vs-snapshot-vs-clone/">base image vs. snapshot vs. clone</a>, and <a href="/blog/apple-silicon-vms-explained/">what a VM on Apple Silicon is</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

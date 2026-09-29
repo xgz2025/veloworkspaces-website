@@ -105,24 +105,24 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Workflow</span>
         <h1>Clean-Room Bug Reproduction With Disposable VMs</h1>
         <p class="article-lede">"Can't reproduce" is sometimes an honest finding and sometimes a confession about your own machine. Months of fixes, tweaks and half-remembered workarounds on your daily environment can hide or change the bug a user reports. A disposable workspace takes that variable out.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Your dev machine is a poor place to reproduce bugs</h2>
+      <h2 id="your-dev-machine-is-a-poor-place-to-reproduce-bugs">Your dev machine is a poor place to reproduce bugs</h2>
       <p>This isn't about sloppiness; it's what any long-lived environment does. A library you upgraded six months ago and forgot, a config file you patched to work around something else, a system package that has drifted from what most users have: none of it feels like a decision you made, and any of it can be why a bug that's real for users doesn't happen for you. "Works on my machine" is often true and irrelevant, because your machine doesn't represent anyone.</p>
 
-      <h2>The workflow</h2>
+      <h2 id="the-workflow">The workflow</h2>
       <ul>
         <li><strong>Start from a clean system</strong>, not your daily driver. A fresh cloud image of the distribution and version the report mentions is ready in about a minute; a saved base image works if you keep one for the product.</li>
         <li><strong>Install only what the report says</strong>: the exact dependency versions and steps, nothing carried over from habit.</li>
@@ -131,10 +131,10 @@
         <li><strong>Throw the workspace away</strong> when you're done. The next bug deserves the same clean start, not this one's leftovers.</li>
       </ul>
 
-      <h2>Why throwing it away matters</h2>
+      <h2 id="why-throwing-it-away-matters">Why throwing it away matters</h2>
       <p>It's tempting to keep a working reproduction environment "in case", but that's how a second machine slowly gets the same problem as the first. A debug flag left on, a temporary patch never reverted, a log level turned up and never down: all fine for the bug you were chasing, all noise for the next one. Discard it, and the next reproduction starts from the same clean base again.</p>
 
-      <h2>How this differs from the QA and DevOps case</h2>
+      <h2 id="how-this-differs-from-the-qa-and-devops-case">How this differs from the QA and DevOps case</h2>
       <p><a href="/blog/qa-devops-disposable-vm-workflow/">The QA and DevOps workflow</a> deals with systemic test flakiness caused by state a suite assumed was reset. This is narrower and more personal: one bug report, reproduced once, debugged once, discarded once. Same disposability underneath; a different reason to reach for it.</p>
 
       <p>Related reading: <a href="/blog/qa-devops-disposable-vm-workflow/">the disposable VM workflow for QA and DevOps</a>, <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>, and <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment is</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

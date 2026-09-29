@@ -105,34 +105,44 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Fundamentals</span>
         <h1>Why ARM64 Linux VMs Feel Native on Apple Silicon</h1>
         <p class="article-lede">Many developers carry a reasonable old assumption: VMs are a bit slow, a bit laggy, something you tolerate. A Linux VM on Apple silicon mostly doesn't feel that way. This is the accessible version of why, the day-to-day effect rather than <a href="/blog/arm-virtualization-performance/">the exception-level mechanics</a>.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#feels-native-is-a-specific-claim"><span>&quot;Feels native&quot; is a specific claim</span></a></li>
+          <li><a href="#the-old-instinct-came-from-different-hardware"><span>The old instinct came from different hardware</span></a></li>
+          <li><a href="#what-that-buys-you"><span>What that buys you</span></a></li>
+          <li><a href="#unified-memory-makes-sizing-simpler"><span>Unified memory makes sizing simpler</span></a></li>
+          <li><a href="#where-it-stops"><span>Where it stops</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>"Feels native" is a specific claim</h2>
+      <h2 id="feels-native-is-a-specific-claim">"Feels native" is a specific claim</h2>
       <p>Here's what it means in practice. A shell in the guest has no noticeable input lag. <code>git clone</code>, <code>npm install</code> and <code>apt upgrade</code> don't feel slower than on the host. Compiling a moderately sized project doesn't visibly drag. That's the observable effect of CPU traps, memory translation and interrupt delivery staying cheap enough that you can't feel them.</p>
 
-      <h2>The old instinct came from different hardware</h2>
+      <h2 id="the-old-instinct-came-from-different-hardware">The old instinct came from different hardware</h2>
       <p>The "VMs feel slow" instinct has a real origin. x86 wasn't designed to be virtualized: it has around 17 instructions that behave differently depending on privilege level but don't trap to a hypervisor, so classic trap-and-emulate couldn't virtualize all of it. VMware's 1998 answer was <a href="https://www.cse.iitb.ac.in/~mythili/virtcc/papers/vmware.pdf" target="_blank" rel="noopener">binary translation</a>, clever software covering a gap in the silicon. Hardware support came later, with Intel VT-x in 2005 and AMD-V in 2006, retrofitted onto an architecture that had shipped for decades without it.</p>
       <p>ARM's virtualization extensions had no such history to work around. EL2, the dedicated exception level for the hypervisor, is part of the architecture's design rather than a later patch (<a href="/blog/arm-virtualization-performance/">the performance deep dive</a> covers it). Apple silicon inherits that clean design, which is why the old assumption doesn't hold here.</p>
 
-      <h2>What that buys you</h2>
+      <h2 id="what-that-buys-you">What that buys you</h2>
       <p>In everyday terms: cheap CPU traps mean a shell prompt in the guest responds like a native one. Hardware-assisted interrupts mean network-heavy work, a <code>docker pull</code> or a <code>git fetch</code> against a big repository, doesn't pay a per-packet hypervisor toll. Two-stage memory translation cached in the TLB means a memory-heavy compile isn't quietly re-walking page tables. None of these are settings to tune; every workspace gets them.</p>
 
-      <h2>Unified memory makes sizing simpler</h2>
+      <h2 id="unified-memory-makes-sizing-simpler">Unified memory makes sizing simpler</h2>
       <p>Apple silicon's unified memory means there's no separate video memory competing with system RAM, as there is on a PC with a discrete GPU. A guest's memory is a slice of the same pool, handed out at boot and reclaimable through the memory balloon device (see <a href="/blog/how-virtualization-framework-works/">the device inventory post</a>) when the guest isn't using it. <a href="/blog/how-much-memory-linux-vm-mac/">How much memory to give a Linux VM</a> covers the numbers.</p>
 
-      <h2>Where it stops</h2>
+      <h2 id="where-it-stops">Where it stops</h2>
       <p>"Feels native" has limits. A Linux guest gets no GPU compute at all, as <a href="/blog/apple-silicon-vms-explained/">the fundamentals post</a> explains, which is why AI Bridge keeps the model on the Mac's GPU instead. And none of this applies to a different CPU architecture: an x86-64 guest, or a container pulled with <code>--platform linux/amd64</code>, is emulated and much slower, for the reasons in <a href="/blog/arm64-vs-x86-apple-silicon/">ARM64 vs. x86-64 on Apple Silicon</a>. The claim is about same-architecture Linux, and only that.</p>
 
       <p>Related reading: <a href="/blog/arm-virtualization-performance/">the full mechanics</a>, <a href="/blog/linux-vm-cpu-performance-apple-silicon/">Linux VM CPU performance</a>, and the numbers in <a href="/blog/vm-inference-benchmark/">the inference benchmark</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

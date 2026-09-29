@@ -105,31 +105,31 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">FAQ</span>
         <h1>Does Velo Workspaces Run Windows on Apple Silicon?</h1>
         <p class="article-lede">Short answer: no. Here's why, what Velo Workspaces runs instead, and where to go if a Windows VM is what you need.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-23">September 23, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-23">September 23, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">1 min read</span></p>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>No</h2>
+      <h2 id="no">No</h2>
       <p>Velo Workspaces doesn't run Windows guests, on Apple silicon or on Intel Macs. The reason is technical rather than a policy choice. Velo Workspaces is built on Apple's Virtualization framework, and the Windows installer can't run on the virtual machine platform that framework provides. Getting past that means building a different kind of virtualization engine altogether, not flipping a setting, so the 1.2.x updates on the <a href="/roadmap/">roadmap</a> don't change it.</p>
 
-      <h2>What Velo Workspaces does run</h2>
+      <h2 id="what-velo-workspaces-does-run">What Velo Workspaces does run</h2>
       <ul>
         <li><strong>Apple silicon Macs:</strong> Linux and macOS guests, hardware-virtualized with the Virtualization framework.</li>
         <li><strong>Intel Macs:</strong> Linux guests.</li>
       </ul>
       <p>Linux is where it shines. Since 1.2, Ubuntu, Debian, Fedora and Rocky Linux come as official cloud images that are ready to sign in to about a minute after they download, and Ubuntu, Fedora Server and Rocky Linux can install themselves from their own ISOs. For disposable VMs for AI agent sandboxing, QA, clean-room bug reproduction or keeping a project's dependencies off your Mac, start with <a href="/blog/apple-silicon-vms-explained/">the fundamentals</a> and <a href="/blog/zero-tax-virtualization/">the complete setup guide</a>.</p>
 
-      <h2>If you need Windows</h2>
+      <h2 id="if-you-need-windows">If you need Windows</h2>
       <p>Two good options, both of which handle Windows on Apple silicon properly:</p>
       <ul>
         <li><strong>Parallels Desktop</strong> is the one to reach for. It has serious engineering behind Windows on Arm: one-step Windows 11 installation, DirectX 11 and OpenGL support for compatible games, and Coherence mode for running Windows apps alongside Mac ones.</li>

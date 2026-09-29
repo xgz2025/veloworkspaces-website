@@ -39,8 +39,11 @@ def main():
     for p in POSTS:
         if wanted and p["slug"] not in wanted:
             continue
-        cards.append(dict(out=f"assets/og/{p['slug']}.jpg", eyebrow=plain(p["eyebrow"]),
-                          title=plain(p["card_title"]), footer="Velo Workspaces Blog"))
+        card = dict(out=f"assets/og/{p['slug']}.jpg", eyebrow=plain(p["eyebrow"]),
+                    title=plain(p["card_title"]), footer="Velo Workspaces Blog")
+        if p.get("hero"):
+            card["shot"] = p["hero"].get("og", p["hero"]["src"]).lstrip("/")
+        cards.append(card)
     with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as f:
         json.dump(cards, f)
     env = dict(os.environ)

@@ -105,21 +105,21 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Security</span>
         <h1>What Can an AI Coding Agent Access on Your Mac?</h1>
         <p class="article-lede"><a href="/blog/how-ai-coding-agents-use-your-computer/">The mechanism</a> is that an agent can read whatever your account can. This is the concrete inventory: what lives in a typical home folder, and a realistic scenario where an agent touches all of it without doing anything malicious.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>The inventory</h2>
+      <h2 id="the-inventory">The inventory</h2>
       <p>These are ordinary paths on most developer Macs, unremarkable to the tools that created them:</p>
       <ul>
         <li><strong>SSH keys:</strong> <code>~/.ssh/</code>, often private keys with no passphrase, ready to sign in to every server and Git host they're registered with.</li>
@@ -132,13 +132,13 @@
         <li><strong>Browser data:</strong> session cookies and saved logins stored in the browser's profile folder, readable by anything with access to it.</li>
       </ul>
 
-      <h2>A realistic scenario, no malice required</h2>
+      <h2 id="a-realistic-scenario-no-malice-required">A realistic scenario, no malice required</h2>
       <p>No attacker needed. You ask an agent to find out why a deploy script keeps failing. While investigating, it runs <code>aws configure list</code> to see which credentials are active, searches the project for anything mentioning the failing service (which turns up a <code>.env</code> file with a database password), and reads <code>~/.ssh/config</code> to see how the deploy target is reached. None of that is wrong; a good engineer would look at the same things. The difference is that an engineer has judgment about a credential they stumble on. An agent's next step is whatever the model decides, and if that decision gets steered by something it shouldn't trust, a comment in a file or a line in a bug report, there's no human pause between reading the credential and using it.</p>
 
-      <h2>Git and source code</h2>
+      <h2 id="git-and-source-code">Git and source code</h2>
       <p>Source code and Git (commits, hooks, and install chains that lead to hooks) deserve their own treatment: <a href="/blog/can-you-trust-ai-agents-with-git/">can you trust an AI coding agent with your Git repository?</a></p>
 
-      <h2>Why this list and not a scarier one</h2>
+      <h2 id="why-this-list-and-not-a-scarier-one">Why this list and not a scarier one</h2>
       <p>Nothing above needs a compromised or jailbroken agent. It's what's reachable by design once an agent runs with the account's file access, which is the point of <a href="/blog/how-ai-coding-agents-use-your-computer/">the mechanism post</a>. The fix isn't a smarter agent that knows to avoid these files; it's running the agent where this list doesn't exist. In a fresh Linux workspace, <code>~/.ssh</code>, <code>~/.aws</code> and your browser profile simply aren't there, unless you deliberately share them in. <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a> covers the options.</p>
 
       <p>Related reading: <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents use your computer</a>, <a href="/blog/ai-agent-security-risks/">what goes wrong when an agent runs unsandboxed</a>, and <a href="/blog/zero-tax-virtualization/">running AI agents safely in an isolated VM</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

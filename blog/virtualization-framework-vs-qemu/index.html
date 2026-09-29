@@ -105,46 +105,60 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Deep dive</span>
         <h1>Virtualization.framework vs. QEMU on Apple Silicon</h1>
         <p class="article-lede">Not a verdict, but an engineering comparison. One is a purpose-built Apple API with a small, curated device set; the other is a general-purpose machine emulator that predates Apple silicon by well over a decade and added a hardware-accelerated backend for it. Where they differ matters more than which is "better".</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">4 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#two-different-starting-points"><span>Two different starting points</span></a></li>
+          <li><a href="#hardware-acceleration-the-same-silicon-under-both"><span>Hardware acceleration: the same silicon under both</span></a></li>
+          <li><a href="#where-they-diverge-emulating-other-architectures"><span>Where they diverge: emulating other architectures</span></a></li>
+          <li><a href="#devices-curated-or-exhaustive"><span>Devices: curated or exhaustive</span></a></li>
+          <li><a href="#guest-operating-systems"><span>Guest operating systems</span></a></li>
+          <li><a href="#the-entitlement-most-comparisons-skip"><span>The entitlement most comparisons skip</span></a></li>
+          <li><a href="#where-performance-differences-come-from"><span>Where performance differences come from</span></a></li>
+          <li><a href="#building-with-each"><span>Building with each</span></a></li>
+          <li><a href="#which-to-reach-for"><span>Which to reach for</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Two different starting points</h2>
+      <h2 id="two-different-starting-points">Two different starting points</h2>
       <p><a href="https://developer.apple.com/documentation/virtualization" target="_blank" rel="noopener">Virtualization.framework</a> was built as a native macOS API for one job: run Linux or macOS guests on a Mac using the CPU's virtualization extensions. <a href="https://www.qemu.org/" target="_blank" rel="noopener">QEMU</a> is a general-purpose machine emulator and virtualizer that emulates dozens of CPU architectures and hundreds of hardware configurations; its Apple silicon support is an accelerated backend added to that much older, much broader project. Neither fact makes one better, but together they explain nearly every difference below.</p>
 
-      <h2>Hardware acceleration: the same silicon under both</h2>
+      <h2 id="hardware-acceleration-the-same-silicon-under-both">Hardware acceleration: the same silicon under both</h2>
       <p>This surprises people expecting a bigger gap. On Apple silicon, QEMU's <code>-accel hvf</code> uses Apple's <a href="https://developer.apple.com/documentation/hypervisor" target="_blank" rel="noopener">Hypervisor framework</a>, the same low-level API that gives Virtualization.framework access to ARM's EL2 extensions (see <a href="/blog/arm-virtualization-performance/">the ARM performance deep dive</a>). For an arm64 guest on an arm64 Mac, both tools ask the same hardware to do the same job. Neither is faster at CPU traps, memory translation or interrupt delivery, because neither implements that layer; Apple's silicon and Hypervisor framework do.</p>
 
-      <h2>Where they diverge: emulating other architectures</h2>
+      <h2 id="where-they-diverge-emulating-other-architectures">Where they diverge: emulating other architectures</h2>
       <p>This is the categorical difference. QEMU's TCG (Tiny Code Generator) translates a <em>different</em> CPU architecture's instructions into the host's in software, which is how it boots an x86-64 OS on an Apple silicon Mac, at emulation speed with no hardware help. Virtualization.framework has no such mode. It only runs same-architecture guests, accelerated, by design. If you need to boot an OS built for a CPU your Mac doesn't have, QEMU is the only one of the two that can. <a href="/blog/can-you-run-x86-linux-on-apple-silicon/">Can you install x86 Linux on an Apple Silicon Mac?</a> covers the practical side, including why you often don't need to.</p>
       <p>A nice piece of trivia in the other direction: QEMU has a <a href="https://www.qemu.org/docs/master/system/arm/vmapple.html" target="_blank" rel="noopener"><code>vmapple</code> machine type</a> that implements the device model Virtualization.framework gives macOS guests, without using Apple's framework code. Two independent implementations arriving at the same device model suggests Apple's design isn't arbitrary.</p>
 
-      <h2>Devices: curated or exhaustive</h2>
+      <h2 id="devices-curated-or-exhaustive">Devices: curated or exhaustive</h2>
       <p>Virtualization.framework's device list is deliberately short: the virtio set in <a href="/blog/how-virtualization-framework-works/">the device inventory post</a> (block storage, network, sockets, console, entropy, memory balloon) plus Mac-specific graphics and shared-folder devices. QEMU's catalog is enormous, with dozens of emulated legacy devices and many machine types, built up over two decades of supporting real historical hardware. That breadth lets QEMU run systems Virtualization.framework was never meant to, but it's also more to configure correctly, and more of it is software emulation rather than paravirtualization.</p>
 
-      <h2>Guest operating systems</h2>
+      <h2 id="guest-operating-systems">Guest operating systems</h2>
       <p>Virtualization.framework officially supports two guest families: Linux, on Apple silicon and Intel Macs, and macOS, on Apple silicon only (see <a href="/blog/apple-silicon-vms-explained/">the fundamentals</a>). QEMU's list is far longer: the BSDs, a long tail of Linux distributions, and older or niche systems. If the guest you need isn't Linux or macOS, Virtualization.framework isn't an option, whatever else is true.</p>
 
-      <h2>The entitlement most comparisons skip</h2>
+      <h2 id="the-entitlement-most-comparisons-skip">The entitlement most comparisons skip</h2>
       <p>A practical difference with nothing to do with speed: an app that uses Virtualization.framework needs the <code>com.apple.security.virtualization</code> entitlement, which Velo Workspaces' entitlements file carries alongside its sandbox and file-access entitlements. QEMU has no such gate. It's open source, builds and runs without any Apple approval, and behaves the same whether or not it goes near the App Store. For a native, sandboxed Mac app that entitlement is part of the cost of entry; for a cross-platform open-source tool it doesn't come up.</p>
 
-      <h2>Where performance differences come from</h2>
+      <h2 id="where-performance-differences-come-from">Where performance differences come from</h2>
       <p>Since both can use the same acceleration, real differences between a Virtualization.framework VM and an HVF-accelerated QEMU VM mostly come from the I/O layer on top: which virtio devices are used, how disk caching and synchronization are set (the caching trade-off in <a href="/blog/how-virtualization-framework-works/">the device inventory post</a> is an example), and how much of the device model is paravirtualized versus emulated. A well-configured VM on either, for a same-architecture guest, should land in the same range. A QEMU guest under TCG emulation of a foreign architecture is a different, much slower game by design.</p>
 
-      <h2>Building with each</h2>
+      <h2 id="building-with-each">Building with each</h2>
       <p>Virtualization.framework is a native Swift and Objective-C API that fits Apple's code signing, sandboxing and notarization. The trade-offs are the restricted entitlement and being limited to what Apple exposes. QEMU is a large C codebase with its own build system and configuration surface, runs on Linux and Windows as well as macOS, and has two decades of community tooling and documentation behind it. The trade-off is that none of it is native to Apple's ecosystem, and configuring it well takes more specialist knowledge.</p>
 
-      <h2>Which to reach for</h2>
+      <h2 id="which-to-reach-for">Which to reach for</h2>
       <p>Virtualization.framework fits when the job is running Linux or macOS guests inside a sandboxed Mac app with Apple silicon acceleration, which is exactly what Velo Workspaces does. QEMU, often through <a href="/blog/velo-vs-parallels-vs-utm/">UTM</a> (which can use either backend), fits when you need broader guest or architecture support: cross-architecture emulation, an OS outside Linux and macOS, or one tool that behaves the same on macOS, Linux and Windows. Different requirements, not a ranking.</p>
 
       <p>Related reading: <a href="/blog/apple-silicon-vms-explained/">what a VM on Apple Silicon is</a>, <a href="/blog/how-virtualization-framework-works/">the Virtualization.framework device inventory</a>, <a href="/blog/arm-virtualization-performance/">what determines VM performance on ARM</a>, and the product-level <a href="/blog/velo-vs-parallels-vs-utm/">Velo Workspaces vs. Parallels vs. UTM comparison</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

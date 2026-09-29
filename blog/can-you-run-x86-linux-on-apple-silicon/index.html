@@ -105,28 +105,28 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Fundamentals</span>
         <h1>Can You Install x86 Linux on an Apple Silicon Mac?</h1>
         <p class="article-lede">The short answer: not as a full guest operating system through Apple's Virtualization framework, which is what Velo Workspaces and every other native Mac VM app on Apple silicon uses. That isn't a gap waiting to be fixed. Here's why, what can do it, and why you often don't need it.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>The direct answer</h2>
+      <h2 id="the-direct-answer">The direct answer</h2>
       <p>Apple's Virtualization framework, which <a href="/blog/apple-silicon-vms-explained/">every VM post on this blog</a> is built on, only runs guests built for the <em>same</em> CPU architecture as the host. On an Apple silicon Mac that means arm64 guests, by design. <a href="/blog/virtualization-framework-vs-qemu/">The framework-vs-QEMU comparison</a> explains why in its section on emulation: the two tools were built to do different jobs.</p>
       <p>The same rule works the other way on an Intel Mac. There, Velo Workspaces runs x86-64 Linux natively, and its cloud images and installers come in x86-64 builds; it's arm64 guests (and macOS guests) that an Intel Mac can't run.</p>
 
-      <h2>What can do it</h2>
+      <h2 id="what-can-do-it">What can do it</h2>
       <p>QEMU can, using its TCG (Tiny Code Generator) mode, which translates a different architecture's instructions into the host's in software, a block of guest code at a time. Nothing in the Virtualization framework does that, and it's why QEMU, directly or through a friendlier front end like UTM, is the answer when you need a real x86-64 Linux installation. The cost is speed. None of that translation is hardware-accelerated, so expect it to be much slower than anything in this blog's <a href="/blog/arm-virtualization-performance/">Virtualization.framework benchmarks</a>.</p>
 
-      <h2>First, what do you need?</h2>
+      <h2 id="first-what-do-you-need">First, what do you need?</h2>
       <p>"I need x86 Linux" often stands in for a narrower problem with a faster answer:</p>
       <ul>
         <li><strong>"I need to run one x86-64 program."</strong> That's <a href="/blog/rosetta-2-linux-vms-explained/">Rosetta for Linux</a>, which translates that one binary inside a native, fully accelerated arm64 guest. Far faster than emulating a whole OS to run one executable.</li>
@@ -135,7 +135,7 @@
         <li><strong>"I need to test on the CPU architecture my users run."</strong> This is the one case Rosetta can't cover, because you're verifying architecture-specific behavior rather than working around a missing binary. Use QEMU's full emulation, or better, a real x86-64 machine or CI runner.</li>
       </ul>
 
-      <h2>The practical takeaway</h2>
+      <h2 id="the-practical-takeaway">The practical takeaway</h2>
       <p>Default to a native arm64 Linux guest. <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu</a>, <a href="/blog/debian-on-apple-silicon/">Debian</a>, <a href="/blog/fedora-on-apple-silicon/">Fedora</a> and <a href="/blog/rocky-linux-on-apple-silicon/">Rocky Linux</a> all start from official cloud images in about a minute in Velo Workspaces, fully accelerated. Reach for Rosetta when a specific x86-64 binary is the blocker, and for full emulation only when the requirement really is a different CPU architecture.</p>
 
       <p>Related reading: <a href="/blog/virtualization-framework-vs-qemu/">Virtualization.framework vs. QEMU</a> for the full comparison, <a href="/blog/rosetta-2-linux-vms-explained/">Rosetta 2 in Linux VMs</a> for the translation mechanism, and <a href="/blog/arm64-vs-x86-apple-silicon/">ARM64 vs. x86-64 on Apple Silicon</a> for how it fits together with Mac apps and containers. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

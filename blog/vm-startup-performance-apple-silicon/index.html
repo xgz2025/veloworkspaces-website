@@ -105,37 +105,47 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Deep dive</span>
         <h1>VM Startup Performance on Apple Silicon: What Determines Boot Time</h1>
         <p class="article-lede">Velo Workspaces' boot loader is a deliberate trade-off, not the fastest possible path. What that trade is, what only happens once, why a cloud image is ready so much sooner than an install, and the case where "startup" isn't a boot at all.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#the-boot-loader-briefly"><span>The boot loader, briefly</span></a></li>
+          <li><a href="#first-boot-cloud-image-or-installer"><span>First boot: cloud image or installer</span></a></li>
+          <li><a href="#every-boot-after-that-is-cheaper"><span>Every boot after that is cheaper</span></a></li>
+          <li><a href="#when-startup-isn-t-a-boot-at-all"><span>When &quot;startup&quot; isn&#x27;t a boot at all</span></a></li>
+          <li><a href="#what-decides-how-fast-a-workspace-comes-up"><span>What decides how fast a workspace comes up</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>The boot loader, briefly</h2>
+      <h2 id="the-boot-loader-briefly">The boot loader, briefly</h2>
       <p>Velo Workspaces boots every Linux workspace with <code>VZEFIBootLoader</code> rather than the faster direct kernel boot, giving up a little raw speed for compatibility with any distribution's own GRUB or systemd-boot. <a href="/blog/how-virtualization-framework-works/">The device inventory post</a> covers the mechanism, including why the EFI variable store is created once and reused. This post is about how that adds up over a workspace's life, from creation to the fifth ordinary restart.</p>
 
-      <h2>First boot: cloud image or installer</h2>
+      <h2 id="first-boot-cloud-image-or-installer">First boot: cloud image or installer</h2>
       <p>A workspace's first start costs the most, and how much depends on where it came from.</p>
       <ul>
         <li><strong>From a cloud image</strong>, most of the work happens before the first boot: the app converts the downloaded qcow2 image into a raw disk sized to your choice. The first boot then runs cloud-init, which creates your account, adds your SSH key, grows the filesystem and starts SSH. That usually takes under a minute.</li>
         <li><strong>From an installer</strong>, the first boot <em>is</em> the install: the installer unpacks and writes a whole system, heavy disk work that <a href="/blog/linux-vm-disk-performance-apple-silicon/">disk caching</a> speeds up but can't remove. Automatic installs save you the clicking, not the writing.</li>
       </ul>
 
-      <h2>Every boot after that is cheaper</h2>
+      <h2 id="every-boot-after-that-is-cheaper">Every boot after that is cheaper</h2>
       <p>From then on, the EFI variable store already exists and just loads, there's no installer or cloud-init setup in the way, and the firmware does what it does on real hardware: finds the installed system and hands over to its boot loader. The gap between the first boot of a fresh install and an ordinary restart of the same workspace is large, and very noticeable.</p>
 
-      <h2>When "startup" isn't a boot at all</h2>
+      <h2 id="when-startup-isn-t-a-boot-at-all">When "startup" isn't a boot at all</h2>
       <p>Restoring a saved (suspended) workspace is a different operation. Saving writes the VM's live memory and device state to disk; restoring reads it back and carries on exactly where it stopped, with no firmware, no kernel start-up and no services to launch. It isn't a faster boot; it isn't a boot. Not every configuration supports it: the app checks whether the workspace's devices can be saved and restored, and some, the graphics device and serial console most often, rule it out. Where it's available, it's the real fast path back to where you were.</p>
 
-      <h2>What decides how fast a workspace comes up</h2>
+      <h2 id="what-decides-how-fast-a-workspace-comes-up">What decides how fast a workspace comes up</h2>
       <ul>
         <li><strong>The first boot costs the most:</strong> cloud-init setup for a cloud image (usually under a minute), or a whole install for an installer image.</li>
         <li><strong>Later boots are cheaper:</strong> just firmware finding an installed system.</li>

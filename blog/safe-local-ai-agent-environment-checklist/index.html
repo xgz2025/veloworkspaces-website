@@ -105,50 +105,61 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Checklist</span>
         <h1>How to Build a Safe Local AI Agent Environment</h1>
         <p class="article-lede">Everything else on this blog about AI agent security explains <em>why</em>. This is the other format: a checklist, in the order to think about it, each item linking to the reasoning rather than repeating it.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#before-you-run-anything"><span>Before you run anything</span></a></li>
+          <li><a href="#choosing-the-environment"><span>Choosing the environment</span></a></li>
+          <li><a href="#what-goes-into-the-workspace"><span>What goes into the workspace</span></a></li>
+          <li><a href="#if-the-agent-touches-a-real-git-repository"><span>If the agent touches a real Git repository</span></a></li>
+          <li><a href="#running-a-model-alongside-the-agent"><span>Running a model alongside the agent</span></a></li>
+          <li><a href="#two-that-aren-t-about-the-environment"><span>Two that aren&#x27;t about the environment</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Before you run anything</h2>
+      <h2 id="before-you-run-anything">Before you run anything</h2>
       <ul>
         <li><strong>Know the mechanism isn't special.</strong> An agent's process gets the same permissions as the account that started it; there's no restricted tier. See <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents use your computer</a>.</li>
         <li><strong>Know what's reachable.</strong> SSH keys, cloud credentials, GitHub CLI tokens, shell history, project <code>.env</code> files. See <a href="/blog/what-can-ai-agents-access-on-your-mac/">what an AI coding agent can access</a>.</li>
       </ul>
 
-      <h2>Choosing the environment</h2>
+      <h2 id="choosing-the-environment">Choosing the environment</h2>
       <ul>
         <li><strong>Use a VM, not just a container.</strong> A container shares the host's kernel; a VM's boundary holds even against a kernel-level compromise in the guest. See <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a> and <a href="/blog/ai-agent-security-risks/">the incident evidence</a>.</li>
         <li><strong>Make it disposable.</strong> A compromise, an accidentally installed Git hook, a credential left in shell history: none of it should outlive the session. See <a href="/blog/what-is-a-disposable-development-environment/">what is a disposable development environment</a>.</li>
         <li><strong>Start every session from a known-good image.</strong> Disposability only sticks if recreating is cheap. A fresh cloud image of Ubuntu or Debian is ready in about a minute; a saved base image with your tools is ready in seconds. See <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>.</li>
       </ul>
 
-      <h2>What goes into the workspace</h2>
+      <h2 id="what-goes-into-the-workspace">What goes into the workspace</h2>
       <ul>
         <li><strong>Share only the project folder,</strong> not your home folder. Anything shared into the guest is reachable from it.</li>
         <li><strong>Don't copy your own SSH keys or cloud credentials in.</strong> Give the workspace narrowly scoped tokens for the task. The key Velo Workspaces uses for its built-in terminal lets you in; it doesn't let the guest out to anything else.</li>
       </ul>
 
-      <h2>If the agent touches a real Git repository</h2>
+      <h2 id="if-the-agent-touches-a-real-git-repository">If the agent touches a real Git repository</h2>
       <ul>
         <li><strong>Don't assume a fresh clone's hooks are inert.</strong> A repository using Husky, <code>pre-commit</code> or Lefthook can install hooks during its own setup. See <a href="/blog/can-you-trust-ai-agents-with-git/">can you trust an AI coding agent with your Git repository</a>.</li>
       </ul>
 
-      <h2>Running a model alongside the agent</h2>
+      <h2 id="running-a-model-alongside-the-agent">Running a model alongside the agent</h2>
       <ul>
         <li><strong>Keep the model on the Mac and the agent in the guest.</strong> Splitting them gives you isolation without giving up GPU speed. See <a href="/blog/zero-tax-virtualization/">the complete AI agent guide</a> and <a href="/blog/ai-bridge-architecture/">the architecture behind it</a>.</li>
       </ul>
 
-      <h2>Two that aren't about the environment</h2>
+      <h2 id="two-that-aren-t-about-the-environment">Two that aren't about the environment</h2>
       <ul>
         <li><strong>Limit what data and long-lived credentials the session can reach,</strong> separately from execution isolation. A perfectly isolated VM doesn't help if the model can be talked into handing over something it was allowed to see.</li>
         <li><strong>Don't count on prompt-injection defenses holding.</strong> Treat isolation as the thing that must work when a defense doesn't, not a second line behind it.</li>

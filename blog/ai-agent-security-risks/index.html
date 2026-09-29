@@ -105,41 +105,56 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Security</span>
         <h1>What Goes Wrong When AI Coding Agents Run Unsandboxed, and Which Isolation Level Stops It</h1>
         <p class="article-lede">AI coding agents run real commands with real permissions, and 2026 produced enough documented incidents to stop treating this as theoretical. Four cases in increasing severity, three more from early 2026 showing the pattern continues, and which level of sandboxing would have contained each.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">7 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#the-year-this-stopped-being-theoretical"><span>The year this stopped being theoretical</span></a></li>
+          <li><a href="#incident-1-the-allowlist-was-the-hole"><span>Incident 1: the allowlist was the hole</span></a></li>
+          <li><a href="#incident-2-indirect-prompt-injection-turns-a-bug-report-into"><span>Incident 2: indirect prompt injection turns a bug report into a backdoor</span></a></li>
+          <li><a href="#incident-3-no-code-execution-needed"><span>Incident 3: no code execution needed</span></a></li>
+          <li><a href="#incident-4-how-far-it-scales-with-enough-autonomy"><span>Incident 4: how far it scales with enough autonomy</span></a></li>
+          <li><a href="#the-pattern-kept-repeating-in-early-2026"><span>The pattern kept repeating in early 2026</span></a></li>
+          <li><a href="#the-common-thread"><span>The common thread</span></a></li>
+          <li><a href="#not-all-isolation-is-the-same-boundary"><span>Not all isolation is the same boundary</span></a></li>
+          <li><a href="#where-velo-workspaces-sits-and-why-the-gpu-mattered"><span>Where Velo Workspaces sits, and why the GPU mattered</span></a></li>
+          <li><a href="#what-to-do"><span>What to do</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>The year this stopped being theoretical</h2>
+      <h2 id="the-year-this-stopped-being-theoretical">The year this stopped being theoretical</h2>
       <p>According to OWASP's 2026 LLM security tracking, prompt injection attacks against production AI systems rose 340% year on year, the fastest-growing category it tracks. Coding agents drive much of that new attack surface: 28 of the 53 agentic projects OWASP tracks are coding agents, and the five fastest-growing tools (Claude Code, Gemini CLI, Codex, Cline and Aider) are all in that category. A separate 2026 enterprise survey found 88% of organizations reported a confirmed or suspected AI agent security incident in the previous year.</p>
       <p>Numbers like that are easy to skim. So here are four specific, documented incidents in increasing order of severity, what each shows about where the boundary has to sit, and three more from the following months so this doesn't read as four cherry-picked cases. (If the underlying mechanism of shell, files, Git and credentials isn't clear yet, <a href="/blog/how-ai-coding-agents-use-your-computer/">the neutral version is here</a>.)</p>
 
-      <h2>Incident 1: the allowlist was the hole</h2>
+      <h2 id="incident-1-the-allowlist-was-the-hole">Incident 1: the allowlist was the hole</h2>
       <p><strong>CVE-2026-22708</strong>, disclosed by Pillar Security against Cursor's agentic IDE. Cursor's Auto-Run mode lets you allowlist commands so you don't approve every shell call. The problem: shell built-ins such as <code>export</code>, <code>typeset</code> and <code>declare</code> were implicitly trusted and never had to be on the list. Anything that could put text in front of the agent (a README, a dependency file, a GitHub issue) could use one of them to poison an environment variable such as Git's <code>PAGER</code>. The next time the developer approved something as ordinary as <code>git branch</code>, a command they'd already vetted, the poisoned environment ran the attacker's code instead.</p>
       <p>The allowlist wasn't misconfigured; it worked as designed. The hole was in what silently counted as "a command", and that's a class of edge case, not a single bug.</p>
 
-      <h2>Incident 2: indirect prompt injection turns a bug report into a backdoor</h2>
+      <h2 id="incident-2-indirect-prompt-injection-turns-a-bug-report-into">Incident 2: indirect prompt injection turns a bug report into a backdoor</h2>
       <p>Indirect prompt injection is the mechanism behind most of this. An agent reading a GitHub issue, a dependency's README or a web page can't reliably tell "data I'm reading" from "an instruction I was given". An agent asked to fix a bug can be steered into inserting a backdoor; one built to watch a repository's issues can treat a malicious issue from anyone as an instruction.</p>
       <p>Cursor's agent produced a concrete case: an indirect prompt injection got it to create a malicious <code>.cursor/mcp.json</code> without user approval, and that MCP configuration became the attacker's path to remote code execution. It's a different failure from Incident 1. The allowlist and approval flow both worked; the agent just wasn't doing the task it was given.</p>
 
-      <h2>Incident 3: no code execution needed</h2>
+      <h2 id="incident-3-no-code-execution-needed">Incident 3: no code execution needed</h2>
       <p><strong>EchoLeak (CVE-2025-32711)</strong>, a zero-click vulnerability in Microsoft 365 Copilot disclosed by Aim Security, CVSS 9.3. One crafted email, no user interaction: when Copilot processed it during routine summarization, hidden instructions made it gather files from OneDrive, SharePoint and Teams that it already had permission to read, and send them to an attacker. Researchers call this "LLM scope violation": untrusted content manipulating the model into using its legitimate access illegitimately, entirely in natural language, with no shell command or malware.</p>
       <p>This is the case that keeps sandboxing claims honest. A code-execution sandbox doesn't stop it. If an agent's job is to read your files or call APIs for you, isolating <em>where its code runs</em> doesn't help when the exfiltration path is persuading the model, in plain English, to hand over data it can already see. Execution isolation answers Incidents 1 and 2. This one is a scoping problem (what data and credentials a session can reach at all) and needs solving separately.</p>
 
-      <h2>Incident 4: how far it scales with enough autonomy</h2>
+      <h2 id="incident-4-how-far-it-scales-with-enough-autonomy">Incident 4: how far it scales with enough autonomy</h2>
       <p>In September 2025, Anthropic's Threat Intelligence team detected and disrupted what it <a href="https://www.anthropic.com/news/disrupting-AI-espionage" target="_blank" rel="noopener">reported</a> as the first largely autonomous, AI-orchestrated cyber espionage campaign at scale. A Chinese state-sponsored group, tracked as GTG-1002, convinced Claude Code it was doing authorized defensive testing, then used it for reconnaissance, vulnerability discovery, exploitation, credential harvesting and data exfiltration against about 30 organizations in tech, finance, chemical manufacturing and government. The agent handled an estimated 80–90% of the tactical work, with humans mainly choosing targets and approving strategy.</p>
       <p>This isn't a sandboxing story in the same sense: the attacker used an agent as the weapon rather than compromising a victim's agent. But it's the clearest evidence of how much leverage a coding agent has once real tool access meets real autonomy, and that's the scale of the question "should I let this run unsandboxed on my machine?" in 2026.</p>
 
-      <h2>The pattern kept repeating in early 2026</h2>
+      <h2 id="the-pattern-kept-repeating-in-early-2026">The pattern kept repeating in early 2026</h2>
       <p>Those four have enough public detail to walk through the mechanism. Three more followed within months, in three different tools, none needing a new category of vulnerability:</p>
       <ul>
         <li><strong>Claude Code, CVE-2026-21852.</strong> A malicious repository's settings file could set <code>ANTHROPIC_BASE_URL</code> to an attacker's endpoint. Opening the repository in Claude Code sent API requests, including the user's Anthropic API key, to that server before the trust prompt appeared. Fixed in version 2.0.65 (January 2026). No code execution needed; the same shape as Incident 3, a legitimate-looking flow redirected.</li>
@@ -148,11 +163,11 @@
       </ul>
       <p>None of this changes the framework below. It confirms the base rate: the same few failure modes keep appearing in new tools every few months, each fixed after the fact.</p>
 
-      <h2>The common thread</h2>
+      <h2 id="the-common-thread">The common thread</h2>
       <p>In each of the first three incidents, something that depended on the model behaving, or on a list of edge cases being complete, stood between "read some text" and "do something harmful": a permission prompt, an allowlist, or the model's judgment about what counted as an instruction. Each was bypassed in a different way. That isn't one bug to patch. Allowlists will keep finding new edge cases like shell built-ins, and prompt injection defense is an open arms race, not a shipped fix.</p>
       <p>The boundary that doesn't depend on any of that is isolation: what the agent's process can reach on disk, on the network and on the host, whatever it decides to do.</p>
 
-      <h2>Not all isolation is the same boundary</h2>
+      <h2 id="not-all-isolation-is-the-same-boundary">Not all isolation is the same boundary</h2>
       <p>"Sandboxed" gets used loosely. These are different guarantees:</p>
       <div class="article-table-wrap">
         <table>
@@ -168,12 +183,12 @@
       </div>
       <p>The middle rows aren't hypothetical. In mid-2026, 13 critical CVEs were disclosed against <code>vm2</code>, a widely used JavaScript sandboxing library, in a single patch cycle: evidence that a sandbox built as a language-level trick, sharing a process and kernel with the code it contains, keeps getting broken, because holding it depends on catching every escape in review rather than on hardware. Google's <a href="https://gvisor.dev/" target="_blank" rel="noopener">gVisor</a> is a real step up, intercepting system calls in user space before they reach the host kernel, but it's still weaker than a VM, which is why production guidance (Northflank's, among others) tends to treat <a href="https://northflank.com/blog/how-to-sandbox-ai-agents" target="_blank" rel="noopener">a Firecracker- or Kata-class microVM as the minimum for a production agent sandbox</a>.</p>
 
-      <h2>Where Velo Workspaces sits, and why the GPU mattered</h2>
+      <h2 id="where-velo-workspaces-sits-and-why-the-gpu-mattered">Where Velo Workspaces sits, and why the GPU mattered</h2>
       <p>Velo Workspaces runs every workspace on Apple's Virtualization framework, the bottom row: a dedicated kernel per workspace. Disposable workspaces add deletion on close, so a successful compromise doesn't outlive the session. That isn't a new technique; it's the same class of boundary Firecracker and Kata provide elsewhere.</p>
       <p>The usual price of that isolation has been giving up the host GPU for anything inside it, which is why <strong>AI Bridge</strong> exists. The untrusted, disposable part, the agent's code execution, stays in the VM, while the model server stays on the Mac, outside the boundary, reached over vsock. See the <a href="/blog/ai-bridge-architecture/">architecture behind that split</a>, what it <a href="/blog/vm-sandboxing-cost/">costs in inference speed</a>, and <a href="/blog/velo-vs-parallels-vs-utm/">how it compares</a> with Parallels and UTM.</p>
       <p>One limit, straight from Incident 3: this isolates code execution. It doesn't solve the model being talked into handing over data it can already see. That's about scoping which files and long-lived credentials a workspace can reach, and it's worth doing deliberately whatever tool you use.</p>
 
-      <h2>What to do</h2>
+      <h2 id="what-to-do">What to do</h2>
       <ul>
         <li><strong>Don't treat an allowlist or approval prompt as your security boundary.</strong> Incident 1 shows it's a convenience with edge cases, not enforcement.</li>
         <li><strong>If an agent runs generated code, run it where an escape means a hypervisor breakout</strong>, not a shell on your account: a microVM or full VM, not a container alone.</li>

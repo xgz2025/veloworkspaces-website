@@ -20,7 +20,7 @@
 <meta property="og:image:alt" content="Running NixOS on Apple Silicon">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-28">
+<meta property="article:modified_time" content="2026-09-29">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -33,7 +33,7 @@
       "description": "Install NixOS 26.05 or 25.05 on an M-series Mac from the official aarch64 ISO, and how configuration.nix and base images fit together in a VM.",
       "image": "https://www.veloworkspaces.com/assets/og/nixos-on-apple-silicon.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-28",
+      "dateModified": "2026-09-29",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -105,33 +105,36 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>Running NixOS on Apple Silicon</h1>
         <p class="article-lede">NixOS's whole idea is reproducibility: a system described in one declarative file. That makes it an interesting contrast with how this blog usually talks about reproducibility, which is base images and disk clones.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-29">September 29, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Minimal or graphical, both for aarch64</h2>
+      <div class="note note-tip" data-guide-callout>
+        <p><strong>Step by step, with screenshots:</strong> <a href="/blog/nixos-vm-mac-install-guide/">install NixOS with the graphical installer</a>, then turn on SSH in configuration.nix.</p>
+      </div>
+      <h2 id="minimal-or-graphical-both-for-aarch64">Minimal or graphical, both for aarch64</h2>
       <p>NixOS publishes a minimal (terminal-only) and a graphical installer ISO for aarch64 as well as x86_64. Velo Workspaces 1.2 has both, for NixOS 26.05 and 25.05, downloaded from nixos.org and checked against the published SHA-256. For a VM the minimal ISO is usually enough, because NixOS's configuration lives in a text file whichever installer put the base system down.</p>
       <p>NixOS's aarch64 ISO is built to boot from a CD, and Apple's Virtualization framework has no CD drive, only USB-style disks. Velo Workspaces gives its own copy of the ISO a partition table the firmware can boot from, leaving the NixOS volume and its label untouched, so the installer starts normally.</p>
 
-      <h2>Installing: by hand, the NixOS way</h2>
+      <h2 id="installing-by-hand-the-nixos-way">Installing: by hand, the NixOS way</h2>
       <p>The NixOS installer has no answer-file mechanism, so there's no automatic install. Create a workspace with <strong>Installer image</strong>, pick NixOS, and when it boots, partition the disk, run <code>nixos-generate-config</code>, edit <code>configuration.nix</code> and run <code>nixos-install</code>, following the <a href="https://nixos.org/manual/nixos/stable/#sec-installation" target="_blank" rel="noopener">NixOS manual</a>. If you already keep a <code>configuration.nix</code> in git, you can start from that.</p>
-      <p>For SSH, enable <code>services.openssh</code> and add this Mac's public key (copy it from <strong>Settings › Access</strong>) to <code>users.users.&lt;name&gt;.openssh.authorizedKeys.keys</code>. The <strong>Install Key</strong> button in the Access tab works too, but it writes to <code>~/.ssh/authorized_keys</code>, which your configuration doesn't know about. Putting the key in the file keeps it where NixOS expects everything to be.</p>
+      <p>For SSH, enable <code>services.openssh</code> and add this Mac's public key (copy it from <strong>Settings › Access</strong>) to <code>users.users.&lt;name&gt;.openssh.authorizedKeys.keys</code>. The <strong>Install Key</strong> button the built-in terminal offers after a password sign-in works too, but it writes to <code>~/.ssh/authorized_keys</code>, which your configuration doesn't know about. Putting the key in the file keeps it where NixOS expects everything to be.</p>
 
-      <h2>Two answers to "how do I get the same system back"</h2>
+      <h2 id="two-answers-to-how-do-i-get-the-same-system-back">Two answers to "how do I get the same system back"</h2>
       <p>Velo Workspaces' own answer to reproducibility is <a href="/blog/base-image-versioning/">a saved base image</a>: a disk-level copy you clone from. It's fast, because clones are copy-on-write, but it's opaque as a description of what's inside; its name is the only record you get. NixOS's answer has the opposite shape. <code>configuration.nix</code> is a complete, readable, version-controlled description of the system (every package, service and setting) that <code>nixos-rebuild</code> reproduces the same way on any NixOS machine.</p>
       <p>One is fast and disk-based, the other precise and text-based, and a NixOS workspace can use both. Save a configured install as a base image for quick day-to-day clones, and keep its <code>configuration.nix</code> as the portable record of what's in it, useful even outside Velo Workspaces.</p>
 
-      <h2>What trips people up</h2>
+      <h2 id="what-trips-people-up">What trips people up</h2>
       <p>The declarative model is also what surprises people coming from other distributions. Installing a package with <code>nix-env</code> outside <code>configuration.nix</code> works, but the file doesn't know about it, and the next rebuild doesn't include it. The file is the only source of truth NixOS recognizes. That's a deliberate design choice, and it catches anyone who reaches for the familiar "just install it" habit and expects it to stick the way <code>apt install</code> does.</p>
 
       <p>Related reading: <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>, <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment is</a>, and <a href="/blog/arch-linux-on-apple-silicon/">Arch Linux on Apple Silicon</a>, another distribution you install by hand. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

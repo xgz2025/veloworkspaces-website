@@ -30,10 +30,12 @@ wrangler.jsonc      Deploy config (Workers static assets, no worker code)
 .assetsignore       Keeps .git, this README, i18n/, etc. out of the deployed assets
 assets/style.css    All styling
 assets/app-store.js Fills in every [data-app-store-link] button's href from one place
+assets/lightbox.js  Opens a blog screenshot full size in a <dialog> (loaded only by posts that have them)
 assets/icon.png     App icon — used as both the favicon and the header/footer brand mark
 assets/screenshots/ Four app screenshots shown in the home page hero (WebP served, PNG kept as source)
 assets/og/          1200×630 share images: default.jpg plus one per blog post (generated, see "Blog")
-assets/blog/        Images used inside blog posts
+assets/blog/        Images used inside blog posts (WebP); assets/blog/guides/ holds the step-by-step guides'
+                     screenshots and the 30-second screen recording
 ```
 
 ## Localization
@@ -87,14 +89,28 @@ article header (eyebrow, h1, lede, byline with dates) and the footer. It also wr
 | `lede` | The paragraph under the h1 (HTML allowed) | |
 | `published`, `modified` | Byline, JSON-LD, sitemap `<lastmod>`, RSS | ISO dates; bump `modified` on real edits |
 | `trademarks` | Extra trademark line in the footer | |
+| `hero` *(optional)* | `{"src", "alt"}`: a screenshot under the byline, the post's card thumbnail on the blog index, and the inset on its share image | Guides have one |
+| `video` *(optional)* | `{"name", "description", "src", "poster", "uploaded", "duration"}`: `VideoObject` JSON-LD for a recording in the body | |
+| `toc` *(optional)* | `"open"` shows the table of contents expanded. Posts with five or more `h2`s get a collapsed one anyway | Guides use `"open"` |
+
+The renderer also gives every `h2` in a body an `id` (kept if it already has one) for the table of
+contents, adds the reading time to the byline, and loads `assets/lightbox.js` on posts with screenshots.
+
+**Guide components** (all in `assets/style.css`): `figure.shot` with an `a.shot-frame` around the image is
+a framed, zoomable screenshot (`shot-wide` lets it overhang the text column, `shot-narrow` keeps a small
+one small, `div.shot-pair` sets two side by side); `div.guide-steps` holding `section.guide-step`s, each
+starting with an `h2`, gives numbered step badges; `div.note` with `note-tip`, `note-pro` or `note-warn` is
+a callout; `dl.guide-facts` is the "at a glance" box; `div.guide-next` is a row of link cards. Give every
+`img` its `width` and `height` and `loading="lazy"`. Screenshots are WebP, cropped to what the step is
+about, with an orange ring on the control to click.
 
 **To add a post:** copy an existing post's folder, replace the body, add its entry to `POSTS`, then run
 `python3 i18n/make_og_images.py <slug>` (its share image) and `python3 i18n/build.py`.
 `render_blog.py` refuses to run if a folder in `blog/` has no entry or an entry has no folder.
 
 **Share images** (`assets/og/`): `python3 i18n/make_og_images.py` renders `default.jpg` and one card per
-post from its eyebrow and `card_title`, using Node + Playwright (`npm i -g playwright`). Re-run it for a
-post whenever its `card_title` changes.
+post from its eyebrow and `card_title` (and its `hero` screenshot, when it has one), using Node +
+Playwright (`npm i -g playwright`). Re-run it for a post whenever its `card_title` or `hero` changes.
 
 ## Deploying on Cloudflare (Workers static assets)
 

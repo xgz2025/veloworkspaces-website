@@ -105,30 +105,30 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Setup guide</span>
         <h1>Claude Code With a Local Model, Isolated in a VM on Apple Silicon</h1>
         <p class="article-lede">The other setup guides here point OpenAI-compatible agents like OpenCode and Continue at a local model. Claude Code isn't one of those: it needs a different environment variable and a host provider that speaks its protocol. Here's the setup that works.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-23">September 23, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-23">September 23, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">3 min read</span></p>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Why Claude Code isn't a drop-in swap for OpenCode</h2>
+      <h2 id="why-claude-code-isn-t-a-drop-in-swap-for-opencode">Why Claude Code isn't a drop-in swap for OpenCode</h2>
       <p>Every other local-model guide on this blog, <a href="/blog/mlx-vm-setup-guide/">OpenCode</a> and <a href="/blog/vscode-continue-ai-bridge/">Continue</a> among them, points the agent at an OpenAI-compatible endpoint. Claude Code doesn't work that way. It's Anthropic's CLI and speaks the Anthropic Messages API: the request body, the streaming format and the tool-call shape are all Anthropic's. Pointing it at a local server means setting <code>ANTHROPIC_BASE_URL</code>, and whatever answers has to accept requests in that exact shape; being "OpenAI-compatible", as <code>mlx_lm.server</code> is, isn't enough.</p>
       <p>That one constraint decides the rest: which host provider you can use, and what you set differently from the other agents.</p>
 
-      <h2>The host provider that works: Ollama, not MLX directly</h2>
+      <h2 id="the-host-provider-that-works-ollama-not-mlx-directly">The host provider that works: Ollama, not MLX directly</h2>
       <p>Since version 0.14, <a href="https://ollama.com/blog/claude" target="_blank" rel="noopener">Ollama supports the Anthropic Messages API</a>: it accepts requests at <code>/v1/messages</code> in Anthropic's format, translates them for the underlying model, and answers in the same shape. That makes it the host provider Claude Code can talk to directly. Ollama's documentation is clear that it's a <em>subset</em>: messages, streaming and function calling work; tool-choice controls, deferred tools and hosted web search don't. Worth knowing before you hit one of those and suspect Velo Workspaces.</p>
       <p>MLX's own server (<code>mlx_lm.server</code>) is OpenAI-compatible only. That's fine for OpenCode and Continue, but Claude Code would need a translation layer in front of it, which this guide doesn't cover. For Claude Code, set AI Bridge's Host Provider to <strong>Ollama</strong>.</p>
       <p style="font-size:0.9rem; color:var(--color-text-secondary);"><em>Since Ollama 0.19 (March 2026), Ollama runs on Apple's MLX internally on Macs with 32 GB or more. That's about the engine inside Ollama, not the API it offers, so both are true at once: Ollama speaks Anthropic's protocol on the outside and runs MLX on the inside.</em></p>
 
-      <h2>Setup</h2>
+      <h2 id="setup">Setup</h2>
       <h3>1. Install and run Ollama on the Mac</h3>
       <p>Install <a href="https://ollama.com" target="_blank" rel="noopener">Ollama</a> if you haven't, make sure it's version 0.14 or later, and pull a model that handles agentic tool calls reasonably well:</p>
       <pre><code>ollama pull qwen2.5-coder:7b</code></pre>
@@ -143,9 +143,9 @@
       <h3>4. Point it at AI Bridge instead of Anthropic's API</h3>
       <p>Set three environment variables before launching, instead of the <code>OPENAI_API_BASE</code> the other guides use:</p>
       <pre><code>export ANTHROPIC_BASE_URL=http://127.0.0.1:&lt;port&gt;
-      export ANTHROPIC_AUTH_TOKEN=ollama
-      export ANTHROPIC_API_KEY=""
-      claude --model qwen2.5-coder:7b</code></pre>
+export ANTHROPIC_AUTH_TOKEN=ollama
+export ANTHROPIC_API_KEY=""
+claude --model qwen2.5-coder:7b</code></pre>
       <p>Two details that differ from the OpenCode setup and are easy to get wrong:</p>
       <ul>
         <li><strong>No <code>/v1</code> on the base URL.</strong> OpenCode's base URL needs <code>/v1</code>; Claude Code adds <code>/v1/messages</code> itself, so adding <code>/v1</code> breaks the path.</li>
@@ -153,7 +153,7 @@
       </ul>
       <p><code>ANTHROPIC_AUTH_TOKEN=ollama</code> is a placeholder, not a credential. Ollama doesn't check it, but Claude Code won't send a request without something in the Authorization header.</p>
 
-      <h2>Why isolate it at all</h2>
+      <h2 id="why-isolate-it-at-all">Why isolate it at all</h2>
       <p>The reason to run a coding agent in a disposable VM doesn't depend on which agent it is. Claude Code runs shell commands and edits files with whatever permissions its process has, and <a href="/blog/ai-agent-security-risks/">2026 incidents</a>, including one involving Claude Code's own project-loading flow, show that "the agent behaves correctly" isn't a boundary to rely on. In a disposable workspace, a compromised or simply mistaken session ends when you close it, and AI Bridge means you keep the Mac's GPU while you get that isolation.</p>
 
       <p>Related reading: the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>, the same setup <a href="/blog/mlx-vm-setup-guide/">for OpenCode</a> and <a href="/blog/vscode-continue-ai-bridge/">for Continue in VS Code</a>, what it <a href="/blog/vm-sandboxing-cost/">costs in inference speed</a>, and <a href="/blog/ai-agent-security-risks/">what goes wrong</a> when a coding agent runs unsandboxed. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

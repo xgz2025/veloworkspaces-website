@@ -105,42 +105,55 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>The Modern Local Development Stack on Apple Silicon</h1>
         <p class="article-lede">This blog has grown into dozens of posts, each answering one question. This one is a map: what a VM on Apple silicon is, getting Linux running, running AI agents safely, building a disposable-by-default workflow, what it costs, and how it compares, as one path instead of a flat list.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">3 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#start-with-what-s-running-under-you"><span>Start with what&#x27;s running under you</span></a></li>
+          <li><a href="#get-linux-running-and-know-its-gotchas"><span>Get Linux running, and know its gotchas</span></a></li>
+          <li><a href="#when-arm64-isn-t-enough"><span>When arm64 isn&#x27;t enough</span></a></li>
+          <li><a href="#running-ai-agents-and-local-models-safely"><span>Running AI agents and local models, safely</span></a></li>
+          <li><a href="#a-disposable-by-default-workflow"><span>A disposable-by-default workflow</span></a></li>
+          <li><a href="#what-it-costs-measured"><span>What it costs, measured</span></a></li>
+          <li><a href="#how-it-compares"><span>How it compares</span></a></li>
+          <li><a href="#where-to-start"><span>Where to start</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Start with what's running under you</h2>
+      <h2 id="start-with-what-s-running-under-you">Start with what's running under you</h2>
       <p>Everything else builds on one mechanism. <a href="/blog/apple-silicon-vms-explained/">Apple Silicon Virtual Machines, Explained</a> covers what the Virtualization framework is, and <a href="/blog/how-virtualization-framework-works/">how it works</a> goes device by device. If you're weighing virtualization against the alternatives, <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a> and <a href="/blog/virtualization-framework-vs-qemu/">Virtualization.framework vs. QEMU</a> cover the isolation and emulation trade-offs. <a href="/blog/arm64-vs-x86-apple-silicon/">ARM64 vs. x86-64</a> and <a href="/blog/why-arm-vms-feel-native/">why ARM VMs feel native</a> cover the architecture underneath.</p>
 
-      <h2>Get Linux running, and know its gotchas</h2>
+      <h2 id="get-linux-running-and-know-its-gotchas">Get Linux running, and know its gotchas</h2>
       <p>Since Velo Workspaces 1.2, the fastest start is an official cloud image: Ubuntu, Debian, Fedora or Rocky Linux, ready to sign in to about a minute after it downloads. <a href="/blog/whats-new-in-velo-workspaces-1-2/">What's new in 1.2</a> walks through it. Each distribution has its own post with what's different about it: <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu</a>, <a href="/blog/debian-on-apple-silicon/">Debian</a>, <a href="/blog/fedora-on-apple-silicon/">Fedora</a>, <a href="/blog/rocky-linux-on-apple-silicon/">Rocky Linux</a>, <a href="/blog/arch-linux-on-apple-silicon/">Arch</a>, <a href="/blog/kali-linux-on-apple-silicon/">Kali</a> and <a href="/blog/nixos-on-apple-silicon/">NixOS</a>, plus <a href="/blog/best-linux-distro-apple-silicon/">which one fits your work</a>, <a href="/blog/linux-server-vs-desktop-vm-mac/">Server or Desktop</a>, and <a href="/blog/linux-vm-networking-apple-silicon/">how VM networking works</a>. For something other than Linux, see <a href="/blog/macos-guests-on-apple-silicon/">macOS guests</a>.</p>
 
-      <h2>When arm64 isn't enough</h2>
+      <h2 id="when-arm64-isn-t-enough">When arm64 isn't enough</h2>
       <p>x86 software doesn't vanish on Apple silicon. <a href="/blog/rosetta-2-linux-vms-explained/">Rosetta 2 in Linux VMs</a> translates individual binaries, <a href="/blog/can-you-run-x86-linux-on-apple-silicon/">can you install x86 Linux at all</a> answers the whole-OS question, and <a href="/blog/running-x86-docker-images-arm64-mac/">running x86 Docker images</a> covers containers. If something won't run and you don't know why, <a href="/blog/arm64-linux-compatibility-problems/">the triage guide</a> sorts it out.</p>
 
-      <h2>Running AI agents and local models, safely</h2>
+      <h2 id="running-ai-agents-and-local-models-safely">Running AI agents and local models, safely</h2>
       <p>This is the deepest part of the blog, best read in roughly this order: <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents use your computer</a>, <a href="/blog/what-can-ai-agents-access-on-your-mac/">what they can access</a>, <a href="/blog/can-you-trust-ai-agents-with-git/">the Git-specific risk</a>, and <a href="/blog/ai-agent-security-risks/">what goes wrong unsandboxed</a>, with dated incidents rather than hypotheticals. Then <a href="/blog/zero-tax-virtualization/">the complete guide to running agents in an isolated VM</a> ties it together, backed by <a href="/blog/ai-bridge-architecture/">the AI Bridge architecture</a> and <a href="/blog/ai-bridge-data-privacy/">what leaves your Mac and what doesn't</a>. On the model side: <a href="/blog/local-llms-apple-silicon/">tools and formats</a>, <a href="/blog/llm-ram-requirements-mac/">how much RAM you need</a>, <a href="/blog/llm-quantization-explained-mac/">what quantization does</a>, and <a href="/blog/local-vs-cloud-llm-coding-agents/">local vs. cloud models for agents</a>. To pull it together: <a href="/blog/safe-local-ai-agent-environment-checklist/">a safe local AI agent environment checklist</a>.</p>
 
-      <h2>A disposable-by-default workflow</h2>
+      <h2 id="a-disposable-by-default-workflow">A disposable-by-default workflow</h2>
       <p>The habit this blog argues for: <a href="/blog/what-is-a-disposable-development-environment/">what disposability means</a>, <a href="/blog/disposable-vm-vs-snapshot/">how it differs from a snapshot</a>, and <a href="/blog/base-image-vs-snapshot-vs-clone/">how base images, snapshots and clones relate</a>. Applied: <a href="/blog/one-vm-per-git-branch/">one VM per Git branch</a>, <a href="/blog/clean-room-bug-reproduction/">clean-room bug reproduction</a>, <a href="/blog/disposable-vms-untrusted-software/">testing untrusted software</a>, <a href="/blog/qa-devops-disposable-vm-workflow/">the QA and DevOps workflow</a>, <a href="/blog/disposable-workspaces-devops-ci/">matching your CI environment</a>, and <a href="/blog/software-engineers-disposable-workspaces/">making it a daily coding habit</a>. Managing the images underneath: <a href="/blog/base-image-versioning/">versioning base images</a> and <a href="/blog/guest-os-performance-tuning/">tuning the guest</a> before you save one.</p>
 
-      <h2>What it costs, measured</h2>
+      <h2 id="what-it-costs-measured">What it costs, measured</h2>
       <p><a href="/blog/arm-virtualization-performance/">Why ARM VMs perform the way they do</a>, then the deep dives on <a href="/blog/linux-vm-cpu-performance-apple-silicon/">CPU</a>, <a href="/blog/linux-vm-disk-performance-apple-silicon/">disk</a> and <a href="/blog/linux-vm-network-performance-apple-silicon/">network</a>, sizing guides for <a href="/blog/how-much-memory-linux-vm-mac/">memory</a> and <a href="/blog/how-many-linux-vms-apple-silicon/">how many VMs you can run</a>, and <a href="/blog/vm-startup-performance-apple-silicon/">what decides boot time</a>. For AI workloads: <a href="/blog/vm-inference-benchmark/">the inference benchmark</a> and <a href="/blog/vm-sandboxing-cost/">what sandboxing costs across two inference engines</a>.</p>
 
-      <h2>How it compares</h2>
+      <h2 id="how-it-compares">How it compares</h2>
       <p>Against other Mac VM apps: <a href="/blog/velo-vs-parallels-vs-utm/">Velo Workspaces vs. Parallels vs. UTM</a>, and <a href="/blog/migrating-to-velo-workspaces/">moving a VM over</a>. Against containers: <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">Velo Workspaces vs. Docker Desktop vs. OrbStack</a>, <a href="/blog/apple-containers-vs-docker-vs-orbstack/">Apple Containers vs. Docker Desktop vs. OrbStack</a> and <a href="/blog/apple-containers-vs-linux-vms/">Apple Containers vs. Linux VMs</a>. Against the cloud: <a href="/blog/velo-vs-codespaces-vs-ona/">Velo Workspaces vs. GitHub Codespaces vs. Ona</a> and <a href="/blog/local-vs-cloud-development-environments/">the trade-offs underneath</a>. Building agents for research? See <a href="/blog/ai-researchers-agent-testing/">the AI researchers guide</a>.</p>
 
-      <h2>Where to start</h2>
+      <h2 id="where-to-start">Where to start</h2>
       <ul>
         <li><strong>New to VMs on Apple silicon:</strong> <a href="/blog/apple-silicon-vms-explained/">the fundamentals</a>, then create an Ubuntu workspace from the cloud image.</li>
         <li><strong>Running an AI coding agent and want it safe:</strong> <a href="/blog/ai-agent-security-risks/">the incidents</a> first, then <a href="/blog/zero-tax-virtualization/">the complete guide</a>.</li>

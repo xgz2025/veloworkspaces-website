@@ -105,31 +105,31 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Fundamentals</span>
         <h1>Disposable VM vs. Snapshot: What's the Difference?</h1>
         <p class="article-lede"><a href="/blog/what-is-a-disposable-development-environment/">The short answer</a>: a snapshot keeps state on purpose, and a disposable environment throws it away on purpose. This is the concrete version: what Velo Workspaces' restore points copy on disk, and what "disposable" does instead.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>What a restore point copies</h2>
+      <h2 id="what-a-restore-point-copies">What a restore point copies</h2>
       <p>A restore point is a real copy. Creating one copies the workspace's main disk, and its saved VM state if the workspace was suspended rather than shut down, into a snapshot folder. Restoring reverses that, putting the disk (and saved state, if there is one) back exactly as it was. Restoring is safe to get wrong, too: the app backs up the workspace's <em>current</em> disk and state before overwriting anything, and puts that backup back automatically if the restore fails partway.</p>
       <p>Creating restore points is part of Pro. Restoring ones you already have is free, and stays free if a subscription lapses.</p>
 
-      <h2>What a disposable workspace does instead</h2>
+      <h2 id="what-a-disposable-workspace-does-instead">What a disposable workspace does instead</h2>
       <p>Nothing is copied or kept; that's the point. Closing a disposable workspace deletes it outright, disk and all. No snapshot is involved, because a disposable workspace was never meant to be returned to. The next one doesn't restore from the one you just closed; it clones fresh from a base image, a separate saved template that was never part of the workspace you threw away (see <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>).</p>
 
-      <h2>When to reach for each</h2>
+      <h2 id="when-to-reach-for-each">When to reach for each</h2>
       <p>A restore point is for a working session you want to be able to rewind. Take one before something risky, a migration or a config change you're unsure of, and if it goes wrong, restore instead of rebuilding. Disposability is for the opposite goal: guaranteeing nothing from this run reaches the next, which matters most in testing, QA, and anywhere an AI agent's generated code runs. <a href="/blog/what-is-a-disposable-development-environment/">The disposability post</a> covers why.</p>
 
-      <h2>Not either-or</h2>
+      <h2 id="not-either-or">Not either-or</h2>
       <p>They answer different questions, and one Mac's workspaces can use both. A long-lived project workspace might use restore points as checkpoints during a risky refactor, while a separate disposable workspace handles the next test run with no snapshot at all. What decides it is whether you'll want to go back to that workspace, not which pattern is "better".</p>
 
       <p>Related reading: <a href="/blog/base-image-vs-snapshot-vs-clone/">base image vs. snapshot vs. clone</a>, <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>, and <a href="/blog/qa-devops-disposable-vm-workflow/">the disposable VM workflow for QA and DevOps</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

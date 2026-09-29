@@ -105,35 +105,45 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Fundamentals</span>
         <h1>Local LLM vs. Cloud LLM for Coding Agents</h1>
         <p class="article-lede">There's no universal verdict. The right choice depends on the work, so here's what decides it, laid out plainly rather than argued toward an answer.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#where-cloud-models-still-clearly-win"><span>Where cloud models still clearly win</span></a></li>
+          <li><a href="#where-local-models-win"><span>Where local models win</span></a></li>
+          <li><a href="#isolation-applies-to-both-differently"><span>Isolation applies to both, differently</span></a></li>
+          <li><a href="#a-practical-pattern"><span>A practical pattern</span></a></li>
+          <li><a href="#the-decision"><span>The decision</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Where cloud models still clearly win</h2>
+      <h2 id="where-cloud-models-still-clearly-win">Where cloud models still clearly win</h2>
       <p>Capability comes first. The largest frontier cloud models are still noticeably stronger than anything that fits in a Mac's unified memory on the hardest coding tasks: multi-file refactors, subtle bugs, reasoning through an unfamiliar codebase. The gap has narrowed as local models and quantization have improved, but it hasn't closed, and pretending otherwise leads to frustration on hard problems. Context is related: cloud models offer context windows far beyond what you can hold locally alongside the weights. <a href="/blog/llm-ram-requirements-mac/">The RAM post</a> explains why the KV cache, not the weights, is what runs out first in a long local session.</p>
       <p>No setup is the third. Give an agent an API key and it works: no model download, no quantization choice, no hardware ceiling. If you're not already committed to a local workflow, that's the easier path.</p>
 
-      <h2>Where local models win</h2>
+      <h2 id="where-local-models-win">Where local models win</h2>
       <p>Cost at volume is the most concrete. Once downloaded, a local model's marginal cost per token is electricity, with no per-request billing. That matters a lot for an agent that makes dozens of tool calls and self-corrections per task, each one a separate model call. <a href="/blog/vm-sandboxing-cost/">This blog's benchmarks</a> measure the isolation overhead, but for anyone running agents constantly, the API bill is the bigger number.</p>
       <p>Privacy is the second, and for some work it's a hard line rather than a preference. A local model never sends your code anywhere, which matters for proprietary code, client work under NDA, or anything regulated. <a href="/blog/ai-bridge-data-privacy/">The AI Bridge privacy post</a> covers exactly what leaves the Mac. Offline reliability is the third: a local model keeps working on a plane, on a bad connection, or during a provider's outage.</p>
 
-      <h2>Isolation applies to both, differently</h2>
+      <h2 id="isolation-applies-to-both-differently">Isolation applies to both, differently</h2>
       <p>Running the model locally and running the agent in an isolated VM are separate decisions. <a href="/blog/zero-tax-virtualization/">The agent-isolation setup on this blog</a> sandboxes the agent's <em>actions</em>, its file access and commands, whether the model behind it is on your GPU or in the cloud. A cloud-backed agent still benefits from a VM, for the reasons in <a href="/blog/ai-agent-security-risks/">the AI agent security post</a>. And a local model doesn't make an unsupervised agent safer: the risk is in what the agent does, not where the weights live.</p>
 
-      <h2>A practical pattern</h2>
+      <h2 id="a-practical-pattern">A practical pattern</h2>
       <p>Many workflows split the difference: a local model for the high-volume, lower-stakes loop (lint fixes, small refactors, boilerplate, anything run constantly where cost and latency add up) and a cloud model for the harder, rarer problem that benefits from frontier capability. <a href="/blog/ai-bridge-architecture/">AI Bridge</a> can point at either kind of backend from the same isolated setup, so switching is a configuration change rather than a rebuild. Design for both even if you start out leaning one way.</p>
 
-      <h2>The decision</h2>
+      <h2 id="the-decision">The decision</h2>
       <ul>
         <li><strong>Cost-sensitive, high-volume or often offline:</strong> lean local, and see <a href="/blog/llm-quantization-explained-mac/">the quantization post</a> for getting the most out of your memory.</li>
         <li><strong>Privacy-critical or regulated:</strong> local isn't optional. Start there and work within its limits.</li>

@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SSH and VS Code Remote-SSH into a Linux VM on Your Mac</title>
+<meta name="description" content="Use one key for the built-in terminal, Terminal and VS Code Remote-SSH: import your Mac&#x27;s key into Velo Workspaces, or export the app&#x27;s key to ~/.ssh.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/ssh-vs-code-linux-vm-mac/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=6">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="SSH and VS Code Remote-SSH into a Linux VM on Your Mac">
+<meta property="og:description" content="Use one key for the built-in terminal, Terminal and VS Code Remote-SSH: import your Mac&#x27;s key into Velo Workspaces, or export the app&#x27;s key to ~/.ssh.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/ssh-vs-code-linux-vm-mac/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/ssh-vs-code-linux-vm-mac.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="SSH and VS Code into a Linux VM on Your Mac, with One Key">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="article:published_time" content="2026-09-29">
+<meta property="article:modified_time" content="2026-09-29">
+<meta property="article:author" content="Gaoliang Luo">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "SSH and VS Code Remote-SSH into a Linux VM on Your Mac",
+      "name": "SSH and VS Code into a Linux VM on Your Mac, with One Key",
+      "description": "Use one key for the built-in terminal, Terminal and VS Code Remote-SSH: import your Mac's key into Velo Workspaces, or export the app's key to ~/.ssh.",
+      "image": [
+        "https://www.veloworkspaces.com/assets/og/ssh-vs-code-linux-vm-mac.jpg",
+        "https://www.veloworkspaces.com/assets/blog/guides/ssh-keys/access-tab-vs-code.webp"
+      ],
+      "datePublished": "2026-09-29",
+      "dateModified": "2026-09-29",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/ssh-vs-code-linux-vm-mac/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "SSH and VS Code into a Linux VM on Your Mac, with One Key",
+          "item": "https://www.veloworkspaces.com/blog/ssh-vs-code-linux-vm-mac/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section article-top">
+    <div class="container article-head">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Step-by-step guide</span>
+        <h1>SSH and VS Code into a Linux VM on Your Mac, with One Key</h1>
+        <p class="article-lede">Velo Workspaces signs in its built-in terminal with a key it keeps in your Mac's Keychain. Terminal and VS Code look in ~/.ssh instead. Make them use the same key and every tool gets in the same way. There are two ways to do it; pick the one that matches where your key lives today.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-29">September 29, 2026</time><span class="article-readtime">4 min read</span></p>
+      </div>
+      <figure class="shot article-hero">
+        <a class="shot-frame" href="/assets/blog/guides/ssh-keys/access-tab-vs-code.webp"><img src="/assets/blog/guides/ssh-keys/access-tab-vs-code.webp" width="823" height="750" alt="A workspace&#x27;s Access tab in Velo Workspaces with SSH details, the ssh command and a VS Code Remote-SSH config block" fetchpriority="high"><span class="shot-zoom">Click to enlarge</span></a>
+      </figure>
+      <details class="article-toc" open>
+        <summary>Steps in this guide</summary>
+        <ol>
+          <li><a href="#how-keys-work-in-velo-workspaces"><span>How keys work in Velo Workspaces</span></a></li>
+          <li><a href="#option-1-import-your-mac-s-own-key"><span>Option 1: Import your Mac&#x27;s own key</span></a></li>
+          <li><a href="#open-preferences-access"><span class="toc-step">1</span><span>Open Preferences › Access</span></a></li>
+          <li><a href="#choose-your-private-key"><span class="toc-step">2</span><span>Choose your private key</span></a></li>
+          <li><a href="#make-it-the-default"><span class="toc-step">3</span><span>Make it the default</span></a></li>
+          <li><a href="#option-2-export-velo-s-key-to-ssh"><span>Option 2: Export Velo&#x27;s key to ~/.ssh</span></a></li>
+          <li><a href="#export-the-key"><span class="toc-step">1</span><span>Export the key</span></a></li>
+          <li><a href="#save-it-in-ssh"><span class="toc-step">2</span><span>Save it in ~/.ssh</span></a></li>
+          <li><a href="#tell-ssh-to-use-it"><span class="toc-step">3</span><span>Tell ssh to use it</span></a></li>
+          <li><a href="#connect-vs-code-with-remote-ssh"><span>Connect VS Code with Remote-SSH</span></a></li>
+          <li><a href="#install-remote-ssh"><span class="toc-step">1</span><span>Install Remote - SSH</span></a></li>
+          <li><a href="#copy-the-config-from-the-access-tab"><span class="toc-step">2</span><span>Copy the config from the Access tab</span></a></li>
+          <li><a href="#add-it-to-ssh-config"><span class="toc-step">3</span><span>Add it to ~/.ssh/config</span></a></li>
+          <li><a href="#connect"><span class="toc-step">4</span><span>Connect</span></a></li>
+          <li><a href="#from-another-computer"><span>From another computer</span></a></li>
+          <li><a href="#troubleshooting"><span>Troubleshooting</span></a></li>
+          <li><a href="#where-to-go-next"><span>Where to go next</span></a></li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+  <section class="section article-main">
+    <div class="container article-body">
+      <dl class="guide-facts">
+        <div><dt>Built-in terminal</dt><dd>Velo's key<span>kept in your Keychain</span></dd></div>
+        <div><dt>Terminal, VS Code</dt><dd>Keys in ~/.ssh<span>id_ed25519 by default</span></dd></div>
+        <div><dt>Key type</dt><dd>Ed25519<span>without a passphrase, to import</span></dd></div>
+        <div><dt>Time</dt><dd>About 5 minutes<span>once per Mac</span></dd></div>
+      </dl>
+
+      <h2 id="how-keys-work-in-velo-workspaces">How keys work in Velo Workspaces</h2>
+
+      <p><strong>Preferences › Access</strong> lists your SSH keys. The one marked <strong>Default</strong> is “this Mac's key”: the assistant adds it to the account of every workspace it sets up, whether from a cloud image or an automatic install, and <strong>Open Terminal</strong> signs in with it. If you have no key yet, one is made the first time you create a cloud workspace.</p>
+
+      <p>The <code>ssh</code> command and the VS Code block in a workspace's Access tab don't name a key file, so they use your usual keys in <code>~/.ssh</code>. If the workspace only knows Velo's key, they're turned away with <em>Permission denied (publickey)</em>. There are two ways to fix that:</p>
+
+      <ul>
+        <li><strong>Option 1, import your key:</strong> best if you already use <code>~/.ssh/id_ed25519</code> with servers and VS Code. Velo Workspaces signs in with it too, and gives it to new workspaces.</li>
+        <li><strong>Option 2, export Velo's key:</strong> best if your workspaces already trust Velo's key. Save it in <code>~/.ssh</code> and tell <code>ssh</code> to use it.</li>
+      </ul>
+
+      <h2 id="option-1-import-your-mac-s-own-key">Option 1: Import your Mac's own key</h2>
+
+      <div class="guide-steps">
+
+      <section class="guide-step">
+      <h2 id="open-preferences-access">Open Preferences › Access</h2>
+      <p>Click <strong>Preferences</strong> in the sidebar, choose <strong>Access</strong>, and click <strong>Import Private Key…</strong>.</p>
+      <figure class="shot shot-narrow">
+        <a class="shot-frame" href="/assets/blog/guides/ssh-keys/access-no-keys.webp"><img src="/assets/blog/guides/ssh-keys/access-no-keys.webp" width="480" height="202" alt="Preferences Access pane with Import Private Key highlighted" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Import Private Key… sits under the key list.</span></figcaption>
+      </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="choose-your-private-key">Choose your private key</h2>
+      <p>Select <code>id_ed25519</code>, not <code>id_ed25519.pub</code>. Press <kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>.</kbd> if the <code>.ssh</code> folder is hidden. Velo Workspaces imports Ed25519 keys only, and not yet ones with a passphrase: remove the passphrase with <code>ssh-keygen -p -f ~/.ssh/id_ed25519</code>, or make a new key.</p>
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/ssh-keys/choose-private-key.webp"><img src="/assets/blog/guides/ssh-keys/choose-private-key.webp" width="659" height="373" alt="File dialog in the .ssh folder with id_ed25519 selected" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>The private key, <code>id_ed25519</code>.</span></figcaption>
+      </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="make-it-the-default">Make it the default</h2>
+      <p>If the imported key isn't marked Default, choose <strong>Make Default</strong> from the menu beside it. From now on, new workspaces get this key, and Open Terminal uses it.</p>
+      <figure class="shot shot-narrow">
+        <a class="shot-frame" href="/assets/blog/guides/ssh-keys/key-imported.webp"><img src="/assets/blog/guides/ssh-keys/key-imported.webp" width="480" height="202" alt="Preferences Access pane with the imported key marked Default" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Imported and marked Default.</span></figcaption>
+      </figure>
+      </section>
+
+      </div>
+
+      <p>Workspaces you created earlier still trust the old key. Add your key to them with <code>ssh-copy-id</code>, or sign in to Open Terminal with the account's password and click <strong>Install Key</strong> when it offers.</p>
+
+      <h2 id="option-2-export-velo-s-key-to-ssh">Option 2: Export Velo's key to ~/.ssh</h2>
+
+      <div class="guide-steps">
+
+      <section class="guide-step">
+      <h2 id="export-the-key">Export the key</h2>
+      <p>In <strong>Preferences › Access</strong>, open the menu beside the key and choose <strong>Export Private Key…</strong>.</p>
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/ssh-keys/export-private-key.webp"><img src="/assets/blog/guides/ssh-keys/export-private-key.webp" width="680" height="316" alt="Key menu in Preferences Access with Export Private Key selected" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Copy Public Key, Export Private Key…, Rename… and Delete… live in this menu.</span></figcaption>
+      </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="save-it-in-ssh">Save it in ~/.ssh</h2>
+      <p>Keep <strong>Where</strong> on your <code>.ssh</code> folder and the suggested name, <code>velo_workspaces_ed25519</code>, then click <strong>Save</strong>. Velo Workspaces saves it so only you can read it, which <code>ssh</code> insists on. As the dialog says, anyone with this file can sign in to your workspaces, so keep it private.</p>
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/ssh-keys/save-private-key.webp"><img src="/assets/blog/guides/ssh-keys/save-private-key.webp" width="597" height="262" alt="Save dialog for velo_workspaces_ed25519 in the .ssh folder" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Saved as <code>~/.ssh/velo_workspaces_ed25519</code>.</span></figcaption>
+      </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="tell-ssh-to-use-it">Tell ssh to use it</h2>
+      <p>Add an <code>IdentityFile</code> line to the workspace's entry in <code>~/.ssh/config</code>. The next section shows where that entry comes from.</p>
+      <pre><code>Host ubuntu
+    HostName 192.168.65.110
+    User luo
+    Port 22
+    IdentityFile ~/.ssh/velo_workspaces_ed25519</code></pre>
+      <p>For a one-off, <code>ssh -i ~/.ssh/velo_workspaces_ed25519 luo@192.168.65.110</code> does the same.</p>
+      </section>
+
+      </div>
+
+      <h2 id="connect-vs-code-with-remote-ssh">Connect VS Code with Remote-SSH</h2>
+
+      <div class="guide-steps">
+
+      <section class="guide-step">
+      <h2 id="install-remote-ssh">Install Remote - SSH</h2>
+      <p>In VS Code's Extensions view, install Microsoft's <strong>Remote - SSH</strong> extension.</p>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="copy-the-config-from-the-access-tab">Copy the config from the Access tab</h2>
+      <p>In the workspace's Access tab, under VS CODE REMOTE, click <strong>Copy SSH Config</strong>. It copies a <code>Host</code> block named after the workspace, with its address and your username.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/ssh-keys/access-tab-vs-code.webp"><img src="/assets/blog/guides/ssh-keys/access-tab-vs-code.webp" width="823" height="750" alt="Access tab with the VS Code Remote section and Copy SSH Config highlighted" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>The VS CODE REMOTE block at the bottom of the Access tab.</span></figcaption>
+      </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="add-it-to-ssh-config">Add it to ~/.ssh/config</h2>
+      <p>In VS Code, press <kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>P</kbd>, run <strong>Remote-SSH: Open SSH Configuration File…</strong>, choose <code>~/.ssh/config</code> and paste. If you went with option 2, add the <code>IdentityFile</code> line.</p>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="connect">Connect</h2>
+      <p>Press <kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>P</kbd> again, run <strong>Remote-SSH: Connect to Host…</strong> and pick the workspace. The first time, VS Code installs its server in the workspace, then opens a window connected to it. Terminals, extensions and the file tree in that window all run in the VM.</p>
+      </section>
+
+      </div>
+
+      <h2 id="from-another-computer">From another computer</h2>
+
+      <p>The Access tab also shows an <code>ssh -J</code> command for other computers on your network. It hops through your Mac, so turn on <strong>Remote Login</strong> in System Settings › General › Sharing first (the Access tab has a button for it). The workspace has to accept that computer's key, or allow password logins.</p>
+
+      <h2 id="troubleshooting">Troubleshooting</h2>
+
+      <h3>Permission denied (publickey)</h3>
+
+      <p>The workspace doesn't trust any key <code>ssh</code> offered. <code>ssh -v</code> lists the keys it tried; use one of the two options above so they match.</p>
+
+      <h3>The workspace's host key has changed</h3>
+
+      <p>That's expected after you reinstall the guest or restore it from a restore point. The built-in terminal shows both keys and a <strong>Trust New Key</strong> button. For Terminal and VS Code, remove the old entry with <code>ssh-keygen -R 192.168.65.110</code>, using the workspace's address. If you did neither, don't trust the new key.</p>
+
+      <h3>SSH ready never appears</h3>
+
+      <p>Velo Workspaces needs Local Network access to reach workspaces. Turn it on in System Settings › Privacy &amp; Security › Local Network; the Access tab has a button that opens it.</p>
+
+      <h2 id="where-to-go-next">Where to go next</h2>
+
+      <div class="guide-next">
+        <a href="/blog/create-ubuntu-vm-mac-cloud-image/"><span>Step by step</span>An Ubuntu VM from a cloud image in 30 seconds</a>
+        <a href="/blog/kali-linux-vm-mac-install-guide/"><span>Step by step</span>Install Kali Linux, then turn on SSH</a>
+        <a href="/blog/vscode-continue-ai-bridge/"><span>Go further</span>A local AI coding assistant in VS Code</a>
+        <a href="/blog/linux-vm-networking-apple-silicon/"><span>Background</span>Linux VM networking on a Mac: NAT, SSH and ports</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc. Visual Studio Code is a trademark of Microsoft Corporation.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+<script src="/assets/lightbox.js?v=1" defer></script>
+</body>
+</html>

@@ -105,33 +105,44 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Fundamentals</span>
         <h1>Base Image vs. Snapshot vs. Clone vs. Disposable Workspace</h1>
         <p class="article-lede">Four terms this blog uses across several posts, in one place. The short version: "clone" isn't a fourth option next to the others; it's the mechanism under two of them. The real choice is between base image, snapshot and disposable workspace, which answer three different questions.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#clone-is-the-how-not-a-what"><span>Clone is the &quot;how&quot;, not a &quot;what&quot;</span></a></li>
+          <li><a href="#base-image-a-saved-starting-point"><span>Base image: a saved starting point</span></a></li>
+          <li><a href="#snapshot-restore-point-a-way-back-to-one-workspace-s-past"><span>Snapshot (restore point): a way back to one workspace&#x27;s past</span></a></li>
+          <li><a href="#disposable-workspace-nothing-kept-by-design"><span>Disposable workspace: nothing kept, by design</span></a></li>
+          <li><a href="#side-by-side"><span>Side by side</span></a></li>
+          <li><a href="#picking-one"><span>Picking one</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Clone is the "how", not a "what"</h2>
+      <h2 id="clone-is-the-how-not-a-what">Clone is the "how", not a "what"</h2>
       <p>Cloning is an APFS copy-on-write operation, <code>clonefile()</code> underneath, and it's nearly instant because no data is copied until something changes. Velo Workspaces uses it for two jobs: making a new workspace's disk from a saved base image, and copying a workspace's disk and state into a restore point. Same mechanism, two jobs, so "should I clone or use a base image?" is really two questions. <a href="/blog/base-image-versioning/">Base images as versioned infrastructure</a> has the mechanics.</p>
 
-      <h2>Base image: a saved starting point</h2>
+      <h2 id="base-image-a-saved-starting-point">Base image: a saved starting point</h2>
       <p>A base image is a frozen template: configured once, then cloned repeatedly so new workspaces all start identical. It doesn't track versions, doesn't change once saved, and exists to be the known-good thing everything else starts from. Saving base images is part of Pro; creating workspaces from ones you already have is free. In 1.2 they live in <strong>Settings › Images › Base Images</strong>.</p>
 
-      <h2>Snapshot (restore point): a way back to one workspace's past</h2>
+      <h2 id="snapshot-restore-point-a-way-back-to-one-workspace-s-past">Snapshot (restore point): a way back to one workspace's past</h2>
       <p>A restore point copies an <em>existing</em> workspace's disk (and saved state, if it was suspended) so you can return to that moment. It belongs to one workspace's history; it isn't a template for new ones. <a href="/blog/disposable-vm-vs-snapshot/">Disposable VM vs. snapshot</a> covers what it copies.</p>
 
-      <h2>Disposable workspace: nothing kept, by design</h2>
+      <h2 id="disposable-workspace-nothing-kept-by-design">Disposable workspace: nothing kept, by design</h2>
       <p>Closing one deletes it: no clone, no snapshot, nothing kept. The next one clones fresh from a base image, not from the one just deleted. It's the opposite instinct to both of the above; <a href="/blog/what-is-a-disposable-development-environment/">disposability</a> is about discarding on purpose.</p>
 
-      <h2>Side by side</h2>
+      <h2 id="side-by-side">Side by side</h2>
       <div class="article-table-wrap">
         <table>
           <thead><tr><th></th><th>Base image</th><th>Snapshot</th><th>Disposable workspace</th></tr></thead>
@@ -144,7 +155,7 @@
         </table>
       </div>
 
-      <h2>Picking one</h2>
+      <h2 id="picking-one">Picking one</h2>
       <p>Want every new workspace to start from the same setup? Base image. Want to rewind one workspace you're working in? Snapshot. Want a guarantee that nothing from this run survives? Disposable workspace, with no snapshot involved. <a href="/blog/one-vm-per-git-branch/">One workspace per Git branch</a> uses all three: a shared base image every branch clones from, snapshots as optional checkpoints in a long-running branch, and disposal when the branch is done.</p>
 
       <p>Related reading: <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>, <a href="/blog/disposable-vm-vs-snapshot/">disposable VM vs. snapshot</a>, and, because clones cost almost nothing on disk, <a href="/blog/how-many-linux-vms-apple-silicon/">how many VMs you can run at once</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

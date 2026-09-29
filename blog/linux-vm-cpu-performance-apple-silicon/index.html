@@ -105,33 +105,33 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Deep dive</span>
         <h1>Linux VM CPU Performance on Apple Silicon: How Core Allocation Works</h1>
         <p class="article-lede"><a href="/blog/arm-virtualization-performance/">Why ARM VMs perform the way they do</a> covers the architecture. This is the practical question on top: when you set a workspace's vCPU count, what does macOS do with it, and does adding more always help?</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>There's no efficiency-core vCPU</h2>
+      <h2 id="there-s-no-efficiency-core-vcpu">There's no efficiency-core vCPU</h2>
       <p>Apple silicon's performance and efficiency cores are central to how the chip balances power and speed on the host, but a vCPU in a Linux guest doesn't get a choice between them. <a href="https://eclecticlight.co/2023/10/23/how-does-macos-manage-virtual-cores-on-apple-silicon/" target="_blank" rel="noopener">The Eclectic Light Company's investigation</a> found that macOS treats every vCPU under the Virtualization framework like a P-core thread: there's no way for a guest's virtual CPU to land on an E-core. On the host, placement follows the pattern for high-priority work: P-cores first, spread across clusters, with E-cores only once P-cores are saturated.</p>
       <p>So a vCPU isn't pinned to one physical core. It behaves like a high-priority thread that the scheduler moves across available P-cores as load changes. That's why VM CPU performance tracks P-core availability so closely, and why heavy work in another app on the Mac can visibly slow a VM even though nothing about the VM changed.</p>
 
-      <h2>Choosing a vCPU count</h2>
+      <h2 id="choosing-a-vcpu-count">Choosing a vCPU count</h2>
       <p>Ask for more vCPUs than the Mac has P-cores to spare and you don't get E-core capacity as a fallback; you get contention, with vCPU threads competing with each other and with the host for the same pool. Velo Workspaces keeps your request within the framework's <code>minimumAllowedCPUCount</code> and <code>maximumAllowedCPUCount</code>, but that ceiling is a hard limit, not a recommendation. Staying under it doesn't mean staying under the point of diminishing returns.</p>
       <p>The built-in profiles reflect this: <strong>Office &amp; Study</strong> starts at 2 vCPUs, <strong>Code &amp; Build</strong> at 4, <strong>DevOps Lab</strong> at 6, and <strong>AI Sandbox</strong>, the one expected to run parallel, CPU-heavy work, at 8. Those numbers track how much each kind of work realistically runs in parallel, not how many the framework allows.</p>
 
-      <h2>Single-threaded work doesn't care how many you assign</h2>
+      <h2 id="single-threaded-work-doesn-t-care-how-many-you-assign">Single-threaded work doesn't care how many you assign</h2>
       <p>This is the most common misconfiguration. A fundamentally single-threaded job (a slow shell script, a compiler pass that isn't parallel, most quick interactive tasks) gets nothing from more vCPUs, because only one of them is ever busy. More vCPUs help exactly as far as the work inside the guest is parallel: a multi-threaded build (<code>make -j</code>, parallel test runners), a service handling many connections, or several processes running at once.</p>
       <p>Before raising the count to fix a slow task, check whether it uses more than one core inside the guest; <code>htop</code> makes it obvious. If one core is pegged while three sit idle, more vCPUs won't help. Make the work parallel, or accept the single-threaded ceiling.</p>
 
-      <h2>Putting it together</h2>
+      <h2 id="putting-it-together">Putting it together</h2>
       <ul>
         <li><strong>Size vCPUs to real parallelism</strong>, not to "more is safer".</li>
         <li><strong>Watch the host, not just the VM.</strong> Heavy work on the Mac competes for the same P-cores, so a VM that felt fast yesterday can feel slower today with nothing changed inside it.</li>

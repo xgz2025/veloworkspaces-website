@@ -105,49 +105,61 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Performance</span>
         <h1>Guest OS Performance Tuning on Apple Silicon: What Moves the Needle</h1>
         <p class="article-lede">Most VM tuning guides are written for bare-metal servers or KVM on Linux, and half their advice doesn't apply here, or applies for a different reason. Five settings inside a Linux guest on Apple silicon, what each buys you, and what it costs.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">3 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#the-frame-disposable-changes-the-maths"><span>The frame: disposable changes the maths</span></a></li>
+          <li><a href="#i-o-scheduler-set-it-to-none"><span>I/O scheduler: set it to none</span></a></li>
+          <li><a href="#trim-keep-the-sparse-disk-sparse"><span>TRIM: keep the sparse disk sparse</span></a></li>
+          <li><a href="#memory-zram-rather-than-a-swap-file"><span>Memory: zram rather than a swap file</span></a></li>
+          <li><a href="#filesystem-journaling-a-real-trade-off"><span>Filesystem journaling: a real trade-off</span></a></li>
+          <li><a href="#shared-folders-virtiofs-caching"><span>Shared folders: VirtioFS caching</span></a></li>
+          <li><a href="#set-it-once-in-a-base-image"><span>Set it once, in a base image</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>The frame: disposable changes the maths</h2>
+      <h2 id="the-frame-disposable-changes-the-maths">The frame: disposable changes the maths</h2>
       <p>Much published VM advice optimizes for crash consistency on a server patched in place for years. A <a href="/blog/qa-devops-disposable-vm-workflow/">disposable workspace</a>, deleted when you close it, has a different risk profile: losing data to an unclean shutdown hardly matters when the disk is thrown away anyway. That changes which trade-offs are worth making, and it's the lens for everything below: what's free, what's a trade worth taking only because the VM is disposable, and what's advice written for somewhere else.</p>
 
-      <h2>I/O scheduler: set it to <code>none</code></h2>
+      <h2 id="i-o-scheduler-set-it-to-none">I/O scheduler: set it to <code>none</code></h2>
       <p>Linux's I/O scheduler reorders and merges requests to reduce physical disk-head movement. A virtio-blk disk has no head to move; it's backed by a sparse file the Mac already manages. Red Hat's virtualization tuning guide says guests on virtualized storage generally do better with <code>none</code> (the modern name for <code>noop</code>), because a second layer of reordering in the guest duplicates, and sometimes fights, what the host already does. Kernel discussions around <code>virtio_blk</code> have measured about 270k 4K random-read IOPS with <code>mq-deadline</code> against 450k with <code>none</code> on the same device. The exception is a guest with direct access to physical storage, which doesn't apply: <a href="/blog/arm-virtualization-performance/">the Virtualization framework has no device passthrough</a> for Linux guests.</p>
       <pre><code>cat /sys/block/vda/queue/scheduler
-      echo none | sudo tee /sys/block/vda/queue/scheduler</code></pre>
+echo none | sudo tee /sys/block/vda/queue/scheduler</code></pre>
 
-      <h2>TRIM: keep the sparse disk sparse</h2>
+      <h2 id="trim-keep-the-sparse-disk-sparse">TRIM: keep the sparse disk sparse</h2>
       <p>A sparse disk file only shrinks when the guest tells the host which blocks are free. Apple's virtio-blk supports the standard discard feature for this, but only if the guest's filesystem sends TRIM. Without it, a workspace's disk only ever grows to its high-water mark, even as you delete files inside it.</p>
       <p>The usual modern approach is a periodic <code>fstrim</code> rather than the <code>discard</code> mount option, batching the work instead of paying a little on every delete. Most distributions ship <code>fstrim.timer</code>; make sure it's on:</p>
       <pre><code>sudo systemctl enable --now fstrim.timer
-      sudo fstrim -v /</code></pre>
+sudo fstrim -v /</code></pre>
       <p>Run it by hand just before you save a workspace as a base image, too. A smaller image means less to carry into every clone.</p>
 
-      <h2>Memory: zram rather than a swap file</h2>
+      <h2 id="memory-zram-rather-than-a-swap-file">Memory: zram rather than a swap file</h2>
       <p>For a memory-tight workspace, the usual advice to keep swappiness low to avoid disk thrashing doesn't carry over, because zram swap isn't disk I/O. It compresses into RAM you already have, never touches the virtio disk, and doesn't grow the disk image you're keeping small with TRIM. Because it's fast, the usual guidance flips: zram setups often use a <code>vm.swappiness</code> well above the default, sometimes 100 or more, so the kernel uses it before dropping file cache.</p>
       <pre><code>sudo apt install zram-tools   # or: dnf install zram-generator
-      echo 'vm.swappiness=150' | sudo tee /etc/sysctl.d/99-zram.conf</code></pre>
+echo 'vm.swappiness=150' | sudo tee /etc/sysctl.d/99-zram.conf</code></pre>
 
-      <h2>Filesystem journaling: a real trade-off</h2>
+      <h2 id="filesystem-journaling-a-real-trade-off">Filesystem journaling: a real trade-off</h2>
       <p>This is the one setting here with a real downside. ext4's default <code>data=ordered</code> mode prevents a specific failure: a crash leaving stale or garbage data in a file because data and metadata were written out of order. <code>data=writeback</code> drops that guarantee (a crash right after a write can leave wrong data in that file) in return for better throughput, since it journals only metadata. On a long-lived server that's a bad trade. On a disposable workspace, deleted on close however it exits, the risk overlaps almost entirely with one you've already accepted, so it's a fair choice here and not a default to carry elsewhere.</p>
       <p><code>noatime</code> is the free win next to it: it skips the access-time write on every read, which almost nothing depends on. Both go in <code>/etc/fstab</code>:</p>
       <pre><code>UUID=xxxx  /  ext4  defaults,noatime,data=writeback  0  1</code></pre>
 
-      <h2>Shared folders: VirtioFS caching</h2>
+      <h2 id="shared-folders-virtiofs-caching">Shared folders: VirtioFS caching</h2>
       <p>Shared folders and the Rosetta share run over VirtioFS, and its caching mode trades coherency for speed. <code>none</code> disables client-side caching for maximum coherency; <code>auto</code> behaves like NFS, with about a one-second metadata cache; <code>always</code> caches for a long time, which speeds up workloads that stat many small files (an <code>npm install</code>, a big Git checkout) at the cost of coherency. The cost is concrete: there's a documented case of a host-side edit in a read-only VirtioFS share taking minutes to appear in the guest under a long-cache setup. If you edit on the Mac and expect the guest to see changes at once, know this before it looks like a sync bug.</p>
 
-      <h2>Set it once, in a base image</h2>
+      <h2 id="set-it-once-in-a-base-image">Set it once, in a base image</h2>
       <p>These are all settings inside the guest, made in whichever distribution you run: <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu</a>, <a href="/blog/debian-on-apple-silicon/">Debian</a>, <a href="/blog/fedora-on-apple-silicon/">Fedora</a> or another. Make them once in a workspace, save it as a base image, and every clone inherits them. Clones are copy-on-write, so a trimmed, tuned base image also makes every future clone cheaper. Keep the <code>data=writeback</code> choice for base images you use with disposable workspaces, where its risk is already accepted.</p>
 
       <p>Related reading: <a href="/blog/arm-virtualization-performance/">why VMs on Apple Silicon perform the way they do</a>, <a href="/blog/linux-vm-disk-performance-apple-silicon/">Linux VM disk performance</a>, the <a href="/blog/qa-devops-disposable-vm-workflow/">disposable VM workflow</a> this tuning serves, and <a href="/blog/base-image-versioning/">a naming convention for base images</a> as you save new generations. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

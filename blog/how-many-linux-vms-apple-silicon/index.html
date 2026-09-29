@@ -105,31 +105,31 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>How Many Linux VMs Can You Run on an Apple Silicon Mac?</h1>
         <p class="article-lede">There's no single ceiling, because three resources all have to hold at once and they run out at different rates. Memory is usually the first you hit, but not always the real limit, and disk costs far less per workspace than it looks.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Budget one: memory, usually the limit</h2>
+      <h2 id="budget-one-memory-usually-the-limit">Budget one: memory, usually the limit</h2>
       <p>The simplest budget: total unified memory, minus what macOS and your other apps need, shared among the workspaces running at the same time. <a href="/blog/how-much-memory-linux-vm-mac/">The memory sizing post</a> covers choosing a per-workspace figure; multiply it by how many run at once and compare with the memory you really have free, not the total installed. The difference matters more the smaller your Mac. The memory balloon gives some slack when workspaces are idle, but the arithmetic still has to work.</p>
 
-      <h2>Budget two: CPU, softer but real under load</h2>
+      <h2 id="budget-two-cpu-softer-but-real-under-load">Budget two: CPU, softer but real under load</h2>
       <p><a href="/blog/linux-vm-cpu-performance-apple-silicon/">The CPU post</a> explains why every vCPU runs like a P-core thread with no efficiency-core fallback. With several VMs running, two workspaces doing parallel, CPU-heavy work compete for the same P-cores, and the number of P-cores, not the total vCPUs you've assigned, is the real ceiling. It's softer than memory in one way: an idle workspace costs almost nothing here, so several mostly idle workspaces next to one busy one is a comfortable pattern. Several all doing heavy parallel work at once is what hits the limit.</p>
 
-      <h2>Budget three: disk, cheaper than it looks</h2>
+      <h2 id="budget-three-disk-cheaper-than-it-looks">Budget three: disk, cheaper than it looks</h2>
       <p>This is the budget people overestimate, assuming each workspace costs its full disk size. It doesn't. Cloning a workspace from a base image is an APFS copy-on-write operation (<a href="/blog/base-image-vs-snapshot-vs-clone/">covered here</a>), so a fresh clone shares nearly all its blocks with the base image and only uses more space as it diverges. Ten lightly used clones of the same base image cost roughly the base image plus each one's own changes, nowhere near ten times the size.</p>
       <p>Where disk does bite: workspaces that diverge a lot (a full toolchain install, a big dataset) carry that as real, separate usage; each saved base image is a full standalone copy (<a href="/blog/base-image-versioning/">see pruning</a>); and since 1.2, the cloud images and installer ISOs you download stay in <strong>Settings › Images</strong> until you delete them. A workspace created from a cloud image gets its own converted disk rather than a clone, so it costs roughly what the guest actually writes.</p>
 
-      <h2>Putting it together</h2>
+      <h2 id="putting-it-together">Putting it together</h2>
       <p>Work out how many workspaces your memory allows if they all run at once, and treat that as the hard number. Then look at how you use them: "several running, one or two busy" is comfortable on CPU; "several all doing heavy parallel work at once" is where CPU contention becomes the limit before memory does. Disk is rarely the limit unless workspaces diverge heavily or old base images and downloads pile up.</p>
 
       <p>Related reading: <a href="/blog/how-much-memory-linux-vm-mac/">how much memory to give a Linux VM</a>, <a href="/blog/linux-vm-cpu-performance-apple-silicon/">how vCPU allocation works</a>, and <a href="/blog/base-image-vs-snapshot-vs-clone/">why cloning is cheap</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

@@ -105,36 +105,47 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>ARM64 Compatibility Problems: Why Won't My Linux Software Run?</h1>
         <p class="article-lede">"It doesn't work on arm64" is four different problems behind one complaint, and each has a different fix. What usually goes wrong is the triage: reaching for the fix for one problem when you have another.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#start-with-what-fails"><span>Start with what fails</span></a></li>
+          <li><a href="#1-the-package-has-no-arm64-build"><span>1. The package has no arm64 build</span></a></li>
+          <li><a href="#2-it-s-one-binary-not-a-whole-ecosystem"><span>2. It&#x27;s one binary, not a whole ecosystem</span></a></li>
+          <li><a href="#3-it-s-a-container-image"><span>3. It&#x27;s a container image</span></a></li>
+          <li><a href="#4-it-really-needs-a-different-cpu-architecture"><span>4. It really needs a different CPU architecture</span></a></li>
+          <li><a href="#the-triage-short-version"><span>The triage, short version</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Start with what fails</h2>
+      <h2 id="start-with-what-fails">Start with what fails</h2>
       <p>Be precise about the failure first. "Command not found" or a package manager with nothing to install is a different problem from a binary that exists but won't start, which is different again from a <code>docker pull</code> that can't find a matching image. The error usually tells you which of the four cases below you're in. The mistake is reaching for the same fix, usually "just emulate it", whichever case it is.</p>
 
-      <h2>1. The package has no arm64 build</h2>
+      <h2 id="1-the-package-has-no-arm64-build">1. The package has no arm64 build</h2>
       <p>Check that it's really missing before working around it. A distribution's arm64 ports repository doesn't always carry every amd64 package, and pulling an amd64 <code>.deb</code> by hand for a package that doesn't exist on arm64 gets you a 404, not an install. <a href="/blog/ubuntu-on-apple-silicon/">The Ubuntu post</a> shows where that bites. If there's no native build, building from source often works; watch for hard-coded <code>x86_64</code> in build scripts or target triples, which look like a compatibility failure but are just a script nobody updated for a second architecture.</p>
 
-      <h2>2. It's one binary, not a whole ecosystem</h2>
+      <h2 id="2-it-s-one-binary-not-a-whole-ecosystem">2. It's one binary, not a whole ecosystem</h2>
       <p>A single, self-contained x86-64 executable, such as a CLI tool or a compiled binary someone handed you, is what Rosetta for Linux is for. <a href="/blog/rosetta-2-linux-vms-explained/">The setup is here</a>: it translates that one binary inside a native, accelerated arm64 guest, and it's much faster than any of the emulation options below. It stops being the right tool once the binary pulls in x86-64-only shared libraries or a dependency tree that also isn't built for arm64. Then you're back in case 1 or 3.</p>
 
-      <h2>3. It's a container image</h2>
+      <h2 id="3-it-s-a-container-image">3. It's a container image</h2>
       <p>An amd64-only Docker image has its own mechanism: QEMU emulation by default, and sometimes Rosetta if it's already set up in the same guest. <a href="/blog/running-x86-docker-images-arm64-mac/">That post covers it</a>. Keep it separate from case 2. A container that can't find your architecture in its manifest is a Docker and registry problem, which <code>update-binfmts</code> alone won't fix, even though the same kernel facility is involved in the end.</p>
 
-      <h2>4. It really needs a different CPU architecture</h2>
+      <h2 id="4-it-really-needs-a-different-cpu-architecture">4. It really needs a different CPU architecture</h2>
       <p>The rare case: software with hand-written x86 assembly or SIMD intrinsics, an out-of-tree kernel module with no arm64 port, or a requirement to verify behavior on the CPU your users run rather than a translated stand-in. None of the above helps. That's <a href="/blog/can-you-run-x86-linux-on-apple-silicon/">full QEMU emulation of the other architecture</a>, with the performance cost that comes with it, or a real x86-64 machine somewhere in the loop.</p>
 
-      <h2>The triage, short version</h2>
+      <h2 id="the-triage-short-version">The triage, short version</h2>
       <div class="article-table-wrap">
         <table>
           <thead><tr><th>Symptom</th><th>Likely case</th><th>Fix</th></tr></thead>

@@ -13,6 +13,10 @@ GROUPS = [
         "description": "What's new in 1.2, and the complete picture if you only read one post."
     },
     {
+        "name": "Step-by-step guides",
+        "description": "Every screen from the + button to a signed-in terminal, with screenshots, for each way of creating a workspace."
+    },
+    {
         "name": "Apple Silicon virtualization fundamentals",
         "description": "The mechanics behind every other post: what a VM is, and how it works on this hardware."
     },
@@ -58,7 +62,7 @@ POSTS = [
         "card_summary": "Official cloud images that are ready in about a minute, installers that run themselves, an Image Library, a built-in SSH terminal, and more distributions. What changed, what's free, and how to try it.",
         "lede": "The biggest update since launch is about one thing: getting from \"I need a Linux machine\" to a shell prompt as fast as possible. Official cloud images, installers that run themselves, and a terminal that signs you straight in.",
         "published": "2026-09-28",
-        "modified": "2026-09-28",
+        "modified": "2026-09-29",
         "trademarks": "Ubuntu is a trademark of Canonical Ltd. Debian is a registered trademark of Software in the Public Interest, Inc. Fedora is a registered trademark of Red Hat, Inc. Rocky Linux is a trademark of the Rocky Enterprise Software Foundation."
     },
     {
@@ -88,6 +92,128 @@ POSTS = [
         "published": "2026-09-22",
         "modified": "2026-09-28",
         "trademarks": ""
+    },
+    {
+        "slug": "create-ubuntu-vm-mac-cloud-image",
+        "group": "Step-by-step guides",
+        "eyebrow": "Step-by-step guide",
+        "title": "Create an Ubuntu VM on a Mac in 30 Seconds: Step by Step",
+        "h1": "Create an Ubuntu VM on Your Mac in 30 Seconds",
+        "description": "Step by step, with screenshots and a video: download Ubuntu 26.04's cloud image, set your account and SSH key, and sign in to a running VM on your Mac.",
+        "card_title": "An Ubuntu VM from a Cloud Image in 30 Seconds",
+        "card_summary": "Every screen from the + button to a signed-in terminal: pick Ubuntu's cloud image, set your account and key once, and let cloud-init do the rest.",
+        "lede": "A cloud image is Ubuntu already installed on a disk. Velo Workspaces downloads it, adds your account and SSH key, and boots it. Once the image is on your Mac, going from the + button to a signed-in terminal takes about 30 seconds. Here is every screen, in order.",
+        "published": "2026-09-29",
+        "modified": "2026-09-29",
+        "trademarks": "Ubuntu is a trademark of Canonical Ltd.",
+        "hero": {
+            "src": "/assets/blog/guides/ubuntu-cloud-image/terminal.webp",
+            "alt": "Velo Workspaces with an Ubuntu 26.04 workspace and its built-in terminal signed in over SSH"
+        },
+        "video": {
+            "name": "Create an Ubuntu VM on a Mac in 30 seconds with Velo Workspaces",
+            "description": "Screen recording, in real time: choosing Ubuntu 26.04's cloud image, configuring the workspace, and opening a terminal signed in to it.",
+            "src": "/assets/blog/guides/ubuntu-cloud-image/cloud-image-in-30-seconds.mp4",
+            "poster": "/assets/blog/guides/ubuntu-cloud-image/cloud-image-in-30-seconds-poster.webp",
+            "uploaded": "2026-09-29",
+            "duration": "PT30S"
+        },
+        "toc": "open"
+    },
+    {
+        "slug": "ubuntu-desktop-vm-mac-automatic-install",
+        "group": "Step-by-step guides",
+        "eyebrow": "Step-by-step guide",
+        "title": "Ubuntu Desktop VM on a Mac: Hands-Free Install, Step by Step",
+        "h1": "Install Ubuntu Desktop in a Mac VM Without Answering a Question",
+        "description": "Step by step with screenshots: Velo Workspaces downloads Ubuntu 26.04 Desktop, answers every installer question, then restarts into your desktop.",
+        "card_title": "Install Ubuntu Desktop Automatically",
+        "card_summary": "Pick the Desktop ISO, enter your account once, and come back to an installed Ubuntu desktop with SSH ready. The installer asks nothing.",
+        "lede": "Ubuntu's installer normally asks about your language, keyboard, disk and account. With automatic installation, Velo Workspaces answers all of it for you, from what you enter once and your Mac's own settings. Here's the whole process, screen by screen.",
+        "published": "2026-09-29",
+        "modified": "2026-09-29",
+        "trademarks": "Ubuntu is a trademark of Canonical Ltd.",
+        "hero": {
+            "src": "/assets/blog/guides/ubuntu-desktop/installing.webp",
+            "alt": "Ubuntu 26.04 Desktop installing itself in a Velo Workspaces VM, with the automatic installation banner above it"
+        },
+        "toc": "open"
+    },
+    {
+        "slug": "fedora-vm-mac-automatic-install",
+        "group": "Step-by-step guides",
+        "eyebrow": "Step-by-step guide",
+        "title": "Fedora VM on a Mac: Automatic Kickstart Install Walkthrough",
+        "h1": "Install Fedora Server in a Mac VM with an Automatic Kickstart",
+        "description": "Step by step with screenshots: install Fedora 44 Server in Velo Workspaces with a kickstart it writes for you, then sign in over SSH. Rocky Linux too.",
+        "card_title": "Fedora Server with an Automatic Kickstart",
+        "card_summary": "Velo Workspaces writes the kickstart and Anaconda does the rest. From the netinst ISO to an SSH session, every screen shown.",
+        "lede": "Fedora's Anaconda installer can run from a kickstart file without asking anything. Velo Workspaces writes that file for you, from the account you enter and your Mac's settings. Here's a Fedora 44 Server install from start to finish. Rocky Linux works the same way.",
+        "published": "2026-09-29",
+        "modified": "2026-09-29",
+        "trademarks": "Fedora is a registered trademark of Red Hat, Inc. Rocky Linux is a trademark of the Rocky Enterprise Software Foundation.",
+        "hero": {
+            "src": "/assets/blog/guides/fedora/terminal.webp",
+            "alt": "A Fedora 44 Server workspace in Velo Workspaces, with its console and the built-in terminal signed in"
+        },
+        "toc": "open"
+    },
+    {
+        "slug": "kali-linux-vm-mac-install-guide",
+        "group": "Step-by-step guides",
+        "eyebrow": "Step-by-step guide",
+        "title": "Install Kali Linux in a VM on an M-Series Mac: Walkthrough",
+        "h1": "Install Kali Linux in a VM on an M-Series Mac, Step by Step",
+        "description": "A walkthrough with screenshots: install Kali's arm64 build in Velo Workspaces, turn on SSH, and sign in from the built-in terminal with your Mac's key.",
+        "card_title": "Install Kali Linux, Then Turn On SSH",
+        "card_summary": "Kali's own installer, the one disk choice that matters, then SSH with your Mac's key and the built-in terminal.",
+        "lede": "Kali Linux publishes an official arm64 installer, and Velo Workspaces downloads and verifies it for you. The install itself is Kali's own, so this guide goes through it screen by screen, then sets up SSH so you can work in Kali from your Mac.",
+        "published": "2026-09-29",
+        "modified": "2026-09-29",
+        "trademarks": "Kali Linux is a trademark of OffSec.",
+        "hero": {
+            "src": "/assets/blog/guides/kali/desktop.webp",
+            "alt": "Kali Linux Xfce desktop running in a Velo Workspaces VM on an Apple silicon Mac"
+        },
+        "toc": "open"
+    },
+    {
+        "slug": "nixos-vm-mac-install-guide",
+        "group": "Step-by-step guides",
+        "eyebrow": "Step-by-step guide",
+        "title": "Install NixOS in a VM on an Apple Silicon Mac: Step by Step",
+        "h1": "Install NixOS in a VM on an Apple Silicon Mac",
+        "description": "Step by step with screenshots: download the NixOS 26.05 graphical installer in Velo Workspaces, install GNOME with a few clicks, then turn on SSH.",
+        "card_title": "Install NixOS with the Graphical Installer",
+        "card_summary": "NixOS 26.05's GNOME installer from download to desktop in about ten minutes, plus the lines of configuration.nix that turn on SSH.",
+        "lede": "NixOS ships a graphical installer for arm64, and it runs well in a Velo Workspaces VM. This guide goes from the download to a GNOME desktop, then turns on SSH the NixOS way, in configuration.nix.",
+        "published": "2026-09-29",
+        "modified": "2026-09-29",
+        "trademarks": "NixOS is a trademark of the NixOS Foundation.",
+        "hero": {
+            "src": "/assets/blog/guides/nixos/installer.webp",
+            "alt": "The NixOS graphical installer welcome screen running in a Velo Workspaces VM"
+        },
+        "toc": "open"
+    },
+    {
+        "slug": "ssh-vs-code-linux-vm-mac",
+        "group": "Step-by-step guides",
+        "eyebrow": "Step-by-step guide",
+        "title": "SSH and VS Code Remote-SSH into a Linux VM on Your Mac",
+        "h1": "SSH and VS Code into a Linux VM on Your Mac, with One Key",
+        "description": "Use one key for the built-in terminal, Terminal and VS Code Remote-SSH: import your Mac's key into Velo Workspaces, or export the app's key to ~/.ssh.",
+        "card_title": "One SSH Key for the Terminal, Terminal.app and VS Code",
+        "card_summary": "Import your Mac's key into Velo Workspaces or export the app's key to ~/.ssh, then connect VS Code Remote-SSH with the config the Access tab gives you.",
+        "lede": "Velo Workspaces signs in its built-in terminal with a key it keeps in your Mac's Keychain. Terminal and VS Code look in ~/.ssh instead. Make them use the same key and every tool gets in the same way. There are two ways to do it; pick the one that matches where your key lives today.",
+        "published": "2026-09-29",
+        "modified": "2026-09-29",
+        "trademarks": "Visual Studio Code is a trademark of Microsoft Corporation.",
+        "hero": {
+            "src": "/assets/blog/guides/ssh-keys/access-tab-vs-code.webp",
+            "alt": "A workspace's Access tab in Velo Workspaces with SSH details, the ssh command and a VS Code Remote-SSH config block"
+        },
+        "toc": "open"
     },
     {
         "slug": "apple-silicon-vms-explained",
@@ -128,7 +254,7 @@ POSTS = [
         "card_summary": "Mac to VM, VM to internet, and another computer to VM are three different paths. Only two work without setup; the third needs a forward or an ssh -J jump through the Mac.",
         "lede": "\"Can this VM reach the network?\" is three questions with three answers. The Mac talking to the guest, the guest talking to the internet, and another computer on your LAN talking to the guest are different paths, and only two of them work without extra setup.",
         "published": "2026-09-22",
-        "modified": "2026-09-28",
+        "modified": "2026-09-29",
         "trademarks": ""
     },
     {
@@ -212,7 +338,7 @@ POSTS = [
         "card_summary": "Ubuntu runs natively on arm64 on an M-series Mac. The one-minute cloud image, hands-free Server and Desktop installs, the Netplan gotcha on cloned VMs, and what Rosetta can and can't do.",
         "lede": "Ubuntu on an M-series Mac runs natively on arm64, so what breaks is different from Ubuntu on a PC. Here's the quickest way to get it running, how to choose between the cloud image and the installer, and two things that catch people out.",
         "published": "2026-09-20",
-        "modified": "2026-09-28",
+        "modified": "2026-09-29",
         "trademarks": "Ubuntu is a trademark of Canonical Ltd."
     },
     {
@@ -240,7 +366,7 @@ POSTS = [
         "card_summary": "Three ways to get Fedora 44 running on an M-series Mac, including a kickstart install that asks nothing, and the defaults that differ from Ubuntu and Debian: SELinux enforcing, NetworkManager, and a different Rosetta setup.",
         "lede": "Third in the series on specific distributions. Fedora runs natively on arm64 like Ubuntu and Debian, installs without a single question in Velo Workspaces 1.2, and has defaults that differ from both in ways that matter.",
         "published": "2026-09-20",
-        "modified": "2026-09-28",
+        "modified": "2026-09-29",
         "trademarks": "Fedora is a registered trademark of Red Hat, Inc."
     },
     {
@@ -254,7 +380,7 @@ POSTS = [
         "card_summary": "The odd one out in this series: no official arm64 build, no installer ISO from Arch Linux ARM, and nothing configured by default, networking included. What works, and when Arch is worth the effort.",
         "lede": "Fourth in the series on specific distributions, and the odd one out. Ubuntu, Debian and Fedora each ship an official arm64 build from the same project as the x86 one. Arch doesn't, and that changes almost everything else here.",
         "published": "2026-09-21",
-        "modified": "2026-09-28",
+        "modified": "2026-09-29",
         "trademarks": "Arch Linux is a trademark of Judd Vinet. Arch Linux ARM is an independent project not affiliated with Velo Workspaces."
     },
     {
@@ -268,7 +394,7 @@ POSTS = [
         "card_summary": "Kali ships an official arm64 installer, and Velo Workspaces downloads it for you. How the install goes, what NAT networking means for a pentest lab, and why a fresh workspace per engagement makes sense.",
         "lede": "Kali Linux ships an official arm64 build, and Velo Workspaces 1.2 downloads it for you. Here's how the install goes, and the networking detail to understand before you rely on it for testing.",
         "published": "2026-09-22",
-        "modified": "2026-09-28",
+        "modified": "2026-09-29",
         "trademarks": "Kali Linux is a trademark of OffSec."
     },
     {
@@ -282,7 +408,7 @@ POSTS = [
         "card_summary": "NixOS's aarch64 ISOs, in the catalog and bootable on Apple silicon. Installing by hand, getting SSH keys in declaratively, and how configuration.nix and base images answer reproducibility differently.",
         "lede": "NixOS's whole idea is reproducibility: a system described in one declarative file. That makes it an interesting contrast with how this blog usually talks about reproducibility, which is base images and disk clones.",
         "published": "2026-09-22",
-        "modified": "2026-09-28",
+        "modified": "2026-09-29",
         "trademarks": ""
     },
     {
@@ -296,7 +422,7 @@ POSTS = [
         "card_summary": "If production runs RHEL, test against Rocky rather than Fedora. Rocky Linux 10 and 9 from the cloud image in a minute or a kickstart install that asks nothing, and what carries over from Fedora.",
         "lede": "If your production servers run RHEL or Rocky, testing against Fedora isn't quite testing against the same thing. Fedora is upstream and fast-moving; Rocky is the stable, RHEL-compatible downstream. Here's how to run it on an M-series Mac.",
         "published": "2026-09-22",
-        "modified": "2026-09-28",
+        "modified": "2026-09-29",
         "trademarks": "Rocky Linux is a trademark of the Rocky Enterprise Software Foundation."
     },
     {
@@ -310,7 +436,7 @@ POSTS = [
         "card_summary": "A headless server plus SSH covers more work than most people expect, including full VS Code editing. When you need a desktop inside the VM, and why it doesn't change the graphics you get.",
         "lede": "Ubuntu offers both, same project, same release, two different starting points. Which one to pick isn't about which is better. It's about whether anything you do needs a desktop session running inside the guest.",
         "published": "2026-09-22",
-        "modified": "2026-09-28",
+        "modified": "2026-09-29",
         "trademarks": ""
     },
     {

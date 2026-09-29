@@ -105,29 +105,29 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Fundamentals</span>
         <h1>LLM Quantization Explained for Mac Users</h1>
         <p class="article-lede"><a href="/blog/llm-ram-requirements-mac/">The RAM post</a> treats quantization as an input ("4-bit is about 0.5 bytes per parameter") and moves on. This is what's behind that number: what quantization does to the weights, why "4-bit" isn't one thing, and how to choose a level.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>What quantization is</h2>
+      <h2 id="what-quantization-is">What quantization is</h2>
       <p>A model's weights start as 16-bit (occasionally 32-bit) floating-point numbers, the precision they're trained and usually published in. Quantization replaces them with fewer bits per weight, grouped into blocks that share a little extra data (a scale factor, sometimes a minimum) so the smaller numbers still map back close to the original range. Fewer bits means less memory and less data moved through the chip for each token, which is why quantized models are faster as well as smaller.</p>
       <p>The cost is precision, not correctness. A quantized model doesn't become wrong the way a training bug would make it wrong. It becomes a slightly blurrier version of the same model: individual answers can differ from the full-precision original, more so at lower bit depths, but there's no bit width where it suddenly produces garbage. The question is always how much quality you'll trade for how much size and speed.</p>
 
-      <h2>Why "4-bit" isn't one thing</h2>
+      <h2 id="why-4-bit-isn-t-one-thing">Why "4-bit" isn't one thing</h2>
       <p>A real GGUF download list is more specific than "4-bit": <code>Q4_K_M</code>, <code>Q5_K_M</code>, <code>Q4_0</code>, <code>Q8_0</code> and more. The number is the average bits per weight; the letters name the scheme, and schemes aren't interchangeable at the same bit count. The older <code>Q4_0</code> and <code>Q4_1</code> quantize every block the same way. The newer <strong>k-quants</strong> (<code>Q4_K_M</code>, <code>Q5_K_M</code> and friends) spend more precision on the weights that matter most to output quality and less on the rest. At the same bit width, a k-quant is almost always the better choice; llama.cpp keeps the old schemes mainly for compatibility.</p>
       <p>The trailing letter on a k-quant (<code>_S</code>, <code>_M</code>, <code>_L</code>, for small, medium and large) is a smaller lever within the same bit width: a little more size for a little more fidelity. When two model cards both say "Q4", check the full tag.</p>
 
-      <h2>Choosing a level on purpose</h2>
+      <h2 id="choosing-a-level-on-purpose">Choosing a level on purpose</h2>
       <p>A sensible default, not a rule: <strong>Q4_K_M</strong> is where most of the ecosystem lands. It's a clear size and speed win over 8-bit, with a quality gap that's hard to notice in normal use for most tasks. Move away from it deliberately:</p>
       <ul>
         <li><strong>Q5_K_M or Q6_K</strong> when the task is precision-sensitive. Code generation, exact syntax and careful multi-step reasoning tend to show quantization loss sooner than open-ended writing.</li>
@@ -136,7 +136,7 @@
       </ul>
       <p>MLX-format models name their bit depths differently from GGUF, but the trade-off is the same: bits per weight against quality. <a href="/blog/local-llms-apple-silicon/">The tools and formats post</a> covers where each format comes from.</p>
 
-      <h2>What it changes in the memory budget</h2>
+      <h2 id="what-it-changes-in-the-memory-budget">What it changes in the memory budget</h2>
       <p>Moving up a tier doesn't only cost weight memory. It changes the whole budget in <a href="/blog/llm-ram-requirements-mac/">the RAM requirements post</a>: weights scale with bits per parameter, but the KV cache doesn't depend on quantization at all; it comes from the model's architecture. A model that fits at Q4_K_M with room for a long agent session may have no KV cache headroom left at Q8_0, even though its weights still fit. Check both numbers before moving up.</p>
 
       <p>Related reading: <a href="/blog/llm-ram-requirements-mac/">how much RAM local LLMs need</a>, and <a href="/blog/local-llms-apple-silicon/">the local LLM tools and formats</a> for where to find quantized models. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fedora VM on a Mac: Automatic Kickstart Install Walkthrough</title>
+<meta name="description" content="Step by step with screenshots: install Fedora 44 Server in Velo Workspaces with a kickstart it writes for you, then sign in over SSH. Rocky Linux too.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/fedora-vm-mac-automatic-install/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=6">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Fedora VM on a Mac: Automatic Kickstart Install Walkthrough">
+<meta property="og:description" content="Step by step with screenshots: install Fedora 44 Server in Velo Workspaces with a kickstart it writes for you, then sign in over SSH. Rocky Linux too.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/fedora-vm-mac-automatic-install/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/fedora-vm-mac-automatic-install.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Install Fedora Server in a Mac VM with an Automatic Kickstart">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="article:published_time" content="2026-09-29">
+<meta property="article:modified_time" content="2026-09-29">
+<meta property="article:author" content="Gaoliang Luo">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Fedora VM on a Mac: Automatic Kickstart Install Walkthrough",
+      "name": "Install Fedora Server in a Mac VM with an Automatic Kickstart",
+      "description": "Step by step with screenshots: install Fedora 44 Server in Velo Workspaces with a kickstart it writes for you, then sign in over SSH. Rocky Linux too.",
+      "image": [
+        "https://www.veloworkspaces.com/assets/og/fedora-vm-mac-automatic-install.jpg",
+        "https://www.veloworkspaces.com/assets/blog/guides/fedora/terminal.webp"
+      ],
+      "datePublished": "2026-09-29",
+      "dateModified": "2026-09-29",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/fedora-vm-mac-automatic-install/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Install Fedora Server in a Mac VM with an Automatic Kickstart",
+          "item": "https://www.veloworkspaces.com/blog/fedora-vm-mac-automatic-install/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section article-top">
+    <div class="container article-head">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Step-by-step guide</span>
+        <h1>Install Fedora Server in a Mac VM with an Automatic Kickstart</h1>
+        <p class="article-lede">Fedora's Anaconda installer can run from a kickstart file without asking anything. Velo Workspaces writes that file for you, from the account you enter and your Mac's settings. Here's a Fedora 44 Server install from start to finish. Rocky Linux works the same way.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-29">September 29, 2026</time><span class="article-readtime">2 min read</span></p>
+      </div>
+      <figure class="shot article-hero">
+        <a class="shot-frame" href="/assets/blog/guides/fedora/terminal.webp"><img src="/assets/blog/guides/fedora/terminal.webp" width="892" height="647" alt="A Fedora 44 Server workspace in Velo Workspaces, with its console and the built-in terminal signed in" fetchpriority="high"><span class="shot-zoom">Click to enlarge</span></a>
+      </figure>
+      <details class="article-toc" open>
+        <summary>Steps in this guide</summary>
+        <ol>
+          <li><a href="#start-a-workspace-from-an-installer"><span class="toc-step">1</span><span>Start a workspace from an installer</span></a></li>
+          <li><a href="#choose-fedora-server"><span class="toc-step">2</span><span>Choose Fedora Server</span></a></li>
+          <li><a href="#keep-automatic-installation-ticked"><span class="toc-step">3</span><span>Keep Automatic installation ticked</span></a></li>
+          <li><a href="#name-it-and-create-your-account"><span class="toc-step">4</span><span>Name it and create your account</span></a></li>
+          <li><a href="#review-and-start"><span class="toc-step">5</span><span>Review and start</span></a></li>
+          <li><a href="#let-anaconda-work"><span class="toc-step">6</span><span>Let Anaconda work</span></a></li>
+          <li><a href="#sign-in"><span class="toc-step">7</span><span>Sign in</span></a></li>
+          <li><a href="#rocky-linux-and-fedora-everything"><span>Rocky Linux and Fedora Everything</span></a></li>
+          <li><a href="#where-to-go-next"><span>Where to go next</span></a></li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+  <section class="section article-main">
+    <div class="container article-body">
+      <dl class="guide-facts">
+        <div><dt>Your time</dt><dd>About 2 minutes<span>Anaconda runs on its own</span></dd></div>
+        <div><dt>Download</dt><dd>About 1.3 GB<span>Fedora 44 Server netinst ISO</span></dd></div>
+        <div><dt>You get</dt><dd>Fedora Server<span>account, keys and Cockpit</span></dd></div>
+        <div><dt>Same steps for</dt><dd>Rocky Linux<span>9 and 10, minimal or DVD</span></dd></div>
+      </dl>
+
+      <div class="guide-steps">
+
+      <section class="guide-step">
+      <h2 id="start-a-workspace-from-an-installer">Start a workspace from an installer</h2>
+      <p>Pick a kind of workspace in the sidebar and click <strong>+</strong> at the top right of the window. On the first step of the assistant, choose <strong>Installer image</strong>.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/select-image-installer.webp"><img src="/assets/blog/guides/select-image-installer.webp" width="796" height="656" alt="Select Image step with Installer image highlighted" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Installer image runs a distribution's own installer, downloaded for you.</span></figcaption>
+      </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="choose-fedora-server">Choose Fedora Server</h2>
+      <p>Choose <strong>Fedora</strong> and release 44. There are three ISOs. <strong>Server</strong> and <strong>Everything</strong> are network installers that Velo Workspaces can drive on its own; <strong>Workstation</strong> is a live desktop image you install by hand. Download Server.</p>
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/fedora/choose-installer.webp"><img src="/assets/blog/guides/fedora/choose-installer.webp" width="644" height="600" alt="Choose an Installer step with Fedora 44 Server, Everything and Workstation ISOs" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Fedora 44's Server, Everything and Workstation images, from download.fedoraproject.org.</span></figcaption>
+      </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="keep-automatic-installation-ticked">Keep Automatic installation ticked</h2>
+      <p>When the ISO has downloaded and been checked against Fedora's published checksum, make sure <strong>Automatic installation</strong> is ticked below the list, and click <strong>Continue</strong>.</p>
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/fedora/downloaded.webp"><img src="/assets/blog/guides/fedora/downloaded.webp" width="644" height="600" alt="Fedora Server ISO downloaded and verified, with Automatic installation highlighted" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Downloaded, verified and selected, with Automatic installation on.</span></figcaption>
+      </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="name-it-and-create-your-account">Name it and create your account</h2>
+      <p>The name becomes the hostname, so “Sandbox Fedora” here turns into <code>sandbox-fedora</code>. Pick a profile, then the username and password Anaconda should create. This Mac's key goes into the account's authorized keys automatically.</p>
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/fedora/configure.webp"><img src="/assets/blog/guides/fedora/configure.webp" width="743" height="604" alt="Configure step for Fedora with the AI Sandbox profile, account fields and SSH public keys" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Name, profile and account. Advanced settings hold CPU, memory and disk size.</span></figcaption>
+      </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="review-and-start">Review and start</h2>
+      <p>Setup reads <strong>Automatic: Anaconda kickstart</strong>. Click <strong>Start Installation</strong>.</p>
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/fedora/review.webp"><img src="/assets/blog/guides/fedora/review.webp" width="644" height="600" alt="Review and Launch step with Setup Automatic Anaconda kickstart and Start Installation highlighted" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Fedora 44 Server, verified, installed by kickstart.</span></figcaption>
+      </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="let-anaconda-work">Let Anaconda work</h2>
+      <p>Anaconda runs in text mode in the workspace's display. It partitions the disk, then downloads and installs packages: the Server ISO is a network installer, so it fetches around 700 packages from Fedora's mirrors. Don't type in it. It restarts on its own when it's done.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/fedora/installing.webp"><img src="/assets/blog/guides/fedora/installing.webp" width="960" height="623" alt="Anaconda text-mode installer downloading 694 packages in the workspace display" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Anaconda downloading packages. Nothing for you to do here.</span></figcaption>
+      </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="sign-in">Sign in</h2>
+      <p>The workspace comes back up at a login prompt. Fedora Server also starts Cockpit, its web console, on port 9090: open <code>https://&lt;workspace IP&gt;:9090</code> in your Mac's browser and sign in with the same account if you'd like a dashboard.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/fedora/login-prompt.webp"><img src="/assets/blog/guides/fedora/login-prompt.webp" width="960" height="291" alt="Fedora 44 Server console showing the web console address and the login prompt" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Installed. The console shows the Cockpit address and a login prompt.</span></figcaption>
+      </figure>
+      <p>In the Access tab, SSH turns ready within seconds. Click <strong>Open Terminal</strong>.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/fedora/terminal.webp"><img src="/assets/blog/guides/fedora/terminal.webp" width="892" height="647" alt="Built-in terminal signed in to Fedora with Open Terminal highlighted in the Access tab" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Signed in to <code>sandbox-fedora</code> over SSH.</span></figcaption>
+      </figure>
+      <div class="note note-pro">
+        <p><strong>Pro feature.</strong> The built-in terminal is part of Velo Workspaces Pro, which you can try free for a week. Without it, copy the <code>ssh</code> command from the Access tab into Terminal. That uses the keys in your <code>~/.ssh</code> folder, so the workspace has to trust one of them: <a href="/blog/ssh-vs-code-linux-vm-mac/">the SSH and VS Code guide</a> shows how.</p>
+      </div>
+      </section>
+
+      </div>
+
+      <h2 id="rocky-linux-and-fedora-everything">Rocky Linux and Fedora Everything</h2>
+
+      <p>Rocky Linux 9 and 10 (minimal and DVD ISOs) and Fedora Everything install exactly the same way, because they use the same Anaconda installer. Fedora and Rocky Linux also have cloud images in Velo Workspaces, if you'd rather skip the installer altogether.</p>
+
+      <h2 id="where-to-go-next">Where to go next</h2>
+
+      <div class="guide-next">
+        <a href="/blog/fedora-on-apple-silicon/"><span>Background</span>Fedora on Apple silicon: editions and what to expect</a>
+        <a href="/blog/ssh-vs-code-linux-vm-mac/"><span>Next guide</span>SSH and VS Code into your workspace, with one key</a>
+        <a href="/blog/ubuntu-desktop-vm-mac-automatic-install/"><span>Step by step</span>Install Ubuntu Desktop without answering a question</a>
+        <a href="/blog/rocky-linux-on-apple-silicon/"><span>Background</span>Rocky Linux on Apple silicon: RHEL-compatible VMs</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc. Fedora is a registered trademark of Red Hat, Inc. Rocky Linux is a trademark of the Rocky Enterprise Software Foundation.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+<script src="/assets/lightbox.js?v=1" defer></script>
+</body>
+</html>

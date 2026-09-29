@@ -105,29 +105,40 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Workflow</span>
         <h1>Base Images as Versioned Infrastructure: A Naming Convention That Holds Up</h1>
         <p class="article-lede">The QA and DevOps post says to version your base image as carefully as the script that builds it. Good advice, but Velo Workspaces gives you nothing to do it with: no version field, no parent chain, no rename after saving. Here's what the app records, and a naming convention that covers the gap.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">4 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#what-save-as-base-image-gives-you"><span>What Save as Base Image gives you</span></a></li>
+          <li><a href="#resaving-never-overwrites-and-there-s-no-rename"><span>Resaving never overwrites, and there&#x27;s no rename</span></a></li>
+          <li><a href="#so-your-naming-convention-is-your-version-control"><span>So your naming convention is your version control</span></a></li>
+          <li><a href="#there-s-no-patching-in-place-which-simplifies-things"><span>There&#x27;s no patching in place, which simplifies things</span></a></li>
+          <li><a href="#pruning-is-manual-and-each-image-is-a-full-copy"><span>Pruning is manual, and each image is a full copy</span></a></li>
+          <li><a href="#what-to-do"><span>What to do</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>What Save as Base Image gives you</h2>
+      <h2 id="what-save-as-base-image-gives-you">What Save as Base Image gives you</h2>
       <p>Stop a workspace and its detail view offers <strong>Save as Base Image</strong> (a Pro feature): a sheet with one text field, pre-filled with the workspace's name, and a Save button. The app then clones the workspace's disk into <code>~/Library/Application Support/VeloWorkspaces/BaseImages/</code> with APFS copy-on-write and marks the copy immutable at the filesystem level, a real file flag rather than an app convention. For a macOS guest it also copies the <code>hardware.bin</code>, <code>machine.bin</code> and <code>auxiliary.img</code> platform files into a metadata folder beside the disk, the identity files <a href="/blog/macos-guests-on-apple-silicon/">the macOS guests post</a> describes. Without them, a clone won't boot.</p>
       <p>That's the whole mechanism. No build step, no provisioning script, no manifest of what's inside. A base image is a read-only copy of a disk you configured, plus a small record: a name, the OS and version, the size, when it was created and, for reference, the workspace it came from.</p>
 
-      <h2>Resaving never overwrites, and there's no rename</h2>
+      <h2 id="resaving-never-overwrites-and-there-s-no-rename">Resaving never overwrites, and there's no rename</h2>
       <p>Two behaviors to know before relying on this. First, saving the same workspace as a base image again creates a new, independent image; it never overwrites the earlier one, which other workspaces may still be cloning from. Every save is a new generation.</p>
       <p>Second, the name is a one-time decision. <strong>Settings › Images › Base Images</strong> lists what you've saved (name, OS, size, and "created <em>&lt;date&gt;</em> from <em>&lt;workspace&gt;</em>") with two actions per image: Delete and Export. There's no rename. Whatever you type in that sheet is the name for as long as the image exists, so treat it as the one moment version information gets recorded.</p>
 
-      <h2>So your naming convention is your version control</h2>
+      <h2 id="so-your-naming-convention-is-your-version-control">So your naming convention is your version control</h2>
       <p>The "from <em>&lt;workspace&gt;</em>" field looks like lineage, but it isn't. It's one flat pointer to the workspace an image was saved from, recorded once, for display. It doesn't chain. Clone a workspace from base image A, add a toolchain, save it as B, and B points to the <em>workspace</em> you customized, not to A. Nothing records that B came from A. A few months into a project, the Base Images list is a flat, date-sorted list of names, with nothing grouping related generations or showing what changed.</p>
       <p>That's a deliberate boundary: the app saves a disk and clones from it, and stops there. Version history has to live in the one field you control, the name. A convention that has worked well:</p>
       <div class="article-table-wrap">
@@ -143,16 +154,16 @@
       </div>
       <p>Together: <code>ubuntu-24.04-ci-runner-node22-2026.09</code>. Resave next month with an updated dependency and it's <code>ubuntu-24.04-ci-runner-node22-2026.10</code>. Both are independent records, so the only thing that says "same line, one generation later" rather than "unrelated image with a similar name" is the name itself.</p>
 
-      <h2>There's no patching in place, which simplifies things</h2>
+      <h2 id="there-s-no-patching-in-place-which-simplifies-things">There's no patching in place, which simplifies things</h2>
       <p>With tools that let you modify a golden image directly, the question is whether to cut a new one or patch the old. That doesn't arise here: a saved base image is immutable, so there's no in-place patch. To change anything, clone a workspace from the current image, make the change there, and save the result as a new image. Every change is a new generation. That removes a classic problem (someone patches the golden image and two people's clones now boot differently) and leaves you one decision: whether the new generation's name makes its relationship to the last one obvious.</p>
       <p>It's cheap to do, because saving and cloning both use APFS copy-on-write (<code>clonefile()</code>), which completes almost instantly on the same volume. A new generation costs a naming decision, not time or disk space at the moment you make it.</p>
 
-      <h2>Pruning is manual, and each image is a full copy</h2>
+      <h2 id="pruning-is-manual-and-each-image-is-a-full-copy">Pruning is manual, and each image is a full copy</h2>
       <p>Nothing expires a base image, and there's no "unused for 90 days" prompt. Each one is a complete, standalone disk, not a layer on top of another, so generations add up, and the size shown next to each is real disk use. A workable habit: keep the latest one or two generations per name prefix plus one deliberately pinned known-good (name it so, for example <code>ubuntu-24.04-ci-runner-node22-stable</code>, so it doesn't get lost in the date sort), and delete the rest once nothing depends on them.</p>
       <p>Export exists for the same reason backups do: it writes the image's disk to a raw file, so you can archive a generation outside the app before deleting it, or move it to another Mac.</p>
       <p>A tip since 1.2: the downloaded cloud images and installer ISOs you build base images from sit in the same <strong>Settings › Images</strong> pane. If you're pruning for space, check that list too.</p>
 
-      <h2>What to do</h2>
+      <h2 id="what-to-do">What to do</h2>
       <ul>
         <li><strong>Get the name right when you save.</strong> There's no rename afterwards.</li>
         <li><strong>Put the OS, role, what changed and a date in the name</strong>, in a consistent order. The app tracks none of it, so the name is the only record.</li>

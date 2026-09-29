@@ -105,39 +105,51 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Fundamentals</span>
         <h1>Local vs. Cloud Development Environments: The Real Trade-offs</h1>
         <p class="article-lede">Not a product comparison; that's <a href="/blog/velo-vs-codespaces-vs-ona/">covered separately</a>, with Velo Workspaces, GitHub Codespaces and Ona by name and real prices. This is the category question underneath: what differs between local and cloud environments, whichever tool you're looking at.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">3 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#who-owns-the-hardware-and-what-that-decides"><span>Who owns the hardware, and what that decides</span></a></li>
+          <li><a href="#gpu-access-a-hardware-question-not-a-pricing-tier"><span>GPU access: a hardware question, not a pricing tier</span></a></li>
+          <li><a href="#offline-isn-t-an-edge-case"><span>Offline isn&#x27;t an edge case</span></a></li>
+          <li><a href="#where-your-code-and-data-live"><span>Where your code and data live</span></a></li>
+          <li><a href="#the-cost-model-rewards-some-habits-and-punishes-others"><span>The cost model rewards some habits and punishes others</span></a></li>
+          <li><a href="#what-cloud-does-better"><span>What cloud does better</span></a></li>
+          <li><a href="#a-framework-not-a-verdict"><span>A framework, not a verdict</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Who owns the hardware, and what that decides</h2>
+      <h2 id="who-owns-the-hardware-and-what-that-decides">Who owns the hardware, and what that decides</h2>
       <p>This is the root of every other difference here. A local environment runs on hardware you own and control; a cloud environment runs on hardware someone else owns and rents to you. GPU access, cost model, offline behavior and data residency all follow from that one fact rather than being separate decisions. Vendor comparisons tend to list each consequence as its own feature or limitation, when they're one decision showing up in several places.</p>
 
-      <h2>GPU access: a hardware question, not a pricing tier</h2>
+      <h2 id="gpu-access-a-hardware-question-not-a-pricing-tier">GPU access: a hardware question, not a pricing tier</h2>
       <p>A local environment has whatever is in the machine. On a modern Mac the GPU is simply there, available to anything on the host, with nothing to provision. A cloud environment offers only what the provider sells as a machine type, and GPU machines have recently become scarcer in this category, not more common. That isn't a permanent rule, but it's a current fact to check. If local-model inference or anything else that wants a GPU is part of your work, confirm a provider's current offering before assuming it's there.</p>
 
-      <h2>Offline isn't an edge case</h2>
+      <h2 id="offline-isn-t-an-edge-case">Offline isn't an edge case</h2>
       <p>A local environment keeps working with no network: on a flight, on a bad connection, during a provider's outage. A cloud environment needs a working connection to be reachable at all; lose it and the environment isn't slow, it's gone. That bites more often than air travel suggests: a home internet outage, a provider's regional incident, a café's flaky Wi-Fi. Treat it as a real reliability property.</p>
 
-      <h2>Where your code and data live</h2>
+      <h2 id="where-your-code-and-data-live">Where your code and data live</h2>
       <p>A local environment's data is on the machine in front of you, under the security you already have. A cloud environment's data is on the provider's infrastructure, under their security, their terms and their jurisdiction, which matters for regulated industries, client work under NDA, or anything where "where does this data live?" carries compliance weight. That's not a criticism of any provider; it's a difference in who's accountable for the boundary, and on what terms.</p>
 
-      <h2>The cost model rewards some habits and punishes others</h2>
+      <h2 id="the-cost-model-rewards-some-habits-and-punishes-others">The cost model rewards some habits and punishes others</h2>
       <p>This is easy to underweight until it adds up. Metered billing, compute-hours plus storage and nearly universal for cloud dev environments, charges more, with no ceiling, the more environments you create and destroy. That's a direct problem if <a href="/blog/qa-devops-disposable-vm-workflow/">disposable, create-and-discard workflows</a> are how you want to work, because that's exactly the pattern metering penalizes most. A flat or one-time local cost doesn't care how many environments you make in a day. Neither model is wrong; they reward different habits, and choosing one that fights yours is where the cost surprises come from.</p>
 
-      <h2>What cloud does better</h2>
+      <h2 id="what-cloud-does-better">What cloud does better</h2>
       <p>Stated plainly: it's reachable from any device, including ones that can't run a local environment at all, like a Chromebook, a tablet or a thin client. Nobody is limited by the machine they own. Handing a teammate a running environment, or spinning up many at once for a class or a hackathon, is easy. And it doesn't use the CPU, memory or battery of the machine in front of you. These are structural advantages, not caveats.</p>
 
-      <h2>A framework, not a verdict</h2>
+      <h2 id="a-framework-not-a-verdict">A framework, not a verdict</h2>
       <ul>
         <li><strong>GPU-dependent work, or a create-and-discard habit:</strong> local's advantages here are hard to match with metered cloud.</li>
         <li><strong>Regulated data, an NDA or strict data residency:</strong> local keeps the decision in your hands rather than a provider's terms.</li>

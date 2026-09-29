@@ -105,33 +105,43 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>Disposable VMs for Testing Untrusted Software</h1>
         <p class="article-lede">This blog has covered AI agents running untrusted code at length. This is the version with no agent at all: you, choosing to run an install script, a build or a tool you found on GitHub, on your own Mac. The risk has the same shape, and so does the boundary that helps.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#curl-bash-convenient-and-exactly-as-trusting-as-it-looks"><span>curl | bash: convenient, and exactly as trusting as it looks</span></a></li>
+          <li><a href="#a-repository-s-own-setup-steps-run-the-same-way"><span>A repository&#x27;s own setup steps run the same way</span></a></li>
+          <li><a href="#building-from-source-isn-t-automatically-safer"><span>Building from source isn&#x27;t automatically safer</span></a></li>
+          <li><a href="#dependencies-you-never-chose-to-audit"><span>Dependencies you never chose to audit</span></a></li>
+          <li><a href="#the-boundary-that-helps-either-way"><span>The boundary that helps either way</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2><code>curl | bash</code>: convenient, and exactly as trusting as it looks</h2>
+      <h2 id="curl-bash-convenient-and-exactly-as-trusting-as-it-looks"><code>curl | bash</code>: convenient, and exactly as trusting as it looks</h2>
       <p>Piping a remote script into a shell is a common install pattern, and it means trusting three things at once: the script's contents (which you rarely read first), the domain serving it (not compromised, not a lookalike), and everything in between at that moment. The same URL can even serve different content to a browser than to a piped <code>curl</code>. None of that is unique to this pattern, but "just run this one command" makes it easy to skip the pause a downloaded, inspected file would give you.</p>
 
-      <h2>A repository's own setup steps run the same way</h2>
+      <h2 id="a-repository-s-own-setup-steps-run-the-same-way">A repository's own setup steps run the same way</h2>
       <p><code>npm install</code>, <code>pip install -e .</code> and <code>make</code> aren't sandboxed by the tools running them. They execute whatever the project's install hooks, <code>setup.py</code> or Makefile say, the same mechanism described in <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents use your computer</a>, minus the agent. Cloning an unfamiliar repository and following its README is running code you haven't reviewed, AI or not.</p>
 
-      <h2>Building from source isn't automatically safer</h2>
+      <h2 id="building-from-source-isn-t-automatically-safer">Building from source isn't automatically safer</h2>
       <p>There's an instinct that compiling something yourself is more trustworthy than a prebuilt binary. Sometimes that's true for supply-chain reasons, but it does nothing for this risk. A build script can do anything a shell script can, because it usually is one or calls one. "I built it myself" tells you where the binary came from, not whether the build did something you wouldn't want.</p>
 
-      <h2>Dependencies you never chose to audit</h2>
+      <h2 id="dependencies-you-never-chose-to-audit">Dependencies you never chose to audit</h2>
       <p>Even a project whose own code you trust pulls in a dependency tree you almost certainly haven't reviewed, and any package in it running install hooks is the same risk one step removed. That's the general shape of supply-chain risk, whether you install the tool yourself or an agent does.</p>
 
-      <h2>The boundary that helps either way</h2>
+      <h2 id="the-boundary-that-helps-either-way">The boundary that helps either way</h2>
       <p>Being more careful about which untrusted software you run only goes so far. The fix is the one this blog keeps arriving at for AI agents: run it where a bad outcome can't reach your account (see <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>). Try the install, the build or the new tool in a disposable workspace, or in a fresh cloud image of Ubuntu or Debian that's ready in a minute. If it's fine, install it properly wherever you normally would. If it isn't, close the workspace, and your Mac was never involved.</p>
 
       <p>Related reading: <a href="/blog/how-ai-coding-agents-use-your-computer/">how AI coding agents use your computer</a> for the same mechanism with an agent, <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>, and <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment is</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

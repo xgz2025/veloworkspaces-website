@@ -105,21 +105,21 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>Ubuntu, Debian, Fedora, Rocky or Arch: Which Linux for Your Mac?</h1>
         <p class="article-lede">There's no single best distribution, just a best fit for what you're doing. This blog has a deep dive on each of these; this is the roundup that points you to the right one, and tells you how much setup each takes in Velo Workspaces 1.2.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Seven distributions, seven different jobs</h2>
+      <h2 id="seven-distributions-seven-different-jobs">Seven distributions, seven different jobs</h2>
       <div class="article-table-wrap">
         <table>
           <thead><tr><th>Distro</th><th>Best for</th><th>In Velo Workspaces 1.2</th><th>Know before you start</th></tr></thead>
@@ -135,7 +135,7 @@
         </table>
       </div>
 
-      <h2>Pick by what you're doing</h2>
+      <h2 id="pick-by-what-you-re-doing">Pick by what you're doing</h2>
       <ul>
         <li><strong>You're not sure yet, or you're following a tutorial written for "Linux".</strong> Ubuntu. The largest user base gives you the best odds that someone has already solved whatever you're about to hit, and the cloud image is running in about a minute.</li>
         <li><strong>You're building something long-lived that shouldn't change under you.</strong> Debian. Fewer package updates means fewer surprises months into a project.</li>
@@ -145,7 +145,7 @@
       </ul>
       <p>Alpine Linux 3.24 is in the catalog too, as a small installer for anyone who wants a minimal musl-based system and doesn't mind running <code>setup-alpine</code> by hand.</p>
 
-      <h2>How much setup each one takes</h2>
+      <h2 id="how-much-setup-each-one-takes">How much setup each one takes</h2>
       <p>Velo Workspaces 1.2 changed this answer a lot. Ubuntu, Debian, Fedora and Rocky Linux come as official cloud images: you enter a username and password, and cloud-init creates the account and adds this Mac's SSH key on first boot, usually within a minute of the download finishing. Ubuntu, Fedora Server and Rocky Linux can also run their own installers automatically. Everything else installs by hand in the workspace's display, exactly as on a PC.</p>
 
       <p>Related reading: <a href="/blog/what-is-a-disposable-development-environment/">what a disposable development environment is</a>, useful whichever distro you pick; <a href="/blog/linux-server-vs-desktop-vm-mac/">Server or Desktop</a>; and <a href="/blog/apple-silicon-vms-explained/">what a VM on Apple Silicon is</a>, if you're starting from scratch. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

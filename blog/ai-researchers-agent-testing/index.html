@@ -105,27 +105,38 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>Building and Testing AI Agents on Apple Silicon: A Guide for AI Researchers</h1>
         <p class="article-lede">Building a RAG pipeline or a tool-calling agent means running code you don't fully trust yet, against a model you want at full local speed. AI Bridge and the AI Sandbox profile are built for exactly that split, and AI Bridge supports more backends than earlier posts here have shown.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">3 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#the-problem-this-solves"><span>The problem this solves</span></a></li>
+          <li><a href="#the-ai-sandbox-profile"><span>The AI Sandbox profile</span></a></li>
+          <li><a href="#ai-bridge-supports-more-backends-than-you-d-think"><span>AI Bridge supports more backends than you&#x27;d think</span></a></li>
+          <li><a href="#a-gotcha-when-switching-backends-mid-experiment"><span>A gotcha when switching backends mid-experiment</span></a></li>
+          <li><a href="#built-in-status-so-you-know-whether-it-s-the-bridge-or-your"><span>Built-in status, so you know whether it&#x27;s the bridge or your code</span></a></li>
+          <li><a href="#why-disposability-matters-here"><span>Why disposability matters here</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>The problem this solves</h2>
+      <h2 id="the-problem-this-solves">The problem this solves</h2>
       <p>Developing an agent, whether a RAG pipeline, a tool-calling loop or anything else that lets a model decide what code runs next, means two things at once. The agent runs generated code, which you don't want touching your real files and credentials while you're still finding its bugs; that's the risk covered in <a href="/blog/ai-agent-security-risks/">the security deep dive</a>. And it needs a model to call, ideally fast and local, so each iteration doesn't pay cloud latency and fees. The <strong>AI Sandbox</strong> profile and <strong>AI Bridge</strong> are built around that split: the agent's code runs in a disposable VM, and the model stays on the Mac at full GPU speed, reached over vsock rather than the internet.</p>
 
-      <h2>The AI Sandbox profile</h2>
+      <h2 id="the-ai-sandbox-profile">The AI Sandbox profile</h2>
       <p>The AI Sandbox profile starts at 8 CPU cores, 16 GB of memory and 64 GB of storage, and turns AI Bridge on. That's room for an agent framework and its dependencies (LangChain, a vector store, your tool-calling library) without the model eating into it, because the model runs on the Mac, not in the sandbox. You can change any of it under Advanced Settings when you create the workspace. The quickest way to one is <strong>Cloud image</strong> › <strong>Ubuntu 26.04 LTS</strong>, ready about a minute after it downloads.</p>
 
-      <h2>AI Bridge supports more backends than you'd think</h2>
+      <h2 id="ai-bridge-supports-more-backends-than-you-d-think">AI Bridge supports more backends than you'd think</h2>
       <p>Earlier posts described AI Bridge as "Ollama or MLX". It supports four provider types, each with its own default port:</p>
       <div class="article-table-wrap">
         <table>
@@ -140,13 +151,13 @@
       </div>
       <p>For research, that means you can compare the same agent across different serving stacks (Ollama's convenience, MLX's Apple silicon speed, llama.cpp's control over quantization and sampling) without touching the workspace or the agent's code, only the provider setting. <strong>Custom</strong> opens it further: vLLM, LM Studio, text-generation-webui, or a local proxy in front of a cloud model for cost comparisons, anything speaking the OpenAI-compatible API on a port on the Mac.</p>
 
-      <h2>A gotcha when switching backends mid-experiment</h2>
+      <h2 id="a-gotcha-when-switching-backends-mid-experiment">A gotcha when switching backends mid-experiment</h2>
       <p>Switching providers moves AI Bridge's listener on the Mac immediately, with no restart. But the guest side is a <code>socat</code> service, a file on the guest's disk that still names the <em>old</em> port, and restarting the workspace doesn't change it. Run the guest-side setup command from the workspace's AI Bridge tab again after you switch, so the forwarder points at the new port. If a provider switch seems to do nothing, this is almost certainly why.</p>
 
-      <h2>Built-in status, so you know whether it's the bridge or your code</h2>
+      <h2 id="built-in-status-so-you-know-whether-it-s-the-bridge-or-your">Built-in status, so you know whether it's the bridge or your code</h2>
       <p>AI Bridge reports its own health as one of five states (disabled, preparing, ready, degraded or failed), with a readable reason for the last two, shown in the workspace. That saves time in agent work: when a run fails, a glance at the bridge's status rules out "the endpoint isn't reachable" before you start debugging your prompt or tool-calling logic.</p>
 
-      <h2>Why disposability matters here</h2>
+      <h2 id="why-disposability-matters-here">Why disposability matters here</h2>
       <p>An agent under development is exactly what <a href="/blog/ai-agent-security-risks/">the security deep dive</a> is about: code you don't fully trust yet, running shell commands and writing files based on what a model decides. A bad run, an agent that goes off-script, installs the wrong thing or wrecks its working directory, costs nothing in a disposable workspace. Close it, clone a fresh one from your saved base image, and try again from the same starting point. It's the <a href="/blog/qa-devops-disposable-vm-workflow/">disposable-workspace pattern</a> from QA and DevOps, applied to a research loop where "did that fail because of my prompt or because the environment drifted?" is the question you most want to rule out.</p>
 
       <p>Related reading: the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>, the <a href="/blog/vm-inference-benchmark/">inference benchmark</a> with MLX, the <a href="/blog/mlx-vm-setup-guide/">MLX setup guide</a>, <a href="/blog/ai-bridge-data-privacy/">what leaves your Mac</a> when the Custom provider points at a URL, and <a href="/blog/vscode-continue-ai-bridge/">Continue in VS Code over the same bridge</a> for an editor-based alternative. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

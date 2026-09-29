@@ -105,31 +105,31 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Deep dive</span>
         <h1>Linux VM Disk Performance on Apple Silicon: virtio-blk vs. virtio-fs</h1>
         <p class="article-lede">The biggest disk-performance decision in a Virtualization.framework VM isn't a setting you tune. It's which device a file lives behind. A workspace's own disk and a shared folder use two different paravirtualized devices, and for I/O-heavy work they're nowhere near interchangeable.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Two devices, not one "disk"</h2>
+      <h2 id="two-devices-not-one-disk">Two devices, not one "disk"</h2>
       <p>A workspace's main disk is <strong>virtio-blk</strong>, a paravirtualized block device (see <a href="/blog/how-virtualization-framework-works/">the device inventory post</a>). A shared folder from the Mac is <strong>virtio-fs</strong>, a paravirtualized <em>filesystem</em> protocol built to share a host directory tree rather than back a disk image. They solve different problems and perform accordingly. A public discussion among Apple's container engineers and contributors (<a href="https://github.com/apple/container/discussions/1516" target="_blank" rel="noopener">apple/container discussion #1516</a>) put native performance at roughly 2–3× virtio-blk, and virtio-blk at roughly 3× virtio-fs, for the same disk-heavy workload. That's a big gap.</p>
 
-      <h2>Where to put what</h2>
+      <h2 id="where-to-put-what">Where to put what</h2>
       <p>The rule that follows: if disk throughput matters (a build with lots of file I/O, a database, unpacking a big archive), do it on the workspace's own disk, not in a shared folder. Use shared folders for what they're good at, convenient access to files that live on the Mac.</p>
       <p>That can seem to clash with keeping project source in a shared folder, as other posts here suggest. The two combine well: keep the source in the shared folder so your Mac and your Git history see it, and point the heavy, generated parts at the guest's own disk. Put <code>node_modules</code>, virtualenvs, build output and caches in a directory on the guest disk (many tools take an output or cache path, or you can symlink the folder), and the slow path only carries the files you edit.</p>
 
-      <h2>Caching is a durability trade-off, not free speed</h2>
+      <h2 id="caching-is-a-durability-trade-off-not-free-speed">Caching is a durability trade-off, not free speed</h2>
       <p>Velo Workspaces attaches the disk in <code>.cached</code> mode instead of the framework's default, which behaves as uncached, to absorb the repeated metadata rewrites an OS install produces. <a href="/blog/how-virtualization-framework-works/">The device inventory post</a> explains the full mechanism and why it doesn't give up durability: the guest's own flushes stay synchronous. It's worth repeating as a disk-performance fact. Caching changes how quickly repeated writes to the same blocks complete, which is a real difference for install-heavy work, but it's a durability decision first and a speed one second, and Velo Workspaces keeps the safer half.</p>
 
-      <h2>Day to day</h2>
+      <h2 id="day-to-day">Day to day</h2>
       <ul>
         <li><strong>Keep your working set on the workspace's own disk</strong> whenever throughput matters.</li>
         <li><strong>Use shared folders for convenience</strong>: moving files to and from the Mac, and source you want to edit on either side, not the live directory for a build or database.</li>

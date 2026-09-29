@@ -105,37 +105,48 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>One Workspace Per Project: A Disposable Dev Environment Habit for Software Engineers</h1>
         <p class="article-lede">Disposable workspaces and base images have mostly come up here as a QA or DevOps tool: a clean VM per test run. The same mechanism works just as well as a daily habit for ordinary development.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">3 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#version-managers-scope-the-runtime-not-everything-else"><span>Version managers scope the runtime, not everything else</span></a></li>
+          <li><a href="#what-one-workspace-per-project-looks-like"><span>What one workspace per project looks like</span></a></li>
+          <li><a href="#matching-a-teammate-s-setup-exactly"><span>Matching a teammate&#x27;s setup exactly</span></a></li>
+          <li><a href="#trying-a-new-framework-without-touching-your-mac"><span>Trying a new framework without touching your Mac</span></a></li>
+          <li><a href="#when-a-vm-is-right-and-when-it-s-overkill"><span>When a VM is right, and when it&#x27;s overkill</span></a></li>
+          <li><a href="#what-to-do"><span>What to do</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Version managers scope the runtime, not everything else</h2>
+      <h2 id="version-managers-scope-the-runtime-not-everything-else">Version managers scope the runtime, not everything else</h2>
       <p>nvm, pyenv and rbenv solve one problem well: which language runtime a project uses. They don't touch the rest of what differs between projects: global npm packages installed once and forgotten, a system library one project needed that now shadows the version another expects, Homebrew formulae that have drifted, a stray variable in <code>~/.zshrc</code> that only one build depends on. "It works on my machine" really means "it works on my machine <em>today</em>". Six months and a dozen projects later, it's a different machine from the one the setup instructions were written for.</p>
 
-      <h2>What one workspace per project looks like</h2>
+      <h2 id="what-one-workspace-per-project-looks-like">What one workspace per project looks like</h2>
       <p>Create a Linux workspace for the project, from a cloud image if you want it running in a minute, with the <strong>Code &amp; Build</strong> profile: 4 CPU cores, 8 GB of memory and 100 GB of storage, sized for a real toolchain rather than a minimal test runner. The habit is simple: one workspace per project, not one you reuse for everything and only half remember the history of.</p>
       <p>The split that makes it work day to day: your project files, the ones with Git history that your editor has open, live in a <strong>shared folder</strong> on your Mac, mounted into the guest with the <code>mount -t virtiofs</code> command the app shows for that folder. The OS, the compilers, the system packages and everything <code>apt install</code> touches stay in the guest. Edit with <a href="/blog/vscode-continue-ai-bridge/">VS Code Remote-SSH</a> connected to the workspace and it feels like working locally, except that a broken system package or a dependency you regret stays inside a VM you can throw away, not on the Mac you use for everything.</p>
 
-      <h2>Matching a teammate's setup exactly</h2>
+      <h2 id="matching-a-teammate-s-setup-exactly">Matching a teammate's setup exactly</h2>
       <p>A README's setup steps are a description someone has to interpret correctly: which package manager version, which system libraries, which order. A saved <strong>base image</strong> is the disk itself. Set up a project's environment once, save it, and everyone clones the identical toolchain instead of rebuilding something close to it. <a href="/blog/base-image-versioning/">The base image versioning post</a> covers naming, which matters because the app doesn't track versions between images: a name like <code>ubuntu-24.04-project-x-node22-2026.09</code> is the only record of what's in it. You can hand that image to a teammate, too. <strong>Settings › Images › Base Images</strong> can export it to a disk file, a real copy of the environment rather than a shared cloud link, to move to another Mac or archive.</p>
 
-      <h2>Trying a new framework without touching your Mac</h2>
+      <h2 id="trying-a-new-framework-without-touching-your-mac">Trying a new framework without touching your Mac</h2>
       <p>The smaller, more frequent version: evaluating a library or framework doesn't need a named project, just a workspace you're happy to throw away. Clone a <strong>disposable workspace</strong> from your usual base image, follow the tool's quickstart (<code>npm create</code>, a new interpreter, a system package you may not keep), and close it when you've made up your mind. None of it touches your Mac's npm cache, Homebrew or any lockfile you'd have to remember to revert. Clones are copy-on-write, so starting one takes seconds.</p>
 
-      <h2>When a VM is right, and when it's overkill</h2>
+      <h2 id="when-a-vm-is-right-and-when-it-s-overkill">When a VM is right, and when it's overkill</h2>
       <p>In the spirit of the <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">Docker Desktop and OrbStack comparison</a>: for per-project dependency isolation on one OS, a container is often lighter and quicker than a VM, and a good version manager plus Docker Compose covers a lot of the same ground. A full Linux VM earns its overhead when you want the isolation to include the OS itself (a separate kernel and system package set) or want root-level changes to be as disposable as the project's files. If your pain is "node_modules is a mess", a container fixes it more cheaply. If it's "I no longer trust what's installed system-wide on my Mac", this workflow is for you.</p>
 
-      <h2>What to do</h2>
+      <h2 id="what-to-do">What to do</h2>
       <ul>
         <li><strong>One workspace per project</strong>, not one long-lived workspace whose history you stop trusting.</li>
         <li><strong>Keep project files in a shared folder</strong>, so the guest holds the toolchain and system state, not the only copy of your work.</li>

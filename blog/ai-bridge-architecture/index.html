@@ -105,21 +105,21 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Architecture</span>
         <h1>An Architecture to Run AI Agents Safely and Efficiently in a Linux VM on Apple Silicon</h1>
         <p class="article-lede">How to let an AI agent run generated code safely in a VM without giving up GPU acceleration: the vsock-based architecture behind AI Bridge, and the benchmark numbers behind it.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-13">September 13, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-13">September 13, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">7 min read</span></p>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>The problem</h2>
+      <h2 id="the-problem">The problem</h2>
       <p>If you want to run an AI coding agent locally on your Mac today, you have two options, and neither is good.</p>
 
       <p><strong>Option A: run it directly on your Mac.</strong> Most agent frameworks, like LangChain, AutoGen, SWE-Agent and Open Interpreter, execute LLM-generated code via <code>subprocess</code> or <code>exec()</code> with full access to your filesystem, network, and credentials. Docker's engineering blog has documented <a href="https://www.docker.com/blog/ai-coding-agent-horror-stories-security-risks/" target="_blank" rel="noopener">AI coding agent security incidents</a> that came from exactly this. Indirect prompt injection makes it worse than it sounds: an instruction hidden in a file the agent reads can run commands with all your permissions. <a href="/blog/ai-agent-security-risks/">Four 2026 incidents</a> show what that looks like in practice, including cases where the agent's own permission prompts and allowlists were what got bypassed.</p>
@@ -129,7 +129,7 @@
 
       <p><strong>The root cause:</strong> on Apple silicon, "safe" (inside a VM) and "fast" (on the GPU) pull in opposite directions, because for a Linux VM the GPU exists only on the host side.</p>
 
-      <h2>The solution: split the agent from the model</h2>
+      <h2 id="the-solution-split-the-agent-from-the-model">The solution: split the agent from the model</h2>
       <p>The fix isn't to pick a side. It's to stop treating "run the agent" and "run the model" as one problem. The dangerous part (running generated code) and the expensive part (running the model) don't have to live in the same place:</p>
       <ul>
         <li>The <strong>agent</strong> runs inside an isolated, disposable Linux VM. When you're done, the VM and everything it wrote to disk are gone.</li>
@@ -140,21 +140,21 @@
 
       <figure>
         <pre><code>┌───────────────────────────────────────────────────────────────────┐
-      │                            macOS HOST                             │
-      │                                                                   │
-      │      Ollama / MLX Engine   ───►  Storage: ~/.ollama/models        │
-      │      (Native Metal GPU)          (single 10GB–50GB copy)          │
-      │              ▲                                                    │
-      │              │  Velo Workspaces AI Bridge                         │
-      │              │  proxies to localhost:&lt;port&gt;                       │
-      │              ▼                                                    │
-      │      ┌─────────────────────────────────────────────────────┐      │
-      │      │                     LINUX VM                        │      │
-      │      │  socat 127.0.0.1:&lt;port&gt;  ⇄  vsock CID 2             │      │
-      │      │  Env: OPENAI_API_BASE=http://127.0.0.1:&lt;port&gt;/v1    │      │
-      │      │  Dev apps / Docker containers / VS Code / Python    │      │
-      │      └─────────────────────────────────────────────────────┘      │
-      └───────────────────────────────────────────────────────────────────┘</code></pre>
+│                            macOS HOST                             │
+│                                                                   │
+│      Ollama / MLX Engine   ───►  Storage: ~/.ollama/models        │
+│      (Native Metal GPU)          (single 10GB–50GB copy)          │
+│              ▲                                                    │
+│              │  Velo Workspaces AI Bridge                         │
+│              │  proxies to localhost:&lt;port&gt;                       │
+│              ▼                                                    │
+│      ┌─────────────────────────────────────────────────────┐      │
+│      │                     LINUX VM                        │      │
+│      │  socat 127.0.0.1:&lt;port&gt;  ⇄  vsock CID 2             │      │
+│      │  Env: OPENAI_API_BASE=http://127.0.0.1:&lt;port&gt;/v1    │      │
+│      │  Dev apps / Docker containers / VS Code / Python    │      │
+│      └─────────────────────────────────────────────────────┘      │
+└───────────────────────────────────────────────────────────────────┘</code></pre>
         <figcaption>The model stays on the host GPU; only the agent's code execution moves into the VM. AI Bridge is the vsock channel connecting them.</figcaption>
       </figure>
 
@@ -164,7 +164,7 @@
 
       <p>vsock is just another Virtualization.framework device, <code>VZVirtioSocketDeviceConfiguration</code>, following the same paravirtualized pattern as every VM's network and storage devices. <a href="/blog/how-virtualization-framework-works/">The device inventory</a> shows where it fits.</p>
 
-      <h2>The results</h2>
+      <h2 id="the-results">The results</h2>
       <p>I wanted to know how close this gets to "no tax", so I measured it rather than asserting it.</p>
 
       <p><strong>Setup:</strong></p>

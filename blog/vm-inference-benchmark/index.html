@@ -105,21 +105,32 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Benchmark</span>
         <h1>I Sandboxed My AI Coding Agent in a VM, and It Cost Almost No GPU Speed</h1>
         <p class="article-lede">Three benchmarks on Apple silicon (single-request speed, concurrent load, and a real agentic coding loop) to measure what a Linux VM costs when the model stays on the Mac's GPU.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-13">September 13, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-13">September 13, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#the-question"><span>The question</span></a></li>
+          <li><a href="#setup"><span>Setup</span></a></li>
+          <li><a href="#tools"><span>Tools</span></a></li>
+          <li><a href="#results"><span>Results</span></a></li>
+          <li><a href="#conclusion"><span>Conclusion</span></a></li>
+          <li><a href="#appendix-raw-test-output"><span>Appendix: raw test output</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>The question</h2>
+      <h2 id="the-question">The question</h2>
       <p>Running an AI coding agent in a VM is the obvious way to isolate it: its own filesystem, its own blast radius, nothing to clean up afterwards. On Apple silicon that hits a wall. Apple's <code>Virtualization.framework</code> doesn't give a Linux guest the Mac's GPU, so a model loaded inside the VM runs on the CPU. <a href="/">Velo Workspaces</a>' answer is <strong>AI Bridge</strong>, a vsock channel that lets the VM reach a model server on the Mac's GPU, appearing inside the guest as an ordinary OpenAI-compatible endpoint.</p>
       <p>If you're going to rely on that every day, the question is what the channel costs. I ran three benchmarks at three scales against <strong>MLX</strong>, Apple's array framework, running natively on the Metal GPU with <code>mlx_lm.server</code>:</p>
       <ul>
@@ -128,7 +139,7 @@
         <li><strong>A real agentic coding loop:</strong> a coding agent (OpenCode) writing and running code against the model, end to end</li>
       </ul>
 
-      <h2>Setup</h2>
+      <h2 id="setup">Setup</h2>
       <ul>
         <li><strong>Host:</strong> Mac mini, Apple M4, 10 cores, 16 GB RAM, macOS 26.6.2</li>
         <li><strong>Guest:</strong> Ubuntu Server 26.04 LTS VM, 4 vCPU, 4 GB RAM, AI Sandbox profile</li>
@@ -136,54 +147,54 @@
         <li><strong>Protocol:</strong> before every run, all VMs were stopped and the model server restarted fresh, to rule out contention left over from the previous run.</li>
       </ul>
 
-      <h2>Tools</h2>
+      <h2 id="tools">Tools</h2>
       <p>Open source: <a href="https://github.com/xgz2025/veloworkspace-tools" target="_blank" rel="noopener">veloworkspace-tools</a>, with <code>ai_perf_test.py</code>, <code>ai_load_test.py</code> and <code>opencode_perf_test.py</code>.</p>
 
-      <h2>Results</h2>
+      <h2 id="results">Results</h2>
 
       <h3>Single-request speed <span style="font-weight:400; color:var(--color-text-secondary); font-size:0.85em;">(average of 5 runs)</span></h3>
-      <figure>
-        <img src="/assets/blog/mlx-chart1-single-request.png" alt="Bar chart comparing host vs VM single-request speed. Time to first token: 172.21 ms on host vs 174.27 ms via AI Bridge (+1%). Throughput: 24.09 tokens/sec on host vs 23.88 tokens/sec via AI Bridge (-1%).">
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/mlx-chart1-single-request.webp"><img src="/assets/blog/mlx-chart1-single-request.webp" width="1800" height="880" alt="Bar chart comparing host vs VM single-request speed. Time to first token: 172.21 ms on host vs 174.27 ms via AI Bridge (+1%). Throughput: 24.09 tokens/sec on host vs 23.88 tokens/sec via AI Bridge (-1%)." loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
       </figure>
       <p>About 1% either way, which is within normal run-to-run noise. The VM boundary has no measurable cost here.</p>
 
       <h3>Concurrent load <span style="font-weight:400; color:var(--color-text-secondary); font-size:0.85em;">(8 parallel clients, average of 4 runs)</span></h3>
-      <figure>
-        <img src="/assets/blog/mlx-chart2-concurrent-load.png" alt="Bar chart comparing host vs VM under 8-client concurrent load. Total wall time: 7.04 seconds on host vs 7.38 seconds via AI Bridge. Average per-client time: 6.24 seconds on host vs 6.39 seconds via AI Bridge.">
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/mlx-chart2-concurrent-load.webp"><img src="/assets/blog/mlx-chart2-concurrent-load.webp" width="1240" height="920" alt="Bar chart comparing host vs VM under 8-client concurrent load. Total wall time: 7.04 seconds on host vs 7.38 seconds via AI Bridge. Average per-client time: 6.24 seconds on host vs 6.39 seconds via AI Bridge." loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
       </figure>
       <p>The VM trails the host by a few percent, consistently across all four runs: small, but real rather than noise.</p>
 
       <h3>Agentic loop <span style="font-weight:400; color:var(--color-text-secondary); font-size:0.85em;">(OpenCode, 5 iterations per task, mean)</span></h3>
-      <figure>
-        <img src="/assets/blog/mlx-chart3-agentic-loop.png" alt="Bar chart comparing host vs VM on three OpenCode agentic tasks. Math computation: 8.40s host vs 8.82s VM. System info: 4.50s host vs 4.55s VM. File I/O: 5.58s host vs 5.70s VM.">
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/mlx-chart3-agentic-loop.webp"><img src="/assets/blog/mlx-chart3-agentic-loop.webp" width="1500" height="960" alt="Bar chart comparing host vs VM on three OpenCode agentic tasks. Math computation: 8.40s host vs 8.82s VM. System info: 4.50s host vs 4.55s VM. File I/O: 5.58s host vs 5.70s VM." loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
       </figure>
       <p>The same pattern: the VM trails by about 1–5% on all three tasks, with tight variance (a standard deviation under 0.2 s on every task), so it's a repeatable, low-noise gap rather than one odd run.</p>
 
-      <h2>Conclusion</h2>
+      <h2 id="conclusion">Conclusion</h2>
       <p>For single requests, sending inference through a vsock proxy into a VM costs nothing measurable. Under concurrent load and in a real agent workflow there's a small, consistent gap in the low single digits rather than perfect parity, and it's worth stating that precisely rather than rounding it to zero.</p>
       <p>In practice: if you run an AI coding agent in a disposable Linux VM to keep it off your Mac's files, and reach a model served by MLX on your Mac's GPU, you aren't giving up meaningful inference speed for the isolation. The vsock hop AI Bridge adds is close to free.</p>
       <p>Raw output, methodology notes and the scripts are in the <a href="https://github.com/xgz2025/veloworkspace-tools" target="_blank" rel="noopener">repository</a> if you want to reproduce this with another model or Mac. These numbers are specific to this hardware, model and workload, and won't necessarily hold for a 70B model or an 8 GB Mac.</p>
       <p>An earlier run of the same tests with Ollama instead of MLX came out differently under load. <a href="/blog/vm-sandboxing-cost/">What sandboxing costs across both engines</a> covers the discrepancy and my best theory for it. To set this up yourself, <a href="/blog/mlx-vm-setup-guide/">the MLX guide</a> walks through it.</p>
 
-      <h2>Appendix: raw test output</h2>
+      <h2 id="appendix-raw-test-output">Appendix: raw test output</h2>
       <p style="font-size:0.9rem;">Terminal output from each test, host and VM side by side.</p>
 
       <h3>Single-request speed test</h3>
       <div class="article-appendix-grid">
-        <img src="/assets/blog/screenshot-single-request-host.png" alt="Terminal output: ai_perf_test.py running on the host, showing average TTFT 172.21 ms and average throughput 24.09 tokens/sec.">
-        <img src="/assets/blog/screenshot-single-request-vm.png" alt="Terminal output: ai_perf_test.py running inside the VM over AI Bridge, showing average TTFT 174.27 ms and average throughput 23.88 tokens/sec.">
+        <img src="/assets/blog/screenshot-single-request-host.webp" width="972" height="671" alt="Terminal output: ai_perf_test.py running on the host, showing average TTFT 172.21 ms and average throughput 24.09 tokens/sec.">
+        <img src="/assets/blog/screenshot-single-request-vm.webp" width="928" height="612" alt="Terminal output: ai_perf_test.py running inside the VM over AI Bridge, showing average TTFT 174.27 ms and average throughput 23.88 tokens/sec.">
       </div>
 
       <h3>Concurrent load test</h3>
       <div class="article-appendix-grid">
-        <img src="/assets/blog/screenshot-concurrent-load-host.png" alt="Terminal output: ai_load_test.py running on the host with 8 parallel clients, total wall time 7.04s, avg client time 6.24s.">
-        <img src="/assets/blog/screenshot-concurrent-load-vm.png" alt="Terminal output: ai_load_test.py running inside the VM over AI Bridge with 8 parallel clients, total wall time 7.38s, avg client time 6.39s.">
+        <img src="/assets/blog/screenshot-concurrent-load-host.webp" width="972" height="626" alt="Terminal output: ai_load_test.py running on the host with 8 parallel clients, total wall time 7.04s, avg client time 6.24s.">
+        <img src="/assets/blog/screenshot-concurrent-load-vm.webp" width="928" height="582" alt="Terminal output: ai_load_test.py running inside the VM over AI Bridge with 8 parallel clients, total wall time 7.38s, avg client time 6.39s.">
       </div>
 
       <h3>Agentic-loop latency test (OpenCode)</h3>
       <div class="article-appendix-grid">
-        <img src="/assets/blog/screenshot-agentic-loop-host.png" alt="Terminal output: opencode_perf_test.py running on the host, showing mean times of 8.40s, 4.50s, and 5.58s for the three tasks.">
-        <img src="/assets/blog/screenshot-agentic-loop-vm.png" alt="Terminal output: opencode_perf_test.py running inside the VM over AI Bridge, showing mean times of 8.82s, 4.55s, and 5.70s for the three tasks.">
+        <img src="/assets/blog/screenshot-agentic-loop-host.webp" width="972" height="851" alt="Terminal output: opencode_perf_test.py running on the host, showing mean times of 8.40s, 4.50s, and 5.58s for the three tasks.">
+        <img src="/assets/blog/screenshot-agentic-loop-vm.webp" width="972" height="851" alt="Terminal output: opencode_perf_test.py running inside the VM over AI Bridge, showing mean times of 8.82s, 4.55s, and 5.70s for the three tasks.">
       </div>
     </div>
   </section>
@@ -209,5 +220,6 @@
 </footer>
 
 <script src="/assets/app-store.js?v=3"></script>
+<script src="/assets/lightbox.js?v=1" defer></script>
 </body>
 </html>

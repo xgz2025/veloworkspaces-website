@@ -61,6 +61,80 @@ def og_image(slug):
     return path if os.path.exists(os.path.join(REPO, path.lstrip("/"))) else DEFAULT_OG
 
 
+def image_size(src):
+    """Pixel size of an image under assets/, for width and height attributes."""
+    from PIL import Image  # authoring machines only, like the rest of i18n/
+    with Image.open(os.path.join(REPO, src.lstrip("/"))) as im:
+        return im.size
+
+
+def reading_minutes(body):
+    words = len(plain(re.sub(r"<pre.*?</pre>", " ", body, flags=re.S)).split())
+    return max(1, round(words / 230))
+
+
+def slugify(text):
+    s = re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+    return s[:60].rstrip("-") or "section"
+
+
+H2_OR_STEP = re.compile(r'(?P<steps><div class="guide-steps[^"]*"[^>]*>)'
+                        r'|(?P<section><section class="guide-step[^"]*"[^>]*>)'
+                        r'|<h2(?P<attrs>[^>]*)>(?P<inner>.*?)</h2>', re.S)
+
+
+def anchor_headings(body):
+    """Gives every h2 in the body an id, keeping one it already has, and
+    returns the body with (id, text, step) for each h2 in order. An h2 that
+    opens a <section class="guide-step"> gets that step's number — the one
+    its badge shows, counted from 1 in each <div class="guide-steps"> —
+    and every other h2 gets None."""
+    used, toc = set(), []
+    step, opens_step = 0, False
+
+    def visit(m):
+        nonlocal step, opens_step
+        if m.group("steps"):
+            step = 0
+            return m.group(0)
+        if m.group("section"):
+            step += 1
+            opens_step = True
+            return m.group(0)
+        attrs, inner = m.group("attrs") or "", m.group("inner")
+        found = re.search(r'\bid="([^"]+)"', attrs)
+        ident = found.group(1) if found else slugify(plain(inner))
+        base, n = ident, 2
+        while ident in used and not found:
+            ident, n = f"{base}-{n}", n + 1
+        used.add(ident)
+        toc.append((ident, plain(inner), step if opens_step else None))
+        opens_step = False
+        return m.group(0) if found else f'<h2{attrs} id="{ident}">{inner}</h2>'
+
+    return H2_OR_STEP.sub(visit, body), toc
+
+
+def toc_html(toc, is_open):
+    items = []
+    for ident, text, step in toc:
+        num = f'<span class="toc-step">{step}</span>' if step else ""
+        items.append(f'          <li><a href="#{ident}">{num}<span>{html.escape(text)}</span></a></li>')
+    label = "Steps in this guide" if any(step for _, _, step in toc) else "In this article"
+    return (f'      <details class="article-toc"{" open" if is_open else ""}>\n'
+            f'        <summary>{label}</summary>\n'
+            f'        <ol>\n' + "\n".join(items) + '\n        </ol>\n'
+            f'      </details>\n')
+
+
+def hero_html(hero):
+    w, h = image_size(hero["src"])
+    return (f'      <figure class="shot article-hero">\n'
+            f'        <a class="shot-frame" href="{hero["src"]}"><img src="{hero["src"]}" width="{w}" height="{h}" '
+            f'alt="{attr(hero["alt"])}" fetchpriority="high"><span class="shot-zoom">Click to enlarge</span></a>\n'
+            f'      </figure>\n')
+
+
 HEADER = f'''<header class="site-header">
   <div class="container">
     <a class="brand" href="/">
@@ -82,7 +156,7 @@ HEADER = f'''<header class="site-header">
 </header>'''
 
 
-def footer(trademarks=""):
+def footer(trademarks="", scripts=""):
     extra = f" {trademarks}" if trademarks else ""
     return f'''<footer class="site-footer">
   <div class="container">
@@ -104,7 +178,7 @@ def footer(trademarks=""):
 </footer>
 
 <script src="/assets/app-store.js?v=3"></script>
-</body>
+{scripts}</body>
 </html>
 '''
 
@@ -141,11 +215,31 @@ def head(*, title, description, url, og_type, image, image_alt, extra_meta="", l
 '''
 
 
+TOC_MIN_HEADINGS = 5
+
+
+def video_ld(video, url):
+    """VideoObject for a post's screen recording, so search can show it."""
+    return {
+        "@type": "VideoObject",
+        "name": video["name"],
+        "description": video["description"],
+        "thumbnailUrl": f"{SITE}{video['poster']}",
+        "contentUrl": f"{SITE}{video['src']}",
+        "uploadDate": video["uploaded"],
+        "duration": video["duration"],
+        "embedUrl": url,
+    }
+
+
 def post_page(post, body):
     slug = post["slug"]
     url = f"{SITE}/blog/{slug}/"
     image = og_image(slug)
     h1_text = plain(post["h1"])
+    body, headings = anchor_headings(body)
+    hero = post.get("hero")
+    images = [f"{SITE}{image}"] + ([f"{SITE}{hero['src']}"] if hero else [])
     ld = {
         "@context": "https://schema.org",
         "@graph": [
@@ -154,7 +248,7 @@ def post_page(post, body):
                 "headline": post["title"][:110],
                 "name": h1_text,
                 "description": post["description"],
-                "image": f"{SITE}{image}",
+                "image": images if len(images) > 1 else images[0],
                 "datePublished": post["published"],
                 "dateModified": post["modified"],
                 "author": {"@type": "Person", "name": AUTHOR, "url": f"{SITE}/"},
@@ -177,12 +271,20 @@ def post_page(post, body):
             },
         ],
     }
+    if post.get("video"):
+        ld["@graph"].append(video_ld(post["video"], url))
     extra = (f'<meta property="article:published_time" content="{post["published"]}">\n'
              f'<meta property="article:modified_time" content="{post["modified"]}">\n'
              f'<meta property="article:author" content="{AUTHOR}">\n')
     byline = f'By {AUTHOR} · Published <time datetime="{post["published"]}">{long_date(post["published"])}</time>'
     if post["modified"] != post["published"]:
         byline += f' · Updated <time datetime="{post["modified"]}">{long_date(post["modified"])}</time>'
+    byline += f'<span class="article-readtime">{reading_minutes(body)} min read</span>'
+    toc = ""
+    if post.get("toc") or len(headings) >= TOC_MIN_HEADINGS:
+        toc = toc_html(headings, is_open=post.get("toc") == "open")
+    scripts = ('<script src="/assets/lightbox.js?v=1" defer></script>\n'
+               if hero or 'class="shot-frame"' in body else "")
     return (
         head(title=post["title"], description=post["description"], url=url, og_type="article",
              image=image, image_alt=h1_text, extra_meta=extra, ld=ld)
@@ -190,8 +292,8 @@ def post_page(post, body):
         + f'''
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">{post["eyebrow"]}</span>
@@ -199,10 +301,10 @@ def post_page(post, body):
         <p class="article-lede">{post["lede"]}</p>
         <p class="article-meta">{byline}</p>
       </div>
-    </div>
+{hero_html(hero) if hero else ""}{toc}    </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     {BODY_START}
 {body}
     </div>
@@ -210,7 +312,7 @@ def post_page(post, body):
 </main>
 
 '''
-        + footer(post.get("trademarks", ""))
+        + footer(post.get("trademarks", ""), scripts)
     )
 
 
@@ -249,16 +351,26 @@ def index_page():
     for g in GROUPS:
         cards = []
         for p in by_group[g["name"]]:
-            cards.append(f'''            <a class="blog-index-card" href="/blog/{p["slug"]}/">
-              <span class="eyebrow">{p["eyebrow"]}</span>
-              <h3>{p["card_title"]}</h3>
-              <p>{p["card_summary"]}</p>
+            hero = p.get("hero")
+            if hero:
+                w, h = image_size(hero["src"])
+                thumb = (f'\n              <img class="blog-index-thumb" src="{hero["src"]}" width="{w}" height="{h}" '
+                         f'alt="" loading="lazy">')
+            else:
+                thumb = ""
+            cards.append(f'''            <a class="blog-index-card{" has-thumb" if hero else ""}" href="/blog/{p["slug"]}/">
+              <div>
+                <span class="eyebrow">{p["eyebrow"]}</span>
+                <h3>{p["card_title"]}</h3>
+                <p>{p["card_summary"]}</p>
+              </div>{thumb}
             </a>''')
         cards_html = "\n\n".join(cards)
+        with_thumbs = " with-thumbs" if any(p.get("hero") for p in by_group[g["name"]]) else ""
         groups_html.append(f'''        <div class="blog-index-group">
-          <h2>{g["name"]}</h2>
+          <h2 id="{slugify(html.unescape(g["name"]))}">{g["name"]}</h2>
           <p class="blog-index-group-desc">{g["description"]}</p>
-          <div class="blog-index-cards">
+          <div class="blog-index-cards{with_thumbs}">
 {cards_html}
           </div>
         </div>''')

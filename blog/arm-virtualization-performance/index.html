@@ -105,36 +105,49 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Deep dive</span>
         <h1>Paravirtualization vs. Hardware Passthrough: What Determines VM Performance on ARM</h1>
         <p class="article-lede">Our benchmarks showed a Linux VM on Apple silicon costing single-digit percent, sometimes nothing, compared with the host. That isn't one good hypervisor; it follows from how ARM's virtualization extensions work. Here's the mechanism, and what paravirtualization and passthrough trade off.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">6 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#four-things-determine-vm-performance"><span>Four things determine VM performance</span></a></li>
+          <li><a href="#cpu-a-dedicated-exception-level-not-a-shared-privilege-ring"><span>CPU: a dedicated exception level, not a shared privilege ring</span></a></li>
+          <li><a href="#memory-two-stage-translation-and-why-it-costs-less-than-it-s"><span>Memory: two-stage translation, and why it costs less than it sounds</span></a></li>
+          <li><a href="#interrupts-where-arm-has-an-architectural-edge-over-x86"><span>Interrupts: where ARM has an architectural edge over x86</span></a></li>
+          <li><a href="#i-o-paravirtualization-vs-hardware-passthrough-plainly-defin"><span>I/O: paravirtualization vs. hardware passthrough, plainly defined</span></a></li>
+          <li><a href="#how-this-shows-up-on-apple-silicon-specifically"><span>How this shows up on Apple Silicon specifically</span></a></li>
+          <li><a href="#the-cloud-reached-the-same-conclusion-from-a-different-direc"><span>The cloud reached the same conclusion from a different direction</span></a></li>
+          <li><a href="#why-this-explains-our-benchmark-numbers"><span>Why this explains our benchmark numbers</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
       <p><em>New to VMs on Apple silicon? <a href="/blog/apple-silicon-vms-explained/">Start with the fundamentals</a>; this post picks up from there.</em></p>
 
-      <h2>Four things determine VM performance</h2>
+      <h2 id="four-things-determine-vm-performance">Four things determine VM performance</h2>
       <p>"Which hypervisor is fastest?" is the wrong question. Nearly every serious hypervisor on a given CPU architecture converges on similar numbers, because they're all constrained by the same four things: how expensive it is to trap from guest to host on the <strong>CPU</strong>, how much overhead the <strong>memory</strong> translation path adds, how <strong>interrupts</strong> get delivered into the guest, and whether <strong>I/O</strong> devices are emulated, paravirtualized, or handed to the guest directly. ARM and x86 answer these differently at the architecture level, and that, not branding, is what explains why VM performance differs between platforms.</p>
 
-      <h2>CPU: a dedicated exception level, not a shared privilege ring</h2>
+      <h2 id="cpu-a-dedicated-exception-level-not-a-shared-privilege-ring">CPU: a dedicated exception level, not a shared privilege ring</h2>
       <p>Every trap from guest to hypervisor and back costs cycles: saving and restoring state, flushing pipelines, switching contexts. How expensive that is depends on the CPU architecture. ARM's Virtualization Extensions add a dedicated hardware exception level for this, <strong>EL2</strong>, with its own register file, MMU context and exception vectors, architecturally separate from EL1 and EL0, where the guest OS and its user processes run. x86's VMX, by contrast, has historically required the hypervisor and the host OS kernel to share the same privilege ring, which is a fundamentally more entangled arrangement. That architectural separation is why ARM research from Columbia University <a href="http://www.cs.columbia.edu/~cdall/pubs/isca2016-dall.pdf" target="_blank" rel="noopener">characterizing ARM virtualization performance</a> treats EL2 as a first-class design advantage rather than a compatibility layer bolted onto an existing privilege model.</p>
       <p>ARMv8.1 added a further refinement, <strong>Virtualization Host Extensions (VHE)</strong>, which lets a Type-2 hypervisor's host kernel run directly at EL2 instead of trampolining through it. That removes a full EL1↔EL2 transition on every host system call while a VM runs: small per call, but it adds up on workloads with a high guest-to-host syscall rate, like network-heavy I/O.</p>
 
-      <h2>Memory: two-stage translation, and why it costs less than it sounds</h2>
+      <h2 id="memory-two-stage-translation-and-why-it-costs-less-than-it-s">Memory: two-stage translation, and why it costs less than it sounds</h2>
       <p>A VM's guest OS manages its own page tables like any OS does, translating guest virtual addresses to what it believes are physical addresses. But the hypervisor still needs to control what real memory the VM can actually touch, so ARM (like x86) adds a second translation stage: <strong>Stage-1</strong> translates guest-virtual to intermediate-physical, and <strong>Stage-2</strong>, controlled entirely by the hypervisor, translates that intermediate address to the real physical address. Two lookups per memory access sounds like it should double memory latency. In practice it doesn't, for the same reason single-stage translation doesn't cost a full page-table walk on every access: modern implementations cache the combined guest-virtual-to-physical translation in the TLB, so the two-stage walk only happens on a genuine TLB miss, not on every access.</p>
 
-      <h2>Interrupts: where ARM has an architectural edge over x86</h2>
+      <h2 id="interrupts-where-arm-has-an-architectural-edge-over-x86">Interrupts: where ARM has an architectural edge over x86</h2>
       <p>This gets less attention than it deserves, and it's a measurable difference. When a virtual device or another virtual CPU needs to signal an interrupt, the guest has to acknowledge and eventually clear it. On x86, that acknowledgment (EOI) has historically had to trap to the hypervisor and be emulated in software, for <em>every single virtual interrupt</em>, including inter-processor interrupts between virtual CPUs. ARM's <strong>Virtual Generic Interrupt Controller (vGIC)</strong> does this in hardware instead: the guest OS can acknowledge and clear virtual interrupts directly, without trapping to the hypervisor at all. The <a href="https://www.cs.columbia.edu/~nieh/pubs/asplos2014_kvmarm.pdf" target="_blank" rel="noopener">KVM/ARM paper from Columbia's research group</a> that introduced this design is explicit that avoiding a hypervisor trap on every interrupt is a structural advantage over x86's software-emulated EOI path: an architectural difference, not a tuning one. It isn't entirely free, since vGIC state lives at EL2 and has to be saved and restored on each VM transition, but that's a different order of magnitude from trapping on every interrupt.</p>
 
-      <h2>I/O: paravirtualization vs. hardware passthrough, plainly defined</h2>
+      <h2 id="i-o-paravirtualization-vs-hardware-passthrough-plainly-defin">I/O: paravirtualization vs. hardware passthrough, plainly defined</h2>
       <p>This is the trade-off most people mean when they ask about virtualization performance, so it's worth defining precisely:</p>
       <ul>
         <li><strong>Full emulation:</strong> the hypervisor pretends to be a specific real piece of hardware (an old Intel NIC, a specific disk controller) in software. The guest's unmodified driver talks to it exactly like real hardware, but every register access can trap to the hypervisor. Simple and maximally compatible; slow.</li>
@@ -169,14 +182,14 @@
         </table>
       </div>
 
-      <h2>How this shows up on Apple Silicon specifically</h2>
+      <h2 id="how-this-shows-up-on-apple-silicon-specifically">How this shows up on Apple Silicon specifically</h2>
       <p>Apple built virtualization into macOS as a first-class part of the Apple Silicon transition rather than retrofitting it, and it rides on exactly the ARM mechanisms above. The <a href="https://developer.apple.com/documentation/hypervisor" target="_blank" rel="noopener">Hypervisor framework</a> gives low-level access to the CPU's virtualization extensions (EL2, Stage-2 translation, EL1/EL0 instruction and register trapping), and Apple's <a href="https://eclecticlight.co/2026/04/29/virtualisation-on-apple-silicon-macs-is-different/" target="_blank" rel="noopener">approach diverges deliberately from how virtualization worked on Intel Macs</a>, precisely because the hardware underneath it is different. <strong>Virtualization.framework</strong>, the higher-level API Velo Workspaces builds on, sits on top of that. (In macOS 15 Apple added support for exposing EL2 <em>inside</em> a guest, nested virtualization that lets a VM run its own hypervisor, a separate and newer capability from the base EL2 virtualization every Apple Silicon Mac has always used to run VMs at all.)</p>
       <p>I/O is where the passthrough-versus-paravirtualization trade-off gets concrete, and a little disappointing if you hoped for GPU passthrough. The Virtualization framework gives a Linux guest <code>virtio-gpu</code>, a paravirtualized display with no path to the Mac's GPU, as Apple's own container team has confirmed in <a href="https://github.com/apple/container/discussions/62" target="_blank" rel="noopener">public discussion</a>. That's a platform limit rather than an oversight: unlike a network card or a disk, there's no SR-IOV-style standard for sharing a GPU this way on this platform yet. It's why <strong>AI Bridge</strong> takes a different path. Instead of pushing compute into the guest across an I/O boundary that doesn't support it, the model server stays on the Mac's GPU and the guest reaches it over <strong>vsock</strong>, itself a virtio device (<code>VZVirtioSocketDeviceConfiguration</code>), the same paravirtualized pattern as virtio-net or virtio-blk, carrying a model API instead of a filesystem or a network stack. See the <a href="/blog/ai-bridge-architecture/">full architecture</a> and what it <a href="/blog/vm-sandboxing-cost/">actually costs</a>, benchmarked rather than asserted, and how the GPU story compares to <a href="/blog/velo-vs-parallels-vs-utm/">other VM apps on the same hardware</a>.</p>
 
-      <h2>The cloud reached the same conclusion from a different direction</h2>
+      <h2 id="the-cloud-reached-the-same-conclusion-from-a-different-direc">The cloud reached the same conclusion from a different direction</h2>
       <p>This isn't an Apple-specific story. AWS's Nitro system and Google's Titanium move exactly these kinds of overhead, network and storage I/O especially, onto dedicated hardware next to the CPU, so guest instances see close to bare-metal performance without the hypervisor mediating every packet or disk write in software. AWS Graviton's newer generations also added ARMv8.3+ nested-virtualization support, the same underlying capability Apple added to Virtualization.framework in macOS 15. Different companies, different silicon, converging on the same answer: push I/O virtualization overhead into hardware, and use ARM's EL2/vGIC-class primitives for everything else, rather than trying to out-engineer trap-and-emulate in software.</p>
 
-      <h2>Why this explains our benchmark numbers</h2>
+      <h2 id="why-this-explains-our-benchmark-numbers">Why this explains our benchmark numbers</h2>
       <p>This is the mechanism behind results published elsewhere on this blog. For single requests, an <a href="/blog/vm-inference-benchmark/">MLX inference benchmark</a> through a VM on Apple silicon was indistinguishable from running on the host, within normal run-to-run noise. Under concurrent load, the gap was a real but small single-digit percentage. Given everything above, that's what you'd expect: CPU traps are cheap (a dedicated EL2), interrupts don't trap to the hypervisor (vGIC), memory translation is amortized by the TLB, and the one I/O path that matters here, AI Bridge's vsock channel, is a lightweight paravirtualized ring buffer, not a heavyweight emulated device or a full virtualized network stack processing TCP/IP.</p>
 
       <p>Related reading: the <a href="/blog/ai-bridge-architecture/">architecture behind AI Bridge</a>, the <a href="/blog/vm-inference-benchmark/">inference benchmark</a>, <a href="/blog/vm-sandboxing-cost/">what VM isolation costs</a> across two inference engines, <a href="/blog/guest-os-performance-tuning/">what's worth tuning inside the guest</a>, <a href="/blog/linux-vm-cpu-performance-apple-silicon/">how many vCPUs to assign</a>, and <a href="/blog/why-arm-vms-feel-native/">what this buys you day to day</a>, without the exception levels. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

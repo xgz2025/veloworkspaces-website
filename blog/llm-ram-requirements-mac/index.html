@@ -105,36 +105,47 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>How Much RAM Do You Need for Local LLMs on a Mac?</h1>
         <p class="article-lede"><a href="/blog/zero-tax-virtualization/">The complete agent guide</a> has a table of models for each memory size. This is the arithmetic behind it, so you can size any model, and understand why one that fit at the start of a session can run out of room an hour later.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#two-numbers-not-one"><span>Two numbers, not one</span></a></li>
+          <li><a href="#weights-the-easy-part"><span>Weights: the easy part</span></a></li>
+          <li><a href="#kv-cache-the-part-that-grows"><span>KV cache: the part that grows</span></a></li>
+          <li><a href="#the-other-consumer-macos"><span>The other consumer: macOS</span></a></li>
+          <li><a href="#putting-it-together"><span>Putting it together</span></a></li>
+          <li><a href="#what-it-looks-like-when-you-get-it-wrong"><span>What it looks like when you get it wrong</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Two numbers, not one</h2>
+      <h2 id="two-numbers-not-one">Two numbers, not one</h2>
       <p>A model's memory use is two things added together: the <strong>weights</strong>, fixed once you pick a model and a quantization, and the <strong>KV cache</strong>, which grows as the conversation gets longer. Sizing for the weights alone is how a model works in a quick test and then runs out of memory in real use.</p>
 
-      <h2>Weights: the easy part</h2>
+      <h2 id="weights-the-easy-part">Weights: the easy part</h2>
       <p>Weight memory is roughly the parameter count times the bytes per parameter. The name gives you the first number ("7B" is 7 billion parameters) and the quantization gives you the second: 4-bit is about 0.5 bytes per parameter, so a 7B model at 4-bit needs about 3.5 GB for its weights. Double the bits and you roughly double that. (<a href="/blog/llm-quantization-explained-mac/">LLM quantization explained</a> covers why schemes at the same bit width aren't interchangeable.) Model cards give you this number, and it's where most "how much RAM" answers stop, which is the gap that causes surprises later.</p>
 
-      <h2>KV cache: the part that grows</h2>
+      <h2 id="kv-cache-the-part-that-grows">KV cache: the part that grows</h2>
       <p>The key-value cache holds attention state for every token in the current context, so unlike the weights, it grows with the conversation. The formula is <code>2 × layers × KV heads × head dimension × tokens × bytes per element</code>. Every term is in the model's config, and most inference tools report the result so you don't have to. What matters is the effect. In a short exchange the weights dominate and the KV cache hardly registers. In a long agent session with a big context window, the kind of multi-turn, tool-calling conversation a coding agent produces, the KV cache can match or exceed the weights. That's why a model can be fine when you start and slow or crashing later: the model didn't change, the context kept growing.</p>
 
-      <h2>The other consumer: macOS</h2>
+      <h2 id="the-other-consumer-macos">The other consumer: macOS</h2>
       <p>With unified memory, the model isn't the only thing drawing from the pool. macOS and the display need their share, which is why <a href="/blog/zero-tax-virtualization/">the model table</a> keeps about 20 to 25% of total memory aside. That's not an arbitrary margin; it covers real system use that a simple "weights plus KV cache" sum leaves out.</p>
 
-      <h2>Putting it together</h2>
+      <h2 id="putting-it-together">Putting it together</h2>
       <p>For any model: weights (parameters times bytes per parameter), plus a KV cache sized for the sessions you expect (small for a short chat, much more for a long agent run), plus 20 to 25% headroom for macOS. If the weights alone take most of your memory, there's nowhere for the KV cache to grow. Choose a smaller model rather than fighting swap.</p>
 
-      <h2>What it looks like when you get it wrong</h2>
+      <h2 id="what-it-looks-like-when-you-get-it-wrong">What it looks like when you get it wrong</h2>
       <p>Memory pressure on a Mac rarely shows up as a crash. It shows up as swapping: an engine that was fast a minute ago suddenly isn't, with no error pointing at the cause. If a model gets steadily slower through a session instead of staying consistent, check the context length and KV cache before blaming the model or the engine.</p>
 
       <p>Related reading: <a href="/blog/zero-tax-virtualization/">the model table this post explains</a>, <a href="/blog/local-llms-apple-silicon/">the local LLM tools</a>, and <a href="/blog/how-much-memory-linux-vm-mac/">how much memory to give a Linux VM</a> for the VM side of the budget. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

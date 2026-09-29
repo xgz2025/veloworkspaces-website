@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ubuntu Desktop VM on a Mac: Hands-Free Install, Step by Step</title>
+<meta name="description" content="Step by step with screenshots: Velo Workspaces downloads Ubuntu 26.04 Desktop, answers every installer question, then restarts into your desktop.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/ubuntu-desktop-vm-mac-automatic-install/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=6">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Ubuntu Desktop VM on a Mac: Hands-Free Install, Step by Step">
+<meta property="og:description" content="Step by step with screenshots: Velo Workspaces downloads Ubuntu 26.04 Desktop, answers every installer question, then restarts into your desktop.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/ubuntu-desktop-vm-mac-automatic-install/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/ubuntu-desktop-vm-mac-automatic-install.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Install Ubuntu Desktop in a Mac VM Without Answering a Question">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="article:published_time" content="2026-09-29">
+<meta property="article:modified_time" content="2026-09-29">
+<meta property="article:author" content="Gaoliang Luo">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Ubuntu Desktop VM on a Mac: Hands-Free Install, Step by Step",
+      "name": "Install Ubuntu Desktop in a Mac VM Without Answering a Question",
+      "description": "Step by step with screenshots: Velo Workspaces downloads Ubuntu 26.04 Desktop, answers every installer question, then restarts into your desktop.",
+      "image": [
+        "https://www.veloworkspaces.com/assets/og/ubuntu-desktop-vm-mac-automatic-install.jpg",
+        "https://www.veloworkspaces.com/assets/blog/guides/ubuntu-desktop/installing.webp"
+      ],
+      "datePublished": "2026-09-29",
+      "dateModified": "2026-09-29",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/ubuntu-desktop-vm-mac-automatic-install/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Install Ubuntu Desktop in a Mac VM Without Answering a Question",
+          "item": "https://www.veloworkspaces.com/blog/ubuntu-desktop-vm-mac-automatic-install/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section article-top">
+    <div class="container article-head">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Step-by-step guide</span>
+        <h1>Install Ubuntu Desktop in a Mac VM Without Answering a Question</h1>
+        <p class="article-lede">Ubuntu's installer normally asks about your language, keyboard, disk and account. With automatic installation, Velo Workspaces answers all of it for you, from what you enter once and your Mac's own settings. Here's the whole process, screen by screen.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-29">September 29, 2026</time><span class="article-readtime">3 min read</span></p>
+      </div>
+      <figure class="shot article-hero">
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-desktop/installing.webp"><img src="/assets/blog/guides/ubuntu-desktop/installing.webp" width="1288" height="842" alt="Ubuntu 26.04 Desktop installing itself in a Velo Workspaces VM, with the automatic installation banner above it" fetchpriority="high"><span class="shot-zoom">Click to enlarge</span></a>
+      </figure>
+      <details class="article-toc" open>
+        <summary>Steps in this guide</summary>
+        <ol>
+          <li><a href="#start-a-workspace-from-an-installer"><span class="toc-step">1</span><span>Start a workspace from an installer</span></a></li>
+          <li><a href="#choose-ubuntu-desktop-and-keep-automatic-installation-on"><span class="toc-step">2</span><span>Choose Ubuntu Desktop and keep Automatic installation on</span></a></li>
+          <li><a href="#set-up-the-workspace-and-your-account"><span class="toc-step">3</span><span>Set up the workspace and your account</span></a></li>
+          <li><a href="#review-and-start-the-installation"><span class="toc-step">4</span><span>Review and start the installation</span></a></li>
+          <li><a href="#let-it-install"><span class="toc-step">5</span><span>Let it install</span></a></li>
+          <li><a href="#sign-in"><span class="toc-step">6</span><span>Sign in</span></a></li>
+          <li><a href="#good-to-know"><span>Good to know</span></a></li>
+          <li><a href="#where-to-go-next"><span>Where to go next</span></a></li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+  <section class="section article-main">
+    <div class="container article-body">
+      <dl class="guide-facts">
+        <div><dt>Your time</dt><dd>About 2 minutes<span>the install runs on its own</span></dd></div>
+        <div><dt>Download</dt><dd>About 4 GB<span>Ubuntu 26.04.1 Desktop ISO</span></dd></div>
+        <div><dt>You get</dt><dd>Ubuntu Desktop<span>account, keys and SSH set up</span></dd></div>
+        <div><dt>Same steps for</dt><dd>Ubuntu Server<span>Fedora and Rocky Linux too</span></dd></div>
+      </dl>
+
+      <p>Automatic installation works for Ubuntu Server and Desktop, Fedora Server and Everything, and Rocky Linux. If you want a server, a <a href="/blog/create-ubuntu-vm-mac-cloud-image/">cloud image</a> is quicker still. The installer is the way to get Ubuntu's full desktop.</p>
+
+      <div class="guide-steps">
+
+      <section class="guide-step">
+      <h2 id="start-a-workspace-from-an-installer">Start a workspace from an installer</h2>
+      <p>Pick a kind of workspace in the sidebar and click <strong>+</strong> at the top right of the window. On the first step of the assistant, choose <strong>Installer image</strong>.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/select-image-installer.webp"><img src="/assets/blog/guides/select-image-installer.webp" width="796" height="656" alt="Select Image step with Installer image highlighted" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Installer image runs a distribution's own installer, downloaded for you.</span></figcaption>
+      </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="choose-ubuntu-desktop-and-keep-automatic-installation-on">Choose Ubuntu Desktop and keep Automatic installation on</h2>
+      <p>Choose <strong>Ubuntu</strong>, then a release: 26.04 LTS is recommended. Each release has a Server and a Desktop ISO. Click <strong>Download</strong> next to <strong>Desktop</strong>. It's about 4 GB, comes from cdimage.ubuntu.com, and is checked against Ubuntu's SHA-256 list when it arrives.</p>
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-desktop/choose-installer.webp"><img src="/assets/blog/guides/ubuntu-desktop/choose-installer.webp" width="743" height="604" alt="Choose an Installer step with the Ubuntu 26.04 Desktop ISO downloaded and Automatic installation ticked" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>The Desktop ISO, downloaded and verified, with Automatic installation ticked.</span></figcaption>
+      </figure>
+      <p>Below the list, <strong>Automatic installation</strong> is ticked. That's what makes this hands-free: Velo Workspaces answers the installer with the account and SSH keys from the next step, and your Mac's language, keyboard and time zone. Click <strong>Continue</strong>.</p>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="set-up-the-workspace-and-your-account">Set up the workspace and your account</h2>
+      <p>Name the workspace (the name becomes the hostname) and pick a profile. A desktop wants at least 4 GB of memory, and Code &amp; Build (4 CPU, 8 GB) is more comfortable. Under Account, enter the username and password the installer should create. This Mac's key is already listed, and <strong>Add Other Public Keys…</strong> takes any others you want to sign in with.</p>
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-desktop/configure.webp"><img src="/assets/blog/guides/ubuntu-desktop/configure.webp" width="743" height="604" alt="Configure step with workspace name, profiles, account and SSH public keys" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>The account you enter here is the one the installer creates.</span></figcaption>
+      </figure>
+      <p><strong>Show Advanced Settings</strong> sets exact CPU, memory and disk size. The disk is 64 GB unless you change it, and it only uses space on your Mac as it fills.</p>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="review-and-start-the-installation">Review and start the installation</h2>
+      <p>Setup reads <strong>Automatic: Ubuntu autoinstall</strong>. Click <strong>Start Installation</strong>.</p>
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-desktop/review.webp"><img src="/assets/blog/guides/ubuntu-desktop/review.webp" width="743" height="604" alt="Review and Launch step with Setup Automatic Ubuntu autoinstall and the Start Installation button" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Ubuntu 26.04 LTS Desktop, verified, with an automatic install.</span></figcaption>
+      </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="let-it-install">Let it install</h2>
+      <p>The workspace boots straight into Ubuntu's installer, and a banner in the app says what's going on: <em>Installing Ubuntu 26.04 LTS Desktop automatically. Don't type in the installer — Velo Workspaces restarts the workspace when it's done.</em> Take it at its word and go do something else.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-desktop/installing.webp"><img src="/assets/blog/guides/ubuntu-desktop/installing.webp" width="1288" height="842" alt="Ubuntu installer copying files in the workspace display, below the Velo Workspaces banner" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Ubuntu's installer copying files, with the app's banner above it.</span></figcaption>
+      </figure>
+      <p>Underneath, Velo Workspaces boots a copy of the ISO with <code>autoinstall</code> on the kernel command line and attaches a small disk holding the answers. That's why Ubuntu doesn't stop to ask anything, not even its usual “Continue with autoinstall?” question. When the installer finishes, it tells the app, and the workspace restarts from its own disk.</p>
+      <div class="note note-tip">
+        <p><strong>Rarely, the ISO can't be prepared that way.</strong> Ubuntu then asks once before it erases the virtual disk, and the banner shows a <strong>Confirm Installation</strong> button that answers for you.</p>
+      </div>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="sign-in">Sign in</h2>
+      <p>After the restart you get Ubuntu's desktop and its short welcome tour. SSH is already set up with your keys, so the Access tab soon shows <strong>SSH ready</strong>, and <strong>Open Terminal</strong> signs you straight in.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-desktop/desktop-terminal.webp"><img src="/assets/blog/guides/ubuntu-desktop/desktop-terminal.webp" width="1364" height="769" alt="Installed Ubuntu desktop welcome screen next to the built-in terminal signed in over SSH" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>The installed desktop, and the built-in terminal signed in over SSH.</span></figcaption>
+      </figure>
+      <div class="note note-pro">
+        <p><strong>Pro feature.</strong> The built-in terminal is part of Velo Workspaces Pro, which you can try free for a week. Without it, copy the <code>ssh</code> command from the Access tab into Terminal. That uses the keys in your <code>~/.ssh</code> folder, so the workspace has to trust one of them: <a href="/blog/ssh-vs-code-linux-vm-mac/">the SSH and VS Code guide</a> shows how.</p>
+      </div>
+      </section>
+
+      </div>
+
+      <h2 id="good-to-know">Good to know</h2>
+
+      <ul>
+        <li><strong>Server instead of Desktop:</strong> the steps are the same with the Server ISO, and you end up at a console instead of a desktop.</li>
+        <li><strong>Debian:</strong> automatic installation isn't available for Debian's installer yet. The Debian cloud image sets up automatically.</li>
+        <li><strong>Server or Desktop?</strong> <a href="/blog/linux-server-vs-desktop-vm-mac/">This comparison</a> helps you choose.</li>
+      </ul>
+
+      <h2 id="where-to-go-next">Where to go next</h2>
+
+      <div class="guide-next">
+        <a href="/blog/fedora-vm-mac-automatic-install/"><span>Step by step</span>Fedora Server with an automatic kickstart</a>
+        <a href="/blog/ssh-vs-code-linux-vm-mac/"><span>Next guide</span>SSH and VS Code into your workspace, with one key</a>
+        <a href="/blog/create-ubuntu-vm-mac-cloud-image/"><span>Faster</span>An Ubuntu server from a cloud image in 30 seconds</a>
+        <a href="/blog/ubuntu-on-apple-silicon/"><span>Background</span>Ubuntu on Apple silicon: versions, desktops and tips</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc. Ubuntu is a trademark of Canonical Ltd.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+<script src="/assets/lightbox.js?v=1" defer></script>
+</body>
+</html>

@@ -20,7 +20,7 @@
 <meta property="og:image:alt" content="Running Fedora on Apple Silicon: What&#x27;s Different">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-20">
-<meta property="article:modified_time" content="2026-09-28">
+<meta property="article:modified_time" content="2026-09-29">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -33,7 +33,7 @@
       "description": "Run Fedora 44 on an M-series Mac from the Cloud Base image or a hands-free Server install, and what's different: SELinux, NetworkManager and Rosetta.",
       "image": "https://www.veloworkspaces.com/assets/og/fedora-on-apple-silicon.jpg",
       "datePublished": "2026-09-20",
-      "dateModified": "2026-09-28",
+      "dateModified": "2026-09-29",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -105,24 +105,38 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>Running Fedora on Apple Silicon: What's Different</h1>
         <p class="article-lede">Third in the series on specific distributions. Fedora runs natively on arm64 like Ubuntu and Debian, installs without a single question in Velo Workspaces 1.2, and has defaults that differ from both in ways that matter.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-29">September 29, 2026</time><span class="article-readtime">3 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#native-arm64-and-only-arm64-on-arm"><span>Native arm64, and only arm64 on ARM</span></a></li>
+          <li><a href="#three-ways-in"><span>Three ways in</span></a></li>
+          <li><a href="#the-default-that-surprises-people-selinux-enforcing"><span>The default that surprises people: SELinux, enforcing</span></a></li>
+          <li><a href="#networking-networkmanager"><span>Networking: NetworkManager</span></a></li>
+          <li><a href="#rosetta-works-differently-here"><span>Rosetta works differently here</span></a></li>
+          <li><a href="#when-fedora-makes-sense"><span>When Fedora makes sense</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Native arm64, and only arm64 on ARM</h2>
+      <div class="note note-tip" data-guide-callout>
+        <p><strong>Step by step, with screenshots:</strong> <a href="/blog/fedora-vm-mac-automatic-install/">install Fedora Server with an automatic kickstart</a>, from download to an SSH session.</p>
+      </div>
+      <h2 id="native-arm64-and-only-arm64-on-arm">Native arm64, and only arm64 on ARM</h2>
       <p>Fedora on an Apple silicon Mac runs natively on arm64, like <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu</a> and <a href="/blog/debian-on-apple-silicon/">Debian</a>. Fedora Linux 44 ships for x86_64 and aarch64. 32-bit ARM was dropped some releases ago, so on ARM there's one build to choose.</p>
 
-      <h2>Three ways in</h2>
+      <h2 id="three-ways-in">Three ways in</h2>
       <ul>
         <li><strong>Cloud image.</strong> Fedora 44 Cloud Base, downloaded from fedoraproject.org and checked against Fedora's published checksum. cloud-init creates your account and adds this Mac's SSH key on first boot, and it's ready in about a minute. The quickest way to a headless Fedora.</li>
         <li><strong>Automatic install.</strong> Choose <strong>Installer image</strong>, pick Fedora Server or Everything, and leave <strong>Automatic installation</strong> on. Velo Workspaces writes a kickstart file to a small disk labelled <code>OEMDRV</code>, which Anaconda picks up by itself. There's no confirmation step at all: the install runs start to finish and the workspace restarts into Fedora.</li>
@@ -130,17 +144,17 @@
       </ul>
       <p>Fedora's aarch64 ISOs are built to boot from a CD, and Apple's Virtualization framework has no CD drive, only USB-style disks. Velo Workspaces gives its own copy of the ISO a partition table the firmware can boot from, and leaves the original file in your library untouched.</p>
 
-      <h2>The default that surprises people: SELinux, enforcing</h2>
+      <h2 id="the-default-that-surprises-people-selinux-enforcing">The default that surprises people: SELinux, enforcing</h2>
       <p>Fedora ships SELinux in enforcing mode with the targeted policy. It isn't just installed, it's on. A service that binds a nonstandard port, reads from an unexpected directory, or gets restarted by a script in a way its policy doesn't expect can fail with what looks like a permissions error while the file permissions are fine. Ubuntu and a minimal Debian don't put you in that position by default.</p>
       <p>The answer isn't to turn SELinux off. It's to check it first. When a service misbehaves for no visible reason, look for an AVC denial with <code>journalctl</code>, or run <code>sealert</code> against the audit log, before anything else.</p>
 
-      <h2>Networking: NetworkManager</h2>
+      <h2 id="networking-networkmanager">Networking: NetworkManager</h2>
       <p>A Fedora installed by Anaconda uses <strong>NetworkManager</strong>, which you configure with <code>nmcli</code> and <code>/etc/NetworkManager/</code>, not Debian's <code>/etc/network/interfaces</code> or Ubuntu Server's Netplan. (The Cloud Base image is set up by cloud-init instead.) NetworkManager doesn't have the Netplan MAC-address problem that trips up cloned Ubuntu Server workspaces, but it is a different place to look when you need to change something.</p>
 
-      <h2>Rosetta works differently here</h2>
+      <h2 id="rosetta-works-differently-here">Rosetta works differently here</h2>
       <p>Ubuntu and Debian register Rosetta through <code>update-binfmts</code>, a tool that manages the kernel's <code>binfmt_misc</code> entries for you. Fedora doesn't ship it. It uses <strong>systemd-binfmt</strong>, which reads the same kernel registration from a config file you write. The end result is the same, with x86-64 binaries handed to Rosetta, but the steps differ, so the <a href="/support/">support FAQ</a> lists Fedora's separately: mount the <code>rosetta</code> share, write <code>/etc/binfmt.d/rosetta.conf</code>, and restart <code>systemd-binfmt</code>.</p>
 
-      <h2>When Fedora makes sense</h2>
+      <h2 id="when-fedora-makes-sense">When Fedora makes sense</h2>
       <p>Fedora tracks upstream closely. New kernels and packages land here well before Ubuntu or Debian. The cost is a support window of about a year per release, which matters little for a disposable workspace you rebuild from a base image and a lot for a server you patch in place for years. Pick Fedora to test against current upstream versions, Debian when you want the base image to be the boring part, Ubuntu when your tools or CI assume it, and <a href="/blog/rocky-linux-on-apple-silicon/">Rocky Linux</a> when production runs RHEL.</p>
 
       <p>Related reading: <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu</a> and <a href="/blog/debian-on-apple-silicon/">Debian</a> on Apple Silicon, the first two in this series; <a href="/blog/rocky-linux-on-apple-silicon/">Rocky Linux on Apple Silicon</a>, Fedora's RHEL-compatible downstream relative; the <a href="/blog/qa-devops-disposable-vm-workflow/">disposable VM workflow for QA and DevOps</a>; and <a href="/blog/arm-virtualization-performance/">why VMs on Apple Silicon perform the way they do</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

@@ -125,6 +125,7 @@ def render(code, seg, label):
             </div>
           </li>
         </ol>
+        <p style="margin-top:16px;"><a href="/blog/#step-by-step-guides">{t['gs1_guides_link']} →</a></p>
       </div>
 
       <div class="card">

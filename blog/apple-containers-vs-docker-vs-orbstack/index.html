@@ -105,24 +105,34 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Comparison</span>
         <h1>Apple Containers vs. Docker Desktop vs. OrbStack</h1>
         <p class="article-lede">Not a Velo Workspaces comparison; Apple's tool doesn't compete with what Velo Workspaces does (see <a href="/blog/apple-containers-vs-linux-vms/">Apple Containers vs. Linux VMs</a>). This is about the three real options for running containers on a Mac today, and what's different about the newest.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#three-answers-to-where-does-the-linux-kernel-come-from"><span>Three answers to &quot;where does the Linux kernel come from?&quot;</span></a></li>
+          <li><a href="#what-apple-s-tool-gets-right"><span>What Apple&#x27;s tool gets right</span></a></li>
+          <li><a href="#what-the-1-0-still-lacks"><span>What the 1.0 still lacks</span></a></li>
+          <li><a href="#where-docker-desktop-and-orbstack-still-win"><span>Where Docker Desktop and OrbStack still win</span></a></li>
+          <li><a href="#which-to-reach-for"><span>Which to reach for</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Three answers to "where does the Linux kernel come from?"</h2>
+      <h2 id="three-answers-to-where-does-the-linux-kernel-come-from">Three answers to "where does the Linux kernel come from?"</h2>
       <p>All three solve the same problem: macOS has no Linux kernel, so running Linux containers means getting one somewhere. They solve it differently enough that "which is fastest" undersells the difference. <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">Docker Desktop and OrbStack</a> run every container inside one shared Linux VM. Apple's tool, stable at 1.0 since June 2026, gives each container its own lightweight VM on the Virtualization framework, the design described in <a href="/blog/apple-containers-vs-linux-vms/">the companion post</a>.</p>
 
-      <h2>What Apple's tool gets right</h2>
+      <h2 id="what-apple-s-tool-gets-right">What Apple's tool gets right</h2>
       <ul>
         <li><strong>Stronger isolation by default.</strong> With a VM per container, a kernel-level compromise in one container doesn't automatically reach the others. It's the container-versus-VM distinction from the <a href="/blog/ai-agent-security-risks/">security deep dive</a>, except here it comes with the default configuration.</li>
         <li><strong>Fast at what it's built for.</strong> A minimal kernel with a small Swift init process is reported to boot in under a second, tuned for starting one container quickly.</li>
@@ -130,13 +140,13 @@
         <li><strong>OCI-compatible.</strong> Docker Hub images run unmodified, and what you build pushes to any standard registry.</li>
       </ul>
 
-      <h2>What the 1.0 still lacks</h2>
+      <h2 id="what-the-1-0-still-lacks">What the 1.0 still lacks</h2>
       <p>A 1.0 isn't feature-complete. Apple's tool is Apple silicon only, with no path for Intel Macs. There's no Docker Compose equivalent for multi-container setups and no confirmed native Kubernetes integration, both real gaps if your workflow depends on them. And it's new, with a far smaller body of tutorials, answers and CI integrations than Docker has built up over a decade. That doesn't make it a bad tool; it makes it a young one.</p>
 
-      <h2>Where Docker Desktop and OrbStack still win</h2>
+      <h2 id="where-docker-desktop-and-orbstack-still-win">Where Docker Desktop and OrbStack still win</h2>
       <p><a href="/blog/velo-vs-docker-desktop-vs-orbstack/">The full comparison</a> covers both. In short: Docker Desktop is still the default that every tutorial, CI config and onboarding doc assumes, with by far the largest ecosystem, and its own newer VM backend (Docker VMM) aimed at closing the performance gap. OrbStack publishes substantial filesystem speed advantages over Docker Desktop's default backend on small-file and metadata-heavy work; test them against your own workload, but they reflect a real strength. Both also run on Intel Macs.</p>
 
-      <h2>Which to reach for</h2>
+      <h2 id="which-to-reach-for">Which to reach for</h2>
       <ul>
         <li><strong>Deep in Docker's ecosystem (Compose, Kubernetes, CI built around it):</strong> stay on Docker Desktop. The migration isn't worth it yet.</li>
         <li><strong>Want the fastest file performance for a container-heavy local workflow:</strong> try OrbStack against your own workload before paying.</li>

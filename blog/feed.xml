@@ -6,7 +6,49 @@
   <atom:link href="https://www.veloworkspaces.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
   <description>Guides to running Linux VMs on Apple silicon Macs: cloud images, automatic installs, local AI agents, Rosetta, benchmarks and honest comparisons.</description>
   <language>en</language>
-  <lastBuildDate>Mon, 28 Sep 2026 12:00:00 +0000</lastBuildDate>
+  <lastBuildDate>Tue, 29 Sep 2026 12:00:00 +0000</lastBuildDate>
+  <item>
+    <title>Create an Ubuntu VM on a Mac in 30 Seconds: Step by Step</title>
+    <link>https://www.veloworkspaces.com/blog/create-ubuntu-vm-mac-cloud-image/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/create-ubuntu-vm-mac-cloud-image/</guid>
+    <pubDate>Tue, 29 Sep 2026 12:00:00 +0000</pubDate>
+    <description>Step by step, with screenshots and a video: download Ubuntu 26.04&#x27;s cloud image, set your account and SSH key, and sign in to a running VM on your Mac.</description>
+  </item>
+  <item>
+    <title>Ubuntu Desktop VM on a Mac: Hands-Free Install, Step by Step</title>
+    <link>https://www.veloworkspaces.com/blog/ubuntu-desktop-vm-mac-automatic-install/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/ubuntu-desktop-vm-mac-automatic-install/</guid>
+    <pubDate>Tue, 29 Sep 2026 12:00:00 +0000</pubDate>
+    <description>Step by step with screenshots: Velo Workspaces downloads Ubuntu 26.04 Desktop, answers every installer question, then restarts into your desktop.</description>
+  </item>
+  <item>
+    <title>Fedora VM on a Mac: Automatic Kickstart Install Walkthrough</title>
+    <link>https://www.veloworkspaces.com/blog/fedora-vm-mac-automatic-install/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/fedora-vm-mac-automatic-install/</guid>
+    <pubDate>Tue, 29 Sep 2026 12:00:00 +0000</pubDate>
+    <description>Step by step with screenshots: install Fedora 44 Server in Velo Workspaces with a kickstart it writes for you, then sign in over SSH. Rocky Linux too.</description>
+  </item>
+  <item>
+    <title>Install Kali Linux in a VM on an M-Series Mac: Walkthrough</title>
+    <link>https://www.veloworkspaces.com/blog/kali-linux-vm-mac-install-guide/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/kali-linux-vm-mac-install-guide/</guid>
+    <pubDate>Tue, 29 Sep 2026 12:00:00 +0000</pubDate>
+    <description>A walkthrough with screenshots: install Kali&#x27;s arm64 build in Velo Workspaces, turn on SSH, and sign in from the built-in terminal with your Mac&#x27;s key.</description>
+  </item>
+  <item>
+    <title>Install NixOS in a VM on an Apple Silicon Mac: Step by Step</title>
+    <link>https://www.veloworkspaces.com/blog/nixos-vm-mac-install-guide/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/nixos-vm-mac-install-guide/</guid>
+    <pubDate>Tue, 29 Sep 2026 12:00:00 +0000</pubDate>
+    <description>Step by step with screenshots: download the NixOS 26.05 graphical installer in Velo Workspaces, install GNOME with a few clicks, then turn on SSH.</description>
+  </item>
+  <item>
+    <title>SSH and VS Code Remote-SSH into a Linux VM on Your Mac</title>
+    <link>https://www.veloworkspaces.com/blog/ssh-vs-code-linux-vm-mac/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/ssh-vs-code-linux-vm-mac/</guid>
+    <pubDate>Tue, 29 Sep 2026 12:00:00 +0000</pubDate>
+    <description>Use one key for the built-in terminal, Terminal and VS Code Remote-SSH: import your Mac&#x27;s key into Velo Workspaces, or export the app&#x27;s key to ~/.ssh.</description>
+  </item>
   <item>
     <title>What&#x27;s New in Velo Workspaces 1.2: Linux VMs in a Minute</title>
     <link>https://www.veloworkspaces.com/blog/whats-new-in-velo-workspaces-1-2/</link>
@@ -36,6 +78,41 @@
     <description>Move an existing Linux VM to Velo Workspaces: UTM&#x27;s QCOW2 disks import directly since 1.2; Fusion and Parallels disks convert with one qemu-img command.</description>
   </item>
   <item>
+    <title>Linux VM Networking on a Mac: NAT, SSH and Port Forwards</title>
+    <link>https://www.veloworkspaces.com/blog/linux-vm-networking-apple-silicon/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/linux-vm-networking-apple-silicon/</guid>
+    <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
+    <description>How a Linux VM on an M-series Mac reaches the internet, how the Mac reaches it, and how another computer on your LAN can connect: port forwards and ssh -J.</description>
+  </item>
+  <item>
+    <title>Kali Linux on Apple Silicon: Set Up an arm64 Kali VM</title>
+    <link>https://www.veloworkspaces.com/blog/kali-linux-on-apple-silicon/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/kali-linux-on-apple-silicon/</guid>
+    <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
+    <description>Install Kali Linux&#x27;s official arm64 build in a VM on an M-series Mac, what NAT networking means for a testing lab, and why disposable workspaces fit.</description>
+  </item>
+  <item>
+    <title>NixOS on Apple Silicon: Install NixOS in a VM on a Mac</title>
+    <link>https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/</guid>
+    <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
+    <description>Install NixOS 26.05 or 25.05 on an M-series Mac from the official aarch64 ISO, and how configuration.nix and base images fit together in a VM.</description>
+  </item>
+  <item>
+    <title>Rocky Linux on Apple Silicon: RHEL-Compatible VMs on a Mac</title>
+    <link>https://www.veloworkspaces.com/blog/rocky-linux-on-apple-silicon/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/rocky-linux-on-apple-silicon/</guid>
+    <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
+    <description>Run Rocky Linux 10 or 9 on an M-series Mac from the GenericCloud image or an automatic kickstart install, and test against RHEL before production.</description>
+  </item>
+  <item>
+    <title>Ubuntu Server or Desktop for a Linux VM on a Mac?</title>
+    <link>https://www.veloworkspaces.com/blog/linux-server-vs-desktop-vm-mac/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/linux-server-vs-desktop-vm-mac/</guid>
+    <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
+    <description>When a headless Ubuntu Server VM plus SSH is all you need on a Mac, when you need a desktop session, and what a Linux desktop&#x27;s graphics can and can&#x27;t do.</description>
+  </item>
+  <item>
     <title>The Local Development Stack on Apple Silicon: A 2026 Map</title>
     <link>https://www.veloworkspaces.com/blog/modern-local-development-stack-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/modern-local-development-stack-apple-silicon/</guid>
@@ -55,13 +132,6 @@
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/how-virtualization-framework-works/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
     <description>A device-by-device tour of a real Virtualization.framework VM: EFI boot, disks and seed disks, NAT networking, graphics, VirtioFS, vsock, and saved state.</description>
-  </item>
-  <item>
-    <title>Linux VM Networking on a Mac: NAT, SSH and Port Forwards</title>
-    <link>https://www.veloworkspaces.com/blog/linux-vm-networking-apple-silicon/</link>
-    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/linux-vm-networking-apple-silicon/</guid>
-    <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>How a Linux VM on an M-series Mac reaches the internet, how the Mac reaches it, and how another computer on your LAN can connect: port forwards and ssh -J.</description>
   </item>
   <item>
     <title>Virtualization.framework vs. QEMU on Apple Silicon Macs</title>
@@ -97,34 +167,6 @@
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/best-linux-distro-apple-silicon/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
     <description>Ubuntu, Debian, Fedora, Rocky Linux, Arch, Kali or NixOS on an M-series Mac? Which fits your work, and which ones set themselves up in about a minute.</description>
-  </item>
-  <item>
-    <title>Kali Linux on Apple Silicon: Set Up an arm64 Kali VM</title>
-    <link>https://www.veloworkspaces.com/blog/kali-linux-on-apple-silicon/</link>
-    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/kali-linux-on-apple-silicon/</guid>
-    <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Install Kali Linux&#x27;s official arm64 build in a VM on an M-series Mac, what NAT networking means for a testing lab, and why disposable workspaces fit.</description>
-  </item>
-  <item>
-    <title>NixOS on Apple Silicon: Install NixOS in a VM on a Mac</title>
-    <link>https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/</link>
-    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/</guid>
-    <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Install NixOS 26.05 or 25.05 on an M-series Mac from the official aarch64 ISO, and how configuration.nix and base images fit together in a VM.</description>
-  </item>
-  <item>
-    <title>Rocky Linux on Apple Silicon: RHEL-Compatible VMs on a Mac</title>
-    <link>https://www.veloworkspaces.com/blog/rocky-linux-on-apple-silicon/</link>
-    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/rocky-linux-on-apple-silicon/</guid>
-    <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Run Rocky Linux 10 or 9 on an M-series Mac from the GenericCloud image or an automatic kickstart install, and test against RHEL before production.</description>
-  </item>
-  <item>
-    <title>Ubuntu Server or Desktop for a Linux VM on a Mac?</title>
-    <link>https://www.veloworkspaces.com/blog/linux-server-vs-desktop-vm-mac/</link>
-    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/linux-server-vs-desktop-vm-mac/</guid>
-    <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>When a headless Ubuntu Server VM plus SSH is all you need on a Mac, when you need a desktop session, and what a Linux desktop&#x27;s graphics can and can&#x27;t do.</description>
   </item>
   <item>
     <title>Rosetta 2 in Linux VMs on Apple Silicon: How It Works</title>
@@ -400,18 +442,18 @@
     <description>Run Ubuntu 26.04 or 24.04 LTS on an M-series Mac in about a minute from the official cloud image, or install Server or Desktop hands-free.</description>
   </item>
   <item>
-    <title>Debian on Apple Silicon: Run a Debian 13 VM on a Mac</title>
-    <link>https://www.veloworkspaces.com/blog/debian-on-apple-silicon/</link>
-    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/debian-on-apple-silicon/</guid>
-    <pubDate>Sun, 20 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Debian 13 and 12 on an M-series Mac: the cloud image that sets itself up in a minute, the netinst installer, and how Debian differs from Ubuntu in a VM.</description>
-  </item>
-  <item>
     <title>Fedora on Apple Silicon: Run a Fedora 44 VM on a Mac</title>
     <link>https://www.veloworkspaces.com/blog/fedora-on-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/fedora-on-apple-silicon/</guid>
     <pubDate>Sun, 20 Sep 2026 12:00:00 +0000</pubDate>
     <description>Run Fedora 44 on an M-series Mac from the Cloud Base image or a hands-free Server install, and what&#x27;s different: SELinux, NetworkManager and Rosetta.</description>
+  </item>
+  <item>
+    <title>Debian on Apple Silicon: Run a Debian 13 VM on a Mac</title>
+    <link>https://www.veloworkspaces.com/blog/debian-on-apple-silicon/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/debian-on-apple-silicon/</guid>
+    <pubDate>Sun, 20 Sep 2026 12:00:00 +0000</pubDate>
+    <description>Debian 13 and 12 on an M-series Mac: the cloud image that sets itself up in a minute, the netinst installer, and how Debian differs from Ubuntu in a VM.</description>
   </item>
   <item>
     <title>Disposable VMs for QA and DevOps on a Mac: A Clean Workflow</title>

@@ -105,38 +105,49 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>Running macOS Guests on Apple Silicon: What's Different from a Linux Workspace</h1>
         <p class="article-lede">The other guest type Velo Workspaces supports, and a very different one from Linux: real GPU acceleration, shared folders that need no mount command, and one gotcha worth knowing before it costs you a workspace.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-21">September 21, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">3 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#an-apple-silicon-host-no-way-around-it"><span>An Apple silicon host, no way around it</span></a></li>
+          <li><a href="#one-image-the-latest-macos-for-this-mac"><span>One image: the latest macOS for this Mac</span></a></li>
+          <li><a href="#the-gpu-story-is-the-opposite-of-linux"><span>The GPU story is the opposite of Linux</span></a></li>
+          <li><a href="#shared-folders-no-mount-command"><span>Shared folders, no mount command</span></a></li>
+          <li><a href="#the-gotcha-the-disk-isn-t-the-whole-workspace"><span>The gotcha: the disk isn&#x27;t the whole workspace</span></a></li>
+          <li><a href="#what-stays-on-the-linux-side"><span>What stays on the Linux side</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>An Apple silicon host, no way around it</h2>
+      <h2 id="an-apple-silicon-host-no-way-around-it">An Apple silicon host, no way around it</h2>
       <p>A macOS guest needs an Apple silicon Mac. On an Intel Mac, Linux guests work fine but macOS guests aren't available at all. That line is drawn by Apple's Virtualization framework, not by Velo Workspaces.</p>
 
-      <h2>One image: the latest macOS for this Mac</h2>
+      <h2 id="one-image-the-latest-macos-for-this-mac">One image: the latest macOS for this Mac</h2>
       <p>Linux means choosing a distribution and a release. macOS doesn't: choose <strong>Installer image</strong>, pick macOS, and Velo Workspaces asks Apple's restore-image service for the latest macOS this Mac supports. There's no list of older releases to browse. If you need a specific build, <strong>Choose File…</strong> accepts an <code>.ipsw</code> restore image you've downloaded yourself.</p>
       <p>Restore images are large, typically 15 to 18 GB. Since 1.2 the download stays in <strong>Settings › Images</strong>, so a second macOS workspace installs from the copy you already have instead of fetching it again. The install itself is unattended: Apple's installer runs by itself, and you finish macOS's setup assistant in the workspace's window.</p>
 
-      <h2>The GPU story is the opposite of Linux</h2>
+      <h2 id="the-gpu-story-is-the-opposite-of-linux">The GPU story is the opposite of Linux</h2>
       <p>A Linux guest gets <code>virtio-gpu</code>, a paravirtualized display with no path to the Mac's GPU, which is why <a href="/blog/ai-bridge-architecture/">AI Bridge</a> exists for AI inference. A macOS guest doesn't hit that wall. Apple's platform gives it a Metal-backed graphics device built to deliver near-native GPU performance through the Metal API. The limitation that shapes every Linux post on this blog, including the <a href="/blog/velo-vs-parallels-vs-utm/">Parallels and UTM comparison</a>, doesn't apply here.</p>
       <p>Input feels native for a related reason. A macOS guest gets real trackpad and keyboard passthrough with multi-touch gestures (two-finger scroll, pinch to zoom, Mission Control swipes), not just forwarded clicks and keystrokes. Together with the graphics, it feels like using another Mac, which a Linux console never tries to.</p>
 
-      <h2>Shared folders, no mount command</h2>
+      <h2 id="shared-folders-no-mount-command">Shared folders, no mount command</h2>
       <p>Linux workspaces need a <code>mount -t virtiofs</code> command for each shared folder. macOS guests don't: every shared folder appears under <code>/Volumes/My Shared Files/</code> as soon as the guest boots. The caveat is that this relies on macOS 13 or later inside the guest. An older macOS guest doesn't recognize the mechanism and silently mounts nothing.</p>
 
-      <h2>The gotcha: the disk isn't the whole workspace</h2>
+      <h2 id="the-gotcha-the-disk-isn-t-the-whole-workspace">The gotcha: the disk isn't the whole workspace</h2>
       <p>A macOS guest's hardware model, machine identifier and auxiliary boot storage are kept <em>beside</em> its disk image, in a small metadata folder that belongs to the workspace. Copy or move only the disk file, to back it up or share it by hand, and you get a workspace that can't start, because the platform data it needs to boot isn't there. Move macOS workspaces with the app, or keep the whole bundle together.</p>
 
-      <h2>What stays on the Linux side</h2>
+      <h2 id="what-stays-on-the-linux-side">What stays on the Linux side</h2>
       <p><strong>Rosetta needs no setup here.</strong> The VirtioFS share and <code>binfmt</code> registration described in the Ubuntu, Debian and Fedora posts are for Linux guests. A macOS guest is an ordinary macOS installation, so an x86-64 Mac app triggers Rosetta 2 the usual way, exactly as on a real Mac.</p>
       <p><strong>AI Bridge is for Linux guests.</strong> A macOS guest doesn't need it, for the same reason: it already has GPU access of its own.</p>
       <p><strong>The built-in SSH terminal is for Linux workspaces too.</strong> To reach a macOS guest over SSH, turn on Remote Login inside it and connect the way you would to any Mac.</p>

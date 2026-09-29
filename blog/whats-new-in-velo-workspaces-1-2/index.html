@@ -20,7 +20,7 @@
 <meta property="og:image:alt" content="What&#x27;s New in Velo Workspaces 1.2">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-28">
-<meta property="article:modified_time" content="2026-09-28">
+<meta property="article:modified_time" content="2026-09-29">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -33,7 +33,7 @@
       "description": "Velo Workspaces 1.2 brings official Linux cloud images, hands-free Ubuntu, Fedora and Rocky installs, an Image Library and a built-in SSH terminal.",
       "image": "https://www.veloworkspaces.com/assets/og/whats-new-in-velo-workspaces-1-2.jpg",
       "datePublished": "2026-09-28",
-      "dateModified": "2026-09-28",
+      "dateModified": "2026-09-29",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -105,21 +105,36 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Release notes</span>
         <h1>What's New in Velo Workspaces 1.2</h1>
         <p class="article-lede">The biggest update since launch is about one thing: getting from "I need a Linux machine" to a shell prompt as fast as possible. Official cloud images, installers that run themselves, and a terminal that signs you straight in.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-28">September 28, 2026</time> · Updated <time datetime="2026-09-29">September 29, 2026</time><span class="article-readtime">4 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#linux-in-about-a-minute-from-official-cloud-images"><span>Linux in about a minute, from official cloud images</span></a></li>
+          <li><a href="#installers-that-run-themselves"><span>Installers that run themselves</span></a></li>
+          <li><a href="#the-image-library"><span>The Image Library</span></a></li>
+          <li><a href="#a-built-in-ssh-terminal"><span>A built-in SSH terminal</span></a></li>
+          <li><a href="#what-s-free-and-what-s-pro"><span>What&#x27;s free and what&#x27;s Pro</span></a></li>
+          <li><a href="#try-it"><span>Try it</span></a></li>
+          <li><a href="#what-s-next"><span>What&#x27;s next</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Linux in about a minute, from official cloud images</h2>
+      <div class="note note-tip" data-guide-callout>
+        <p><strong>Step by step, with screenshots:</strong> <a href="/blog/create-ubuntu-vm-mac-cloud-image/">an Ubuntu cloud image</a>, <a href="/blog/ubuntu-desktop-vm-mac-automatic-install/">Ubuntu Desktop</a> and <a href="/blog/fedora-vm-mac-automatic-install/">Fedora</a> installed automatically, <a href="/blog/kali-linux-vm-mac-install-guide/">Kali Linux</a> and <a href="/blog/nixos-vm-mac-install-guide/">NixOS</a> by hand, and <a href="/blog/ssh-vs-code-linux-vm-mac/">SSH and VS Code</a>.</p>
+      </div>
+      <h2 id="linux-in-about-a-minute-from-official-cloud-images">Linux in about a minute, from official cloud images</h2>
       <p>Until now, a new Linux workspace meant downloading an installer ISO and clicking through the distribution's installer. That still works, but it's no longer the quickest way. When you create a workspace, the first choice is now <strong>Cloud image</strong>: the prebuilt disk images distributions publish for cloud servers, with cloud-init built in.</p>
       <p>Pick a distribution and version, type a username and password, and click <strong>Create Workspace</strong>. Velo Workspaces downloads the image from the vendor's own servers, checks it against the vendor's published checksum, converts it for Apple's Virtualization framework, and hands cloud-init your account, this Mac's SSH key, your time zone and a hostname on a small seed disk. The first boot sets everything up and grows the disk to the size you chose. It's usually ready to sign in to about a minute after the download finishes.</p>
       <p>Available in 1.2:</p>
@@ -131,28 +146,28 @@
       </ul>
       <p>There's no default user with a known password; the only account is the one you named. Each cloud workspace also gets its own SSH host key, generated in advance, so the first connection is trusted without a fingerprint prompt.</p>
 
-      <h2>Installers that run themselves</h2>
+      <h2 id="installers-that-run-themselves">Installers that run themselves</h2>
       <p>If you'd rather run a distribution's own installer, for Ubuntu Desktop for example, choose <strong>Installer image</strong>. For Ubuntu, Fedora and Rocky Linux, leave <strong>Automatic installation</strong> on and the app answers the installer's questions for you: your account and SSH key, plus this Mac's language, keyboard and time zone.</p>
       <ul>
-        <li><strong>Ubuntu Server and Desktop</strong> use Ubuntu's autoinstall. Ubuntu always asks once before erasing the disk, so click <strong>Confirm Installation</strong> in the banner.</li>
+        <li><strong>Ubuntu Server and Desktop</strong> use Ubuntu's autoinstall. The app boots the installer with <code>autoinstall</code> on the kernel command line, so it doesn't stop to ask anything, not even before erasing the disk.</li>
         <li><strong>Fedora Server and Everything</strong>, and <strong>Rocky Linux</strong> Minimal and DVD, use a kickstart file that Anaconda picks up by itself. No questions at all.</li>
       </ul>
       <p>When the install finishes, the workspace restarts into the new system. Debian's installer, Fedora Workstation, Kali Linux, NixOS 26.05 and 25.05, and Alpine Linux 3.24 are in the catalog too, installed by hand in the workspace's display. For a hands-free Debian, use the cloud image.</p>
       <p>Some of these ISOs, Fedora's, Rocky Linux's and NixOS's aarch64 images among them, are built to boot from a CD, and Apple's framework has no CD drive. Velo Workspaces now gives its own copy of such an ISO a partition table the firmware can boot from, so they start normally on Apple silicon.</p>
 
-      <h2>The Image Library</h2>
+      <h2 id="the-image-library">The Image Library</h2>
       <p>Everything you download or import is kept in one place: <strong>Settings › Images</strong>, also reachable from <strong>Images</strong> in the sidebar. Cloud images, installer ISOs and the macOS restore image are under <strong>Installers &amp; Cloud Images</strong>, and saved base images under <strong>Base Images</strong>. Images are reused, so your second Ubuntu workspace doesn't download anything, and a second macOS workspace doesn't fetch another 15 GB restore image.</p>
       <p>Already have a file? <strong>Choose File…</strong> on the Image step, or <strong>Import…</strong> in Settings › Images. If its name appears in the vendor's checksum list, the app verifies it against the official checksum. And <strong>Boot from an existing virtual disk</strong> now accepts QCOW2 disks as well as raw ones, which makes <a href="/blog/migrating-to-velo-workspaces/">moving a VM from UTM</a> a matter of choosing its disk file.</p>
 
-      <h2>A built-in SSH terminal</h2>
-      <p>Each workspace's <strong>Access</strong> tab (formerly Developer Tools) now has an SSH section that shows when the workspace's SSH server is ready, and an <strong>Open Terminal</strong> button. The terminal signs in over SSH with a key Velo Workspaces creates for this Mac and keeps in your Keychain; workspaces made from cloud images and automatic installs already trust it. For a system you installed by hand, type its username, sign in once with the password, and click <strong>Install Key</strong>. Manage the key, or import your own, in <strong>Settings › Access</strong>.</p>
+      <h2 id="a-built-in-ssh-terminal">A built-in SSH terminal</h2>
+      <p>Each workspace's <strong>Access</strong> tab (formerly Developer Tools) now has an SSH section that shows when the workspace's SSH server is ready, and an <strong>Open Terminal</strong> button. The terminal signs in over SSH with a key Velo Workspaces creates for this Mac and keeps in your Keychain; workspaces made from cloud images and automatic installs already trust it. For a system you installed by hand, type its username in the Access tab, sign in to the terminal once with the password, and click <strong>Install Key</strong>. Manage the key, or import your own, in <strong>Settings › Access</strong>.</p>
       <p>The terminal is part of Pro. Everything else in the Access tab stays free: the workspace's address, a copyable <code>ssh</code> command for Terminal or any client (using your own SSH key, which you can add when creating the workspace), the VS Code Remote configuration, and an <code>ssh -J</code> command that lets other computers on your network reach the workspace through your Mac.</p>
       <p>macOS treats the Mac's private virtual network as part of the local network, so the first time the app checks a workspace's SSH server, macOS asks for Local Network access. Velo Workspaces only connects to its own workspaces. If you decline, the Access tab says so and links to the setting.</p>
 
-      <h2>What's free and what's Pro</h2>
+      <h2 id="what-s-free-and-what-s-pro">What's free and what's Pro</h2>
       <p>Cloud images, automatic installs and the Image Library are free, like unlimited Linux and macOS workspaces, the console, shared folders, SSH details and the VS Code helper. <strong>Velo Workspaces Pro</strong> adds the built-in SSH terminal to AI Bridge, restore points, disposable workspaces, base images and Rosetta, for $3.99 a month, $24.99 a year, or $79.99 once, with a free week to try it. Anyone who bought Velo Workspaces 1.0 keeps every Pro feature at no cost.</p>
 
-      <h2>Try it</h2>
+      <h2 id="try-it">Try it</h2>
       <ol>
         <li>Update Velo Workspaces from the App Store (macOS 14 or later).</li>
         <li>Choose a library in the sidebar, such as Developer Workspace, and click <strong>+</strong>.</li>
@@ -162,7 +177,7 @@
       </ol>
       <p>Linux guests run on Apple silicon and Intel Macs; macOS guests need Apple silicon. Velo Workspaces doesn't run Windows guests (<a href="/blog/windows-on-apple-silicon/">here's why</a>).</p>
 
-      <h2>What's next</h2>
+      <h2 id="what-s-next">What's next</h2>
       <p>Kali Linux and Alpine Linux cloud images, and catalog updates that don't need an app update, are next on the <a href="/roadmap/">roadmap</a>. Questions or requests: <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>, and the <a href="/support/">support page</a> covers the new features in detail.</p>
 
       <p>Where to go from here: <a href="/blog/ubuntu-on-apple-silicon/">Ubuntu</a>, <a href="/blog/debian-on-apple-silicon/">Debian</a>, <a href="/blog/fedora-on-apple-silicon/">Fedora</a> and <a href="/blog/rocky-linux-on-apple-silicon/">Rocky Linux</a> on Apple Silicon, <a href="/blog/best-linux-distro-apple-silicon/">which distribution fits your work</a>, and <a href="/blog/zero-tax-virtualization/">running AI agents in a workspace</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

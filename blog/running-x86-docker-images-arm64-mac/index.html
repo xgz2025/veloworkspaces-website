@@ -105,29 +105,29 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Guide</span>
         <h1>Running x86 Docker Images on an Apple Silicon Mac</h1>
         <p class="article-lede"><a href="/blog/arm64-vs-x86-apple-silicon/">The multi-arch basics</a> are covered elsewhere: what a manifest list is, and why <code>docker pull</code> usually just works. This is the narrower question: when you need an amd64-only image on an arm64 Mac, what runs it, how slow is it, and how Rosetta in a Linux VM can help.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>What <code>--platform linux/amd64</code> triggers</h2>
+      <h2 id="what-platform-linux-amd64-triggers">What <code>--platform linux/amd64</code> triggers</h2>
       <p>Ask for an architecture your machine doesn't have, with <code>docker pull --platform linux/amd64 &lt;image&gt;</code> or an image that has no arm64 build at all, and Docker doesn't refuse. It runs the amd64 binaries through QEMU's user-mode emulation, registered with the kernel through <code>binfmt_misc</code>, the same facility Linux uses to run any non-native executable format. It works, but it's instruction translation in software with no hardware help, so anything CPU-bound is noticeably slower than the native arm64 build. The <a href="/blog/virtualization-framework-vs-qemu/">Virtualization.framework vs. QEMU post</a> explains why.</p>
       <p>Docker Desktop sets up that QEMU registration for you. If you run Docker Engine directly inside a Linux workspace instead, it isn't there until you add it, usually with a one-time <code>docker run --privileged --rm tonistiigi/binfmt --install all</code> inside the guest.</p>
 
-      <h2>A faster path if Rosetta is already set up</h2>
+      <h2 id="a-faster-path-if-rosetta-is-already-set-up">A faster path if Rosetta is already set up</h2>
       <p>If you run Docker inside a Linux workspace, this part is worth knowing. <a href="/blog/rosetta-2-linux-vms-explained/">Setting up Rosetta for Linux</a> registers Rosetta as the guest kernel's handler for x86-64 ELF binaries with the <code>--fix-binary yes</code> flag. That flag makes the kernel open the interpreter once, at registration, which is what lets the registration keep working for a process inside a container's own mount namespace; the container image doesn't need its own copy of the interpreter. That's standard Linux kernel behavior, and it's the same principle <code>tonistiigi/binfmt</code> relies on for QEMU.</p>
       <p>So once Rosetta is registered in a guest, an amd64 container's binaries may already be going through Rosetta rather than QEMU. Test it rather than assume: Velo Workspaces doesn't wire the two together explicitly, and we haven't published numbers for it. Pull a known amd64-only image and time something CPU-bound inside it, before and after the Rosetta setup in the same guest. If Rosetta is doing the work, you won't need a stopwatch to notice.</p>
 
-      <h2>When no emulation is the right answer</h2>
+      <h2 id="when-no-emulation-is-the-right-answer">When no emulation is the right answer</h2>
       <p>Translation, Rosetta's or QEMU's, is a workaround for a missing native build, not a substitute for one. If the amd64-only image is yours, the fix is a multi-arch build, <code>docker buildx build --platform linux/amd64,linux/arm64</code>, so nobody pulling it has to emulate anything, your CI included. If it's a third-party image with no arm64 build, emulation is the only option short of finding an alternative, so budget for the slowdown instead of discovering it halfway through a build.</p>
 
       <p>Related reading: <a href="/blog/rosetta-2-linux-vms-explained/">Rosetta 2 in Linux VMs</a>, <a href="/blog/can-you-run-x86-linux-on-apple-silicon/">can you install x86 Linux on an Apple Silicon Mac</a> for the whole-OS version of this question, and <a href="/blog/velo-vs-docker-desktop-vs-orbstack/">Velo Workspaces vs. Docker Desktop vs. OrbStack</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

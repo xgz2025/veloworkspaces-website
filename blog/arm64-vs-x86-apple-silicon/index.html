@@ -105,37 +105,48 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Fundamentals</span>
         <h1>ARM64 vs. x86-64 on Apple Silicon: What Developers Need to Know</h1>
         <p class="article-lede">"Rosetta" means two different things depending on whether you mean a Mac app or a Linux guest. Homebrew installs to two different places. Whether CI tests what you ship depends on the runner's architecture. None of it is exotic; it's just scattered, so here it is in one place.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">3 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#native-arm64-is-the-default-now"><span>Native arm64 is the default now</span></a></li>
+          <li><a href="#rosetta-2-for-mac-apps-and-why-it-s-not-rosetta-for-linux"><span>Rosetta 2 for Mac apps, and why it&#x27;s not Rosetta for Linux</span></a></li>
+          <li><a href="#package-managers-two-install-prefixes-on-purpose"><span>Package managers: two install prefixes, on purpose</span></a></li>
+          <li><a href="#containers-one-name-several-images"><span>Containers: one name, several images</span></a></li>
+          <li><a href="#ci-check-what-your-runner-is"><span>CI: check what your runner is</span></a></li>
+          <li><a href="#the-practical-version"><span>The practical version</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Native arm64 is the default now</h2>
+      <h2 id="native-arm64-is-the-default-now">Native arm64 is the default now</h2>
       <p>Every Apple silicon Mac has an arm64 CPU. A Mac app compiled for <code>arm64</code> runs on it directly, and so does a Linux guest with an arm64 kernel and userland, which is what the Virtualization framework boots (see <a href="/blog/apple-silicon-vms-explained/">the VM fundamentals post</a>). That's the fast, unremarkable path: native code on native silicon. The rest of this post is about what happens when the software you need wasn't built for it.</p>
 
-      <h2>Rosetta 2 for Mac apps, and why it's not Rosetta for Linux</h2>
+      <h2 id="rosetta-2-for-mac-apps-and-why-it-s-not-rosetta-for-linux">Rosetta 2 for Mac apps, and why it's not Rosetta for Linux</h2>
       <p>The name covers two different mechanisms. <strong>Rosetta 2 for Mac apps</strong> is the system-wide translation layer that lets an Intel-only Mac app run on Apple silicon the moment you open it, with no setup. <strong>Rosetta for Linux</strong>, covered in <a href="/blog/rosetta-2-linux-vms-explained/">Rosetta 2 in Linux VMs</a>, works inside a guest: Velo Workspaces shares it into a Linux VM over VirtioFS, you register it once with <code>binfmt</code>, and it translates x86-64 binaries you run there. Same name, same Apple technology, different integration and different limits, so don't assume a fact about one applies to the other.</p>
       <p><strong>Universal binaries</strong> are why well-maintained Mac apps don't need Rosetta at all. One app bundle can carry both <code>arm64</code> and <code>x86_64</code> code, and macOS picks the right one at launch. An app that's still Intel-only just hasn't shipped the second half yet; that's a build setting, not a platform limit.</p>
 
-      <h2>Package managers: two install prefixes, on purpose</h2>
+      <h2 id="package-managers-two-install-prefixes-on-purpose">Package managers: two install prefixes, on purpose</h2>
       <p>Homebrew makes the split visible. On Apple silicon it installs to <code>/opt/homebrew</code>; on an Intel Mac, or a Homebrew run under Rosetta with <code>arch -x86_64</code>, it uses <code>/usr/local</code>. Two prefixes let both trees live side by side without one quietly shadowing the other. The same problem shows up one level down inside a Linux guest, where a distribution's arm64 repository doesn't always carry every amd64 package; <a href="/blog/arm64-linux-compatibility-problems/">the compatibility triage post</a> covers what to do about it.</p>
 
-      <h2>Containers: one name, several images</h2>
+      <h2 id="containers-one-name-several-images">Containers: one name, several images</h2>
       <p>A multi-arch container image is really a manifest list pointing at separate <code>arm64</code> and <code>amd64</code> builds, and the registry serves whichever matches the machine pulling it. That's why <code>docker pull</code> behaves the same on an Apple silicon Mac and an x86 CI server for a well-maintained image. Ask for the architecture you don't have, with <code>--platform linux/amd64</code>, and Docker falls back to QEMU's software emulation (the TCG mechanism in <a href="/blog/virtualization-framework-vs-qemu/">the Virtualization.framework vs. QEMU post</a>). It works, but it's emulated and noticeably slower for CPU-heavy work. <a href="/blog/running-x86-docker-images-arm64-mac/">Running x86 Docker images on an Apple Silicon Mac</a> has a faster path if you run Docker inside a Linux VM with Rosetta set up.</p>
 
-      <h2>CI: check what your runner is</h2>
+      <h2 id="ci-check-what-your-runner-is">CI: check what your runner is</h2>
       <p>This changed recently enough to state plainly. GitHub Actions' <code>macos-26</code> label, the current default macOS runner, runs on Apple silicon (<code>arm64</code>), with a separate <code>macos-26-intel</code> label for x64, and Intel macOS runners are being <a href="https://github.blog/changelog/2026-02-26-macos-26-is-now-generally-available-for-github-hosted-runners/" target="_blank" rel="noopener">phased out by August 2027</a>. If your build matrix assumes "the macOS runner" means x86-64, it's testing an architecture fewer and fewer of your users run. Matching the runner to what ships is a small check, not an edge case.</p>
 
-      <h2>The practical version</h2>
+      <h2 id="the-practical-version">The practical version</h2>
       <p>Architecture mismatches bite in a few predictable places: a dependency that only ships x86-64 binaries, a container image with no multi-arch manifest, a CI runner on the wrong architecture, or a Linux package your distribution never built for arm64. None of that is Apple silicon being difficult. It's the ordinary tail of a platform transition that's several years in and mostly finished.</p>
 
       <p>Related reading: <a href="/blog/apple-silicon-vms-explained/">what a VM on Apple Silicon is</a>, <a href="/blog/rosetta-2-linux-vms-explained/">Rosetta in Linux VMs</a>, <a href="/blog/virtualization-framework-vs-qemu/">Virtualization.framework vs. QEMU</a>, and <a href="/blog/arch-linux-on-apple-silicon/">why Arch Linux has no official arm64 build</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

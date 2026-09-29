@@ -105,35 +105,35 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Fundamentals</span>
         <h1>Apple Containers vs. Linux VMs: What's the Difference?</h1>
         <p class="article-lede">The usual container-versus-VM framing, namespaces sharing a kernel against a hypervisor boundary, doesn't quite fit here, because Apple's <code>container</code> tool already gives every container its own lightweight VM. So what's different from a Linux VM workspace? Not the isolation. What each is built for.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Apple's <code>container</code>, briefly: one micro-VM per container</h2>
+      <h2 id="apple-s-container-briefly-one-micro-vm-per-container">Apple's <code>container</code>, briefly: one micro-VM per container</h2>
       <p>Apple's container tool, introduced at WWDC 2025 and stable at 1.0 in June 2026, breaks from every other container tool on macOS. Instead of running all containers in one shared Linux VM, as Docker Desktop and OrbStack do (<a href="/blog/apple-containers-vs-docker-vs-orbstack/">compared here</a>), Apple's <strong>Containerization framework</strong> gives each container its own lightweight VM on the Virtualization framework. Each boots a minimal, purpose-built kernel with a small Swift init process, tuned to start fast, with reported boot times under a second. It's open source (Apache-licensed), written in Swift, Apple silicon only, and OCI-compatible: Docker Hub images run unmodified, and what you build pushes to any standard registry.</p>
       <p>That one-VM-per-container design is why "containers share a kernel, VMs don't" breaks down here. Apple's containers already have the hardware isolation of separate VMs, the tier <a href="/blog/ai-agent-security-risks/">the security deep dive</a> gives a full VM rather than a shared-kernel container.</p>
 
-      <h2>If both are VMs, what's different?</h2>
+      <h2 id="if-both-are-vms-what-s-different">If both are VMs, what's different?</h2>
       <p>What they're optimized for, not how strongly they isolate. Apple's per-container VM is deliberately minimal and short-lived: a stripped-down kernel for one job, run this image and exit, with start-up speed as the priority. A Linux VM workspace is optimized the other way: a full, general-purpose OS (real Ubuntu, Debian, Fedora or Rocky Linux) with a persistent disk, an interactive shell or desktop, a package manager, SSH and VS Code Remote access, a built-in terminal, a console for when networking breaks, and, where needed, <a href="/blog/ai-bridge-architecture/">a GPU-backed channel to the Mac</a>. Apple's tool doesn't lack those by oversight; they're not its job.</p>
 
-      <h2>When to use each</h2>
+      <h2 id="when-to-use-each">When to use each</h2>
       <ul>
         <li><strong>Apple's <code>container</code></strong> when you have an OCI image to run quickly with strong isolation and nothing more: a single service, a build step, a CI job already packaged as a container. Its per-container VMs give you real isolation without a heavier tool.</li>
         <li><strong>A Linux VM workspace</strong> when you need an environment, not just a place to run one packaged process: installing and configuring software interactively, a working directory that persists between sessions, GUI tools, GPU-backed local inference, or a disposable dev, test or CI environment that isn't shaped like a single image.</li>
       </ul>
       <p>Where they don't compete at all: Apple's model doesn't give you an interactive session with your own tools installed, a desktop, or state that persists across restarts the way a workspace does. That's not a gap waiting to close; it's a different tool for a different problem.</p>
 
-      <h2>Use both</h2>
+      <h2 id="use-both">Use both</h2>
       <p>A realistic setup uses each for its half of the same workflow: a Linux VM workspace as the development environment, where you write the code, test it interactively and build the image, and Apple's <code>container</code> to run the packaged service or CI step afterwards. One doesn't replace the other; they sit at different points in the same pipeline.</p>
 
       <p>Related reading: <a href="/blog/apple-containers-vs-docker-vs-orbstack/">Apple Containers vs. Docker Desktop vs. OrbStack</a>, <a href="/blog/vm-vs-container-vs-sandbox/">VM vs. container vs. sandbox on macOS</a>, and <a href="/blog/ai-agent-security-risks/">the security deep dive</a> for where each isolation level sits. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

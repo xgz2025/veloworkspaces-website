@@ -105,38 +105,48 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Workflow</span>
         <h1>One VM Per Git Branch: Isolated Development Workflows</h1>
         <p class="article-lede">Switching branches changes more than your working directory. <code>node_modules</code> installed for one branch isn't right for another, and a stale build from yesterday's branch can quietly break today's. One workspace per project doesn't fully fix that; one per branch does.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#two-problems-not-one"><span>Two problems, not one</span></a></li>
+          <li><a href="#the-pairing-that-fixes-both"><span>The pairing that fixes both</span></a></li>
+          <li><a href="#what-lives-where"><span>What lives where</span></a></li>
+          <li><a href="#naming-and-cleanup"><span>Naming and cleanup</span></a></li>
+          <li><a href="#when-it-s-overkill"><span>When it&#x27;s overkill</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Two problems, not one</h2>
+      <h2 id="two-problems-not-one">Two problems, not one</h2>
       <p>Switching branches in one working directory mixes two things: which source files are checked out, and what's been built or installed on top of them. Git handles the first; that's what <code>checkout</code> does. It has no opinion about the second. <code>node_modules</code>, compiled output, a Python virtualenv, anything your tools generated for the last branch, all stays put, possibly wrong for the branch you're on now, until something rebuilds it or you remember to clean up.</p>
 
-      <h2>The pairing that fixes both</h2>
+      <h2 id="the-pairing-that-fixes-both">The pairing that fixes both</h2>
       <p>Git already covers the first half. <a href="https://git-scm.com/docs/git-worktree" target="_blank" rel="noopener"><code>git worktree</code></a> gives a branch its own working directory (<code>git worktree add ../feature-a feature-a</code>) while sharing the repository's history and objects with the main checkout. No stashing, no losing your place; both branches exist as real directories at once. Add the second half: one workspace per worktree, each cloned from the same base image, so every branch also gets its own toolchain, its own <code>node_modules</code> and its own build cache, none of it shared and none of it stale.</p>
 
-      <h2>What lives where</h2>
+      <h2 id="what-lives-where">What lives where</h2>
       <p>It's the same host/guest split as <a href="/blog/software-engineers-disposable-workspaces/">one workspace per project</a>. Each worktree directory is a shared folder mounted into its own workspace, so the source and Git history stay on the Mac where your editor expects them. What differs per branch (dependencies, build output, anything an install generates) lives on each workspace's own disk, cloned from a shared base image, so each new branch starts from the same toolchain without a fresh setup.</p>
       <pre><code>main
-       ├── worktree: main        → workspace: proj-main
-       ├── worktree: feature-a   → workspace: proj-feature-a
-       ├── worktree: feature-b   → workspace: proj-feature-b
-       └── worktree: experiment  → workspace: proj-experiment</code></pre>
+ ├── worktree: main        → workspace: proj-main
+ ├── worktree: feature-a   → workspace: proj-feature-a
+ ├── worktree: feature-b   → workspace: proj-feature-b
+ └── worktree: experiment  → workspace: proj-experiment</code></pre>
 
-      <h2>Naming and cleanup</h2>
+      <h2 id="naming-and-cleanup">Naming and cleanup</h2>
       <p>Name each workspace after its branch, the same habit <a href="/blog/base-image-versioning/">the base image naming post</a> argues for: <code>proj-feature-a</code>, not a generic name you'll have three copies of within a week. A per-branch workspace sits between the two ends in <a href="/blog/disposable-vm-vs-snapshot/">disposability vs. snapshots</a>: it isn't thrown away after one run like a CI workspace, but it isn't meant to last forever. Delete it, and its worktree, when the branch is merged or abandoned, at the same moment you delete the branch.</p>
 
-      <h2>When it's overkill</h2>
+      <h2 id="when-it-s-overkill">When it's overkill</h2>
       <p>A one-line hotfix doesn't need its own VM; a new worktree and workspace cost more than the branch-switching friction they'd save. The pattern pays off when branches have different dependencies or long-running build state worth protecting from each other, not as a rule for every branch.</p>
 
       <p>Related reading: <a href="/blog/software-engineers-disposable-workspaces/">one workspace per project</a>, <a href="/blog/base-image-vs-snapshot-vs-clone/">base image vs. snapshot vs. clone</a>, and <a href="/blog/base-image-versioning/">base images as versioned infrastructure</a>. Or <a href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8" data-app-store-link>download Velo Workspaces</a> and try it yourself.</p>

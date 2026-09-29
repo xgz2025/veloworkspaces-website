@@ -105,43 +105,54 @@
 </header>
 
 <main id="main">
-  <section class="section" style="padding-bottom:0;">
-    <div class="container">
+  <section class="section article-top">
+    <div class="container article-head">
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Workflow</span>
         <h1>Your Test Environment Isn't as Clean as You Think: A Disposable VM Workflow for QA and DevOps</h1>
         <p class="article-lede">A flaky test that only fails after another test runs, and an install script that passes staging but breaks on a fresh production host, have the same root cause: state that should have been reset wasn't. Here's why resetting and throwing away are different guarantees, and the workflow that follows.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">5 min read</span></p>
       </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#two-jobs-one-root-cause"><span>Two jobs, one root cause</span></a></li>
+          <li><a href="#reset-and-disposable-are-different-guarantees"><span>&quot;Reset&quot; and &quot;disposable&quot; are different guarantees</span></a></li>
+          <li><a href="#for-qa-a-base-image-once-a-disposable-workspace-per-run"><span>For QA: a base image once, a disposable workspace per run</span></a></li>
+          <li><a href="#for-devops-test-against-a-fresh-system-not-a-machine-you-hal"><span>For DevOps: test against a fresh system, not a machine you half-remember fixing</span></a></li>
+          <li><a href="#where-this-sits-next-to-vagrant-multipass-and-lima"><span>Where this sits next to Vagrant, Multipass and Lima</span></a></li>
+          <li><a href="#what-to-do"><span>What to do</span></a></li>
+        </ol>
+      </details>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section article-main">
     <div class="container article-body">
-      <h2>Two jobs, one root cause</h2>
+      <h2 id="two-jobs-one-root-cause">Two jobs, one root cause</h2>
       <p>QA and DevOps rarely get grouped together, but many of the bugs each fights are the same bug under different names.</p>
       <p>In QA it's the classic flaky test: it passes alone and fails only after some other test. That's a known category. When one test leaves a changed record, a temp file or an open session behind, the next inherits that state and behaves differently than it would from a clean start. The 2026 Flaky Test Benchmark Report puts timing issues, test data problems and runtime errors at over 70% of flaky failures combined, and much of that comes from environment state that wasn't reset the way the suite assumed.</p>
       <p>In DevOps it's the install script or Ansible playbook that passes validation and breaks on a truly fresh host. Configuration tools are designed around idempotency (running a script twice should converge on the same state) but that's a property you have to test from many starting states, not assume. If the only place a script runs before production is a staging box with six months of undocumented manual fixes, "it passed staging" says it works on that one machine, not that it's idempotent. A related, increasingly common version is your CI runner's environment changing under you with no code change at all; <a href="/blog/disposable-workspaces-devops-ci/">disposable workspaces for DevOps and CI</a> has a current example.</p>
 
-      <h2>"Reset" and "disposable" are different guarantees</h2>
+      <h2 id="reset-and-disposable-are-different-guarantees">"Reset" and "disposable" are different guarantees</h2>
       <p><em>For the fuller definition, and how it differs from a snapshot or a container, see <a href="/blog/what-is-a-disposable-development-environment/">what is a disposable development environment?</a></em></p>
       <p>The usual fix for both is a teardown script: a fixture that rolls back the database, a CI step that runs <code>vagrant destroy &amp;&amp; vagrant up</code>, a habit of logging in and undoing whatever the last run changed. They work most of the time, and "most of the time" is the problem. A teardown script is code, written by someone (maybe you, months ago) who had to foresee every piece of state a run could leave. Miss one, a cron job that fired mid-test, a package installed as a side effect, a config file an installer half-wrote before failing, and the next run starts <em>probably</em> clean, which is a much weaker guarantee.</p>
       <p>A disposable VM removes that category of bug instead of chasing it. There's no cleanup step to get wrong, because nothing about the workspace outlives it. The next run doesn't start from whatever the teardown managed to undo; it starts from the same saved image, bit for bit, every time.</p>
 
-      <h2>For QA: a base image once, a disposable workspace per run</h2>
+      <h2 id="for-qa-a-base-image-once-a-disposable-workspace-per-run">For QA: a base image once, a disposable workspace per run</h2>
       <p>Save a fully configured environment (OS, browser and test dependencies, the application under test) as a base image once. Each test run clones a new disposable workspace from it in seconds with copy-on-write, runs, and is gone when you close it: no snapshot to remember to delete, and no doubt about leftovers from last time. When a test fails, a whole category of noise is gone. Every run starts from the same state, so a failure that reproduces is real, and one that doesn't is much more likely a race condition than leftovers from three runs ago. That's a far easier bug to triage than "did something about the environment change?"</p>
 
-      <h2>For DevOps: test against a fresh system, not a machine you half-remember fixing</h2>
+      <h2 id="for-devops-test-against-a-fresh-system-not-a-machine-you-hal">For DevOps: test against a fresh system, not a machine you half-remember fixing</h2>
       <p>The same pattern validates a deployment script, an install procedure or a config change before it ships. Since Velo Workspaces 1.2, the vanilla starting point is easy to get: an official Ubuntu, Debian, Fedora or Rocky Linux cloud image, ready about a minute after download, with nothing on it you didn't put there. Test the script against a fresh one every time instead of a box you've patched by hand. If the script only works because an earlier run left a dependency installed, a fresh system is what catches it, before a production host does.</p>
       <p>Testing the installer path itself? Fedora Server and Rocky Linux can install unattended from their own ISOs with a kickstart file the app writes, and Ubuntu with autoinstall, so "does a clean install from the vendor's media come up correctly" is a repeatable test too.</p>
       <p>One failure mode deserves a mention: an install script that goes wrong early enough that networking or SSH never comes up. That's where SSH-based debugging can't help, because SSH is what's broken. A serial console, a terminal into the guest that doesn't need the network stack, is the difference between staring at a stuck workspace and seeing why. Once a script passes on a fresh system, save that state as a new base image and version it as carefully as the script, so "the golden image" isn't a Slack thread about which server it came from.</p>
 
-      <h2>Where this sits next to Vagrant, Multipass and Lima</h2>
+      <h2 id="where-this-sits-next-to-vagrant-multipass-and-lima">Where this sits next to Vagrant, Multipass and Lima</h2>
       <p>Vagrant, Canonical's Multipass and Lima are good, free tools, and any of them is a reasonable answer to "I want a Linux VM on my Mac for testing". Multipass and Lima work well on Apple silicon and, like Velo Workspaces 1.2, start from cloud images with cloud-init. Plenty of people have moved to Lima after finding Vagrant rougher going on Apple silicon.</p>
       <p>The difference is what's built in. Those tools are command-line first and give you a VM; disposability, base-image management and editor setup are workflow you build on top with a Vagrantfile or Lima YAML and your own conventions. Velo Workspaces is a Mac app that treats the disposable shape as the workflow: close a disposable workspace and it's gone, save a base image in one step and clone from it, and the console, SSH details and VS Code Remote config are there without wiring. If you already maintain that scripting and like it, you may not need to switch. If you'd be the one writing it, that's the gap this fills.</p>
 
-      <h2>What to do</h2>
+      <h2 id="what-to-do">What to do</h2>
       <ul>
         <li><strong>Don't rely on a teardown script to undo a run completely.</strong> It catches only what its author foresaw; disposability removes the category instead.</li>
         <li><strong>Test scripts against a provably fresh system</strong>, not a machine that's probably been reset.</li>

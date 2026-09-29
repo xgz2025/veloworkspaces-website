@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create an Ubuntu VM on a Mac in 30 Seconds: Step by Step</title>
+<meta name="description" content="Step by step, with screenshots and a video: download Ubuntu 26.04&#x27;s cloud image, set your account and SSH key, and sign in to a running VM on your Mac.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/create-ubuntu-vm-mac-cloud-image/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=6">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Create an Ubuntu VM on a Mac in 30 Seconds: Step by Step">
+<meta property="og:description" content="Step by step, with screenshots and a video: download Ubuntu 26.04&#x27;s cloud image, set your account and SSH key, and sign in to a running VM on your Mac.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/create-ubuntu-vm-mac-cloud-image/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/create-ubuntu-vm-mac-cloud-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Create an Ubuntu VM on Your Mac in 30 Seconds">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="article:published_time" content="2026-09-29">
+<meta property="article:modified_time" content="2026-09-29">
+<meta property="article:author" content="Gaoliang Luo">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Create an Ubuntu VM on a Mac in 30 Seconds: Step by Step",
+      "name": "Create an Ubuntu VM on Your Mac in 30 Seconds",
+      "description": "Step by step, with screenshots and a video: download Ubuntu 26.04's cloud image, set your account and SSH key, and sign in to a running VM on your Mac.",
+      "image": [
+        "https://www.veloworkspaces.com/assets/og/create-ubuntu-vm-mac-cloud-image.jpg",
+        "https://www.veloworkspaces.com/assets/blog/guides/ubuntu-cloud-image/terminal.webp"
+      ],
+      "datePublished": "2026-09-29",
+      "dateModified": "2026-09-29",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/create-ubuntu-vm-mac-cloud-image/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Create an Ubuntu VM on Your Mac in 30 Seconds",
+          "item": "https://www.veloworkspaces.com/blog/create-ubuntu-vm-mac-cloud-image/"
+        }
+      ]
+    },
+    {
+      "@type": "VideoObject",
+      "name": "Create an Ubuntu VM on a Mac in 30 seconds with Velo Workspaces",
+      "description": "Screen recording, in real time: choosing Ubuntu 26.04's cloud image, configuring the workspace, and opening a terminal signed in to it.",
+      "thumbnailUrl": "https://www.veloworkspaces.com/assets/blog/guides/ubuntu-cloud-image/cloud-image-in-30-seconds-poster.webp",
+      "contentUrl": "https://www.veloworkspaces.com/assets/blog/guides/ubuntu-cloud-image/cloud-image-in-30-seconds.mp4",
+      "uploadDate": "2026-09-29",
+      "duration": "PT30S",
+      "embedUrl": "https://www.veloworkspaces.com/blog/create-ubuntu-vm-mac-cloud-image/"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section article-top">
+    <div class="container article-head">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Step-by-step guide</span>
+        <h1>Create an Ubuntu VM on Your Mac in 30 Seconds</h1>
+        <p class="article-lede">A cloud image is Ubuntu already installed on a disk. Velo Workspaces downloads it, adds your account and SSH key, and boots it. Once the image is on your Mac, going from the + button to a signed-in terminal takes about 30 seconds. Here is every screen, in order.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-29">September 29, 2026</time><span class="article-readtime">5 min read</span></p>
+      </div>
+      <figure class="shot article-hero">
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-cloud-image/terminal.webp"><img src="/assets/blog/guides/ubuntu-cloud-image/terminal.webp" width="907" height="629" alt="Velo Workspaces with an Ubuntu 26.04 workspace and its built-in terminal signed in over SSH" fetchpriority="high"><span class="shot-zoom">Click to enlarge</span></a>
+      </figure>
+      <details class="article-toc" open>
+        <summary>Steps in this guide</summary>
+        <ol>
+          <li><a href="#start-a-new-workspace"><span class="toc-step">1</span><span>Start a new workspace</span></a></li>
+          <li><a href="#choose-cloud-image"><span class="toc-step">2</span><span>Choose Cloud image</span></a></li>
+          <li><a href="#pick-ubuntu-and-download-it"><span class="toc-step">3</span><span>Pick Ubuntu and download it</span></a></li>
+          <li><a href="#configure-the-workspace"><span class="toc-step">4</span><span>Configure the workspace</span></a></li>
+          <li><a href="#review-and-create"><span class="toc-step">5</span><span>Review and create</span></a></li>
+          <li><a href="#watch-it-boot"><span class="toc-step">6</span><span>Watch it boot</span></a></li>
+          <li><a href="#open-the-terminal"><span class="toc-step">7</span><span>Open the terminal</span></a></li>
+          <li><a href="#if-something-doesn-t-work"><span>If something doesn&#x27;t work</span></a></li>
+          <li><a href="#where-to-go-next"><span>Where to go next</span></a></li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+  <section class="section article-main">
+    <div class="container article-body">
+      <dl class="guide-facts">
+        <div><dt>Time</dt><dd>About 30 seconds<span>once the image is downloaded</span></dd></div>
+        <div><dt>Download</dt><dd>Under 1 GB<span>Ubuntu 26.04 LTS Server, QCOW2</span></dd></div>
+        <div><dt>You get</dt><dd>Ubuntu Server<span>your account, key and hostname set</span></dd></div>
+        <div><dt>Needs</dt><dd>Velo Workspaces 1.2<span>free on the Mac App Store</span></dd></div>
+      </dl>
+
+      <figure class="shot shot-wide">
+        <div class="shot-frame"><video controls preload="none" playsinline width="1440" height="810" poster="/assets/blog/guides/ubuntu-cloud-image/cloud-image-in-30-seconds-poster.webp"><source src="/assets/blog/guides/ubuntu-cloud-image/cloud-image-in-30-seconds.mp4" type="video/mp4">Your browser can't play this video. The screenshots below show the same steps.</video></div>
+        <figcaption><span class="shot-tag">Video</span><span>The whole thing in real time, from choosing the image to a signed-in terminal. No cuts.</span></figcaption>
+      </figure>
+
+      <p>Every step below has a screenshot, and you can click any of them to see it full size. Most were taken on an Intel MacBook Pro, which is why the file names end in <code>amd64</code>. On an Apple silicon Mac, Velo Workspaces picks the <code>arm64</code> image and everything else looks the same.</p>
+
+      <div class="guide-steps">
+
+      <section class="guide-step">
+      <h2 id="start-a-new-workspace">Start a new workspace</h2>
+      <p>In the sidebar, under Library, pick the kind of workspace you want: Developer, Office &amp; Study, AI or Disposable. The kind decides where the workspace is listed and which hardware profile it starts with; you can change the hardware later. Then click <strong>+</strong> at the top right of the window.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/new-workspace.webp"><img src="/assets/blog/guides/new-workspace.webp" width="1336" height="797" alt="Velo Workspaces main window with the + button highlighted in the top-right corner" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>An empty library. The + button at the top right opens the new-workspace assistant.</span></figcaption>
+      </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="choose-cloud-image">Choose Cloud image</h2>
+      <p>The assistant has four steps: Source, Image, Configure and Review. On the first, choose <strong>Cloud image</strong>. It's marked Recommended because there's no installer to sit through: a cloud image is an installed system, and Velo Workspaces personalizes it the first time it starts.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/select-image-cloud.webp"><img src="/assets/blog/guides/select-image-cloud.webp" width="796" height="656" alt="Select Image step with Cloud image highlighted" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Cloud image, Installer image or an existing disk. This guide uses Cloud image.</span></figcaption>
+      </figure>
+      <p>The other two choices lead elsewhere: <a href="/blog/ubuntu-desktop-vm-mac-automatic-install/">Installer image</a> runs a distribution's own installer, and <strong>Boot from an existing virtual disk</strong> starts from a disk you already have, including a QCOW2 file from UTM or QEMU.</p>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="pick-ubuntu-and-download-it">Pick Ubuntu and download it</h2>
+      <p>Choose <strong>Ubuntu</strong> in the Distributions list, then a release. 26.04 LTS (Resolute Raccoon) is the recommended one; 24.04 LTS (Noble Numbat) is there if you need to match an older server. Click <strong>Download</strong>. The image comes straight from cloud-images.ubuntu.com and is under 1 GB.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-cloud-image/choose-cloud-image.webp"><img src="/assets/blog/guides/ubuntu-cloud-image/choose-cloud-image.webp" width="796" height="656" alt="Choose a Cloud Image step with Ubuntu selected and releases 26.04 LTS and 24.04 LTS" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Ubuntu's releases, 26.04 LTS recommended. This Mac already had an older build, so the button reads Download Update.</span></figcaption>
+      </figure>
+      <div class="shot-pair shot-wide">
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-cloud-image/downloading.webp"><img src="/assets/blog/guides/ubuntu-cloud-image/downloading.webp" width="796" height="656" alt="Ubuntu cloud image downloading, 303.5 MB of 865.1 MB" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>The download keeps going if you close the window.</span></figcaption>
+      </figure>
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-cloud-image/downloaded.webp"><img src="/assets/blog/guides/ubuntu-cloud-image/downloaded.webp" width="796" height="656" alt="Ubuntu cloud image downloaded and verified, with Continue highlighted" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Verified against Ubuntu's checksum and selected.</span></figcaption>
+      </figure>
+      </div>
+      <p>When the download finishes, Velo Workspaces checks the file against the SHA-256 checksum Ubuntu publishes and marks it <strong>Verified</strong>. The image stays in your library, so your next Ubuntu workspace skips the download; when Ubuntu publishes a newer build, this panel says so. Click <strong>Continue</strong>.</p>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="configure-the-workspace">Configure the workspace</h2>
+      <p>This screen is the whole setup. cloud-init applies all of it the first time the workspace starts.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-cloud-image/configure.webp"><img src="/assets/blog/guides/ubuntu-cloud-image/configure.webp" width="796" height="656" alt="Configure step with workspace name, hardware profiles, disk size, account and SSH public keys" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Name, hardware profile, disk size and the account cloud-init creates.</span></figcaption>
+      </figure>
+      <ul>
+        <li><strong>Workspace Name</strong> is also the guest's hostname: “Ubuntu” becomes <code>ubuntu</code>.</li>
+        <li><strong>Profile</strong> sets CPU and memory, for example Code &amp; Build (4 CPU, 8 GB) or AI Sandbox (8 CPU, 16 GB). <strong>Show Advanced Settings</strong> lets you set exact numbers, and turn on a shared folder, AI Bridge or Rosetta for Linux.</li>
+        <li><strong>Storage</strong> is the disk size Ubuntu sees. This image needs at least 8 GB. The disk grows to the size you set on first boot, but it only uses space on your Mac as it fills.</li>
+        <li><strong>Username</strong> and <strong>Password</strong> are for your account. The password is required even if you only sign in with keys, because <code>sudo</code> and the console ask for it.</li>
+        <li><strong>SSH Public Keys</strong> already lists this Mac's key, which the built-in terminal signs in with. To use Terminal or VS Code with your own key too, click <strong>Add Other Public Keys…</strong> and paste your <code>~/.ssh/id_ed25519.pub</code>.</li>
+        <li><strong>Allow SSH logins with the password</strong> is off, so SSH accepts keys only. Leave it that way unless you have a reason not to.</li>
+      </ul>
+      <div class="note note-tip">
+        <p><strong>Copy your public key</strong> with <code>pbcopy &lt; ~/.ssh/id_ed25519.pub</code> in Terminal, then paste it into the box. No key yet? <code>ssh-keygen -t ed25519</code> makes one.</p>
+      </div>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="review-and-create">Review and create</h2>
+      <p>Review &amp; Launch lists what's about to happen. Setup reads <strong>Automatic: cloud-init</strong> and the source disk shows Verified. Click <strong>Create Workspace</strong>.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-cloud-image/review.webp"><img src="/assets/blog/guides/ubuntu-cloud-image/review.webp" width="796" height="656" alt="Review and Launch step showing all checks passed, Setup Automatic cloud-init, and the Create Workspace button" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Everything in one place before anything is created.</span></figcaption>
+      </figure>
+      <p>Velo Workspaces then turns the downloaded QCOW2 file into the raw disk Apple's Virtualization framework boots. It takes a few seconds, once per workspace, and the image in your library stays as it is.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-cloud-image/converting.webp"><img src="/assets/blog/guides/ubuntu-cloud-image/converting.webp" width="796" height="656" alt="Converting disk image progress at 43 percent" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Converting disk image: a few seconds, once per workspace.</span></figcaption>
+      </figure>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="watch-it-boot">Watch it boot</h2>
+      <p>The workspace starts at once and its console opens. The kernel and systemd scroll past, then a login prompt appears. You don't need to sign in here: while it booted, cloud-init created your account, set the hostname and installed your keys.</p>
+      <div class="shot-pair shot-wide">
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-cloud-image/booting.webp"><img src="/assets/blog/guides/ubuntu-cloud-image/booting.webp" width="725" height="360" alt="Ubuntu console showing systemd boot messages" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>First boot, a second or two in.</span></figcaption>
+      </figure>
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-cloud-image/login-prompt.webp"><img src="/assets/blog/guides/ubuntu-cloud-image/login-prompt.webp" width="725" height="360" alt="Ubuntu console showing the ubuntu login prompt" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>The login prompt means the boot is done.</span></figcaption>
+      </figure>
+      </div>
+      </section>
+
+      <section class="guide-step">
+      <h2 id="open-the-terminal">Open the terminal</h2>
+      <p>Select the workspace and open its <strong>Access</strong> tab. It has everything for getting in: host, user and port, a ready-made <code>ssh</code> command, and a green <strong>SSH ready</strong> as soon as the workspace answers.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-cloud-image/access-tab.webp"><img src="/assets/blog/guides/ubuntu-cloud-image/access-tab.webp" width="823" height="750" alt="Access tab with SSH details, SSH ready, Open Terminal highlighted, serial console and VS Code Remote settings" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>SSH details, a command for other computers, the serial console and a block for VS Code.</span></figcaption>
+      </figure>
+      <p>Click <strong>Open Terminal</strong>. A terminal window opens, already signed in as your user with this Mac's key. It has tabs: <strong>+</strong> opens another session.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-cloud-image/terminal.webp"><img src="/assets/blog/guides/ubuntu-cloud-image/terminal.webp" width="907" height="629" alt="Built-in terminal signed in to Ubuntu 26.04 as the account created in the wizard" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Signed in over SSH as the account from step 4.</span></figcaption>
+      </figure>
+      <div class="note note-pro">
+        <p><strong>Pro feature.</strong> The built-in terminal is part of Velo Workspaces Pro, which you can try free for a week. Without it, copy the <code>ssh</code> command from the Access tab into Terminal. That uses the keys in your <code>~/.ssh</code> folder, so the workspace has to trust one of them: <a href="/blog/ssh-vs-code-linux-vm-mac/">the SSH and VS Code guide</a> shows how.</p>
+      </div>
+      </section>
+
+      </div>
+
+      <h2 id="if-something-doesn-t-work">If something doesn't work</h2>
+
+      <h3>SSH ready never appears</h3>
+
+      <p>Velo Workspaces needs Local Network access to reach a workspace. If macOS turned it off, the Access tab says so and has a button that opens the setting: System Settings › Privacy &amp; Security › Local Network. Otherwise, give the first boot a few more seconds.</p>
+
+      <h3>Terminal says Permission denied (publickey)</h3>
+
+      <p>The <code>ssh</code> command in Terminal uses the keys in <code>~/.ssh</code>, not the one Velo Workspaces keeps in your Keychain. Add your own public key when you create the workspace, or use one key for everything as the <a href="/blog/ssh-vs-code-linux-vm-mac/">SSH and VS Code guide</a> describes.</p>
+
+      <h2 id="where-to-go-next">Where to go next</h2>
+
+      <div class="guide-next">
+        <a href="/blog/ssh-vs-code-linux-vm-mac/"><span>Next guide</span>SSH and VS Code into your workspace, with one key</a>
+        <a href="/blog/ubuntu-desktop-vm-mac-automatic-install/"><span>Step by step</span>Install Ubuntu Desktop without answering a question</a>
+        <a href="/blog/zero-tax-virtualization/"><span>Go further</span>Run an AI coding agent in the VM with a local model</a>
+        <a href="/blog/ubuntu-on-apple-silicon/"><span>Background</span>Ubuntu on Apple silicon: versions, desktops and tips</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc. Ubuntu is a trademark of Canonical Ltd.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+<script src="/assets/lightbox.js?v=1" defer></script>
+</body>
+</html>
