@@ -6,7 +6,14 @@
   <atom:link href="https://www.veloworkspaces.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
   <description>Guides to running Linux VMs on Apple silicon Macs: cloud images, automatic installs, local AI agents, Rosetta, benchmarks and honest comparisons.</description>
   <language>en</language>
-  <lastBuildDate>Tue, 29 Sep 2026 12:00:00 +0000</lastBuildDate>
+  <lastBuildDate>Thu, 01 Oct 2026 12:00:00 +0000</lastBuildDate>
+  <item>
+    <title>Ubuntu Cloud Images on a Mac: Fix the Login and Disk Size</title>
+    <link>https://www.veloworkspaces.com/blog/ubuntu-cloud-images-on-mac/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/ubuntu-cloud-images-on-mac/</guid>
+    <pubDate>Thu, 01 Oct 2026 12:00:00 +0000</pubDate>
+    <description>An Ubuntu cloud image on a Mac boots to a 3.5 GB disk and no login. How the cloud-init seed, disk resizing and SSH host keys work, with a script.</description>
+  </item>
   <item>
     <title>Create an Ubuntu VM on a Mac in 30 Seconds: Step by Step</title>
     <link>https://www.veloworkspaces.com/blog/create-ubuntu-vm-mac-cloud-image/</link>

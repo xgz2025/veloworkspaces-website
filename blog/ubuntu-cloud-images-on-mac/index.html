@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ubuntu Cloud Images on a Mac: Fix the Login and Disk Size</title>
+<meta name="description" content="An Ubuntu cloud image on a Mac boots to a 3.5 GB disk and no login. How the cloud-init seed, disk resizing and SSH host keys work, with a script.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/ubuntu-cloud-images-on-mac/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=6">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Ubuntu Cloud Images on a Mac: Fix the Login and Disk Size">
+<meta property="og:description" content="An Ubuntu cloud image on a Mac boots to a 3.5 GB disk and no login. How the cloud-init seed, disk resizing and SSH host keys work, with a script.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/ubuntu-cloud-images-on-mac/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/ubuntu-cloud-images-on-mac.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ubuntu Cloud Images on a Mac: Why the Disk Is 3.5 GB, Why You Can&#x27;t Log In, and How to Fix Both">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="article:published_time" content="2026-10-01">
+<meta property="article:modified_time" content="2026-10-01">
+<meta property="article:author" content="Gaoliang Luo">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Ubuntu Cloud Images on a Mac: Fix the Login and Disk Size",
+      "name": "Ubuntu Cloud Images on a Mac: Why the Disk Is 3.5 GB, Why You Can't Log In, and How to Fix Both",
+      "description": "An Ubuntu cloud image on a Mac boots to a 3.5 GB disk and no login. How the cloud-init seed, disk resizing and SSH host keys work, with a script.",
+      "image": "https://www.veloworkspaces.com/assets/og/ubuntu-cloud-images-on-mac.jpg",
+      "datePublished": "2026-10-01",
+      "dateModified": "2026-10-01",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/ubuntu-cloud-images-on-mac/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Ubuntu Cloud Images on a Mac: Why the Disk Is 3.5 GB, Why You Can't Log In, and How to Fix Both",
+          "item": "https://www.veloworkspaces.com/blog/ubuntu-cloud-images-on-mac/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section article-top">
+    <div class="container article-head">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Guide</span>
+        <h1>Ubuntu Cloud Images on a Mac: Why the Disk Is 3.5 GB, Why You Can't Log In, and How to Fix Both</h1>
+        <p class="article-lede">Ubuntu's cloud images are the quickest way to a Linux VM I know. There's no installer to click through, the download is under 1 GB, and they boot in seconds. Then you boot one on your Mac and hit two walls at once: the disk is about 3.5 GB, and there's no account you can log in with.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-10-01">October 1, 2026</time><span class="article-readtime">7 min read</span></p>
+      </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#what-s-actually-in-a-cloud-image"><span>What&#x27;s actually in a cloud image</span></a></li>
+          <li><a href="#be-the-cloud-a-nocloud-seed"><span>Be the cloud: a NoCloud seed</span></a></li>
+          <li><a href="#growing-the-disk-and-the-part-most-guides-skip"><span>Growing the disk, and the part most guides skip</span></a></li>
+          <li><a href="#ssh-without-the-fingerprint-prompt"><span>SSH without the fingerprint prompt</span></a></li>
+          <li><a href="#the-whole-thing-as-one-script"><span>The whole thing as one script</span></a></li>
+          <li><a href="#lessons-from-automating-this-for-real"><span>Lessons from automating this for real</span></a></li>
+          <li><a href="#or-let-a-tool-do-it"><span>Or let a tool do it</span></a></li>
+          <li><a href="#takeaways"><span>Takeaways</span></a></li>
+          <li><a href="#where-to-go-next"><span>Where to go next</span></a></li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+  <section class="section article-main">
+    <div class="container article-body">
+      <p>Both walls have the same cause. A cloud image expects a cloud to finish setting it up. On your laptop, there is no cloud, so you have to play its part.</p>
+      <p>This post walks through what that means and how to do it by hand on macOS with QEMU: a login, a disk of the size you want, and SSH without the fingerprint prompt. It ends with a script that does all of it, and a few tools that do it for you.</p>
+      <p><em>Velo Workspaces, the app this site is about, does all of this for you, and it's one of the tools in the last section. Everything before that works with plain QEMU, and the same ideas apply to UTM, Tart or anything else that boots a disk image.</em></p>
+      <h2 id="what-s-actually-in-a-cloud-image">What's actually in a cloud image</h2>
+      <p>Grab the arm64 image for Ubuntu 26.04 and look at it:</p>
+      <pre><code>curl -LO https://cloud-images.ubuntu.com/releases/26.04/release/ubuntu-26.04-server-cloudimg-arm64.img
+qemu-img info ubuntu-26.04-server-cloudimg-arm64.img
+</code></pre>
+      <p>Despite the <code>.img</code> name it's a QCOW2 file. Its <em>virtual size</em> is about 3.5 GiB, while the file itself is under 1 GB, because QCOW2 only stores the blocks that hold data. Inside is a fully installed Ubuntu: an EFI system partition, a root filesystem, a kernel, and <strong>cloud-init</strong>.</p>
+      <p>What it doesn't have is a user you can sign in as. The stock <code>ubuntu</code> account is created by cloud-init at first boot, with its password locked, and the only way in is an SSH key that "the cloud" hands over.</p>
+      <p>So everything depends on cloud-init finding a <strong>datasource</strong>: the place a cloud publishes a VM's configuration. On first boot, a tool called <code>ds-identify</code> looks for one (EC2's metadata service, Azure's, GCE's, and a dozen more). On Ubuntu, if it finds none, cloud-init simply disables itself. No account is created, no SSH key is installed, and the disk isn't grown. You're left at a login prompt with nothing that works.</p>
+      <h2 id="be-the-cloud-a-nocloud-seed">Be the cloud: a NoCloud seed</h2>
+      <p>The datasource meant for exactly this situation is <strong>NoCloud</strong>. It's just a small filesystem whose volume label is <code>cidata</code> (or <code>CIDATA</code>), FAT or ISO 9660, with two files at its root.</p>
+      <p><code>meta-data</code> identifies the instance:</p>
+      <pre><code>instance-id: devbox-001
+local-hostname: devbox
+</code></pre>
+      <p>cloud-init runs its "once per instance" setup whenever it sees a new <code>instance-id</code>. Keep it stable for the VM's life, and change it if you want first-boot setup to run again.</p>
+      <p><code>user-data</code> says what to set up:</p>
+      <pre><code>#cloud-config
+hostname: devbox
+users:
+  - name: you
+    groups: [sudo]
+    shell: /bin/bash
+    sudo: &quot;ALL=(ALL) NOPASSWD:ALL&quot;
+    lock_passwd: true
+    ssh_authorized_keys:
+      - &quot;ssh-ed25519 AAAA...your-public-key... you@your-mac&quot;
+ssh_pwauth: false
+</code></pre>
+      <p>A few details worth knowing:</p>
+      <ul>
+      <li><strong>There's no <code>- default</code> under <code>users:</code>.</strong> That means the stock <code>ubuntu</code> account is never created, and the only way in is the account you named.</li>
+      <li><strong>Quote anything that could be read as something else.</strong> In YAML, a hostname of <code>yes</code> is a boolean, and a key comment containing <code>#</code> loses everything after it.</li>
+      <li><strong>A password is optional.</strong> Here the account has no password and passwordless <code>sudo</code>, which is common for throwaway VMs. If you want one (for <code>sudo</code> or the console), <code>passwd:</code> takes a crypt hash such as <code>$6$...</code>, never the plain password. Making that hash on a Mac is less obvious than it sounds: macOS's <code>crypt(3)</code> only does old DES, so use OpenSSL 3 from Homebrew (<code>openssl passwd -6</code>) or <code>mkpasswd</code> in any Linux box.</li>
+      </ul>
+      <p>macOS can build the seed without installing anything:</p>
+      <pre><code>mkdir seed &amp;&amp; mv meta-data user-data seed/
+hdiutil makehybrid -o seed.iso -iso -joliet -default-volume-name cidata seed
+</code></pre>
+      <p>Attach <code>seed.iso</code> to the VM as a second drive, and cloud-init finds it by its label on first boot.</p>
+      <h2 id="growing-the-disk-and-the-part-most-guides-skip">Growing the disk, and the part most guides skip</h2>
+      <p>Making the disk bigger looks like one command:</p>
+      <pre><code>qemu-img resize ubuntu-26.04-server-cloudimg-arm64.img 40G
+</code></pre>
+      <p>That only makes the <em>file</em> bigger, though. The partition table and the root filesystem inside it still describe a 3.5 GB disk. Two more things have to happen:</p>
+      <ol>
+      <li><strong>The root partition has to grow</strong> to the new end of the disk (<code>growpart</code>).</li>
+      <li><strong>The filesystem has to grow</strong> to fill the partition (<code>resize2fs</code> for ext4).</li>
+      </ol>
+      <p>The good news: cloud-init's <code>growpart</code> and <code>resizefs</code> modules do both at boot. So if you resize before the first boot, and the seed is attached so cloud-init actually runs, the VM comes up at full size. If cloud-init didn't run, or you'd rather not reboot, do it yourself inside the VM:</p>
+      <pre><code>sudo growpart /dev/vda 1
+sudo resize2fs /dev/vda1
+</code></pre>
+      <p>(Check your layout with <code>lsblk</code> first. On Ubuntu's cloud images the root filesystem is partition 1.)</p>
+      <p>Now the part most guides skip. A GPT partition table keeps a <strong>backup copy of its header at the very end of the disk</strong>, and the primary header records where that backup is. Resizing the file moves the end of the disk, but not the backup header, which is now stranded somewhere in the middle. On the next boot the kernel notices and says so:</p>
+      <pre><code>GPT:Alternate GPT header not at the end of the disk.
+GPT:Use GNU Parted to correct GPT errors.
+</code></pre>
+      <p>Linux carries on with the primary header, and a recent <code>growpart</code> moves the backup as part of growing the partition, so on current Ubuntu it usually resolves itself. Older <code>growpart</code> versions on other distributions didn't, and some partitioning tools refuse to touch the disk until it's fixed. If you see that message, one command puts the backup where it belongs:</p>
+      <pre><code>sudo sgdisk -e /dev/vda
+</code></pre>
+      <h3>If you're using Apple's Virtualization framework</h3>
+      <p>QEMU reads QCOW2 directly (<a href="/blog/virtualization-framework-vs-qemu/">how the two compare</a>). <a href="/blog/how-virtualization-framework-works/">Apple's Virtualization framework</a> (used by Tart, Lima's <code>vz</code> mode, UTM's Apple backend and others) only boots <strong>raw</strong> disk images, so convert first, then grow:</p>
+      <pre><code>qemu-img convert -f qcow2 -O raw ubuntu-26.04-server-cloudimg-arm64.img devbox.raw
+qemu-img resize -f raw devbox.raw 40G
+</code></pre>
+      <p>On APFS both steps produce a <strong>sparse</strong> file. <code>ls -lh</code> shows 40G, but <code>du -h</code> shows only what Ubuntu has actually written, so a generous size costs nothing until you fill it.</p>
+      <h2 id="ssh-without-the-fingerprint-prompt">SSH without the fingerprint prompt</h2>
+      <p>Boot a fresh VM, SSH in, and you get the familiar "authenticity of host can't be established" question. That's because cloud-init generates the VM's <strong>host keys</strong> on first boot, so your Mac has never seen them. Recreate the VM on the same address and port, and SSH greets you with a full-screen "REMOTE HOST IDENTIFICATION HAS CHANGED" warning instead. With throwaway VMs, that happens all the time.</p>
+      <p>The fix is to generate the host key yourself, hand it to cloud-init, and tell SSH about it before the VM ever boots:</p>
+      <pre><code>ssh-keygen -q -t ed25519 -N '' -C devbox -f devbox-host
+</code></pre>
+      <p>Add it to <code>user-data</code>:</p>
+      <pre><code>ssh_deletekeys: true
+ssh_keys:
+  ed25519_private: |
+    -----BEGIN OPENSSH PRIVATE KEY-----
+    ...the contents of devbox-host, indented...
+    -----END OPENSSH PRIVATE KEY-----
+  ed25519_public: &quot;ssh-ed25519 AAAA... devbox&quot;
+</code></pre>
+      <p>Then pin it in a known-hosts file for this VM:</p>
+      <pre><code>echo &quot;[127.0.0.1]:2222 $(cut -d' ' -f1,2 devbox-host.pub)&quot; &gt; devbox.known_hosts
+ssh -p 2222 -o UserKnownHostsFile=devbox.known_hosts you@127.0.0.1
+</code></pre>
+      <p>The first connection is trusted with no prompt, because it really is the key you made. One caveat: the seed now contains a private key, so treat <code>seed.iso</code> like one and delete it once the VM is set up.</p>
+      <h2 id="the-whole-thing-as-one-script">The whole thing as one script</h2>
+      <p>Here's everything above in one script for an Apple silicon Mac with QEMU (<code>brew install qemu</code>). It downloads the image once and checks it against Ubuntu's published checksums. Then, for each VM, it makes an APFS clone of the image, grows the clone, generates a host key, writes the seed and prints the commands to boot and connect.</p>
+      <pre><code>#!/bin/sh
+# make-vm.sh NAME SIZE    e.g.  ./make-vm.sh devbox 40G
+set -eu
+NAME=${1:-devbox}
+SIZE=${2:-40G}
+GUEST_USER=you                       # a valid Linux username
+PUBKEY=$(cat ~/.ssh/id_ed25519.pub)  # the key you'll sign in with
+IMG=ubuntu-26.04-server-cloudimg-arm64.img
+URL=https://cloud-images.ubuntu.com/releases/26.04/release
+
+# 1. The image: download once, verify, clone per VM, grow the clone
+[ -f &quot;$IMG&quot; ] || curl -fLO &quot;$URL/$IMG&quot;
+curl -fsL &quot;$URL/SHA256SUMS&quot; | grep -E &quot;[ *]$IMG\$&quot; | sed 's/ \*/  /' | shasum -a 256 -c -
+cp -c &quot;$IMG&quot; &quot;$NAME.qcow2&quot;           # -c: an APFS clone, instant and free
+qemu-img resize &quot;$NAME.qcow2&quot; &quot;$SIZE&quot;
+
+# 2. A host key we can trust before the first boot
+rm -f &quot;$NAME-host&quot; &quot;$NAME-host.pub&quot;
+ssh-keygen -q -t ed25519 -N '' -C &quot;$NAME&quot; -f &quot;$NAME-host&quot;
+
+# 3. The NoCloud seed
+mkdir -p &quot;$NAME-seed&quot;
+cat &gt; &quot;$NAME-seed/meta-data&quot; &lt;&lt;EOF
+instance-id: $NAME-$(date +%s)
+local-hostname: $NAME
+EOF
+{
+  cat &lt;&lt;EOF
+#cloud-config
+hostname: &quot;$NAME&quot;
+users:
+  - name: &quot;$GUEST_USER&quot;
+    groups: [sudo]
+    shell: /bin/bash
+    sudo: &quot;ALL=(ALL) NOPASSWD:ALL&quot;
+    lock_passwd: true
+    ssh_authorized_keys:
+      - &quot;$PUBKEY&quot;
+ssh_pwauth: false
+ssh_deletekeys: true
+ssh_keys:
+  ed25519_private: |
+EOF
+  sed 's/^/    /' &quot;$NAME-host&quot;
+  echo &quot;  ed25519_public: \&quot;$(cat &quot;$NAME-host.pub&quot;)\&quot;&quot;
+} &gt; &quot;$NAME-seed/user-data&quot;
+rm -f &quot;$NAME-seed.iso&quot;
+hdiutil makehybrid -o &quot;$NAME-seed.iso&quot; -iso -joliet -default-volume-name cidata &quot;$NAME-seed&quot;
+
+# 4. Pin the host key, and say how to boot and connect
+echo &quot;[127.0.0.1]:2222 $(cut -d' ' -f1,2 &quot;$NAME-host.pub&quot;)&quot; &gt; &quot;$NAME.known_hosts&quot;
+cat &lt;&lt;EOF
+
+Boot it (Ctrl-A then X quits QEMU):
+  qemu-system-aarch64 -machine virt -accel hvf -cpu host -smp 4 -m 4G \\
+    -bios &quot;$(brew --prefix qemu)/share/qemu/edk2-aarch64-code.fd&quot; \\
+    -drive if=virtio,format=qcow2,file=$NAME.qcow2 \\
+    -drive if=virtio,format=raw,readonly=on,file=$NAME-seed.iso \\
+    -nic user,model=virtio-net-pci,hostfwd=tcp:127.0.0.1:2222-:22 \\
+    -nographic
+
+Then, in another terminal:
+  ssh -p 2222 -o UserKnownHostsFile=$PWD/$NAME.known_hosts $GUEST_USER@127.0.0.1
+EOF
+</code></pre>
+      <p>Once you're in, <code>df -h /</code> shows a root filesystem of nearly the full size you asked for, from an image that started at 3.5 GB.</p>
+      <h2 id="lessons-from-automating-this-for-real">Lessons from automating this for real</h2>
+      <p>I've built this flow into a Mac app, and these are the things that cost me the most time. They apply whatever tool you use.</p>
+      <ul>
+      <li><strong>Fedora and Rocky Linux search every cloud on every boot.</strong> Without a hint, their cloud-init probes each cloud provider's metadata service in turn and waits for each to time out. In a local VM that can add minutes to every boot. Write <code>datasource_list: [ NoCloud, None ]</code> to a file in <code>/etc/cloud/cloud.cfg.d/</code> (cloud-config's <code>write_files</code> can do it on first boot), and they boot like Ubuntu.</li>
+      <li><strong>Attach the seed as a virtio disk, not USB.</strong> Some cloud kernels leave out drivers for physical hardware. Debian's <code>cloud-arm64</code> kernel, for example, has no USB storage support. Every cloud kernel has virtio-blk, because its root disk is on it.</li>
+      <li><strong>The seed doesn't have to be an ISO.</strong> cloud-init reads a FAT volume labelled <code>CIDATA</code> just as well, which matters if you're writing the seed from code, where building an ISO is awkward.</li>
+      <li><strong>Hash the password on the host.</strong> The seed is a file on your disk. Put a <code>$6$</code> hash in it, never the password itself.</li>
+      <li><strong>Fix the GPT before the first boot, not after.</strong> If you grow the disk in code, move the backup header to the new end at the same time. The guest then never boots from a partition table that disagrees with its disk.</li>
+      </ul>
+      <h2 id="or-let-a-tool-do-it">Or let a tool do it</h2>
+      <p>If you'd rather not maintain a script:</p>
+      <ul>
+      <li><strong><a href="https://lima-vm.io/">Lima</a></strong> (free, open source) generates the seed, the SSH keys and the port forward for you, from a YAML template: <code>limactl start --name=devbox --disk=40 template://ubuntu</code>. It also mounts your home folder into the VM (read-only by default), which you'll either love or want to turn off.</li>
+      <li><strong><a href="https://canonical.com/multipass">Multipass</a></strong> (free, open source, from Canonical) is the Ubuntu-centric version: <code>multipass launch --name devbox --disk 40G</code>.</li>
+      <li><strong>Velo Workspaces</strong> is the one I build, a native Mac app. You pick Ubuntu, Debian, Fedora or Rocky Linux, then type a username, password and disk size. It downloads the official image and checks its checksum, converts it to a sparse raw disk and grows it, moves the backup GPT, writes the <code>CIDATA</code> seed and pins the host key: everything in this post. It also gives you an <code>ssh</code> command and a VS Code Remote-SSH config. Once the image is downloaded it takes about 30 seconds (<a href="/blog/create-ubuntu-vm-mac-cloud-image/">step-by-step guide with a video</a>). It's free on the Mac App Store, with an optional Pro tier.</li>
+      </ul>
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/cloud-image-usual-way-vs-one-field.webp"><img src="/assets/blog/cloud-image-usual-way-vs-one-field.webp" width="1600" height="900" alt="The usual way: qemu-img resize, a cloud-init seed built with hdiutil, growpart and resize2fs, then copying a key. In Velo Workspaces: type 40 in Storage." loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Four chores by hand, or one field in Velo Workspaces.</span></figcaption>
+      </figure>
+      <h2 id="takeaways">Takeaways</h2>
+      <ul>
+      <li>A cloud image is an installed system waiting for a cloud. On your Mac, a 2-file <code>CIDATA</code> disk is the cloud.</li>
+      <li>Growing a disk is three changes: the file, the partition, the filesystem. cloud-init does the last two at boot, if it runs at all.</li>
+      <li>Pre-generating the host key turns SSH's first-connection prompt from a ritual into a non-event.</li>
+      </ul>
+      <p>If you try the script and something doesn't boot, email <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a> with what you see on the console. Most problems show up there in the first ten seconds.</p>
+      <h2 id="where-to-go-next">Where to go next</h2>
+      <div class="guide-next">
+        <a href="/blog/create-ubuntu-vm-mac-cloud-image/"><span>Step by step</span>An Ubuntu VM from a cloud image in 30 seconds</a>
+        <a href="/blog/ssh-vs-code-linux-vm-mac/"><span>Next guide</span>SSH and VS Code into a Linux VM, with one key</a>
+        <a href="/blog/ubuntu-on-apple-silicon/"><span>Background</span>Ubuntu on Apple silicon: versions, desktops and tips</a>
+        <a href="/blog/linux-vm-networking-apple-silicon/"><span>Background</span>Linux VM networking on a Mac: NAT, SSH and ports</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc. Ubuntu is a trademark of Canonical Ltd.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+<script src="/assets/lightbox.js?v=1" defer></script>
+</body>
+</html>

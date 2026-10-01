@@ -20,7 +20,7 @@
 <meta property="og:image:alt" content="Running Ubuntu on Apple Silicon: The Quick Way, and What Trips People Up">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-20">
-<meta property="article:modified_time" content="2026-09-29">
+<meta property="article:modified_time" content="2026-10-01">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -33,7 +33,7 @@
       "description": "Run Ubuntu 26.04 or 24.04 LTS on an M-series Mac in about a minute from the official cloud image, or install Server or Desktop hands-free.",
       "image": "https://www.veloworkspaces.com/assets/og/ubuntu-on-apple-silicon.jpg",
       "datePublished": "2026-09-20",
-      "dateModified": "2026-09-29",
+      "dateModified": "2026-10-01",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -112,7 +112,7 @@
         <span class="eyebrow">Guide</span>
         <h1>Running Ubuntu on Apple Silicon: The Quick Way, and What Trips People Up</h1>
         <p class="article-lede">Ubuntu on an M-series Mac runs natively on arm64, so what breaks is different from Ubuntu on a PC. Here's the quickest way to get it running, how to choose between the cloud image and the installer, and two things that catch people out.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-29">September 29, 2026</time><span class="article-readtime">4 min read</span></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-10-01">October 1, 2026</time><span class="article-readtime">4 min read</span></p>
       </div>
       <details class="article-toc">
         <summary>In this article</summary>
@@ -139,7 +139,7 @@
 
       <h2 id="the-fastest-way-in-ubuntu-s-cloud-image">The fastest way in: Ubuntu's cloud image</h2>
       <p>Since Velo Workspaces 1.2, the quickest route to a working Ubuntu is Canonical's official cloud image. Create a workspace, choose <strong>Cloud image</strong>, pick Ubuntu 26.04 LTS or 24.04 LTS, and enter a username and password. The app downloads the image from cloud-images.ubuntu.com, checks it against Canonical's published checksum, and hands your account, this Mac's SSH key and a hostname to cloud-init on a small seed disk. First boot sets everything up, and the workspace is usually ready to sign in to about a minute after the download finishes.</p>
-      <p>There's no installer to click through, and the disk grows on first boot to whatever size you picked. With Pro, <strong>Open Terminal</strong> in the workspace's <strong>Access</strong> tab signs you in straight away, using the key the app keeps for this Mac. The Access tab also shows a plain <code>ssh</code> command for Terminal or any other client; that uses your own SSH key, so paste your public key under <strong>SSH Public Keys</strong> when you create the workspace. The cloud image is Ubuntu Server, with no desktop, which is what most development and CI-style work wants anyway.</p>
+      <p>There's no installer to click through, and the disk grows on first boot to whatever size you picked. With Pro, <strong>Open Terminal</strong> in the workspace's <strong>Access</strong> tab signs you in straight away, using the key the app keeps for this Mac. The Access tab also shows a plain <code>ssh</code> command for Terminal or any other client; that uses your own SSH key, so paste your public key under <strong>SSH Public Keys</strong> when you create the workspace. The cloud image is Ubuntu Server, with no desktop, which is what most development and CI-style work wants anyway. Curious what cloud-init is doing behind the scenes, or using QEMU or UTM instead? <a href="/blog/ubuntu-cloud-images-on-mac/">Ubuntu cloud images on a Mac, by hand</a> covers the seed disk, the disk resize and SSH host keys.</p>
 
       <h2 id="when-you-want-the-installer-server-or-desktop-hands-free">When you want the installer: Server or Desktop, hands-free</h2>
       <p>Choose <strong>Installer image</strong> instead if you want Ubuntu Desktop, or a system laid out by Ubuntu's own installer. Leave <strong>Automatic installation</strong> on and the app writes an autoinstall file for Subiquity with your account, your SSH key, and this Mac's language, keyboard and time zone. It also boots the installer with <code>autoinstall</code> on the kernel command line, so Subiquity doesn't stop to ask anything, not even before it erases the disk. Leave it alone, and the workspace restarts into the installed system when it's done.</p>

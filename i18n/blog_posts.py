@@ -104,7 +104,7 @@ POSTS = [
         "card_summary": "Every screen from the + button to a signed-in terminal. Type the disk size you want, and the disk, partition and filesystem are grown for you: no qemu-img resize, no growpart.",
         "lede": "A cloud image is Ubuntu already installed on a small disk. Velo Workspaces downloads it, grows it to the size you type, adds your account and SSH key, and boots it. Once the image is on your Mac, going from the + button to a signed-in terminal takes about 30 seconds. Here is every screen, in order.",
         "published": "2026-09-29",
-        "modified": "2026-09-29",
+        "modified": "2026-10-01",
         "trademarks": "Ubuntu is a trademark of Canonical Ltd.",
         "hero": {
             "src": "/assets/blog/guides/ubuntu-cloud-image/terminal.webp",
@@ -338,7 +338,21 @@ POSTS = [
         "card_summary": "Ubuntu runs natively on arm64 on an M-series Mac. The one-minute cloud image, hands-free Server and Desktop installs, the Netplan gotcha on cloned VMs, and what Rosetta can and can't do.",
         "lede": "Ubuntu on an M-series Mac runs natively on arm64, so what breaks is different from Ubuntu on a PC. Here's the quickest way to get it running, how to choose between the cloud image and the installer, and two things that catch people out.",
         "published": "2026-09-20",
-        "modified": "2026-09-29",
+        "modified": "2026-10-01",
+        "trademarks": "Ubuntu is a trademark of Canonical Ltd."
+    },
+    {
+        "slug": "ubuntu-cloud-images-on-mac",
+        "group": "Guides by operating system",
+        "eyebrow": "Guide",
+        "title": "Ubuntu Cloud Images on a Mac: Fix the Login and Disk Size",
+        "h1": "Ubuntu Cloud Images on a Mac: Why the Disk Is 3.5 GB, Why You Can't Log In, and How to Fix Both",
+        "description": "An Ubuntu cloud image on a Mac boots to a 3.5 GB disk and no login. How the cloud-init seed, disk resizing and SSH host keys work, with a script.",
+        "card_title": "Ubuntu Cloud Images on a Mac, by Hand",
+        "card_summary": "Why a cloud image boots to a 3.5 GB disk with no login, how to fix both with a cloud-init seed built on macOS, and the GPT detail most guides skip.",
+        "lede": "Ubuntu's cloud images are the quickest way to a Linux VM I know. There's no installer to click through, the download is under 1 GB, and they boot in seconds. Then you boot one on your Mac and hit two walls at once: the disk is about 3.5 GB, and there's no account you can log in with.",
+        "published": "2026-10-01",
+        "modified": "2026-10-01",
         "trademarks": "Ubuntu is a trademark of Canonical Ltd."
     },
     {
