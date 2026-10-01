@@ -24,7 +24,7 @@ de/ fr/ it/ es/ pt-br/ ja/ ko/ zh-hans/ zh-hant/
 i18n/                Authoring scripts that generate every localized page — see "Localization" below
 robots.txt
 sitemap.xml          Generated: every localized page with hreflang alternates, plus the roadmap and every blog post, all with <lastmod>
-_redirects          Cloudflare Workers assets: path-level redirects (none active — see below)
+_redirects          Cloudflare Workers assets: path-level redirects (old blog PNG URLs → their WebP versions)
 _headers            Cloudflare Workers assets: security + cache headers
 wrangler.jsonc      Deploy config (Workers static assets, no worker code)
 .assetsignore       Keeps .git, this README, i18n/, etc. out of the deployed assets

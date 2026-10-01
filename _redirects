@@ -6,6 +6,21 @@
 #
 # The apex (veloworkspaces.com) -> www (www.veloworkspaces.com) redirect is
 # instead set up as a Cloudflare Redirect Rule at the zone level — see
-# README.md "Routing www and the apex domain". Nothing else in this site
-# currently needs a path-level redirect, so this file intentionally has no
-# active rules.
+# README.md "Routing www and the apex domain".
+
+# Blog images converted from PNG to WebP in September 2026. The old URLs may
+# still be linked or embedded elsewhere (articles on other sites, image search),
+# so they redirect permanently to the new files.
+/assets/blog/ai-bridge-tab.png /assets/blog/ai-bridge-tab.webp 301
+/assets/blog/ai_workspace_config.png /assets/blog/ai-workspace-config.webp 301
+/assets/blog/architecture-topology-diagram.png /assets/blog/architecture-topology-diagram.webp 301
+/assets/blog/mlx-chart1-single-request.png /assets/blog/mlx-chart1-single-request.webp 301
+/assets/blog/mlx-chart2-concurrent-load.png /assets/blog/mlx-chart2-concurrent-load.webp 301
+/assets/blog/mlx-chart3-agentic-loop.png /assets/blog/mlx-chart3-agentic-loop.webp 301
+/assets/blog/opencode-mlx-screenshot.png /assets/blog/opencode-mlx-screenshot.webp 301
+/assets/blog/screenshot-agentic-loop-host.png /assets/blog/screenshot-agentic-loop-host.webp 301
+/assets/blog/screenshot-agentic-loop-vm.png /assets/blog/screenshot-agentic-loop-vm.webp 301
+/assets/blog/screenshot-concurrent-load-host.png /assets/blog/screenshot-concurrent-load-host.webp 301
+/assets/blog/screenshot-concurrent-load-vm.png /assets/blog/screenshot-concurrent-load-vm.webp 301
+/assets/blog/screenshot-single-request-host.png /assets/blog/screenshot-single-request-host.webp 301
+/assets/blog/screenshot-single-request-vm.png /assets/blog/screenshot-single-request-vm.webp 301
