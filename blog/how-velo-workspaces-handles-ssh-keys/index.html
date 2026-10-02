@@ -3,21 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How Velo Workspaces Handles Your SSH Keys</title>
-<meta name="description" content="Where Velo Workspaces keeps your SSH keys, how it verifies a VM&#x27;s host key, and how its terminal works inside the App Sandbox with SwiftNIO SSH.">
+<title>Putting an SSH Terminal Inside a Sandboxed Mac App</title>
+<meta name="description" content="How Velo Workspaces runs an SSH terminal inside the App Sandbox with SwiftNIO SSH, keeps your Ed25519 key in the Keychain, and checks each VM&#x27;s host key.">
 <link rel="canonical" href="https://www.veloworkspaces.com/blog/how-velo-workspaces-handles-ssh-keys/">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="stylesheet" href="/assets/style.css?v=6">
 <link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Velo Workspaces">
-<meta property="og:title" content="How Velo Workspaces Handles Your SSH Keys">
-<meta property="og:description" content="Where Velo Workspaces keeps your SSH keys, how it verifies a VM&#x27;s host key, and how its terminal works inside the App Sandbox with SwiftNIO SSH.">
+<meta property="og:title" content="Putting an SSH Terminal Inside a Sandboxed Mac App">
+<meta property="og:description" content="How Velo Workspaces runs an SSH terminal inside the App Sandbox with SwiftNIO SSH, keeps your Ed25519 key in the Keychain, and checks each VM&#x27;s host key.">
 <meta property="og:url" content="https://www.veloworkspaces.com/blog/how-velo-workspaces-handles-ssh-keys/">
 <meta property="og:image" content="https://www.veloworkspaces.com/assets/og/how-velo-workspaces-handles-ssh-keys.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="How Velo Workspaces Handles Your SSH Keys, Inside the Built-In Terminal">
+<meta property="og:image:alt" content="Putting an SSH Terminal Inside a Sandboxed Mac App">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-10-02">
 <meta property="article:modified_time" content="2026-10-02">
@@ -28,9 +28,9 @@
   "@graph": [
     {
       "@type": "BlogPosting",
-      "headline": "How Velo Workspaces Handles Your SSH Keys",
-      "name": "How Velo Workspaces Handles Your SSH Keys, Inside the Built-In Terminal",
-      "description": "Where Velo Workspaces keeps your SSH keys, how it verifies a VM's host key, and how its terminal works inside the App Sandbox with SwiftNIO SSH.",
+      "headline": "Putting an SSH Terminal Inside a Sandboxed Mac App",
+      "name": "Putting an SSH Terminal Inside a Sandboxed Mac App",
+      "description": "How Velo Workspaces runs an SSH terminal inside the App Sandbox with SwiftNIO SSH, keeps your Ed25519 key in the Keychain, and checks each VM's host key.",
       "image": "https://www.veloworkspaces.com/assets/og/how-velo-workspaces-handles-ssh-keys.jpg",
       "datePublished": "2026-10-02",
       "dateModified": "2026-10-02",
@@ -72,7 +72,7 @@
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "How Velo Workspaces Handles Your SSH Keys, Inside the Built-In Terminal",
+          "name": "Putting an SSH Terminal Inside a Sandboxed Mac App",
           "item": "https://www.veloworkspaces.com/blog/how-velo-workspaces-handles-ssh-keys/"
         }
       ]
@@ -110,8 +110,8 @@
       <a class="article-back-link" href="/blog/">← Back to Blog</a>
       <div class="article-header">
         <span class="eyebrow">Security</span>
-        <h1>How Velo Workspaces Handles Your SSH Keys, Inside the Built-In Terminal</h1>
-        <p class="article-lede">Open Terminal signs you in to a Linux workspace with one click. Here's what happens to your keys when it does: where they're kept, how the workspace's identity is checked, and how an SSH client fits inside a sandboxed Mac app.</p>
+        <h1>Putting an SSH Terminal Inside a Sandboxed Mac App</h1>
+        <p class="article-lede">Open Terminal in Velo Workspaces signs you in to a Linux VM with one click. Here's how it's built: where your keys are kept, how the VM's identity is checked, and how an SSH client fits inside a sandboxed Mac app.</p>
         <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-10-02">October 2, 2026</time><span class="article-readtime">8 min read</span></p>
       </div>
       <details class="article-toc">

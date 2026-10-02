@@ -29,11 +29,11 @@
     <description>Install Ubuntu and Fedora or Rocky Linux hands-free from the vendor&#x27;s ISO: a labelled seed disk, one kernel argument, and no PXE server.</description>
   </item>
   <item>
-    <title>How Velo Workspaces Handles Your SSH Keys</title>
+    <title>Putting an SSH Terminal Inside a Sandboxed Mac App</title>
     <link>https://www.veloworkspaces.com/blog/how-velo-workspaces-handles-ssh-keys/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/how-velo-workspaces-handles-ssh-keys/</guid>
     <pubDate>Fri, 02 Oct 2026 12:00:00 +0000</pubDate>
-    <description>Where Velo Workspaces keeps your SSH keys, how it verifies a VM&#x27;s host key, and how its terminal works inside the App Sandbox with SwiftNIO SSH.</description>
+    <description>How Velo Workspaces runs an SSH terminal inside the App Sandbox with SwiftNIO SSH, keeps your Ed25519 key in the Keychain, and checks each VM&#x27;s host key.</description>
   </item>
   <item>
     <title>Ubuntu Cloud Images on a Mac: Fix the Login and Disk Size</title>
