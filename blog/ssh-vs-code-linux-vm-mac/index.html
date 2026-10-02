@@ -20,7 +20,7 @@
 <meta property="og:image:alt" content="SSH and VS Code into a Linux VM on Your Mac, with One Key">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-29">
-<meta property="article:modified_time" content="2026-09-29">
+<meta property="article:modified_time" content="2026-10-02">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -36,7 +36,7 @@
         "https://www.veloworkspaces.com/assets/blog/guides/ssh-keys/access-tab-vs-code.webp"
       ],
       "datePublished": "2026-09-29",
-      "dateModified": "2026-09-29",
+      "dateModified": "2026-10-02",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -115,7 +115,7 @@
         <span class="eyebrow">Step-by-step guide</span>
         <h1>SSH and VS Code into a Linux VM on Your Mac, with One Key</h1>
         <p class="article-lede">Velo Workspaces signs in its built-in terminal with a key it keeps in your Mac's Keychain. Terminal and VS Code look in ~/.ssh instead. Make them use the same key and every tool gets in the same way. There are two ways to do it; pick the one that matches where your key lives today.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-29">September 29, 2026</time><span class="article-readtime">4 min read</span></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-29">September 29, 2026</time> · Updated <time datetime="2026-10-02">October 2, 2026</time><span class="article-readtime">4 min read</span></p>
       </div>
       <figure class="shot article-hero">
         <a class="shot-frame" href="/assets/blog/guides/ssh-keys/access-tab-vs-code.webp"><img src="/assets/blog/guides/ssh-keys/access-tab-vs-code.webp" width="823" height="750" alt="A workspace&#x27;s Access tab in Velo Workspaces with SSH details, the ssh command and a VS Code Remote-SSH config block" fetchpriority="high"><span class="shot-zoom">Click to enlarge</span></a>
@@ -277,7 +277,7 @@
 
       <h3>The workspace's host key has changed</h3>
 
-      <p>That's expected after you reinstall the guest or restore it from a restore point. The built-in terminal shows both keys and a <strong>Trust New Key</strong> button. For Terminal and VS Code, remove the old entry with <code>ssh-keygen -R 192.168.65.110</code>, using the workspace's address. If you did neither, don't trust the new key.</p>
+      <p>That's expected after you reinstall the guest or restore it from a restore point. The built-in terminal shows both keys and a <strong>Trust New Key</strong> button. For Terminal and VS Code, remove the old entry with <code>ssh-keygen -R 192.168.65.110</code>, using the workspace's address. If you did neither, don't trust the new key. <a href="/blog/how-velo-workspaces-handles-ssh-keys/">How Velo Workspaces handles your SSH keys</a> explains how host keys are checked.</p>
 
       <h3>SSH ready never appears</h3>
 

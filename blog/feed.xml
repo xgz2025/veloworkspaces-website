@@ -15,11 +15,46 @@
     <description>Fedora, Rocky Linux and NixOS ship ARM ISOs with no partition table, so Apple&#x27;s Virtualization framework can&#x27;t boot them as disks. The fix, with a script.</description>
   </item>
   <item>
+    <title>Why Your Mac&#x27;s Disk Numbers Don&#x27;t Add Up: APFS Clones</title>
+    <link>https://www.veloworkspaces.com/blog/mac-disk-space-apfs-clones-sparse-files/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/mac-disk-space-apfs-clones-sparse-files/</guid>
+    <pubDate>Fri, 02 Oct 2026 12:00:00 +0000</pubDate>
+    <description>Finder can show folders bigger than your Mac&#x27;s free space. APFS clones and sparse files explain why, and when a copy to another drive needs far more room.</description>
+  </item>
+  <item>
+    <title>Unattended Ubuntu and Fedora Installs From the ISO, No PXE</title>
+    <link>https://www.veloworkspaces.com/blog/unattended-ubuntu-fedora-installs-from-iso/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/unattended-ubuntu-fedora-installs-from-iso/</guid>
+    <pubDate>Fri, 02 Oct 2026 12:00:00 +0000</pubDate>
+    <description>Install Ubuntu and Fedora or Rocky Linux hands-free from the vendor&#x27;s ISO: a labelled seed disk, one kernel argument, and no PXE server.</description>
+  </item>
+  <item>
+    <title>How Velo Workspaces Handles Your SSH Keys</title>
+    <link>https://www.veloworkspaces.com/blog/how-velo-workspaces-handles-ssh-keys/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/how-velo-workspaces-handles-ssh-keys/</guid>
+    <pubDate>Fri, 02 Oct 2026 12:00:00 +0000</pubDate>
+    <description>Where Velo Workspaces keeps your SSH keys, how it verifies a VM&#x27;s host key, and how its terminal works inside the App Sandbox with SwiftNIO SSH.</description>
+  </item>
+  <item>
     <title>Ubuntu Cloud Images on a Mac: Fix the Login and Disk Size</title>
     <link>https://www.veloworkspaces.com/blog/ubuntu-cloud-images-on-mac/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/ubuntu-cloud-images-on-mac/</guid>
     <pubDate>Thu, 01 Oct 2026 12:00:00 +0000</pubDate>
     <description>An Ubuntu cloud image on a Mac boots to a 3.5 GB disk and no login. How the cloud-init seed, disk resizing and SSH host keys work, with a script.</description>
+  </item>
+  <item>
+    <title>Fedora VM on a Mac: Automatic Kickstart Install Walkthrough</title>
+    <link>https://www.veloworkspaces.com/blog/fedora-vm-mac-automatic-install/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/fedora-vm-mac-automatic-install/</guid>
+    <pubDate>Tue, 29 Sep 2026 12:00:00 +0000</pubDate>
+    <description>Step by step with screenshots: install Fedora 44 Server in Velo Workspaces with a kickstart it writes for you, then sign in over SSH. Rocky Linux too.</description>
+  </item>
+  <item>
+    <title>SSH and VS Code Remote-SSH into a Linux VM on Your Mac</title>
+    <link>https://www.veloworkspaces.com/blog/ssh-vs-code-linux-vm-mac/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/ssh-vs-code-linux-vm-mac/</guid>
+    <pubDate>Tue, 29 Sep 2026 12:00:00 +0000</pubDate>
+    <description>Use one key for the built-in terminal, Terminal and VS Code Remote-SSH: import your Mac&#x27;s key into Velo Workspaces, or export the app&#x27;s key to ~/.ssh.</description>
   </item>
   <item>
     <title>Create an Ubuntu VM on a Mac in 30 Seconds: Step by Step</title>
@@ -36,13 +71,6 @@
     <description>Step by step with screenshots: Velo Workspaces downloads Ubuntu 26.04 Desktop, answers every installer question, then restarts into your desktop.</description>
   </item>
   <item>
-    <title>Fedora VM on a Mac: Automatic Kickstart Install Walkthrough</title>
-    <link>https://www.veloworkspaces.com/blog/fedora-vm-mac-automatic-install/</link>
-    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/fedora-vm-mac-automatic-install/</guid>
-    <pubDate>Tue, 29 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Step by step with screenshots: install Fedora 44 Server in Velo Workspaces with a kickstart it writes for you, then sign in over SSH. Rocky Linux too.</description>
-  </item>
-  <item>
     <title>Install Kali Linux in a VM on an M-Series Mac: Walkthrough</title>
     <link>https://www.veloworkspaces.com/blog/kali-linux-vm-mac-install-guide/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/kali-linux-vm-mac-install-guide/</guid>
@@ -55,13 +83,6 @@
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/nixos-vm-mac-install-guide/</guid>
     <pubDate>Tue, 29 Sep 2026 12:00:00 +0000</pubDate>
     <description>Step by step with screenshots: download the NixOS 26.05 graphical installer in Velo Workspaces, install GNOME with a few clicks, then turn on SSH.</description>
-  </item>
-  <item>
-    <title>SSH and VS Code Remote-SSH into a Linux VM on Your Mac</title>
-    <link>https://www.veloworkspaces.com/blog/ssh-vs-code-linux-vm-mac/</link>
-    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/ssh-vs-code-linux-vm-mac/</guid>
-    <pubDate>Tue, 29 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Use one key for the built-in terminal, Terminal and VS Code Remote-SSH: import your Mac&#x27;s key into Velo Workspaces, or export the app&#x27;s key to ~/.ssh.</description>
   </item>
   <item>
     <title>What&#x27;s New in Velo Workspaces 1.2: Linux VMs in a Minute</title>
@@ -97,6 +118,13 @@
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
     <description>Install NixOS 26.05 or 25.05 on an M-series Mac from the official aarch64 ISO, and how configuration.nix and base images fit together in a VM.</description>
+  </item>
+  <item>
+    <title>Base Image vs. Snapshot vs. Clone: VM Terms Explained</title>
+    <link>https://www.veloworkspaces.com/blog/base-image-vs-snapshot-vs-clone/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/base-image-vs-snapshot-vs-clone/</guid>
+    <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
+    <description>Base image, snapshot, clone and disposable workspace, sorted out: what each one is, which question it answers, and how to combine them on a Mac.</description>
   </item>
   <item>
     <title>Linux VM Networking on a Mac: NAT, SSH and Port Forwards</title>
@@ -251,13 +279,6 @@
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/disposable-vm-vs-snapshot/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
     <description>A snapshot keeps a VM&#x27;s state so you can go back; a disposable VM throws it away so nothing carries over. What each does, and when to use which.</description>
-  </item>
-  <item>
-    <title>Base Image vs. Snapshot vs. Clone: VM Terms Explained</title>
-    <link>https://www.veloworkspaces.com/blog/base-image-vs-snapshot-vs-clone/</link>
-    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/base-image-vs-snapshot-vs-clone/</guid>
-    <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Base image, snapshot, clone and disposable workspace, sorted out: what each one is, which question it answers, and how to combine them on a Mac.</description>
   </item>
   <item>
     <title>One VM Per Git Branch: Isolated Development on a Mac</title>

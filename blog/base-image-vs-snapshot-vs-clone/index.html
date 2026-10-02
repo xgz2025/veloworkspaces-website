@@ -20,7 +20,7 @@
 <meta property="og:image:alt" content="Base Image vs. Snapshot vs. Clone vs. Disposable Workspace">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-22">
-<meta property="article:modified_time" content="2026-09-28">
+<meta property="article:modified_time" content="2026-10-02">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -33,7 +33,7 @@
       "description": "Base image, snapshot, clone and disposable workspace, sorted out: what each one is, which question it answers, and how to combine them on a Mac.",
       "image": "https://www.veloworkspaces.com/assets/og/base-image-vs-snapshot-vs-clone.jpg",
       "datePublished": "2026-09-22",
-      "dateModified": "2026-09-28",
+      "dateModified": "2026-10-02",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -112,7 +112,7 @@
         <span class="eyebrow">Fundamentals</span>
         <h1>Base Image vs. Snapshot vs. Clone vs. Disposable Workspace</h1>
         <p class="article-lede">Four terms this blog uses across several posts, in one place. The short version: "clone" isn't a fourth option next to the others; it's the mechanism under two of them. The real choice is between base image, snapshot and disposable workspace, which answer three different questions.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-09-28">September 28, 2026</time><span class="article-readtime">2 min read</span></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-22">September 22, 2026</time> · Updated <time datetime="2026-10-02">October 2, 2026</time><span class="article-readtime">2 min read</span></p>
       </div>
       <details class="article-toc">
         <summary>In this article</summary>
@@ -131,7 +131,7 @@
   <section class="section article-main">
     <div class="container article-body">
       <h2 id="clone-is-the-how-not-a-what">Clone is the "how", not a "what"</h2>
-      <p>Cloning is an APFS copy-on-write operation, <code>clonefile()</code> underneath, and it's nearly instant because no data is copied until something changes. Velo Workspaces uses it for two jobs: making a new workspace's disk from a saved base image, and copying a workspace's disk and state into a restore point. Same mechanism, two jobs, so "should I clone or use a base image?" is really two questions. <a href="/blog/base-image-versioning/">Base images as versioned infrastructure</a> has the mechanics.</p>
+      <p>Cloning is an APFS copy-on-write operation, <code>clonefile()</code> underneath, and it's nearly instant because no data is copied until something changes. Velo Workspaces uses it for two jobs: making a new workspace's disk from a saved base image, and copying a workspace's disk and state into a restore point. Same mechanism, two jobs, so "should I clone or use a base image?" is really two questions. <a href="/blog/base-image-versioning/">Base images as versioned infrastructure</a> has the mechanics, and <a href="/blog/mac-disk-space-apfs-clones-sparse-files/">why your Mac's disk numbers don't add up</a> explains why Finder counts every clone at full size.</p>
 
       <h2 id="base-image-a-saved-starting-point">Base image: a saved starting point</h2>
       <p>A base image is a frozen template: configured once, then cloned repeatedly so new workspaces all start identical. It doesn't track versions, doesn't change once saved, and exists to be the known-good thing everything else starts from. Saving base images is part of Pro; creating workspaces from ones you already have is free. In 1.2 they live in <strong>Settings › Images › Base Images</strong>.</p>

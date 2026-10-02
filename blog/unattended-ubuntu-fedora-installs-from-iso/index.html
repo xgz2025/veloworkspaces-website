@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unattended Ubuntu and Fedora Installs From the ISO, No PXE</title>
+<meta name="description" content="Install Ubuntu and Fedora or Rocky Linux hands-free from the vendor&#x27;s ISO: a labelled seed disk, one kernel argument, and no PXE server.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/unattended-ubuntu-fedora-installs-from-iso/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=6">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Unattended Ubuntu and Fedora Installs From the ISO, No PXE">
+<meta property="og:description" content="Install Ubuntu and Fedora or Rocky Linux hands-free from the vendor&#x27;s ISO: a labelled seed disk, one kernel argument, and no PXE server.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/unattended-ubuntu-fedora-installs-from-iso/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/unattended-ubuntu-fedora-installs-from-iso.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Unattended Ubuntu and Fedora Installs From the Vendor&#x27;s ISO, Without a PXE Server">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="article:published_time" content="2026-10-02">
+<meta property="article:modified_time" content="2026-10-02">
+<meta property="article:author" content="Gaoliang Luo">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Unattended Ubuntu and Fedora Installs From the ISO, No PXE",
+      "name": "Unattended Ubuntu and Fedora Installs From the Vendor's ISO, Without a PXE Server",
+      "description": "Install Ubuntu and Fedora or Rocky Linux hands-free from the vendor's ISO: a labelled seed disk, one kernel argument, and no PXE server.",
+      "image": "https://www.veloworkspaces.com/assets/og/unattended-ubuntu-fedora-installs-from-iso.jpg",
+      "datePublished": "2026-10-02",
+      "dateModified": "2026-10-02",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/unattended-ubuntu-fedora-installs-from-iso/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Unattended Ubuntu and Fedora Installs From the Vendor's ISO, Without a PXE Server",
+          "item": "https://www.veloworkspaces.com/blog/unattended-ubuntu-fedora-installs-from-iso/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section article-top">
+    <div class="container article-head">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Deep dive</span>
+        <h1>Unattended Ubuntu and Fedora Installs From the Vendor's ISO, Without a PXE Server</h1>
+        <p class="article-lede">Ubuntu's and Fedora's installers can run with no one at the keyboard, straight from the distribution's own ISO and without a PXE server. They look for their answers on a disk with the right label. Here's that, and everything else it took.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-10-02">October 2, 2026</time><span class="article-readtime">8 min read</span></p>
+      </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#the-shape-a-tiny-disk-with-the-right-label"><span>The shape: a tiny disk with the right label</span></a></li>
+          <li><a href="#ubuntu-autoinstall-and-the-question-it-still-asks"><span>Ubuntu: autoinstall, and the question it still asks</span></a></li>
+          <li><a href="#fedora-and-rocky-kickstart-zero-touch"><span>Fedora and Rocky: kickstart, zero touch</span></a></li>
+          <li><a href="#the-keyboard-trap"><span>The keyboard trap</span></a></li>
+          <li><a href="#knowing-when-it-s-done"><span>Knowing when it&#x27;s done</span></a></li>
+          <li><a href="#what-i-couldn-t-make-work"><span>What I couldn&#x27;t make work</span></a></li>
+          <li><a href="#the-checklist"><span>The checklist</span></a></li>
+          <li><a href="#where-to-go-next"><span>Where to go next</span></a></li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+  <section class="section article-main">
+    <div class="container article-body">
+      <p><em>Velo Workspaces, the app this site is about, does all of this for you. Everything below works with any hypervisor, and the files are plain Subiquity and Anaconda. Written with the help of an AI assistant, and reviewed by me.</em></p>
+      <p>Cloud images are the fastest way to a Linux VM, and I use them whenever I can. Sometimes they're not enough, though. You want Ubuntu Desktop or Fedora Workstation, or a disk laid out by the distribution's own installer, or simply the same ISO your team installs on real hardware.</p>
+      <p>Then you're back to clicking through an installer. The usual way to automate that is network boot: a PXE or HTTP server that hands the installer its answer file. On a laptop, for a VM you'll throw away next week, that's a lot of infrastructure.</p>
+      <p>You don't need it. Ubuntu's and Fedora's installers both look for their answers on a disk with a particular volume label, with nothing on the kernel command line. Getting from there to a truly hands-free install took me a few more steps than I expected. This post is about those steps.</p>
+      <h2 id="the-shape-a-tiny-disk-with-the-right-label">The shape: a tiny disk with the right label</h2>
+      <p>Both installers scan the attached disks at boot for a filesystem with a known label:</p>
+      <ul>
+      <li><strong>Ubuntu's Subiquity</strong> uses cloud-init's NoCloud datasource. It reads <code>user-data</code> and <code>meta-data</code> from a volume labelled <code>CIDATA</code>, and the autoinstall config lives inside <code>user-data</code>.</li>
+      <li><strong>Anaconda</strong> (Fedora, Rocky Linux, AlmaLinux, RHEL) reads <code>ks.cfg</code> from the root of a volume labelled <code>OEMDRV</code>. No <code>inst.ks=</code> needed.</li>
+      </ul>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/unattended-ubuntu-fedora-installs-from-iso/how-installers-find-answers.webp"><img src="/assets/blog/unattended-ubuntu-fedora-installs-from-iso/how-installers-find-answers.webp" width="1600" height="880" alt="Two lanes. Ubuntu: the kernel command line needs autoinstall and noprompt, Subiquity looks for the CIDATA label and reads user-data and meta-data. Anaconda: nothing on the kernel command line, it looks for the OEMDRV label and reads ks.cfg." loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Both installers find their answers by volume label. Only Ubuntu also needs a kernel argument, which comes up below.</span></figcaption>
+      </figure>
+      <p>The documented recipe for these disks is an ISO made with <code>genisoimage</code>, but FAT works just as well for both. On Linux, with dosfstools and mtools:</p>
+      <pre><code>truncate -s 32M seed.img
+mkfs.vfat -n CIDATA seed.img
+mcopy -i seed.img user-data meta-data ::
+
+truncate -s 32M ks.img
+mkfs.vfat -n OEMDRV ks.img
+mcopy -i ks.img ks.cfg ::
+</code></pre>
+      <p>On a Mac, with nothing to install:</p>
+      <pre><code>hdiutil makehybrid -o seed.iso -iso -joliet -default-volume-name cidata seed/
+</code></pre>
+      <p>where <code>seed/</code> is a folder holding the two files. Use <code>OEMDRV</code> and a folder with <code>ks.cfg</code> for Anaconda.</p>
+      <p>Attach it to the VM as a second, read-only virtio disk, next to the ISO and the empty target disk. That's the whole mechanism. The rest is what goes in the files, and what the installers do with them.</p>
+      <h2 id="ubuntu-autoinstall-and-the-question-it-still-asks">Ubuntu: autoinstall, and the question it still asks</h2>
+      <p>Here is a complete <code>user-data</code> for an Ubuntu Server install, with placeholders:</p>
+      <pre><code>#cloud-config
+autoinstall:
+  version: 1
+  locale: &quot;en_US.UTF-8&quot;
+  keyboard:
+    layout: &quot;us&quot;
+  timezone: &quot;Europe/Berlin&quot;
+  identity:
+    hostname: &quot;devbox&quot;
+    username: &quot;you&quot;
+    password: &quot;$6$...a crypt hash...&quot;
+  ssh:
+    install-server: true
+    allow-pw: false
+    authorized-keys:
+      - &quot;ssh-ed25519 AAAA... you@laptop&quot;
+  storage:
+    layout:
+      name: direct
+      match:
+        size: largest
+  late-commands:
+    - &quot;curtin in-target -- sh -c 'echo \&quot;datasource_list: [ None ]\&quot; &gt; /etc/cloud/cloud.cfg.d/99-local.cfg'&quot;
+</code></pre>
+      <p>And <code>meta-data</code> is just:</p>
+      <pre><code>instance-id: devbox-001
+local-hostname: devbox
+</code></pre>
+      <p>Three details that cost me time:</p>
+      <p><strong><code>password</code> is a crypt hash, never the password.</strong> <code>openssl passwd -6</code> makes one. On a Mac, use OpenSSL 3 from Homebrew: macOS's own <code>crypt(3)</code> only does old DES.</p>
+      <p><strong><code>match: size: largest</code> picks the biggest disk.</strong> That's your target disk only if it's bigger than the ISO, which is attached as a disk too. Give the VM a few gigabytes more than the ISO's size, or match on something else.</p>
+      <p><strong>The late command is housekeeping.</strong> The installed system also has cloud-init. On its first boot the seed disk is gone, and cloud-init would otherwise probe every cloud it knows before giving up. <code>datasource_list: [ None ]</code> tells it there's nothing to find.</p>
+      <p>Boot that, and the install still stops at:</p>
+      <pre><code>Continue with autoinstall? (yes|no)
+</code></pre>
+      <p>This is on purpose. Autoinstall erases disks, so Subiquity won't run it just because it found a config on some disk. It wants a second signal that you meant it: the word <code>autoinstall</code> on the kernel command line. Ubuntu's desktop installer asks for its own confirmation for the same reason.</p>
+      <p>That means editing GRUB's menu on the ISO. The usual way is to repack the ISO with xorriso or a tool like livefs-editor. I didn't want to write a new multi-gigabyte file for every VM, so I edit a copy in place instead.</p>
+      <p>ISO 9660 stores each file as one contiguous extent with a recorded length, and FAT records a file's length in its directory entry. If the rewritten <code>grub.cfg</code> is exactly as long as the original, nothing else in the image changes. The rewrite keeps only the first menu entry, sets <code>timeout=0</code>, and adds the arguments to its <code>linux</code> line. Dropping the other entries makes the text shorter, so it's padded back to the original length with a comment line.</p>
+      <p>On a Mac the copy is an APFS clone, so it costs no time and no disk space. On Linux, <code>cp --reflink</code> does the same on Btrfs or XFS.</p>
+      <p>Two kernel arguments go in: <code>autoinstall</code>, and <code>noprompt</code>. The second stops casper waiting for someone to remove the installation medium at the final reboot.</p>
+      <p>Ubuntu's signed GRUB reads <code>/boot/grub/grub.cfg</code> from the ISO's own filesystem; its EFI partition holds only the loaders. That's the file to rewrite.</p>
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-desktop/installing.webp"><img src="/assets/blog/guides/ubuntu-desktop/installing.webp" width="1288" height="842" alt="Velo Workspaces showing &quot;Installing Ubuntu 26.04 LTS Desktop automatically&quot; above the workspace&#x27;s window, where Ubuntu&#x27;s installer is copying files with no one at the keyboard" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Ubuntu Desktop installing itself in Velo Workspaces: with <code>autoinstall</code> on the kernel command line, no screen asks anything.</span></figcaption>
+      </figure>
+      <h2 id="fedora-and-rocky-kickstart-zero-touch">Fedora and Rocky: kickstart, zero touch</h2>
+      <p>Anaconda needs no kernel argument at all. If it finds <code>OEMDRV</code>, it runs <code>ks.cfg</code>. Here's a kickstart for Fedora Server, again with placeholders:</p>
+      <pre><code>text
+lang en_US.UTF-8
+keyboard --xlayouts=us
+timezone Europe/Berlin --utc
+network --bootproto=dhcp --device=link --activate --hostname=devbox
+rootpw --lock
+user --name=you --groups=wheel --iscrypted --password=$6$...
+url --mirrorlist=https://mirrors.fedoraproject.org/mirrorlist?repo=fedora-$releasever&amp;arch=$basearch
+repo --name=updates --mirrorlist=https://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f$releasever&amp;arch=$basearch
+ignoredisk --only-use=vda
+zerombr
+clearpart --all --initlabel --drives=vda
+autopart --type=plain --nohome
+firstboot --disable
+services --enabled=sshd
+reboot
+
+%packages
+@^server-product-environment
+openssh-server
+%end
+
+%post
+install -d -m 700 -o you -g you /home/you/.ssh
+cat &gt;&gt; /home/you/.ssh/authorized_keys &lt;&lt;'KEYS'
+ssh-ed25519 AAAA... you@laptop
+KEYS
+chown you:you /home/you/.ssh/authorized_keys
+chmod 600 /home/you/.ssh/authorized_keys
+restorecon -R /home/you/.ssh || :
+mkdir -p /etc/ssh/sshd_config.d
+echo 'PasswordAuthentication no' &gt; /etc/ssh/sshd_config.d/01-local.conf
+%end
+</code></pre>
+      <p>The lines that matter most:</p>
+      <p><strong><code>ignoredisk --only-use=vda</code> and <code>clearpart --drives=vda</code>.</strong> The ISO and the seed are disks too. Without these, Anaconda is free to consider them, and <code>clearpart --all</code> means what it says.</p>
+      <p><strong><code>autopart --type=plain</code>.</strong> Plain partitions rather than LVM, so growing the disk later is <code>growpart</code> and <code>xfs_growfs</code>, with no volume group to extend.</p>
+      <p><strong><code>url</code> and <code>repo</code>, only when the ISO has no packages.</strong> Fedora's netinst ISOs (Server and Everything) carry none and install from the network. Rocky's minimal and DVD images carry their own repositories, so for those you leave both lines out. For Rocky, the package line is <code>@^minimal-environment</code>.</p>
+      <p><strong>The quoted heredoc delimiter, <code>&lt;&lt;'KEYS'</code>.</strong> Nothing inside it expands, so a key comment containing <code>$</code> or a backtick arrives intact.</p>
+      <p><strong><code>restorecon</code>.</strong> Fedora and Rocky run SELinux in enforcing mode, and sshd won't read an <code>authorized_keys</code> file with the wrong label. Files created in <code>%post</code> don't always get the right one.</p>
+      <p><strong>The <code>01-</code> in <code>01-local.conf</code>.</strong> sshd uses the first value it reads for each setting, and the distribution's own drop-ins sort after yours. Name yours to sort first.</p>
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/fedora/installing.webp"><img src="/assets/blog/guides/fedora/installing.webp" width="960" height="623" alt="Anaconda&#x27;s text-mode progress screen: installation source from the Fedora mirror list, automatic partitioning, and packages downloading" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Anaconda running a kickstart like the one above, in text mode: the mirror list as its source, automatic partitioning on /dev/vda, and 694 packages downloading.</span></figcaption>
+      </figure>
+      <p>One message during the install looks alarming and isn't:</p>
+      <pre><code>parse-kickstart WARNING: No device with link found for --device=link
+</code></pre>
+      <p><code>parse-kickstart</code> checks each interface's carrier early in the initramfs, before the network is up. It falls back to DHCP, and the setting is applied again later in the install, once the interface is up. You can ignore it. (It once sent me the wrong way: <a href="/blog/fedora-arm-iso-wont-boot-apple-virtualization/">Why Fedora's ARM ISO wouldn't boot</a> tells that story.)</p>
+      <h2 id="the-keyboard-trap">The keyboard trap</h2>
+      <p>This one bit me after everything else worked. The install finished, the VM rebooted to a login prompt, and the password I'd set didn't work.</p>
+      <p>A VM's display passes on which key was pressed, not which character it makes. If the guest's keyboard layout differs from the host's, you type <code>z</code> and the guest gets <code>y</code>. On a German keyboard that breaks any password with a <code>y</code> or <code>z</code> in it, and the first place you notice is the first login.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/unattended-ubuntu-fedora-installs-from-iso/keyboard-trap.webp"><img src="/assets/blog/unattended-ubuntu-fedora-installs-from-iso/keyboard-trap.webp" width="1600" height="790" alt="A German Mac&#x27;s Z key sits where US keyboards have Y. A guest with the us layout types y; a guest with the de layout types z." loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>The guest decides which character a key makes, so its layout has to match the keyboard you type on.</span></figcaption>
+      </figure>
+      <p>So the layout in the answer file has to match the keyboard on the machine you'll type from. I map the Mac's current input source to the X11 layout name both installers take: <code>com.apple.keylayout.German</code> becomes <code>de</code>, and a layout the table doesn't know becomes <code>us</code>.</p>
+      <p>Two more mapping rules came out of testing:</p>
+      <ul>
+      <li><strong>Language.</strong> Chinese, Japanese and Korean get an English locale. The Linux console can't draw those scripts, and a server install has no fonts for them, so the login prompt would be a row of boxes.</li>
+      <li><strong>Time zone.</strong> Installers take IANA region names like <code>Asia/Shanghai</code>. A zone that's only an offset becomes <code>Etc/UTC</code>.</li>
+      </ul>
+      <h2 id="knowing-when-it-s-done">Knowing when it's done</h2>
+      <p>An unattended install is only useful if something knows it has finished. My first idea was to watch for the reboot, but a reboot doesn't prove success. Polling SSH works only once the installed system has booted with its network and sshd up, and it can't tell "still installing" from "failed".</p>
+      <p>What I settled on is a named virtio console port. While the install runs, the VM gets an extra console port called, say, <code>org.example.install</code>. In QEMU that's a <code>virtserialport</code> with a <code>name</code>; in Apple's Virtualization framework, a <code>VZVirtioConsolePortConfiguration</code> with a name. The installer's very last command writes one line to it, and the host watches the other end:</p>
+      <pre><code>sync
+for p in /sys/class/virtio-ports/*; do
+  if [ &quot;$(cat &quot;$p/name&quot; 2&gt;/dev/null)&quot; = &quot;org.example.install&quot; ]; then
+    printf '%s_%s\n' INSTALL COMPLETE &gt; &quot;/dev/${p##*/}&quot;
+  fi
+done
+true
+</code></pre>
+      <p>In Subiquity it's the last entry in <code>late-commands</code>. In Anaconda it goes in a <code>%post --nochroot</code> section, so it runs in the installer's environment, where the port is.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/unattended-ubuntu-fedora-installs-from-iso/install-done-signal.webp"><img src="/assets/blog/unattended-ubuntu-fedora-installs-from-iso/install-done-signal.webp" width="1600" height="770" alt="The installer&#x27;s last command finds the port by name and writes INSTALL_COMPLETE to it; the host watches the port and restarts the VM into the installed system." loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>One line through a named console port tells the host the install is done, and on disk.</span></figcaption>
+      </figure>
+      <p>A few details in those lines are deliberate:</p>
+      <ul>
+      <li><strong><code>sync</code> first.</strong> The marker means the installed system is on disk, not just that the installer is happy.</li>
+      <li><strong>The port is found by name through sysfs.</strong> The kernel names it <code>vport0p1</code> or <code>vport1p1</code> depending on device order, and the <code>/dev/virtio-ports/</code> symlinks need udev, which an installer environment may not have.</li>
+      <li><strong>The marker is printed in two halves.</strong> Installers log the commands they run, sometimes to a console you may be watching. Written as <code>printf '%s_%s\n' INSTALL COMPLETE</code>, the command's own text never contains <code>INSTALL_COMPLETE</code>, so the host can't see the marker before the command has actually run.</li>
+      <li><strong><code>true</code> at the end.</strong> If the port isn't there, an install that worked must not be reported as failed.</li>
+      </ul>
+      <p>The host side is a reader that looks for the marker in the port's output, keeping a few bytes from each read in case the marker arrives split across two.</p>
+      <h2 id="what-i-couldn-t-make-work">What I couldn't make work</h2>
+      <p><strong>Debian's installer.</strong> debian-installer finds a preseed file on its own only when it's inside the initrd. Anywhere else, it has to be pointed at the file, with a boot argument or a network server. A labelled seed disk isn't enough. For Debian, the cloud image is the better route anyway: it's unattended by design.</p>
+      <p><strong>Skipping the firmware.</strong> I considered booting the installer's kernel directly with my own command line, which would make the kernel arguments trivial. It would also install a system with no EFI boot loader, because the installer would be running without UEFI, and that system wouldn't boot under UEFI afterwards. Editing GRUB in a copy of the ISO turned out to be simpler than it sounds.</p>
+      <h2 id="the-checklist">The checklist</h2>
+      <ul>
+      <li>Put the answers on a small disk labelled <code>CIDATA</code> (Ubuntu) or <code>OEMDRV</code> (Anaconda). FAT or ISO 9660 both work.</li>
+      <li>Use a crypt hash for the password, never the password itself.</li>
+      <li>For Ubuntu, add <code>autoinstall</code> (and <code>noprompt</code>) to the kernel command line, or it will ask before erasing anything.</li>
+      <li>Pin Anaconda to the target disk with <code>ignoredisk</code> and <code>clearpart --drives</code>.</li>
+      <li>Match the guest's keyboard layout to the one you'll type on.</li>
+      <li>Have the installer's last command tell the host it's done, after a <code>sync</code>.</li>
+      </ul>
+      <p>If you're on a Mac and would rather not script any of this, Velo Workspaces does it from one form: pick the ISO, leave <strong>Automatic installation</strong> on, and come back to an installed system you can SSH into.</p>
+      <h2 id="where-to-go-next">Where to go next</h2>
+      <div class="guide-next">
+        <a href="/blog/fedora-vm-mac-automatic-install/"><span>Step by step</span>Install Fedora Server with an automatic kickstart</a>
+        <a href="/blog/ubuntu-desktop-vm-mac-automatic-install/"><span>Step by step</span>Install Ubuntu Desktop without answering a question</a>
+        <a href="/blog/fedora-arm-iso-wont-boot-apple-virtualization/"><span>Deep dive</span>Why Fedora's ARM ISO wouldn't boot</a>
+        <a href="/blog/ubuntu-cloud-images-on-mac/"><span>By hand</span>Ubuntu cloud images on a Mac</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc. Ubuntu is a trademark of Canonical Ltd. Fedora is a registered trademark of Red Hat, Inc. Rocky Linux is a trademark of the Rocky Enterprise Software Foundation.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+<script src="/assets/lightbox.js?v=1" defer></script>
+</body>
+</html>

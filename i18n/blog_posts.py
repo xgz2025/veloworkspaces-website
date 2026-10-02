@@ -150,7 +150,7 @@ POSTS = [
         "card_summary": "Velo Workspaces writes the kickstart and Anaconda does the rest. From the netinst ISO to an SSH session, every screen shown.",
         "lede": "Fedora's Anaconda installer can run from a kickstart file without asking anything. Velo Workspaces writes that file for you, from the account you enter and your Mac's settings. Here's a Fedora 44 Server install from start to finish. Rocky Linux works the same way.",
         "published": "2026-09-29",
-        "modified": "2026-09-29",
+        "modified": "2026-10-02",
         "trademarks": "Fedora is a registered trademark of Red Hat, Inc. Rocky Linux is a trademark of the Rocky Enterprise Software Foundation.",
         "hero": {
             "src": "/assets/blog/guides/fedora/terminal.webp",
@@ -207,7 +207,7 @@ POSTS = [
         "card_summary": "Import your Mac's key into Velo Workspaces or export the app's key to ~/.ssh, then connect VS Code Remote-SSH with the config the Access tab gives you.",
         "lede": "Velo Workspaces signs in its built-in terminal with a key it keeps in your Mac's Keychain. Terminal and VS Code look in ~/.ssh instead. Make them use the same key and every tool gets in the same way. There are two ways to do it; pick the one that matches where your key lives today.",
         "published": "2026-09-29",
-        "modified": "2026-09-29",
+        "modified": "2026-10-02",
         "trademarks": "Visual Studio Code is a trademark of Microsoft Corporation.",
         "hero": {
             "src": "/assets/blog/guides/ssh-keys/access-tab-vs-code.webp",
@@ -325,6 +325,20 @@ POSTS = [
         "lede": "Many developers carry a reasonable old assumption: VMs are a bit slow, a bit laggy, something you tolerate. A Linux VM on Apple silicon mostly doesn't feel that way. This is the accessible version of why, the day-to-day effect rather than <a href=\"/blog/arm-virtualization-performance/\">the exception-level mechanics</a>.",
         "published": "2026-09-22",
         "modified": "2026-09-28",
+        "trademarks": ""
+    },
+    {
+        "slug": "mac-disk-space-apfs-clones-sparse-files",
+        "group": "Apple Silicon virtualization fundamentals",
+        "eyebrow": "Fundamentals",
+        "title": "Why Your Mac's Disk Numbers Don't Add Up: APFS Clones",
+        "h1": "Why Your Mac's Disk Numbers Don't Add Up: APFS Clones and Sparse Files",
+        "description": "Finder can show folders bigger than your Mac's free space. APFS clones and sparse files explain why, and when a copy to another drive needs far more room.",
+        "card_title": "Why Your Mac's Disk Numbers Don't Add Up",
+        "card_summary": "APFS clones and sparse files make files take less space than Finder says. How they work, how to see the real numbers, and when they stop working.",
+        "lede": "Finder, Terminal and the Storage settings can disagree by a hundred gigabytes, and none of them is wrong. Two features of APFS explain it: clones and sparse files. Here's how they work, and when they quietly stop saving you space.",
+        "published": "2026-10-02",
+        "modified": "2026-10-02",
         "trademarks": ""
     },
     {
@@ -716,7 +730,7 @@ POSTS = [
         "card_summary": "Four terms in one place. Clone is the mechanism under two of them; the real choice is between a base image, a snapshot and a disposable workspace, which answer three different questions.",
         "lede": "Four terms this blog uses across several posts, in one place. The short version: \"clone\" isn't a fourth option next to the others; it's the mechanism under two of them. The real choice is between base image, snapshot and disposable workspace, which answer three different questions.",
         "published": "2026-09-22",
-        "modified": "2026-09-28",
+        "modified": "2026-10-02",
         "trademarks": ""
     },
     {
@@ -802,6 +816,20 @@ POSTS = [
         "published": "2026-09-22",
         "modified": "2026-09-28",
         "trademarks": ""
+    },
+    {
+        "slug": "unattended-ubuntu-fedora-installs-from-iso",
+        "group": "Workflows &amp; infrastructure",
+        "eyebrow": "Deep dive",
+        "title": "Unattended Ubuntu and Fedora Installs From the ISO, No PXE",
+        "h1": "Unattended Ubuntu and Fedora Installs From the Vendor's ISO, Without a PXE Server",
+        "description": "Install Ubuntu and Fedora or Rocky Linux hands-free from the vendor's ISO: a labelled seed disk, one kernel argument, and no PXE server.",
+        "card_title": "Unattended Ubuntu and Fedora Installs, Without PXE",
+        "card_summary": "The labelled disk both installers look for, the kernel argument Ubuntu still needs, a keyboard-layout trap, and how a VM can tell the host the install is done.",
+        "lede": "Ubuntu's and Fedora's installers can run with no one at the keyboard, straight from the distribution's own ISO and without a PXE server. They look for their answers on a disk with the right label. Here's that, and everything else it took.",
+        "published": "2026-10-02",
+        "modified": "2026-10-02",
+        "trademarks": "Ubuntu is a trademark of Canonical Ltd. Fedora is a registered trademark of Red Hat, Inc. Rocky Linux is a trademark of the Rocky Enterprise Software Foundation."
     },
     {
         "slug": "base-image-versioning",
@@ -900,6 +928,20 @@ POSTS = [
         "published": "2026-09-22",
         "modified": "2026-09-28",
         "trademarks": ""
+    },
+    {
+        "slug": "how-velo-workspaces-handles-ssh-keys",
+        "group": "Security",
+        "eyebrow": "Security",
+        "title": "How Velo Workspaces Handles Your SSH Keys",
+        "h1": "How Velo Workspaces Handles Your SSH Keys, Inside the Built-In Terminal",
+        "description": "Where Velo Workspaces keeps your SSH keys, how it verifies a VM's host key, and how its terminal works inside the App Sandbox with SwiftNIO SSH.",
+        "card_title": "How Velo Workspaces Handles Your SSH Keys",
+        "card_summary": "Your private key stays in the Keychain, host keys are pinned, and the app never listens on a port. Plus how the terminal is built inside a sandboxed app.",
+        "lede": "Open Terminal signs you in to a Linux workspace with one click. Here's what happens to your keys when it does: where they're kept, how the workspace's identity is checked, and how an SSH client fits inside a sandboxed Mac app.",
+        "published": "2026-10-02",
+        "modified": "2026-10-02",
+        "trademarks": "Ubuntu is a trademark of Canonical Ltd."
     },
     {
         "slug": "vm-sandboxing-cost",

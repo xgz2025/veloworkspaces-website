@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Velo Workspaces Handles Your SSH Keys</title>
+<meta name="description" content="Where Velo Workspaces keeps your SSH keys, how it verifies a VM&#x27;s host key, and how its terminal works inside the App Sandbox with SwiftNIO SSH.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/how-velo-workspaces-handles-ssh-keys/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=6">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="How Velo Workspaces Handles Your SSH Keys">
+<meta property="og:description" content="Where Velo Workspaces keeps your SSH keys, how it verifies a VM&#x27;s host key, and how its terminal works inside the App Sandbox with SwiftNIO SSH.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/how-velo-workspaces-handles-ssh-keys/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/how-velo-workspaces-handles-ssh-keys.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="How Velo Workspaces Handles Your SSH Keys, Inside the Built-In Terminal">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="article:published_time" content="2026-10-02">
+<meta property="article:modified_time" content="2026-10-02">
+<meta property="article:author" content="Gaoliang Luo">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "How Velo Workspaces Handles Your SSH Keys",
+      "name": "How Velo Workspaces Handles Your SSH Keys, Inside the Built-In Terminal",
+      "description": "Where Velo Workspaces keeps your SSH keys, how it verifies a VM's host key, and how its terminal works inside the App Sandbox with SwiftNIO SSH.",
+      "image": "https://www.veloworkspaces.com/assets/og/how-velo-workspaces-handles-ssh-keys.jpg",
+      "datePublished": "2026-10-02",
+      "dateModified": "2026-10-02",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/how-velo-workspaces-handles-ssh-keys/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "How Velo Workspaces Handles Your SSH Keys, Inside the Built-In Terminal",
+          "item": "https://www.veloworkspaces.com/blog/how-velo-workspaces-handles-ssh-keys/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section article-top">
+    <div class="container article-head">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Security</span>
+        <h1>How Velo Workspaces Handles Your SSH Keys, Inside the Built-In Terminal</h1>
+        <p class="article-lede">Open Terminal signs you in to a Linux workspace with one click. Here's what happens to your keys when it does: where they're kept, how the workspace's identity is checked, and how an SSH client fits inside a sandboxed Mac app.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-10-02">October 2, 2026</time><span class="article-readtime">8 min read</span></p>
+      </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#what-it-means-for-your-keys"><span>What it means for your keys</span></a></li>
+          <li><a href="#why-not-just-run-usr-bin-ssh"><span>Why not just run /usr/bin/ssh?</span></a></li>
+          <li><a href="#keys-cryptokit-the-keychain-and-openssh-s-formats"><span>Keys: CryptoKit, the Keychain, and OpenSSH&#x27;s formats</span></a></li>
+          <li><a href="#host-keys-pinning-instead-of-trust-on-first-use"><span>Host keys: pinning instead of &quot;trust on first use&quot;</span></a></li>
+          <li><a href="#the-shell-itself"><span>The shell itself</span></a></li>
+          <li><a href="#installing-a-key-with-one-command-in-any-shell"><span>Installing a key with one command, in any shell</span></a></li>
+          <li><a href="#what-the-sandbox-still-decides"><span>What the sandbox still decides</span></a></li>
+          <li><a href="#takeaways"><span>Takeaways</span></a></li>
+          <li><a href="#where-to-go-next"><span>Where to go next</span></a></li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+  <section class="section article-main">
+    <div class="container article-body">
+      <p><em>Written with the help of an AI assistant, and reviewed by me.</em></p>
+      <p>The feature sounded simple. Click <strong>Open Terminal</strong> on a running Linux VM and get a shell, already signed in. No copying IP addresses, no typing passwords, no <code>known_hosts</code> prompt.</p>
+      <figure class="shot">
+        <a class="shot-frame" href="/assets/blog/guides/ubuntu-cloud-image/terminal.webp"><img src="/assets/blog/guides/ubuntu-cloud-image/terminal.webp" width="907" height="629" alt="A terminal window signed in to an Ubuntu VM over SSH, showing the login banner and a shell prompt" loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>The goal: one click from a running VM to a signed-in shell.</span></figcaption>
+      </figure>
+      <h2 id="what-it-means-for-your-keys">What it means for your keys</h2>
+      <ul>
+      <li><strong>Your private key stays on your Mac.</strong> Its 32 bytes live in your login keychain. They're never written anywhere else, and never logged.</li>
+      <li><strong>The first connection is verified.</strong> For a workspace made from a cloud image, Velo Workspaces creates the workspace's host key itself, so it knows the key before the workspace first boots. There's no fingerprint to accept blindly.</li>
+      <li><strong>A changed host key is never accepted silently.</strong> You're asked, with the old and new fingerprints side by side.</li>
+      <li><strong>The app never listens on the network.</strong> It only makes outgoing connections, so nothing on your network can connect to it.</li>
+      <li><strong>An exported key is private from the first byte.</strong> The file is created readable only by you before the key is written into it.</li>
+      </ul>
+      <p>The rest of this post is for the curious, and for other Mac developers: how the terminal is built, and the details that took longest. Two things made it interesting. The app is sandboxed, because it's in the Mac App Store. And the other end is a VM the app itself just created, which turns out to be an advantage once you use it.</p>
+      <h2 id="why-not-just-run-usr-bin-ssh">Why not just run /usr/bin/ssh?</h2>
+      <p>macOS ships OpenSSH, and SwiftTerm, the terminal view I already used, can run a process in a PTY. That was my first idea, and it does run. But a child process inherits the app's sandbox, and that's where it falls apart.</p>
+      <p>OpenSSH finds <code>~/.ssh</code> by asking the system for the user's home directory, which gives the real home, not the app's container. The sandbox denies access to it. Every path ssh normally finds on its own then has to be passed in: <code>-i</code> for the key, <code>-F</code> for the config, <code>-o UserKnownHostsFile=</code> for known hosts, all pointing into the container. It works, but it's fragile, and a sandboxed app spawning command-line tools is the kind of thing that invites questions from App Review.</p>
+      <p>So the SSH client had to live inside the app. The options I weighed:</p>
+      <ul>
+      <li><strong>SwiftNIO SSH</strong> (Apple's <code>swift-nio-ssh</code>): in-process and maintained by Apple, with Ed25519 and ECDSA keys. It doesn't support RSA user keys, and you write a few hundred lines of client code yourself.</li>
+      <li><strong>Citadel</strong>, built on SwiftNIO SSH: adds RSA and needs less code, but it's a community dependency whose API was still changing.</li>
+      <li><strong>libssh2 with OpenSSL</strong>: supports everything, at the cost of C dependencies, binary frameworks and keeping up with their security fixes.</li>
+      </ul>
+      <p>I picked SwiftNIO SSH, behind a small protocol of my own, so swapping in Citadel later would be a contained change if RSA turns out to matter. For keys the app makes itself, Ed25519 is the right choice anyway.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/how-velo-workspaces-handles-ssh-keys/terminal-architecture.webp"><img src="/assets/blog/how-velo-workspaces-handles-ssh-keys/terminal-architecture.webp" width="1600" height="800" alt="Inside the App Sandbox: the SwiftTerm view and the serial console feed one byte-stream protocol, which feeds the SwiftNIO SSH session; the Keychain supplies the Ed25519 key; the session connects out to the VM&#x27;s sshd on port 22. /usr/bin/ssh is crossed out." loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Everything runs in the app's own process. The only network permission is for outgoing connections.</span></figcaption>
+      </figure>
+      <h2 id="keys-cryptokit-the-keychain-and-openssh-s-formats">Keys: CryptoKit, the Keychain, and OpenSSH's formats</h2>
+      <p>The app makes one key the first time it needs one, named for the Mac:</p>
+      <pre><code>import CryptoKit
+
+let key = Curve25519.Signing.PrivateKey()
+</code></pre>
+      <p>The private key's raw 32 bytes go into the login keychain as a generic password item, keyed by the key's ID. Its name, public key and fingerprint go into the app's preferences. Private key material is never written anywhere else, and never logged.</p>
+      <p>The VM needs the public half in OpenSSH's one-line format. That line is <code>ssh-ed25519</code>, then base64 of a small binary blob, then an optional comment. The blob is two SSH strings, each a 4-byte big-endian length followed by the bytes: the key type, then the 32-byte public key.</p>
+      <pre><code>import CryptoKit
+import Foundation
+
+extension Data {
+    mutating func appendSSHString(_ bytes: Data) {
+        var length = UInt32(bytes.count).bigEndian
+        append(Data(bytes: &amp;length, count: 4))
+        append(bytes)
+    }
+}
+
+func publicKeyBlob(_ key: Curve25519.Signing.PublicKey) -&gt; Data {
+    var blob = Data()
+    blob.appendSSHString(Data(&quot;ssh-ed25519&quot;.utf8))
+    blob.appendSSHString(key.rawRepresentation)
+    return blob
+}
+
+func publicKeyLine(_ key: Curve25519.Signing.PublicKey, comment: String) -&gt; String {
+    &quot;ssh-ed25519 &quot; + publicKeyBlob(key).base64EncodedString() + &quot; &quot; + comment
+}
+
+/// &quot;SHA256:&quot; and the unpadded base64 of the blob's SHA-256, as ssh-keygen -l prints it.
+func fingerprint(_ key: Curve25519.Signing.PublicKey) -&gt; String {
+    let digest = Data(SHA256.hash(data: publicKeyBlob(key)))
+    return &quot;SHA256:&quot; + digest.base64EncodedString().replacingOccurrences(of: &quot;=&quot;, with: &quot;&quot;)
+}
+</code></pre>
+      <p>The fingerprint is worth getting exactly right. People compare it with what <code>ssh-keygen -l</code> prints, and a version that's off by one padding character looks like a security problem.</p>
+      <p>The same key is useful from Terminal and VS Code too, so the app can export it as an unencrypted <code>openssh-key-v1</code> file. That file is created with mode <code>0600</code> <em>before</em> a byte of the key is written into it, so it's never readable by anyone else, even for a moment. A symbolic link at the chosen path is refused rather than followed. Importing an existing key works the same way in reverse; passphrase-protected keys are refused for now, with a message that says so.</p>
+      <h2 id="host-keys-pinning-instead-of-trust-on-first-use">Host keys: pinning instead of "trust on first use"</h2>
+      <p>The usual SSH experience on a first connection is a fingerprint you can't verify and a <code>yes</code> you type anyway. Here, the app creates the VM, so it can do better.</p>
+      <p>For VMs made from cloud images, the app generates the guest's SSH <strong>host</strong> key itself and hands it to the guest through cloud-init's <code>ssh_keys</code>. It already knows the host key before the VM has booted. The first connection is checked like any other, and there's nothing to ask.</p>
+      <p>For VMs installed from an ISO, the installer generates the host key, so the app trusts the first one it sees and shows the fingerprint as it does. If the key ever changes, it asks. A changed key is legitimate after a reinstall or a snapshot restore, and the dialog shows the old and new fingerprints side by side.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/how-velo-workspaces-handles-ssh-keys/host-key-decision.webp"><img src="/assets/blog/how-velo-workspaces-handles-ssh-keys/host-key-decision.webp" width="1600" height="790" alt="Decision flow: the guest presents its host key. If no key is on record, trust it and record it. If one is, compare: the same key connects, a different key asks with old and new fingerprints. Cloud images always have a key on record." loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Three outcomes, and cloud images only ever reach two of them.</span></figcaption>
+      </figure>
+      <p>In SwiftNIO SSH, that decision lives in a server authentication delegate:</p>
+      <pre><code>struct HostKeyChanged: Error {}
+
+final class HostKeyDelegate: NIOSSHClientServerAuthenticationDelegate {
+    let knownHostKey: String?   // &quot;ssh-ed25519 AAAA…&quot;, or nil if none on record yet
+
+    init(knownHostKey: String?) { self.knownHostKey = knownHostKey }
+
+    func validateHostKey(hostKey: NIOSSHPublicKey,
+                         validationCompletePromise: EventLoopPromise&lt;Void&gt;) {
+        let presented = String(openSSHPublicKey: hostKey)
+        guard let known = knownHostKey else {
+            validationCompletePromise.succeed(())   // first use: record `presented`
+            return
+        }
+        if sameKey(presented, known) {
+            validationCompletePromise.succeed(())
+        } else {
+            validationCompletePromise.fail(HostKeyChanged())
+        }
+    }
+}
+</code></pre>
+      <p><code>sameKey</code> compares the type and the key, not the whole line: a comment isn't part of a key.</p>
+      <p>Signing in is a second delegate, <code>NIOSSHClientUserAuthenticationDelegate</code>. It offers the key first, then the password if the guest takes one, once each. If the password works, that's the moment to offer to install the key, so next time there's no password at all.</p>
+      <h2 id="the-shell-itself">The shell itself</h2>
+      <p>Once the session channel is open, the client asks for a pseudo-terminal and a shell:</p>
+      <pre><code>func channelActive(context: ChannelHandlerContext) {
+    let pty = SSHChannelRequestEvent.PseudoTerminalRequest(
+        wantReply: false,
+        term: &quot;xterm-256color&quot;,
+        terminalCharacterWidth: columns,
+        terminalRowHeight: rows,
+        terminalPixelWidth: 0,
+        terminalPixelHeight: 0,
+        terminalModes: SSHTerminalModes([:])
+    )
+    context.triggerUserOutboundEvent(pty, promise: nil)
+    context.triggerUserOutboundEvent(SSHChannelRequestEvent.ShellRequest(wantReply: false), promise: nil)
+    context.fireChannelActive()
+}
+</code></pre>
+      <p>When the window is resized, a <code>WindowChangeRequest</code> tells the guest the new size, so programs like <code>vim</code> and <code>htop</code> redraw correctly.</p>
+      <p>One bug here is easy to write and hard to notice. Data arrives on SwiftNIO's event loop, and the terminal view lives on the main actor. Starting a new <code>Task</code> for each read looks natural, but Swift doesn't promise those tasks run in the order they were created. If two chunks of a screen redraw ever ran swapped, the terminal would show garbage. Delivering every read with <code>DispatchQueue.main.async</code> keeps them in order, because the main queue is serial and runs blocks in the order they were added.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/how-velo-workspaces-handles-ssh-keys/output-order.webp"><img src="/assets/blog/how-velo-workspaces-handles-ssh-keys/output-order.webp" width="1600" height="560" alt="Three chunks arrive in order 1, 2, 3. With a Task per read they may run 1, 3, 2 and the line comes out scrambled; with DispatchQueue.main.async they run 1, 2, 3." loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>Order matters in a terminal: a serial queue keeps it, a task per read doesn't promise to.</span></figcaption>
+      </figure>
+      <p>The same SwiftTerm view also shows the VM's serial console. Both sources sit behind one small byte-stream protocol, with <code>send</code>, <code>resize</code> and a data callback, so the terminal doesn't know or care which one it's talking to.</p>
+      <h2 id="installing-a-key-with-one-command-in-any-shell">Installing a key with one command, in any shell</h2>
+      <p>"Install Key" runs a command over the connection that's already open, on a channel of its own, so the shell next to it isn't touched:</p>
+      <pre><code>umask 077 &amp;&amp; mkdir -p ~/.ssh &amp;&amp; touch ~/.ssh/authorized_keys
+  &amp;&amp; { grep -qxF 'KEY' ~/.ssh/authorized_keys || printf '%s\n' 'KEY' &gt;&gt; ~/.ssh/authorized_keys; }
+  &amp;&amp; chmod 700 ~/.ssh &amp;&amp; chmod 600 ~/.ssh/authorized_keys
+  &amp;&amp; if command -v restorecon &gt;/dev/null 2&gt;&amp;1; then restorecon -R ~/.ssh; fi
+</code></pre>
+      <p>(Shown on several lines; it's sent as one, wrapped in <code>sh -c '…'</code>.) Each part is there for a reason. <code>grep -qxF</code> means running it twice doesn't add the key twice. The braces matter, because <code>&amp;&amp;</code> and <code>||</code> have equal precedence in <code>sh</code>. And <code>restorecon</code> fixes the SELinux label that Fedora's and Rocky's sshd check, where it exists.</p>
+      <p>The quoting took longest. The key is quoted twice: once inside the script, and then the whole script again for <code>sh -c</code>. And sshd hands that command to the account's <strong>login shell</strong> before <code>sh</code> ever sees it. The textbook way to put a single quote inside single quotes is <code>'\''</code>. Quoted twice, that leaves a backslash inside single quotes, and fish reads a backslash before a quote as an escape even there. A key comment like <em>Kofi's MacBook Pro</em> then reaches <code>sh</code> torn in half. Using <code>'"'"'</code> instead (end the quote, a double-quoted single quote, start again) puts no backslash anywhere, and sh, bash, zsh, fish and tcsh all read it the same way.</p>
+      <p>Two SwiftNIO details came out of review:</p>
+      <ul>
+      <li><strong>Every promise must be completed.</strong> If opening the channel fails, nothing will ever complete the exit-status promise, and SwiftNIO stops a debug build on a promise that's dropped unfulfilled. Fail it explicitly on that path.</li>
+      <li><strong>A command that never ends must not leave a spinner spinning.</strong> A scheduled task closes the channel after 20 seconds, and is cancelled when the command finishes first.</li>
+      </ul>
+      <h2 id="what-the-sandbox-still-decides">What the sandbox still decides</h2>
+      <p><strong>Outgoing connections only.</strong> The app has the <code>com.apple.security.network.client</code> entitlement and no server entitlement. Port forwarding from the Mac into a VM would mean listening on a port, which needs <code>network.server</code> as well. For reaching a VM from another computer, the app shows an <code>ssh -J</code> command instead. It hops through the Mac's own Remote Login, so the app listens on nothing.</p>
+      <p><strong>The Local Network prompt.</strong> On recent versions of macOS, connecting to a VM's address counts as talking to the local network, and the first attempt brings up the system's permission prompt. Two lessons from that:</p>
+      <ul>
+      <li><strong>Don't probe what nobody will use.</strong> The app checks whether a VM's SSH port is up, and each check is a local network connection. Checking every VM, including ones nobody would ever sign in to, made the prompt appear for no visible reason. Now it checks only Linux VMs that have an account the app knows about, and never while an installer is running.</li>
+      <li><strong>Tell "denied" apart from "down."</strong> When access is denied, the connection doesn't fail outright; it waits. Its path's <code>unsatisfiedReason</code> is <code>.localNetworkDenied</code>, and that's the signal to show "No Local Network access" with a button to the right settings page, instead of spinning forever.</li>
+      </ul>
+      <h2 id="takeaways">Takeaways</h2>
+      <ul>
+      <li>In a sandboxed app, an in-process SSH library beats wrapping <code>/usr/bin/ssh</code>, which can't find <code>~/.ssh</code> on its own.</li>
+      <li>If you create the server, create its host key too, and pin it. Trust on first use is a fallback, not a default.</li>
+      <li>Get OpenSSH's formats byte-exact. People will compare fingerprints.</li>
+      <li>Quote for the login shell you don't know about. <code>'"'"'</code> survives all of them.</li>
+      <li>Keep terminal output in order: a serial queue, not a task per read.</li>
+      <li>Treat the Local Network prompt as part of your design, not something that happens to you.</li>
+      </ul>
+      <p><strong>Open Terminal</strong> is part of Velo Workspaces Pro. The key, the connection details and a copyable <code>ssh</code> command are free, for Terminal, VS Code or another computer. <a href="/blog/ssh-vs-code-linux-vm-mac/">SSH and VS Code into a Linux VM</a> shows both.</p>
+      <h2 id="where-to-go-next">Where to go next</h2>
+      <div class="guide-next">
+        <a href="/blog/ssh-vs-code-linux-vm-mac/"><span>Step by step</span>SSH and VS Code into a Linux VM, with one key</a>
+        <a href="/blog/ubuntu-cloud-images-on-mac/"><span>By hand</span>Ubuntu cloud images on a Mac, with pinned host keys</a>
+        <a href="/blog/linux-vm-networking-apple-silicon/"><span>Background</span>Linux VM networking on a Mac</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc. Ubuntu is a trademark of Canonical Ltd.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+<script src="/assets/lightbox.js?v=1" defer></script>
+</body>
+</html>

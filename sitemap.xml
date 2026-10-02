@@ -555,7 +555,7 @@
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/fedora-vm-mac-automatic-install/</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -573,7 +573,7 @@
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/ssh-vs-code-linux-vm-mac/</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -622,6 +622,12 @@
   <url>
     <loc>https://www.veloworkspaces.com/blog/why-arm-vms-feel-native/</loc>
     <lastmod>2026-09-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/blog/mac-disk-space-apfs-clones-sparse-files/</loc>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -789,7 +795,7 @@
   </url>
   <url>
     <loc>https://www.veloworkspaces.com/blog/base-image-vs-snapshot-vs-clone/</loc>
-    <lastmod>2026-09-28</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -826,6 +832,12 @@
   <url>
     <loc>https://www.veloworkspaces.com/blog/disposable-workspaces-devops-ci/</loc>
     <lastmod>2026-09-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/blog/unattended-ubuntu-fedora-installs-from-iso/</loc>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -868,6 +880,12 @@
   <url>
     <loc>https://www.veloworkspaces.com/blog/safe-local-ai-agent-environment-checklist/</loc>
     <lastmod>2026-09-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/blog/how-velo-workspaces-handles-ssh-keys/</loc>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
