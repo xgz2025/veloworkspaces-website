@@ -6,7 +6,14 @@
   <atom:link href="https://www.veloworkspaces.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
   <description>Guides to running Linux VMs on Apple silicon Macs: cloud images, automatic installs, local AI agents, Rosetta, benchmarks and honest comparisons.</description>
   <language>en</language>
-  <lastBuildDate>Thu, 01 Oct 2026 12:00:00 +0000</lastBuildDate>
+  <lastBuildDate>Fri, 02 Oct 2026 12:00:00 +0000</lastBuildDate>
+  <item>
+    <title>Why Fedora&#x27;s ARM ISO Won&#x27;t Boot in Apple Virtualization</title>
+    <link>https://www.veloworkspaces.com/blog/fedora-arm-iso-wont-boot-apple-virtualization/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/fedora-arm-iso-wont-boot-apple-virtualization/</guid>
+    <pubDate>Fri, 02 Oct 2026 12:00:00 +0000</pubDate>
+    <description>Fedora, Rocky Linux and NixOS ship ARM ISOs with no partition table, so Apple&#x27;s Virtualization framework can&#x27;t boot them as disks. The fix, with a script.</description>
+  </item>
   <item>
     <title>Ubuntu Cloud Images on a Mac: Fix the Login and Disk Size</title>
     <link>https://www.veloworkspaces.com/blog/ubuntu-cloud-images-on-mac/</link>
@@ -85,6 +92,13 @@
     <description>Move an existing Linux VM to Velo Workspaces: UTM&#x27;s QCOW2 disks import directly since 1.2; Fusion and Parallels disks convert with one qemu-img command.</description>
   </item>
   <item>
+    <title>NixOS on Apple Silicon: Install NixOS in a VM on a Mac</title>
+    <link>https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/</guid>
+    <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
+    <description>Install NixOS 26.05 or 25.05 on an M-series Mac from the official aarch64 ISO, and how configuration.nix and base images fit together in a VM.</description>
+  </item>
+  <item>
     <title>Linux VM Networking on a Mac: NAT, SSH and Port Forwards</title>
     <link>https://www.veloworkspaces.com/blog/linux-vm-networking-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/linux-vm-networking-apple-silicon/</guid>
@@ -97,13 +111,6 @@
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/kali-linux-on-apple-silicon/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
     <description>Install Kali Linux&#x27;s official arm64 build in a VM on an M-series Mac, what NAT networking means for a testing lab, and why disposable workspaces fit.</description>
-  </item>
-  <item>
-    <title>NixOS on Apple Silicon: Install NixOS in a VM on a Mac</title>
-    <link>https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/</link>
-    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/nixos-on-apple-silicon/</guid>
-    <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Install NixOS 26.05 or 25.05 on an M-series Mac from the official aarch64 ISO, and how configuration.nix and base images fit together in a VM.</description>
   </item>
   <item>
     <title>Rocky Linux on Apple Silicon: RHEL-Compatible VMs on a Mac</title>
@@ -442,6 +449,13 @@
     <description>Local VMs on your Mac versus cloud dev environments: pricing, why Codespaces and Ona have no GPU option now, and when cloud is simply the better choice.</description>
   </item>
   <item>
+    <title>Fedora on Apple Silicon: Run a Fedora 44 VM on a Mac</title>
+    <link>https://www.veloworkspaces.com/blog/fedora-on-apple-silicon/</link>
+    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/fedora-on-apple-silicon/</guid>
+    <pubDate>Sun, 20 Sep 2026 12:00:00 +0000</pubDate>
+    <description>Run Fedora 44 on an M-series Mac from the Cloud Base image or a hands-free Server install, and what&#x27;s different: SELinux, NetworkManager and Rosetta.</description>
+  </item>
+  <item>
     <title>Ubuntu on Apple Silicon: Run an Ubuntu VM on Your Mac</title>
     <link>https://www.veloworkspaces.com/blog/ubuntu-on-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/ubuntu-on-apple-silicon/</guid>
@@ -454,13 +468,6 @@
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/debian-on-apple-silicon/</guid>
     <pubDate>Sun, 20 Sep 2026 12:00:00 +0000</pubDate>
     <description>Debian 13 and 12 on an M-series Mac: the cloud image that sets itself up in a minute, the netinst installer, and how Debian differs from Ubuntu in a VM.</description>
-  </item>
-  <item>
-    <title>Fedora on Apple Silicon: Run a Fedora 44 VM on a Mac</title>
-    <link>https://www.veloworkspaces.com/blog/fedora-on-apple-silicon/</link>
-    <guid isPermaLink="true">https://www.veloworkspaces.com/blog/fedora-on-apple-silicon/</guid>
-    <pubDate>Sun, 20 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Run Fedora 44 on an M-series Mac from the Cloud Base image or a hands-free Server install, and what&#x27;s different: SELinux, NetworkManager and Rosetta.</description>
   </item>
   <item>
     <title>Disposable VMs for QA and DevOps on a Mac: A Clean Workflow</title>

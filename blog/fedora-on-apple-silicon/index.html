@@ -20,7 +20,7 @@
 <meta property="og:image:alt" content="Running Fedora on Apple Silicon: What&#x27;s Different">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="2026-09-20">
-<meta property="article:modified_time" content="2026-09-29">
+<meta property="article:modified_time" content="2026-10-02">
 <meta property="article:author" content="Gaoliang Luo">
 <script type="application/ld+json">
 {
@@ -33,7 +33,7 @@
       "description": "Run Fedora 44 on an M-series Mac from the Cloud Base image or a hands-free Server install, and what's different: SELinux, NetworkManager and Rosetta.",
       "image": "https://www.veloworkspaces.com/assets/og/fedora-on-apple-silicon.jpg",
       "datePublished": "2026-09-20",
-      "dateModified": "2026-09-29",
+      "dateModified": "2026-10-02",
       "author": {
         "@type": "Person",
         "name": "Gaoliang Luo",
@@ -112,7 +112,7 @@
         <span class="eyebrow">Guide</span>
         <h1>Running Fedora on Apple Silicon: What's Different</h1>
         <p class="article-lede">Third in the series on specific distributions. Fedora runs natively on arm64 like Ubuntu and Debian, installs without a single question in Velo Workspaces 1.2, and has defaults that differ from both in ways that matter.</p>
-        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-09-29">September 29, 2026</time><span class="article-readtime">3 min read</span></p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-09-20">September 20, 2026</time> · Updated <time datetime="2026-10-02">October 2, 2026</time><span class="article-readtime">3 min read</span></p>
       </div>
       <details class="article-toc">
         <summary>In this article</summary>
@@ -142,7 +142,7 @@
         <li><strong>Automatic install.</strong> Choose <strong>Installer image</strong>, pick Fedora Server or Everything, and leave <strong>Automatic installation</strong> on. Velo Workspaces writes a kickstart file to a small disk labelled <code>OEMDRV</code>, which Anaconda picks up by itself. There's no confirmation step at all: the install runs start to finish and the workspace restarts into Fedora.</li>
         <li><strong>Workstation, by hand.</strong> Fedora Workstation's live image doesn't support kickstart, so it installs interactively in the workspace's display. Pick it when you want the GNOME desktop.</li>
       </ul>
-      <p>Fedora's aarch64 ISOs are built to boot from a CD, and Apple's Virtualization framework has no CD drive, only USB-style disks. Velo Workspaces gives its own copy of the ISO a partition table the firmware can boot from, and leaves the original file in your library untouched.</p>
+      <p>Fedora's aarch64 ISOs are built to boot from a CD, and Apple's Virtualization framework has no CD drive, only USB-style disks. Velo Workspaces gives its own copy of the ISO a partition table the firmware can boot from, and leaves the original file in your library untouched. <a href="/blog/fedora-arm-iso-wont-boot-apple-virtualization/">Why Fedora's ARM ISO wouldn't boot</a> tells how that came to light, with a script that does the same to any ISO.</p>
 
       <h2 id="the-default-that-surprises-people-selinux-enforcing">The default that surprises people: SELinux, enforcing</h2>
       <p>Fedora ships SELinux in enforcing mode with the targeted policy. It isn't just installed, it's on. A service that binds a nonstandard port, reads from an unexpected directory, or gets restarted by a script in a way its policy doesn't expect can fail with what looks like a permissions error while the file permissions are fine. Ubuntu and a minimal Debian don't put you in that position by default.</p>

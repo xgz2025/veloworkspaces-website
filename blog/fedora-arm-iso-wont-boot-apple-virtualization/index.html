@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why Fedora&#x27;s ARM ISO Won&#x27;t Boot in Apple Virtualization</title>
+<meta name="description" content="Fedora, Rocky Linux and NixOS ship ARM ISOs with no partition table, so Apple&#x27;s Virtualization framework can&#x27;t boot them as disks. The fix, with a script.">
+<link rel="canonical" href="https://www.veloworkspaces.com/blog/fedora-arm-iso-wont-boot-apple-virtualization/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css?v=6">
+<link rel="alternate" type="application/rss+xml" title="Velo Workspaces Blog" href="https://www.veloworkspaces.com/blog/feed.xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Velo Workspaces">
+<meta property="og:title" content="Why Fedora&#x27;s ARM ISO Won&#x27;t Boot in Apple Virtualization">
+<meta property="og:description" content="Fedora, Rocky Linux and NixOS ship ARM ISOs with no partition table, so Apple&#x27;s Virtualization framework can&#x27;t boot them as disks. The fix, with a script.">
+<meta property="og:url" content="https://www.veloworkspaces.com/blog/fedora-arm-iso-wont-boot-apple-virtualization/">
+<meta property="og:image" content="https://www.veloworkspaces.com/assets/og/fedora-arm-iso-wont-boot-apple-virtualization.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Why Fedora&#x27;s ARM ISO Wouldn&#x27;t Boot in Apple&#x27;s Virtualization Framework">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="article:published_time" content="2026-10-02">
+<meta property="article:modified_time" content="2026-10-02">
+<meta property="article:author" content="Gaoliang Luo">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Why Fedora's ARM ISO Won't Boot in Apple Virtualization",
+      "name": "Why Fedora's ARM ISO Wouldn't Boot in Apple's Virtualization Framework",
+      "description": "Fedora, Rocky Linux and NixOS ship ARM ISOs with no partition table, so Apple's Virtualization framework can't boot them as disks. The fix, with a script.",
+      "image": "https://www.veloworkspaces.com/assets/og/fedora-arm-iso-wont-boot-apple-virtualization.jpg",
+      "datePublished": "2026-10-02",
+      "dateModified": "2026-10-02",
+      "author": {
+        "@type": "Person",
+        "name": "Gaoliang Luo",
+        "url": "https://www.veloworkspaces.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Velo Workspaces",
+        "url": "https://www.veloworkspaces.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.veloworkspaces.com/assets/icon.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.veloworkspaces.com/blog/fedora-arm-iso-wont-boot-apple-virtualization/"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.veloworkspaces.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.veloworkspaces.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Why Fedora's ARM ISO Wouldn't Boot in Apple's Virtualization Framework",
+          "item": "https://www.veloworkspaces.com/blog/fedora-arm-iso-wont-boot-apple-virtualization/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="mark" src="/assets/icon.png" width="48" height="48" alt="Velo Workspaces">
+      Velo Workspaces
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <span class="nav-links">
+        <a href="/#personas">Who it's for</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/support/">Support</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/blog/" aria-current="page">Blog</a>
+      </span>
+      <a class="btn btn-primary" data-app-store-link href="https://apps.apple.com/app/apple-store/id6805509975?pt=129339260&amp;ct=homepage&amp;mt=8">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section article-top">
+    <div class="container article-head">
+      <a class="article-back-link" href="/blog/">← Back to Blog</a>
+      <div class="article-header">
+        <span class="eyebrow">Deep dive</span>
+        <h1>Why Fedora's ARM ISO Wouldn't Boot in Apple's Virtualization Framework</h1>
+        <p class="article-lede">On an M4 Mac, Fedora's and Rocky Linux's automatic installs failed and NixOS's installer went to a black screen, while the same setup worked on an Intel Mac. Two error messages blamed the kickstart. The real cause was a partition table the ARM ISOs don't have, and the fix is one 16-byte entry.</p>
+        <p class="article-meta">By Gaoliang Luo · Published <time datetime="2026-10-02">October 2, 2026</time><span class="article-readtime">12 min read</span></p>
+      </div>
+      <details class="article-toc">
+        <summary>In this article</summary>
+        <ol>
+          <li><a href="#the-test-round"><span>The test round</span></a></li>
+          <li><a href="#two-error-messages-that-agreed-with-each-other"><span>Two error messages that agreed with each other</span></a></li>
+          <li><a href="#the-wrong-conclusion"><span>The wrong conclusion</span></a></li>
+          <li><a href="#the-black-screen"><span>The black screen</span></a></li>
+          <li><a href="#why-would-an-iso-have-no-partition-table"><span>Why would an ISO have no partition table?</span></a></li>
+          <li><a href="#what-the-two-messages-actually-meant"><span>What the two messages actually meant</span></a></li>
+          <li><a href="#the-fix-one-partition-entry"><span>The fix: one partition entry</span></a></li>
+          <li><a href="#try-it-yourself"><span>Try it yourself</span></a></li>
+          <li><a href="#checking-that-the-partition-really-does-the-work"><span>Checking that the partition really does the work</span></a></li>
+          <li><a href="#bonus-rewriting-grub-without-moving-a-byte"><span>Bonus: rewriting GRUB without moving a byte</span></a></li>
+          <li><a href="#what-i-d-tell-myself-a-week-earlier"><span>What I&#x27;d tell myself a week earlier</span></a></li>
+          <li><a href="#where-it-ended-up"><span>Where it ended up</span></a></li>
+          <li><a href="#where-to-go-next"><span>Where to go next</span></a></li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+  <section class="section article-main">
+    <div class="container article-body">
+      <p><em>This is the story of a bug in Velo Workspaces, the app this site is about, and of something I hadn't known about how Linux installer ISOs for ARM are built. The checks and the script near the end work on any ISO, whichever VM you boot it in.</em></p>
+      <h2 id="the-test-round">The test round</h2>
+      <p>Just before I sent version 1.2 to App Review, I ran every distribution in the app's library on an M4 Mac. 1.2 was the release that installs Linux for you: cloud images that set themselves up on first boot, and the distributions' own installers driven unattended, with Ubuntu's autoinstall and Anaconda's kickstart.</p>
+      <p>Every cloud image worked. Three things didn't:</p>
+      <ul>
+      <li><strong>Fedora Server's</strong> automatic install failed partway through boot.</li>
+      <li><strong>Rocky Linux's</strong> failed the same way.</li>
+      <li><strong>NixOS's</strong> installer reached its GRUB menu. Once the kernel was chosen, the screen went black and stayed black.</li>
+      </ul>
+      <p>The odd part was the first two. The same kickstart, generated by the same build of the app, installed Fedora and Rocky Linux without a hitch on the Intel Mac.</p>
+      <h2 id="two-error-messages-that-agreed-with-each-other">Two error messages that agreed with each other</h2>
+      <p>Anaconda's console had two things to say. Early on:</p>
+      <pre><code>parse-kickstart WARNING: No device with link found for --device=link
+</code></pre>
+      <p>Then, after a long pause, a dracut banner saying the <code>inst.stage2</code> or <code>inst.repo</code> boot option was missing, with a reminder that the <code>inst.</code> prefix is mandatory now.</p>
+      <p>Read together they told a tidy story. The kickstart's <code>network --device=link</code> line found no interface with a link, so networking on Apple silicon's virtual hardware was different somehow. And the installer's boot options were wrong. Both pointed at the configuration, and both said "this is different on ARM".</p>
+      <p>I believed them.</p>
+      <h2 id="the-wrong-conclusion">The wrong conclusion</h2>
+      <p>I decided Anaconda's kickstart path didn't work under Apple silicon's virtualization, and spent part of a day making that official. Kickstart was driven on Intel Macs only. A note on the Image step sent Apple silicon users to Fedora's cloud image instead. The App Store description, in all ten languages, now said automatic Fedora and Rocky Linux installs were for Intel Macs. NixOS, with its unexplained black screen, came out of the library and went into the backlog.</p>
+      <p>All of that was committed. None of it was released: a few hours later every part of it was reverted, because the NixOS bug turned out to be the same bug, and it wasn't Fedora's, Rocky's or NixOS's. It was mine.</p>
+      <h2 id="the-black-screen">The black screen</h2>
+      <p>NixOS's installer boots like most live ISOs. GRUB loads a kernel and an initrd from the image. Then stage 1, the initrd's init, waits for the ISO itself to appear as a block device, by its volume label, here <code>/dev/disk/by-label/nixos-minimal-26.05-aarch64</code>, mounts it and finds the Nix store on it. If the device never appears, stage 1 waits, and nothing more happens on the screen.</p>
+      <p>So the useful question wasn't "what's wrong with NixOS". It was "what did the VM actually boot from?" The answer was a disk I hadn't meant to give it.</p>
+      <p><a href="/blog/how-virtualization-framework-works/">Apple's Virtualization framework</a> has no CD drive. A virtual machine gets virtio block devices, NVMe and USB mass storage, and nothing optical. An installer ISO has to be attached as a disk, and the guest's UEFI firmware boots a disk the way it boots any disk. It reads the partition table, finds the EFI System Partition, and runs <code>\EFI\BOOT\BOOTAA64.EFI</code> from it.</p>
+      <p>NixOS's aarch64 ISO has no partition table.</p>
+      <p>Velo Workspaces inspects an installer ISO when you create a workspace, and it classified this one as "optical only": bootable as a CD, not as a disk. For that case the app had an older code path. It copied the ISO's boot files onto a new FAT32 disk image, which any UEFI firmware will boot. It had been written for a different installer, one that copes with that. The code that starts a workspace had been guarded to build the copy only for that installer. The code that creates a workspace's disks never got the same guard, and it ran for every "optical only" ISO.</p>
+      <p>For NixOS, a manual install, only the copy was attached. GRUB and the kernel were on it, so they loaded. The ISO 9660 volume labelled <code>nixos-minimal-26.05-aarch64</code> wasn't attached at all. Stage 1 waited for it, forever, behind a black screen.</p>
+      <h2 id="why-would-an-iso-have-no-partition-table">Why would an ISO have no partition table?</h2>
+      <p>This is the part I hadn't known.</p>
+      <p>CDs and disks boot differently. A CD boots through <strong>El Torito</strong>. Among the ISO's volume descriptors is a boot record that points to a boot catalog, and the catalog lists boot images. For UEFI, the boot image is a small FAT filesystem with the boot loader in it. Firmware reading a CD follows that chain. Firmware reading a disk looks at sector 0 for a partition table.</p>
+      <p>For years, distributions have made their ISOs work both ways. ISO 9660 leaves the first 32 KB of an image unused. It calls that space the "system area" and reserves it for the platform to use. <strong>isohybrid</strong> images write an MBR or GPT into it. A CD drive ignores it and follows El Torito; anything that sees the file as a disk finds a partition table. That's why you can <code>dd</code> most ISOs onto a USB stick and boot them.</p>
+      <p>Most ISOs do this on x86. On ARM, not all of them do:</p>
+      <ul>
+      <li>Fedora's and Rocky Linux's boot media come from <strong>lorax</strong>. Its <code>x86.tmpl</code> passes <code>--grub2-mbr</code> and appends a GPT EFI partition. Its <code>aarch64.tmpl</code> passes <code>-eltorito-alt-boot -e images/efiboot.img -no-emul-boot</code>, which means El Torito and nothing else.</li>
+      <li>NixOS's aarch64 ISO is made without <code>-isohybrid-mbr</code>. Only its x86 image gets that flag.</li>
+      </ul>
+      <p>Every aarch64 ISO I tested from these projects came out the same: Fedora Server and Everything, Rocky's minimal and DVD images, and NixOS. All of them had El Torito, and their system area was 32 KB of zeros.</p>
+      <p>That explained Fedora and Rocky too. Their automatic install has its own boot media, an APFS clone of the ISO with GRUB's configuration rewritten to go straight into the install (more on that below). But the creation step had also built the FAT copy, since the ISO was "optical only", and when both existed, the copy booted. GRUB showed the stock menu. The kernel loaded. dracut found the kickstart, which Velo Workspaces puts on a small separate disk labelled <code>OEMDRV</code> that Anaconda looks for on its own; that's why <code>parse-kickstart</code> ran at all. Then dracut waited for the installer's root:</p>
+      <pre><code>inst.stage2=hd:LABEL=Fedora-S-dvd-aarch64-44
+</code></pre>
+      <p><code>hd:LABEL=</code> means "a disk whose filesystem has this label". On a real DVD, that's the ISO 9660 volume itself. In this VM, no attached disk had that label.</p>
+      <p>On the Intel Mac the x86_64 ISOs are hybrids. The copy was never built, the rewritten clone booted, and kickstart worked. It was the same app and the same kickstart; only the ISO layout differed.</p>
+      <h2 id="what-the-two-messages-actually-meant">What the two messages actually meant</h2>
+      <p>With the cause in hand, I went back to the two messages, because they'd sent me the wrong way and I wanted to know why. The lesson is an old one: find the code that prints the message. It often isn't the code that failed.</p>
+      <p><strong>The dracut banner</strong> comes from Anaconda's <code>anaconda-error-reporting.sh</code>. It's installed as a dracut <code>initqueue/timeout</code> hook, and dracut runs those hooks when it gives up waiting for the root device, whatever the reason. The text guesses at the most common cause, a missing or old-style boot option, and it prints that guess for every cause. My boot options were fine. All the banner really told me was that dracut had waited for the installer's root and it never showed up.</p>
+      <p><strong>The link warning</strong> comes from <code>parse-kickstart</code>, early in the initramfs. Its <code>first_device_with_link()</code> reads each interface's <code>carrier</code> before the network has been brought up, so it can easily find no link. It then falls back to <code>ip=dhcp</code>, and Anaconda applies <code>--device=link</code> again in stage 2, when the interface is up. It was noise. (The other common choice, <code>--device=bootif</code>, only means something after a PXE boot, which passes <code>BOOTIF=</code> on the command line.)</p>
+      <p>Both messages were true. Neither was about the problem.</p>
+      <h2 id="the-fix-one-partition-entry">The fix: one partition entry</h2>
+      <p>Stopping the copy for Linux was one line. But then the firmware has nothing it can boot, because the ISO is still not a disk.</p>
+      <p>The El Torito catalog already says where the EFI boot image is and how big it is. The firmware wants an EFI System Partition. So the EFI boot image can <em>also</em> be a partition: write an MBR into the empty system area, with one entry of type <code>0xEF</code> covering exactly the bytes El Torito points at. That's what <code>isohybrid --uefi</code> does, and what xorriso's <code>-efi-boot-part --efi-boot-image</code> does at build time with GPT.</p>
+      <figure class="shot shot-wide">
+        <a class="shot-frame" href="/assets/blog/el-torito-only-iso-vs-hybrid.webp"><img src="/assets/blog/el-torito-only-iso-vs-hybrid.webp" width="1600" height="896" alt="Before: an ISO whose first 32 KB are zeros, with volume descriptors, a boot catalog pointing at the EFI boot image, and the installer files. After: the same ISO with an MBR in its system area whose one partition, type 0xEF, covers the EFI boot image. Everything else is unchanged." loading="lazy" decoding="async"><span class="shot-zoom">Click to enlarge</span></a>
+        <figcaption><span>The EFI boot image El Torito points at becomes partition 1. Nothing in the ISO moves.</span></figcaption>
+      </figure>
+      <p>Nothing else changes. The volume descriptors, the catalog and the files are where they were, and ISO 9660 readers never look at the system area. Linux still probes the whole device, finds an iso9660 filesystem with the same label, and the installer finds its disc. The firmware finds a partition table, an EFI System Partition, and GRUB inside it.</p>
+      <p>The entry is 16 bytes at offset 446, and the boot signature is 2 bytes at offset 510:</p>
+      <pre><code>offset 446  00            status: not active (UEFI doesn't use it)
+       447  FE FF FF      first sector, CHS: &quot;out of range, use the LBA&quot;
+       450  EF            type: EFI System Partition
+       451  FE FF FF      last sector, CHS: same
+       454  xx xx xx xx   first sector (LBA) = El Torito's sector × 4
+       458  xx xx xx xx   size in 512-byte sectors
+offset 510  55 AA         boot signature
+</code></pre>
+      <p>The × 4 is because El Torito counts 2,048-byte CD sectors and an MBR counts 512-byte disk sectors.</p>
+      <p>The size takes one more step. The catalog entry has a sector count, but it's 16 bits of 512-byte units, so it can't describe a boot image over 32 MB. The FAT boot sector at the start of the image knows the real size. Its bytes per sector are at offset 11, and its total sectors at offset 19, or at offset 32 when that's zero. The size comes from there.</p>
+      <p>On NixOS 26.05 the boot image is <code>/boot/efi.img</code> at CD sector 53, a 3 MB FAT12 volume labelled <code>EFIBOOT</code>. The entry starts at sector 212 (<code>D4</code>) and runs for 6,144 sectors (<code>00 18</code>). Over a zeroed system area, <code>cmp</code> counts exactly <strong>11 changed bytes</strong>:</p>
+      <ul>
+      <li>the two <code>FE FF FF</code> runs (six bytes)</li>
+      <li>the type byte</li>
+      <li>one byte of the start</li>
+      <li>one byte of the size</li>
+      <li>the two signature bytes</li>
+      </ul>
+      <p>Fedora's image sits elsewhere on its disc, so its numbers are different and the count may be a byte or two higher. It's the same entry either way.</p>
+      <p>Velo Workspaces does this on an APFS clone of the ISO. A clone shares every block with the original, so it takes no time and no disk space, and the ISO in your library is never touched. For an automatic install, the clone with the rewritten GRUB configuration is the one that gets the partition table, in place. An ISO whose catalog has no EFI boot image is refused when you create the workspace, with a message that says so, instead of failing at boot. And the FAT copy is made only for the installer it was written for.</p>
+      <p>I didn't repack the ISO with xorriso. That would mean bundling a tool like xorriso in a sandboxed app and writing a new multi-gigabyte file every time. The partition entry is 18 bytes written into a file that already exists.</p>
+      <h2 id="try-it-yourself">Try it yourself</h2>
+      <p>Here's the same logic as a standalone Python script with no dependencies. It finds the boot record, walks the catalog for a bootable EFI entry, sizes the image from its FAT boot sector, and writes the entry. It refuses an ISO that already has a partition table.</p>
+      <pre><code>#!/usr/bin/env python3
+&quot;&quot;&quot;hybridize.py IMAGE.iso
+
+Give an El Torito-only ISO an MBR with one EFI System Partition over the
+EFI boot image its catalog already points at, so UEFI firmware can boot it
+as a disk. Edits the file in place: run it on a copy.
+&quot;&quot;&quot;
+import struct
+import sys
+
+CD = 2048  # ISO 9660 sector size; MBRs count 512-byte sectors
+
+with open(sys.argv[1], &quot;r+b&quot;) as f:
+    def read(offset, size):
+        f.seek(offset)
+        return f.read(size)
+
+    # 1. Never overwrite a partition table that's already there.
+    mbr = read(0, 512)
+    if mbr[510:512] == b&quot;\x55\xaa&quot; and any(mbr[446 + 16 * n + 4] for n in range(4)):
+        sys.exit(&quot;already has a partition table&quot;)
+
+    # 2. El Torito's boot record is a volume descriptor from sector 16 on.
+    catalog = None
+    for sector in range(16, 64):
+        vd = read(sector * CD, CD)
+        if vd[0] == 255:                      # descriptor set terminator
+            break
+        if vd[0] == 0 and vd[7:30] == b&quot;EL TORITO SPECIFICATION&quot;:
+            catalog = struct.unpack_from(&quot;&lt;I&quot;, vd, 71)[0]
+            break
+    if catalog is None:
+        sys.exit(&quot;no El Torito boot record&quot;)
+
+    # 3. In the catalog, find the bootable, no-emulation entry for EFI (0xEF).
+    cat = read(catalog * CD, CD)
+    if cat[0] != 1 or cat[30:32] != b&quot;\x55\xaa&quot;:
+        sys.exit(&quot;bad boot catalog&quot;)
+    platform, entry = cat[1], None            # the default entry's platform
+    for i in range(32, CD, 32):
+        kind = cat[i]
+        if kind in (0x90, 0x91):              # section header: a new platform
+            platform = cat[i + 1]
+        elif kind == 0x88 and platform == 0xEF and cat[i + 1] &amp; 0x0F == 0:
+            count, rba = struct.unpack_from(&quot;&lt;HI&quot;, cat, i + 6)
+            entry = (rba, count)
+            break
+    if entry is None:
+        sys.exit(&quot;no EFI boot image in the catalog&quot;)
+    rba, count = entry
+
+    # 4. Size it by its FAT boot sector: the catalog's count is 16 bits of
+    #    512-byte units, too small for an image over 32 MB.
+    boot = read(rba * CD, 512)
+    sectors = count
+    if boot[510:512] == b&quot;\x55\xaa&quot;:
+        per_sector = struct.unpack_from(&quot;&lt;H&quot;, boot, 11)[0]
+        total = struct.unpack_from(&quot;&lt;H&quot;, boot, 19)[0] or struct.unpack_from(&quot;&lt;I&quot;, boot, 32)[0]
+        if per_sector and total:
+            sectors = total * per_sector // 512
+
+    # 5. One partition entry of type 0xEF, and the boot signature. CHS
+    #    fields say &quot;beyond CHS&quot;; firmware and Linux read only the LBAs.
+    part = bytes([0x00, 0xFE, 0xFF, 0xFF, 0xEF, 0xFE, 0xFF, 0xFF])
+    part += struct.pack(&quot;&lt;II&quot;, rba * CD // 512, sectors)
+    f.seek(446)
+    f.write(part)
+    f.seek(510)
+    f.write(b&quot;\x55\xaa&quot;)
+    print(f&quot;EFI partition: start {rba * CD // 512}, {sectors} sectors ({sectors * 512 // 1024} KiB)&quot;)
+</code></pre>
+      <p>First, check whether your ISO needs it. These 66 bytes are the four partition entries and the signature:</p>
+      <pre><code>hexdump -C -s 446 -n 66 installer.iso
+</code></pre>
+      <p>An El Torito-only ISO prints nothing but zeros:</p>
+      <pre><code>000001be  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+*
+000001fe  00 00                                             |..|
+</code></pre>
+      <p>If you have xorriso (Homebrew and every Linux distribution package it), it will show you the catalog too:</p>
+      <pre><code>xorriso -indev installer.iso -report_el_torito plain -report_system_area plain
+</code></pre>
+      <p>Then run the script on a copy. On a Mac, <code>cp -c</code> makes the copy an APFS clone, so it's instant:</p>
+      <pre><code>cp -c installer.iso installer-hybrid.iso
+python3 hybridize.py installer-hybrid.iso
+</code></pre>
+      <p>On a small test image built with lorax's aarch64 options and Fedora's volume label, it prints:</p>
+      <pre><code>EFI partition: start 140, 6144 sectors (3072 KiB)
+</code></pre>
+      <p>The same 66 bytes afterwards:</p>
+      <pre><code>000001be  00 fe ff ff ef fe ff ff  8c 00 00 00 00 18 00 00  |................|
+000001ce  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+*
+000001fe  55 aa                                             |U.|
+</code></pre>
+      <p>On Linux, <code>sfdisk -l</code> now sees the partition, and <code>blkid</code> still sees the whole file as the same ISO:</p>
+      <pre><code>$ sfdisk -l installer-hybrid.iso
+Disklabel type: dos
+Device                Boot Start   End Sectors Size Id Type
+installer-hybrid.iso1        140  6283    6144   3M ef EFI (FAT-12/16/32)
+
+$ blkid installer-hybrid.iso
+installer-hybrid.iso: BLOCK_SIZE=&quot;2048&quot; UUID=&quot;2026-10-02-05-58-59-00&quot; LABEL=&quot;Fedora-S-dvd-aarch64-44&quot; TYPE=&quot;iso9660&quot; PTTYPE=&quot;dos&quot;
+</code></pre>
+      <p>xorriso even maps the partition back to the file it covers:</p>
+      <pre><code>MBR partition table:   N Status  Type        Start       Blocks
+MBR partition      :   1   0x00  0xef          140         6144
+MBR partition path :   1  /images/efiboot.img
+</code></pre>
+      <p>(The <code>sfdisk</code> output is trimmed to the relevant lines.)</p>
+      <h2 id="checking-that-the-partition-really-does-the-work">Checking that the partition really does the work</h2>
+      <p>Before trusting this on Apple's firmware, which I can't inspect, I wanted to know that the partition alone was enough. El Torito shouldn't be quietly helping.</p>
+      <p>So I used <a href="/blog/virtualization-framework-vs-qemu/">QEMU</a>'s <code>virt</code> machine with AAVMF 2024.02 firmware, attached the hybridized NixOS 26.05 image as a USB disk, and switched El Torito off, so the partition was the only way in. It booted to GRUB. Stage 1 then mounted <code>/sysroot/iso</code> by its label, mounted the squashfs store, and reached the installer's multi-user target with the <code>nixos</code> session. The same image without the partition found nothing to boot: <code>Not Found</code>, then the UEFI shell.</p>
+      <p>One honest caveat. That same AAVMF firmware <em>will</em> boot an untouched ISO through El Torito from a USB disk. Whether Apple's firmware does, I don't know, and Apple doesn't say. With the partition in place, it doesn't matter.</p>
+      <p>Then the real test, back on the M4: Fedora Server and Rocky Linux installed unattended, and NixOS's installer booted and installed by hand. The "Intel only" note, the App Store change and NixOS's trip to the backlog were all reverted before release.</p>
+      <h2 id="bonus-rewriting-grub-without-moving-a-byte">Bonus: rewriting GRUB without moving a byte</h2>
+      <p>The automatic install's clone has one more trick, and in the end it's the part the story turned on, so here it is.</p>
+      <p>To go straight into installing, with no boot menu to wait out, Velo Workspaces rewrites GRUB's configuration in the clone. It keeps only the first menu entry, sets <code>timeout=0</code>, and adds any extra arguments to the <code>linux</code> line. Ubuntu gets <code>autoinstall</code>. Anaconda needs none, because it finds the <code>OEMDRV</code> disk by itself.</p>
+      <p>It does this in place, without touching the filesystem around the file. ISO 9660 stores each file as one extent and records its length, and FAT records a file's length in its directory entry. If the new configuration is exactly as long as the old one, no directory entry, extent or allocation table changes, and nothing else in the image moves. Dropping the other menu entries makes the text shorter, so it's padded back to the original length with a comment line.</p>
+      <p>Where the configuration lives depends on the distribution. Ubuntu's signed GRUB reads <code>/boot/grub/grub.cfg</code> from the ISO's own filesystem. Fedora's and RHEL's read <code>/EFI/BOOT/grub.cfg</code>, which exists twice: once in the ISO tree and once inside <code>images/efiboot.img</code>. Every copy is rewritten, so whichever one GRUB reads says the same thing.</p>
+      <p>That rewrite was right all along. The VM just wasn't booting it.</p>
+      <h2 id="what-i-d-tell-myself-a-week-earlier">What I'd tell myself a week earlier</h2>
+      <ul>
+      <li><strong>Read the code that prints the error.</strong> dracut's banner is a timeout hook printing its best guess. The link warning was a race that sorts itself out later. Both were true, and both pointed away from the cause.</li>
+      <li><strong>Check what the VM actually booted.</strong> Not what you meant to attach: what was attached, and which disk the firmware picked.</li>
+      <li><strong>A guard in one place isn't a guard everywhere.</strong> The code that started a workspace knew the copy was only for one installer. The code that ran before it didn't.</li>
+      <li><strong>Don't ship a workaround before you've found the cause.</strong> "Intel only" got as far as App Store text in ten languages, for a bug that had nothing to do with Intel.</li>
+      <li><strong>Test every architecture you ship for, with the real media.</strong> The x86 ISOs are hybrids and the ARM ones aren't, so every Intel test passed.</li>
+      </ul>
+      <p>And if you maintain an aarch64 ISO build: a UEFI partition in the system area costs nothing, and it makes your image bootable as a disk anywhere, including in virtual machines that have no CD drive.</p>
+      <h2 id="where-it-ended-up">Where it ended up</h2>
+      <p>Velo Workspaces 1.2 installs Fedora Server and Rocky Linux unattended on Apple silicon and Intel Macs, from each project's own ISO, and boots NixOS's installer for a manual install.</p>
+      <p>If <code>hybridize.py</code> refuses an ISO you think it should handle, email <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a> with the output of xorriso's <code>-report_el_torito plain</code>.</p>
+      <h2 id="where-to-go-next">Where to go next</h2>
+      <div class="guide-next">
+        <a href="/blog/fedora-vm-mac-automatic-install/"><span>Step by step</span>Install Fedora Server with an automatic kickstart</a>
+        <a href="/blog/nixos-vm-mac-install-guide/"><span>Step by step</span>Install NixOS in a VM, by hand</a>
+        <a href="/blog/rocky-linux-on-apple-silicon/"><span>Background</span>Rocky Linux on Apple silicon</a>
+        <a href="/blog/how-virtualization-framework-works/"><span>Background</span>How Apple's Virtualization framework works</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <a class="brand" href="/">
+        <img class="mark" src="/assets/icon.png" width="28" height="28" alt="Velo Workspaces">
+        Velo Workspaces
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/blog/">Blog</a>
+        <a href="/roadmap/">Roadmap</a>
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="mailto:support@veloworkspaces.com">support@veloworkspaces.com</a>
+      </nav>
+    </div>
+    <p class="footer-fine">© 2026 Velo Workspaces. Apple, the Apple logo, Mac, macOS, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries. Velo Workspaces is an independent app and is not affiliated with or endorsed by Apple Inc. Fedora is a registered trademark of Red Hat, Inc. Rocky Linux is a trademark of the Rocky Enterprise Software Foundation. NixOS is a trademark of the NixOS Foundation.</p>
+  </div>
+</footer>
+
+<script src="/assets/app-store.js?v=3"></script>
+<script src="/assets/lightbox.js?v=1" defer></script>
+</body>
+</html>

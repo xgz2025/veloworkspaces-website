@@ -272,6 +272,20 @@ POSTS = [
         "trademarks": ""
     },
     {
+        "slug": "fedora-arm-iso-wont-boot-apple-virtualization",
+        "group": "Apple Silicon virtualization fundamentals",
+        "eyebrow": "Deep dive",
+        "title": "Why Fedora's ARM ISO Won't Boot in Apple Virtualization",
+        "h1": "Why Fedora's ARM ISO Wouldn't Boot in Apple's Virtualization Framework",
+        "description": "Fedora, Rocky Linux and NixOS ship ARM ISOs with no partition table, so Apple's Virtualization framework can't boot them as disks. The fix, with a script.",
+        "card_title": "Why Fedora's ARM ISO Wouldn't Boot, and the Fix",
+        "card_summary": "A black screen, two misleading errors, and the CD-only layout of Fedora's, Rocky's and NixOS's ARM ISOs. One partition entry makes them boot as disks; here's a script.",
+        "lede": "On an M4 Mac, Fedora's and Rocky Linux's automatic installs failed and NixOS's installer went to a black screen, while the same setup worked on an Intel Mac. Two error messages blamed the kickstart. The real cause was a partition table the ARM ISOs don't have, and the fix is one 16-byte entry.",
+        "published": "2026-10-02",
+        "modified": "2026-10-02",
+        "trademarks": "Fedora is a registered trademark of Red Hat, Inc. Rocky Linux is a trademark of the Rocky Enterprise Software Foundation. NixOS is a trademark of the NixOS Foundation."
+    },
+    {
         "slug": "vm-vs-container-vs-sandbox",
         "group": "Apple Silicon virtualization fundamentals",
         "eyebrow": "Fundamentals",
@@ -380,7 +394,7 @@ POSTS = [
         "card_summary": "Three ways to get Fedora 44 running on an M-series Mac, including a kickstart install that asks nothing, and the defaults that differ from Ubuntu and Debian: SELinux enforcing, NetworkManager, and a different Rosetta setup.",
         "lede": "Third in the series on specific distributions. Fedora runs natively on arm64 like Ubuntu and Debian, installs without a single question in Velo Workspaces 1.2, and has defaults that differ from both in ways that matter.",
         "published": "2026-09-20",
-        "modified": "2026-09-29",
+        "modified": "2026-10-02",
         "trademarks": "Fedora is a registered trademark of Red Hat, Inc."
     },
     {
@@ -422,7 +436,7 @@ POSTS = [
         "card_summary": "NixOS's aarch64 ISOs, in the catalog and bootable on Apple silicon. Installing by hand, getting SSH keys in declaratively, and how configuration.nix and base images answer reproducibility differently.",
         "lede": "NixOS's whole idea is reproducibility: a system described in one declarative file. That makes it an interesting contrast with how this blog usually talks about reproducibility, which is base images and disk clones.",
         "published": "2026-09-22",
-        "modified": "2026-09-29",
+        "modified": "2026-10-02",
         "trademarks": ""
     },
     {
