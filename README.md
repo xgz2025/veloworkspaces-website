@@ -18,6 +18,8 @@ privacy/index.html  Privacy policy                         → served at /privac
 support/index.html  Support & FAQ                           → served at /support/
 roadmap/index.html  Roadmap (English only, hand-written)    → served at /roadmap/
 blog/               Blog (English only): index.html, feed.xml (RSS), one folder per post
+nextmark/           Nextmark (a second app): marketing page, support/ and privacy/ — English only, hand-written,
+                     styled by the body.nextmark rules at the end of assets/style.css; assets/nextmark/ holds its icons
 404.html            Not-found page
 de/ fr/ it/ es/ pt-br/ ja/ ko/ zh-hans/ zh-hant/
                      Same three pages + 404, per locale     → served at /<locale>/, /<locale>/privacy/, etc.
