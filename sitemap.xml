@@ -518,6 +518,24 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.veloworkspaces.com/nextmark/</loc>
+    <lastmod>2026-10-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/nextmark/support/</loc>
+    <lastmod>2026-10-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.veloworkspaces.com/nextmark/privacy/</loc>
+    <lastmod>2026-10-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
     <loc>https://www.veloworkspaces.com/blog/</loc>
     <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>

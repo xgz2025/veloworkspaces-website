@@ -1392,3 +1392,96 @@ dl.guide-facts { margin-top: 0; }
 .blog-index-card { transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease; }
 .blog-index-card:hover { box-shadow: var(--shadow-card); transform: translateY(-1px); }
 @media (prefers-reduced-motion: reduce) { .blog-index-card, .blog-index-card:hover { transition: none; transform: none; } }
+
+/* ---------- Nextmark (/nextmark/) ----------
+   Nextmark's pages share the site's layout and components but use the app's
+   own coral instead of Velo's indigo. Everything here is scoped to
+   body.nextmark, so the Velo Workspaces pages are untouched. */
+
+body.nextmark {
+  --color-primary: #d23a52;
+  --color-primary-strong: #b02c43;
+  --color-focus: #d23a52;
+  --nm-coral: #f2694f;
+  --nm-pink: #e3466e;
+}
+@media (prefers-color-scheme: dark) {
+  body.nextmark {
+    --color-primary: #ff8395;
+    --color-primary-strong: #ffa3b0;
+    --color-focus: #ff8395;
+    --nm-coral: #ff8a6b;
+    --nm-pink: #ff6f93;
+  }
+}
+
+.nextmark .hero h1 {
+  background: linear-gradient(120deg, var(--nm-coral), var(--nm-pink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.nextmark .hero h1 span { color: var(--color-text); -webkit-text-fill-color: var(--color-text); }
+
+.nm-badge-soon {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 700;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-raised);
+}
+
+.nm-badge-small { padding: 6px 14px; font-size: 0.85rem; white-space: nowrap; }
+
+/* A stylised phone screen in the hero: saves with their "why" chips, and a Moment. */
+.nm-mock {
+  border-radius: 28px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-raised);
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+  max-width: 400px;
+  margin-inline: auto;
+  display: grid;
+  gap: 12px;
+}
+.nm-mock-title { font-weight: 800; font-size: 1.3rem; margin: 4px 4px 0; }
+.nm-item {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 16px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+}
+.nm-thumb {
+  width: 44px; height: 44px; border-radius: 10px;
+  display: grid; place-items: center;
+  color: #fff;
+  background: linear-gradient(135deg, var(--nm-coral), var(--nm-pink));
+}
+.nm-thumb svg { width: 22px; height: 22px; }
+.nm-item strong { display: block; font-size: 0.95rem; }
+.nm-item small { color: var(--color-text-secondary); }
+.nm-chip {
+  font-size: 0.75rem; font-weight: 700;
+  padding: 4px 10px; border-radius: 999px;
+  color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+.nm-moment {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--color-primary) 10%, var(--color-bg-raised));
+  border: 1px solid color-mix(in srgb, var(--color-primary) 30%, var(--color-border));
+  font-size: 0.9rem;
+}
+.nm-moment svg { width: 22px; height: 22px; color: var(--color-primary); }
