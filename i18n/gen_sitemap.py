@@ -23,14 +23,14 @@ LOCALIZED_LASTMOD = "2026-09-28"
 from blog_posts import POSTS
 
 ROADMAP_LASTMOD = "2026-09-28"
-# Nextmark, a second app from the same developer, has its own English-only
-# marketing, support and privacy pages under /nextmark/.
-NEXTMARK_LASTMOD = "2026-10-12"
+# Laterwise, a second app from the same developer, has its own English-only
+# marketing, support and privacy pages under /laterwise/.
+LATERWISE_LASTMOD = "2026-10-14"
 ENGLISH_ONLY_PAGES = [
     ("roadmap/", "weekly", "0.6", ROADMAP_LASTMOD),
-    ("nextmark/", "weekly", "0.8", NEXTMARK_LASTMOD),
-    ("nextmark/support/", "monthly", "0.6", NEXTMARK_LASTMOD),
-    ("nextmark/privacy/", "monthly", "0.3", NEXTMARK_LASTMOD),
+    ("laterwise/", "weekly", "0.8", LATERWISE_LASTMOD),
+    ("laterwise/support/", "monthly", "0.6", LATERWISE_LASTMOD),
+    ("laterwise/privacy/", "monthly", "0.3", LATERWISE_LASTMOD),
     ("blog/", "weekly", "0.7", max(p["modified"] for p in POSTS)),
 ] + [
     (f"blog/{p['slug']}/", "monthly", "0.6", p["modified"]) for p in POSTS
