@@ -24,3 +24,10 @@
 /assets/blog/screenshot-concurrent-load-vm.png /assets/blog/screenshot-concurrent-load-vm.webp 301
 /assets/blog/screenshot-single-request-host.png /assets/blog/screenshot-single-request-host.webp 301
 /assets/blog/screenshot-single-request-vm.png /assets/blog/screenshot-single-request-vm.webp 301
+
+# Nextmark was renamed Laterwise in October 2026 (the App Store name was taken).
+# Its pages moved from /nextmark/ to /laterwise/; old links keep working.
+/nextmark /laterwise/ 301
+/nextmark/ /laterwise/ 301
+/nextmark/* /laterwise/:splat 301
+/assets/nextmark/* /assets/laterwise/:splat 301

@@ -1393,12 +1393,12 @@ dl.guide-facts { margin-top: 0; }
 .blog-index-card:hover { box-shadow: var(--shadow-card); transform: translateY(-1px); }
 @media (prefers-reduced-motion: reduce) { .blog-index-card, .blog-index-card:hover { transition: none; transform: none; } }
 
-/* ---------- Nextmark (/nextmark/) ----------
-   Nextmark's pages share the site's layout and components but use the app's
+/* ---------- Laterwise (/laterwise/) ----------
+   Laterwise's pages share the site's layout and components but use the app's
    own coral instead of Velo's indigo. Everything here is scoped to
-   body.nextmark, so the Velo Workspaces pages are untouched. */
+   body.laterwise, so the Velo Workspaces pages are untouched. */
 
-body.nextmark {
+body.laterwise {
   --color-primary: #d23a52;
   --color-primary-strong: #b02c43;
   --color-focus: #d23a52;
@@ -1406,7 +1406,7 @@ body.nextmark {
   --nm-pink: #e3466e;
 }
 @media (prefers-color-scheme: dark) {
-  body.nextmark {
+  body.laterwise {
     --color-primary: #ff8395;
     --color-primary-strong: #ffa3b0;
     --color-focus: #ff8395;
@@ -1415,13 +1415,13 @@ body.nextmark {
   }
 }
 
-.nextmark .hero h1 {
+.laterwise .hero h1 {
   background: linear-gradient(120deg, var(--nm-coral), var(--nm-pink));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
-.nextmark .hero h1 span { color: var(--color-text); -webkit-text-fill-color: var(--color-text); }
+.laterwise .hero h1 span { color: var(--color-text); -webkit-text-fill-color: var(--color-text); }
 
 .nm-badge-soon {
   display: inline-flex;
