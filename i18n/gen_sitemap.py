@@ -25,7 +25,7 @@ from blog_posts import POSTS
 ROADMAP_LASTMOD = "2026-09-28"
 # Nextmark, a second app from the same developer, has its own English-only
 # marketing, support and privacy pages under /nextmark/.
-NEXTMARK_LASTMOD = "2026-10-12"
+NEXTMARK_LASTMOD = "2026-10-14"
 ENGLISH_ONLY_PAGES = [
     ("roadmap/", "weekly", "0.6", ROADMAP_LASTMOD),
     ("nextmark/", "weekly", "0.8", NEXTMARK_LASTMOD),
