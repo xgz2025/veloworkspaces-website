@@ -20,6 +20,7 @@ roadmap/index.html  Roadmap (English only, hand-written)    → served at /roadm
 blog/               Blog (English only): index.html, feed.xml (RSS), one folder per post
 laterwise/          Laterwise (a second app): marketing page, support/ and privacy/ — English only, hand-written,
                      styled by the body.laterwise rules at the end of assets/style.css; assets/laterwise/ holds its icons
+                     and the home page's hero.webp (served) and hero.png (source): three of the app's own iPhone screens
 404.html            Not-found page
 de/ fr/ it/ es/ pt-br/ ja/ ko/ zh-hans/ zh-hant/
                      Same three pages + 404, per locale     → served at /<locale>/, /<locale>/privacy/, etc.
