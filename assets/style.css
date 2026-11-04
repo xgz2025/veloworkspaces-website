@@ -1485,3 +1485,27 @@ body.laterwise {
   font-size: 0.9rem;
 }
 .nm-moment svg { width: 22px; height: 22px; color: var(--color-primary); }
+
+/* The home page's first screen says what Laterwise is for, its four headline
+   features beside the app's own screens, with no scrolling on a laptop. */
+.lw-hero { padding: 32px 0 32px; }
+.lw-hero h1 { font-size: clamp(2rem, 1.5rem + 1.8vw, 2.7rem); margin-bottom: 0.4em; }
+.lw-lead { font-size: 1.05rem; max-width: 54ch; margin-bottom: 18px; }
+.lw-points { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; max-width: 56ch; }
+.lw-points li { display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: start; color: var(--color-text-secondary); font-size: 0.98rem; line-height: 1.45; }
+.lw-points strong { display: block; color: var(--color-text); font-size: 1rem; }
+.lw-point-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: grid; place-items: center;
+  color: #fff;
+  background: linear-gradient(135deg, var(--nm-coral), var(--nm-pink));
+}
+.lw-point-icon svg { width: 19px; height: 19px; }
+.lw-hero .hero-actions { margin-top: 22px; }
+.lw-hero .hero-note { margin-top: 10px; }
+.lw-hero-art { display: block; text-align: center; }
+.lw-hero-art img { width: 100%; height: auto; max-height: min(600px, 72vh); object-fit: contain; }
+@media (max-width: 860px) {
+  .lw-hero { padding-top: 24px; }
+  .lw-hero-art img { max-height: 460px; }
+}
