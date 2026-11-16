@@ -6,7 +6,7 @@
   <atom:link href="https://www.veloworkspaces.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
   <description>Guides to running Linux VMs on Apple silicon Macs: cloud images, automatic installs, local AI agents, Rosetta, benchmarks and honest comparisons.</description>
   <language>en</language>
-  <lastBuildDate>Fri, 02 Oct 2026 12:00:00 +0000</lastBuildDate>
+  <lastBuildDate>Mon, 16 Nov 2026 12:00:00 +0000</lastBuildDate>
   <item>
     <title>Why Fedora&#x27;s ARM ISO Won&#x27;t Boot in Apple Virtualization</title>
     <link>https://www.veloworkspaces.com/blog/fedora-arm-iso-wont-boot-apple-virtualization/</link>
@@ -47,7 +47,7 @@
     <link>https://www.veloworkspaces.com/blog/fedora-vm-mac-automatic-install/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/fedora-vm-mac-automatic-install/</guid>
     <pubDate>Tue, 29 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Step by step with screenshots: install Fedora 44 Server in Velo Workspaces with a kickstart it writes for you, then sign in over SSH. Rocky Linux too.</description>
+    <description>Step by step with screenshots: install Fedora 45 Server in Velo Workspaces with a kickstart it writes for you, then sign in over SSH. Rocky Linux too.</description>
   </item>
   <item>
     <title>SSH and VS Code Remote-SSH into a Linux VM on Your Mac</title>
@@ -470,11 +470,11 @@
     <description>Local VMs on your Mac versus cloud dev environments: pricing, why Codespaces and Ona have no GPU option now, and when cloud is simply the better choice.</description>
   </item>
   <item>
-    <title>Fedora on Apple Silicon: Run a Fedora 44 VM on a Mac</title>
+    <title>Fedora on Apple Silicon: Run a Fedora 45 VM on a Mac</title>
     <link>https://www.veloworkspaces.com/blog/fedora-on-apple-silicon/</link>
     <guid isPermaLink="true">https://www.veloworkspaces.com/blog/fedora-on-apple-silicon/</guid>
     <pubDate>Sun, 20 Sep 2026 12:00:00 +0000</pubDate>
-    <description>Run Fedora 44 on an M-series Mac from the Cloud Base image or a hands-free Server install, and what&#x27;s different: SELinux, NetworkManager and Rosetta.</description>
+    <description>Run Fedora 45 on an M-series Mac from the Cloud Base image or a hands-free Server install, and what&#x27;s different: SELinux, NetworkManager and Rosetta.</description>
   </item>
   <item>
     <title>Ubuntu on Apple Silicon: Run an Ubuntu VM on Your Mac</title>

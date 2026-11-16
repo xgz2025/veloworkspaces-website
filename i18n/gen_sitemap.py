@@ -14,7 +14,7 @@ PAGES = [
 # When the localized pages (home, support, privacy) last changed in substance.
 # Search engines use <lastmod> to decide what to recrawl, so move this only
 # when their content changes.
-LOCALIZED_LASTMOD = "2026-09-28"
+LOCALIZED_LASTMOD = "2026-11-16"
 
 # English-only pages with no translations yet — listed without hreflang
 # alternates rather than forced through the per-locale PAGES loop, which would
@@ -25,7 +25,7 @@ from blog_posts import POSTS
 ROADMAP_LASTMOD = "2026-09-28"
 # Laterwise, a second app from the same developer, has its own English-only
 # marketing, support and privacy pages under /laterwise/.
-LATERWISE_LASTMOD = "2026-10-14"
+LATERWISE_LASTMOD = "2026-11-04"
 ENGLISH_ONLY_PAGES = [
     ("roadmap/", "weekly", "0.6", ROADMAP_LASTMOD),
     ("laterwise/", "weekly", "0.8", LATERWISE_LASTMOD),

@@ -413,7 +413,7 @@ def render(code, seg, label):
       <div class="pill-row" style="justify-content:center;">
         <span class="pill">Ubuntu 26.04 &amp; 24.04</span>
         <span class="pill">Debian 13 &amp; 12</span>
-        <span class="pill">Fedora 44</span>
+        <span class="pill">Fedora 45 &amp; 44</span>
         <span class="pill">Rocky Linux 10 &amp; 9</span>
         <span class="pill">Kali Linux</span>
         <span class="pill">NixOS</span>
