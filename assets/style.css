@@ -1510,3 +1510,17 @@ body.laterwise {
   .lw-hero-art img { max-height: 460px; }
 }
 .lw-pricing-download { text-align: center; margin: 28px 0 0; }
+/* A time-limited offer (an App Store offer code): one line, tinted with the app's colour. */
+.lw-offer {
+  margin: 16px 0 0;
+  padding: 10px 14px;
+  max-width: 56ch;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+  background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+.lw-offer strong { color: var(--color-primary); }
+.lw-offer a { font-weight: 700; white-space: nowrap; }
+.lw-offer.lw-offer-card { margin-top: 12px; font-size: 0.86rem; }
